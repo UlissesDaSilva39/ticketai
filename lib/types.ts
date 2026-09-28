@@ -1,10 +1,11 @@
-﻿export type UserRole = 'attendee' | 'organizer' | 'admin';
+export type UserRole = "attendee" | "organizer" | "admin";
 
 export interface Profile {
   id: string;
   full_name: string | null;
   role: UserRole;
   stripe_customer_id: string | null;
+  stripe_account_id: string | null;
   created_at: string;
 }
 
@@ -27,15 +28,24 @@ export interface Venue {
   description: string | null;
   venue_type: string | null;
   address_line1: string | null;
+  address_line2: string | null;
   city: string | null;
+  county: string | null;
   postcode: string | null;
   country: string;
   latitude: number | null;
   longitude: number | null;
   capacity: number | null;
+  standing_capacity: number | null;
+  seated_capacity: number | null;
+  accessibility_features: string[];
+  timezone: string;
+  currency: string;
   hero_image: string | null;
-  status: 'draft' | 'published';
+  status: "draft" | "published";
   verified: boolean;
+  revenue_share_percent: number;
+  total_revenue: number;
   created_at: string;
 }
 
@@ -55,12 +65,16 @@ export interface Event {
   start_date: string;
   end_date: string | null;
   timezone: string;
-  event_type: 'in-person' | 'live-stream' | 'hybrid';
-  status: 'draft' | 'published' | 'cancelled';
+  event_type: "in-person" | "live-stream" | "hybrid";
+  status: "draft" | "published" | "cancelled";
   hero_image: string | null;
   stream_url: string | null;
   ticket_types: TicketType[];
-  fee_handling: 'absorb' | 'pass';
+  fee_handling: "absorb" | "pass";
+  views: number;
+  featured_until: string | null;
+  featured_tier: string | null;
+  featured_paid: number | null;
   created_at: string;
 }
 
@@ -74,8 +88,12 @@ export interface Order {
   currency: string;
   stripe_payment_intent_id: string | null;
   stripe_checkout_session_id: string | null;
-  status: 'pending' | 'paid' | 'refunded' | 'cancelled';
+  status: "pending" | "paid" | "refunded" | "cancelled";
   tickets: TicketType[];
+  referral_code: string | null;
+  promoter_event_id: string | null;
+  venue_id: string | null;
+  venue_revenue: number;
   created_at: string;
 }
 
@@ -87,7 +105,12 @@ export interface Ticket {
   ticket_type: string;
   price: number;
   qr_code: string;
-  status: 'valid' | 'used' | 'cancelled';
+  status: "valid" | "used" | "cancelled" | "returned" | "resold";
   checked_in_at: string | null;
+  returned_at: string | null;
+  resale_claim_token: string | null;
+  resale_claim_expires_at: string | null;
+  resale_completed_at: string | null;
+  resale_new_owner_id: string | null;
   created_at: string;
 }

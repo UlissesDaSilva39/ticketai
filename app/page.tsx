@@ -14,37 +14,60 @@ export default async function HomePage() {
     .order("start_date", { ascending: true });
 
   const allEvents = (events as Event[]) || [];
-  const liveStreams = allEvents.filter((e) => e.event_type === "live-stream");
-  const inPerson = allEvents.filter((e) => e.event_type !== "live-stream");
+  const now = new Date();
+
+  const featured = allEvents.filter(
+    (e) => e.featured_until && new Date(e.featured_until) > now
+  );
+  const nonFeatured = allEvents.filter(
+    (e) => !e.featured_until || new Date(e.featured_until) <= now
+  );
+  const liveStreams = nonFeatured.filter((e) => e.event_type === "live-stream");
+  const inPerson = nonFeatured.filter((e) => e.event_type !== "live-stream");
 
   return (
     <div>
-      <section className="bg-black text-white py-24 px-4">
+      <section className="bg-black text-white px-4 py-16 md:py-24">
         <div className="max-w-7xl mx-auto">
-          <h1
-            className="text-6xl md:text-8xl font-bold leading-none tracking-tight"
-            style={{ fontFamily: "var(--font-antonio)" }}
-          >
-            FIND YOUR
+          <h1 className="text-6xl md:text-8xl font-bold leading-[0.85] tracking-tighter uppercase mb-12" style={{ fontFamily: "var(--font-antonio)" }}>
+            FIND
             <br />
-            NEXT EVENT
+            YOUR NEXT
+            <br />
+            EVENT
           </h1>
-          <p className="mt-6 text-lg text-gray-300 max-w-xl">
-            AI-powered discovery. Transparent pricing. Zero hassle.
-          </p>
+
+          {featured.length > 0 ? (
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="px-3 py-1 bg-[#00FF87] text-black text-xs font-bold rounded-full uppercase tracking-widest">Featured</span>
+                <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-tight" style={{ fontFamily: "var(--font-antonio)" }}>
+                  Don&apos;t Miss These
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {featured.map((event) => (
+                  <EventCard key={event.id} event={event} dark />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p className="text-lg text-gray-400 max-w-xl">
+              AI-powered discovery. Transparent pricing. Zero hassle.
+            </p>
+          )}
         </div>
       </section>
 
       {liveStreams.length > 0 && (
-        <section className="py-16 px-4 bg-gray-50">
+        <section className="px-4 py-16">
           <div className="max-w-7xl mx-auto">
-            <h2
-              className="text-4xl font-bold mb-8"
-              style={{ fontFamily: "var(--font-antonio)" }}
-            >
-              LIVE STREAMS
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 uppercase tracking-tight" style={{ fontFamily: "var(--font-antonio)" }}>
+              LIVE
+              <br />
+              STREAMS
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {liveStreams.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
@@ -53,20 +76,17 @@ export default async function HomePage() {
         </section>
       )}
 
-      <section className="py-16 px-4">
+      <section className="px-4 py-16">
         <div className="max-w-7xl mx-auto">
-          <h2
-            className="text-4xl font-bold mb-8"
-            style={{ fontFamily: "var(--font-antonio)" }}
-          >
-            UPCOMING EVENTS
+          <h2 className="text-5xl md:text-6xl font-bold mb-8 uppercase tracking-tight" style={{ fontFamily: "var(--font-antonio)" }}>
+            UPCOMING
+            <br />
+            EVENTS
           </h2>
           {inPerson.length === 0 ? (
-            <p className="text-gray-500">
-              No events yet. Add some in Supabase Table Editor.
-            </p>
+            <p className="text-gray-500">No events yet.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {inPerson.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}

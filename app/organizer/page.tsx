@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
@@ -88,11 +88,12 @@ export default async function OrganizerDashboard() {
               <div className="flex-1">
                 <h3 className="font-bold text-lg mb-1">{event.title}</h3>
                 <p className="text-sm text-gray-500">
-                  {new Date(event.start_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} · {event.status}
+                  {new Date(event.start_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} Â· {event.status}
                 </p>
               </div>
               <div className="flex gap-2">
                 <Link href={"/event/" + event.id} className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:border-black">View</Link>
+                <Link href={"/organizer/events/" + event.id + "/boost"} className="px-4 py-2 bg-[#00FF87] text-black rounded-full text-sm font-medium hover:bg-[#00e67a]">Boost</Link>
               </div>
             </div>
           ))}
