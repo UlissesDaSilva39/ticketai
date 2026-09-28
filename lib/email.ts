@@ -1,4 +1,4 @@
-﻿import { Resend } from "resend";
+import { Resend } from "resend";
 import { generateTicketPdf } from "./pdf";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -74,7 +74,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
         content: pdf,
       });
     } catch (pdfErr) {
-      console.error("PDF generation failed (continuing without PDF):", pdfErr);
+      console.error("PDF generation failed:", pdfErr);
     }
   }
 
@@ -92,4 +92,53 @@ export async function sendTicketEmail(data: TicketEmailData) {
   }
 
   return result;
+}
+
+type ResaleEmailData = {
+  toEmail: string;
+  eventTitle: string;
+  eventDate: string;
+  ticketType: string;
+  price: number;
+  claimUrl: string;
+  expiresAt: string;
+};
+
+export async function sendResaleNotification(data: ResaleEmailData) {
+  const expiresFormatted = new Date(data.expiresAt).toLocaleString("en-GB");
+
+  const html =
+    '<!DOCTYPE html><html><body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#f5f5f5;">' +
+    '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:40px 20px;"><tr><td align="center">' +
+    '<table width="600" cellpadding="0" cellspacing="0" style="background:white;border-radius:12px;overflow:hidden;">' +
+    '<tr><td style="background:#00FF87;padding:40px 32px;text-align:center;">' +
+    '<h1 style="margin:0;font-size:42px;font-weight:700;letter-spacing:-1px;color:#000;">A TICKET IS WAITING</h1>' +
+    '<p style="margin:8px 0 0 0;font-size:16px;color:#000;">Face value resale</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:32px;">' +
+    '<h2 style="margin:0 0 4px 0;font-size:24px;">' + data.eventTitle + '</h2>' +
+    '<p style="margin:0;color:#666;font-size:14px;">' + data.eventDate + '</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:0 32px 32px 32px;">' +
+    '<p style="font-size:15px;line-height:1.6;">You are next on the waitlist. A ticket for <strong>' + data.eventTitle + '</strong> has just been returned by its original owner.</p>' +
+    '<p style="font-size:15px;line-height:1.6;">Ticket type: <strong>' + data.ticketType + '</strong><br>Price: <strong>£' + data.price.toFixed(2) + '</strong> (original face value)</p>' +
+    '<p style="font-size:14px;color:#999;">This link expires on ' + expiresFormatted + '. First come, first served.</p>' +
+    '<a href="' + data.claimUrl + '" style="display:inline-block;margin-top:16px;background:#000;color:#fff;padding:16px 32px;border-radius:999px;text-decoration:none;font-weight:600;font-size:15px;">Claim Ticket</a>' +
+    '</td></tr>' +
+    '<tr><td style="background:#f9f9f9;padding:24px 32px;text-align:center;font-size:12px;color:#999;">' +
+    '<p style="margin:0;">TicketAI · Face value resale</p>' +
+    '</td></tr>' +
+    '</table></td></tr></table></body></html>';
+
+  const { error } = await resend.emails.send({
+    from: "TicketAI <onboarding@resend.dev>",
+    to: data.toEmail,
+    subject: "A ticket just became available - " + data.eventTitle,
+    html,
+  });
+
+  if (error) {
+    console.error("Resale notification error:", error);
+    throw new Error(error.message);
+  }
 }

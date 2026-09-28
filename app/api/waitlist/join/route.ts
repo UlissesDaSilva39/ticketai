@@ -20,7 +20,6 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = await createClient();
-
     const { data: { user } } = await supabase.auth.getUser();
 
     const { data, error } = await supabase
@@ -34,18 +33,43 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) {
+      console.error("Waitlist insert error:", JSON.stringify(error));
+
       if (error.code === "23505") {
         return NextResponse.json(
           { error: "You are already on this waitlist" },
           { status: 400 }
         );
       }
-      throw error;
+
+      if (error.code === "23503") {
+        return NextResponse.json(
+          { error: "This event does not exist" },
+          { status: 400 }
+        );
+      }
+
+      if (error.code === "42501") {
+        return NextResponse.json(
+          { error: "Permission denied - check RLS policy" },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json(
+        { error: error.message || error.code || "Insert failed" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ entry: data, success: true });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Failed to join";
+    console.error("Waitlist route error:", err);
+    const message =
+      err instanceof Error ? err.message :
+      typeof err === "object" && err !== null && "message" in err
+        ? String((err as { message: unknown }).message)
+        : "Failed to join";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
