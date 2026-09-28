@@ -1,0 +1,262 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+
+type Promoter = {
+  id: string;
+  display_name: string | null;
+  bio: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  youtube: string | null;
+  city: string | null;
+  commission_rate: number;
+};
+
+type PromoterEvent = {
+  id: string;
+  event_id: string;
+  referral_code: string;
+  clicks: number;
+  conversions: number;
+  revenue: number;
+  status: string;
+  commission_rate: number;
+  events?: { title: string; start_date: string } | null;
+};
+
+export default function PromoterDashboard() {
+  const [promoter, setPromoter] = useState<Promoter | null>(null);
+  const [myEvents, setMyEvents] = useState<PromoterEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const [form, setForm] = useState({
+    display_name: "",
+    bio: "",
+    instagram: "",
+    tiktok: "",
+    youtube: "",
+    city: "",
+  });
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) { setLoading(false); return; }
+      const { data: p } = await supabase
+        .from("promoters")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (p) {
+        setPromoter(p as Promoter);
+        setForm({
+          display_name: p.display_name || "",
+          bio: p.bio || "",
+          instagram: p.instagram || "",
+          tiktok: p.tiktok || "",
+          youtube: p.youtube || "",
+          city: p.city || "",
+        });
+
+        const { data: pe } = await supabase
+          .from("promoter_events")
+          .select("*, events:event_id(title, start_date)")
+          .eq("promoter_id", p.id)
+          .order("created_at", { ascending: false });
+
+        if (pe) setMyEvents(pe as unknown as PromoterEvent[]);
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  const join = async () => {
+    if (!form.display_name) { setError("Display name required"); return; }
+    setSaving(true);
+    setError("");
+    try {
+      const res = await fetch("/api/promoter/join", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setPromoter(data.promoter);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Join failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const buildReferralUrl = (eventId: string, code: string) => {
+    if (typeof window === "undefined") return "";
+    return window.location.origin + "/event/" + eventId + "?ref=" + code;
+  };
+
+  const copyLink = async (eventId: string, code: string) => {
+    const url = buildReferralUrl(eventId, code);
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(code);
+      setTimeout(() => setCopied(null), 2000);
+    } catch {
+      window.prompt("Copy this link:", url);
+    }
+  };
+
+  const shareOnSocial = (platform: string, eventId: string, code: string, title: string) => {
+    const url = buildReferralUrl(eventId, code);
+    const text = "Check out " + title + " — tickets available now";
+    let shareUrl = "";
+    if (platform === "x") {
+      shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url);
+    } else if (platform === "whatsapp") {
+      shareUrl = "https://wa.me/?text=" + encodeURIComponent(text + " " + url);
+    } else if (platform === "facebook") {
+      shareUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+    } else if (platform === "telegram") {
+      shareUrl = "https://t.me/share/url?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text);
+    }
+    window.open(shareUrl, "_blank", "width=600,height=500");
+  };
+
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
+
+  if (!promoter) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-12">
+        <div className="mb-8">
+          <Link href="/promoters" className="text-sm text-gray-500 hover:text-black">
+            ← Back to Promoters
+          </Link>
+        </div>
+        <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>
+          BECOME A PROMOTER
+        </h1>
+        <p className="text-gray-500 mb-10">
+          Pick events you love. Share your unique link. Earn commission on every ticket sold.
+        </p>
+        <div className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium mb-2">Display Name *</label>
+            <input type="text" value={form.display_name} onChange={(e) => setForm({ ...form, display_name: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="Your name or brand" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Bio</label>
+            <textarea value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="What kind of events do you promote?" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Instagram</label>
+              <input type="text" value={form.instagram} onChange={(e) => setForm({ ...form, instagram: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="username" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">TikTok</label>
+              <input type="text" value={form.tiktok} onChange={(e) => setForm({ ...form, tiktok: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="username" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">YouTube</label>
+              <input type="text" value={form.youtube} onChange={(e) => setForm({ ...form, youtube: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="channel" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">City</label>
+              <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="London" />
+            </div>
+          </div>
+          {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
+          <button onClick={join} disabled={saving} className="w-full py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800 disabled:opacity-50">
+            {saving ? "Joining..." : "Join as Promoter"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+        <div>
+          <h1 className="text-5xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>PROMOTER</h1>
+          <p className="text-gray-500 mt-2">{promoter.display_name}</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/promoter/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+            Analytics
+          </Link>
+          <Link href="/promoter/payouts" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+            Payouts
+          </Link>
+          <Link href="/promoter/events" className="px-6 py-3 bg-black text-white font-medium rounded-full hover:bg-gray-800">
+            + Find Events to Promote
+          </Link>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Promoting</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{myEvents.length}</p>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Clicks</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{myEvents.reduce((s, e) => s + (e.clicks || 0), 0)}</p>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Sales</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{myEvents.reduce((s, e) => s + (e.conversions || 0), 0)}</p>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Revenue</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{myEvents.reduce((s, e) => s + Number(e.revenue || 0), 0).toFixed(2)}</p>
+        </div>
+      </div>
+      <h2 className="text-2xl font-bold mb-6" style={{ fontFamily: "var(--font-antonio)" }}>EVENTS YOU ARE PROMOTING</h2>
+      {myEvents.length === 0 ? (
+        <div className="bg-gray-50 rounded-lg p-12 text-center">
+          <p className="text-lg text-gray-500 mb-6">You have not picked any events to promote yet.</p>
+          <Link href="/promoter/events" className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800">Browse Events</Link>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {myEvents.map((pe) => {
+            const title = pe.events?.title || "Event";
+            const url = buildReferralUrl(pe.event_id, pe.referral_code);
+            return (
+              <div key={pe.id} className="border border-gray-200 rounded-lg p-6">
+                <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+                  <div className="flex-1 min-w-[200px]">
+                    <h3 className="font-bold text-lg mb-1">{title}</h3>
+                    <p className="text-xs text-gray-500">{pe.conversions} sales · £{Number(pe.revenue).toFixed(2)} earned · {Number(pe.commission_rate || 0)}% commission</p>
+                  </div>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                  <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Your referral link</p>
+                  <p className="font-mono text-sm break-all">{url}</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={() => copyLink(pe.event_id, pe.referral_code)} className="px-5 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800">
+                    {copied === pe.referral_code ? "Copied!" : "Copy Link"}
+                  </button>
+                  <button onClick={() => shareOnSocial("whatsapp", pe.event_id, pe.referral_code, title)} className="px-5 py-2 border border-gray-300 text-sm font-medium rounded-full hover:border-black">WhatsApp</button>
+                  <button onClick={() => shareOnSocial("x", pe.event_id, pe.referral_code, title)} className="px-5 py-2 border border-gray-300 text-sm font-medium rounded-full hover:border-black">X</button>
+                  <button onClick={() => shareOnSocial("facebook", pe.event_id, pe.referral_code, title)} className="px-5 py-2 border border-gray-300 text-sm font-medium rounded-full hover:border-black">Facebook</button>
+                  <button onClick={() => shareOnSocial("telegram", pe.event_id, pe.referral_code, title)} className="px-5 py-2 border border-gray-300 text-sm font-medium rounded-full hover:border-black">Telegram</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

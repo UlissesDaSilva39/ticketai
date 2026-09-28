@@ -1,0 +1,132 @@
+﻿import Link from "next/link";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import type { Event } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
+
+export default async function OrganizerDashboard() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data: events } = await supabase
+    .from("events")
+    .select("*")
+    .eq("organizer_id", user.id)
+    .order("start_date", { ascending: false });
+
+  const eventList = (events as Event[]) || [];
+  const eventIds = eventList.map((e) => e.id);
+
+  let totalRevenue = 0;
+  let totalTicketsSold = 0;
+  let orderCount = 0;
+
+  if (eventIds.length > 0) {
+    const { data: orders } = await supabase
+      .from("orders")
+      .select("*")
+      .in("event_id", eventIds)
+      .eq("status", "paid");
+
+    if (orders) {
+      orderCount = orders.length;
+      totalRevenue = orders.reduce(
+        (sum, o) => sum + Number(o.total_amount || 0),
+        0
+      );
+      for (const o of orders) {
+        const tickets = o.tickets || [];
+        for (const t of tickets) {
+          totalTicketsSold += t.qty || 0;
+        }
+      }
+    }
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+        <div>
+          <h1 className="text-5xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>
+            ORGANIZER
+          </h1>
+          <p className="text-gray-500 mt-2">Signed in as {user.email}</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/organizer/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+            Analytics
+          </Link>
+          <Link href="/organizer/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Analytics</Link>
+          <Link href="/venue/dashboard" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+            Venues
+          </Link>
+          <Link href="/organizer/check-in" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+            Check-In
+          </Link>
+          <Link href="/organizer/promote" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+            Promote
+          </Link>
+          <Link href="/organizer/events/new" className="px-6 py-3 bg-black text-white font-medium rounded-full hover:bg-gray-800">
+            + Create Event
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Events</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{eventList.length}</p>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Tickets Sold</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{totalTicketsSold}</p>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Orders</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{orderCount}</p>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Revenue</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>
+            {"£" + totalRevenue.toFixed(2)}
+          </p>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold mb-6" style={{ fontFamily: "var(--font-antonio)" }}>
+        YOUR EVENTS
+      </h2>
+
+      {eventList.length === 0 ? (
+        <div className="bg-gray-50 rounded-lg p-12 text-center">
+          <p className="text-lg text-gray-500 mb-6">You have not created any events yet.</p>
+          <Link href="/organizer/events/new" className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800">
+            Create Your First Event
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {eventList.map((event) => (
+            <div key={event.id} className="flex items-center justify-between p-5 border border-gray-200 rounded-lg">
+              <div className="flex-1">
+                <h3 className="font-bold text-lg mb-1">{event.title}</h3>
+                <p className="text-sm text-gray-500">
+                  {new Date(event.start_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} · {event.status}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Link href={"/event/" + event.id} className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:border-black">
+                  View
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
