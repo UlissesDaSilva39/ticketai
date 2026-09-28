@@ -51,6 +51,7 @@ export default async function OrganizerDashboard() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/organizer/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Analytics</Link>
+          <Link href="/organizer/campaigns" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Campaigns</Link>
           <Link href="/venue/dashboard" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Venues</Link>
           <Link href="/organizer/check-in" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Check-In</Link>
           <Link href="/organizer/promote" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Promote</Link>

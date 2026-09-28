@@ -1,11 +1,20 @@
 import { createClient } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
+import VisitTracker from "@/components/VisitTracker";
 import type { Event } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const supabase = await createClient();
+
+  const { data: stats } = await supabase
+    .from("site_stats")
+    .select("total_visits")
+    .eq("id", "discover")
+    .single();
+
+  const totalVisits = Number(stats?.total_visits || 0);
 
   const { data: events } = await supabase
     .from("events")
@@ -14,8 +23,28 @@ export default async function HomePage() {
     .order("start_date", { ascending: true });
 
   const allEvents = (events as Event[]) || [];
-  const now = new Date();
+  const eventIds = allEvents.map((e) => e.id);
 
+  const currentUser = (await supabase.auth.getUser()).data.user;
+
+  const soldMap: Record<string, number> = {};
+  const likeCounts: Record<string, number> = {};
+  const userLikes: Record<string, boolean> = {};
+  const followerCounts: Record<string, number> = {};
+  const userFollows: Record<string, boolean> = {};
+  if (eventIds.length > 0) {
+    const { data: tickets } = await supabase
+      .from("tickets")
+      .select("event_id")
+      .in("event_id", eventIds)
+      .neq("status", "cancelled");
+
+    for (const t of tickets || []) {
+      soldMap[t.event_id] = (soldMap[t.event_id] || 0) + 1;
+    }
+  }
+
+  const now = new Date();
   const featured = allEvents.filter(
     (e) => e.featured_until && new Date(e.featured_until) > now
   );
@@ -47,7 +76,7 @@ export default async function HomePage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 {featured.map((event) => (
-                  <EventCard key={event.id} event={event} dark />
+                  <EventCard key={event.id} event={event} dark soldCount={soldMap[event.id] || 0} likeCount={likeCounts[event.id] || 0} userLiked={userLikes[event.id] || false} followerCount={followerCounts[event.organizer_id] || 0} userFollowing={userFollows[event.organizer_id] || false} />
                 ))}
               </div>
             </div>
@@ -56,6 +85,8 @@ export default async function HomePage() {
               AI-powered discovery. Transparent pricing. Zero hassle.
             </p>
           )}
+
+          <VisitTracker initialCount={totalVisits} />
         </div>
       </section>
 
@@ -69,7 +100,7 @@ export default async function HomePage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {liveStreams.map((event) => (
-                <EventCard key={event.id} event={event} />
+                <EventCard key={event.id} event={event} soldCount={soldMap[event.id] || 0} likeCount={likeCounts[event.id] || 0} userLiked={userLikes[event.id] || false} followerCount={followerCounts[event.organizer_id] || 0} userFollowing={userFollows[event.organizer_id] || false} />
               ))}
             </div>
           </div>
@@ -88,7 +119,7 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {inPerson.map((event) => (
-                <EventCard key={event.id} event={event} />
+                <EventCard key={event.id} event={event} soldCount={soldMap[event.id] || 0} likeCount={likeCounts[event.id] || 0} userLiked={userLikes[event.id] || false} followerCount={followerCounts[event.organizer_id] || 0} userFollowing={userFollows[event.organizer_id] || false} />
               ))}
             </div>
           )}

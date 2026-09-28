@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -21,7 +21,6 @@ export async function generateMetadata({
     .maybeSingle();
 
   if (!venue) return { title: "Venue not found" };
-
   const desc = venue.description || ("Events at " + venue.name + (venue.city ? ", " + venue.city : "") + ".");
 
   return {
@@ -58,7 +57,6 @@ export default async function VenuePage({
     .maybeSingle();
 
   if (!venue) return notFound();
-
   const v = venue as Venue;
 
   const { data: events } = await supabase
@@ -69,6 +67,19 @@ export default async function VenuePage({
     .order("start_date", { ascending: true });
 
   const eventList = (events as Event[]) || [];
+  const eventIds = eventList.map((e) => e.id);
+
+  const soldMap: Record<string, number> = {};
+  if (eventIds.length > 0) {
+    const { data: tickets } = await supabase
+      .from("tickets")
+      .select("event_id")
+      .in("event_id", eventIds)
+      .neq("status", "cancelled");
+    for (const t of tickets || []) {
+      soldMap[t.event_id] = (soldMap[t.event_id] || 0) + 1;
+    }
+  }
 
   return (
     <div>
@@ -128,7 +139,7 @@ export default async function VenuePage({
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {eventList.map((event) => (
-              <EventCard key={event.id} event={event} />
+              <EventCard key={event.id} event={event} soldCount={soldMap[event.id] || 0} likeCount={likeCounts[event.id] || 0} userLiked={userLikes[event.id] || false} followerCount={followerCounts[event.organizer_id] || 0} userFollowing={userFollows[event.organizer_id] || false} />
             ))}
           </div>
         )}

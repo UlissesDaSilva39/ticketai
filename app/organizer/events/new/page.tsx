@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { TicketType } from "@/lib/types";
+import AudioUploader from "@/components/AudioUploader";
 
 type VenueOption = {
   id: string;
@@ -22,6 +23,7 @@ export default function NewEventPage() {
   const [eventType, setEventType] = useState("in-person");
   const [venueId, setVenueId] = useState("");
   const [heroImage, setHeroImage] = useState("");
+  const [previewAudio, setPreviewAudio] = useState("");
   const [ticketTypes, setTicketTypes] = useState<TicketType[]>([
     { name: "General Admission", price: 25, quantity: 100 },
   ]);
@@ -69,6 +71,7 @@ export default function NewEventPage() {
         body: JSON.stringify({
           title, description, startDate, eventType,
           venueId, heroImage, ticketTypes, status,
+          previewAudioUrl: previewAudio,
         }),
       });
       const data = await res.json();
@@ -134,6 +137,18 @@ export default function NewEventPage() {
           <p className="text-xs text-gray-500 mt-2">
             Pick a venue to credit them with their revenue share on every ticket sold.
           </p>
+        </section>
+
+        <section>
+          <label className="block text-sm font-medium mb-2">Music Preview (optional)</label>
+          <AudioUploader value={previewAudio} onChange={setPreviewAudio} />
+          <p className="text-xs text-gray-500 mt-2">Upload a 30-second MP3 preview.</p>
+        </section>
+
+        <section>
+          <label className="block text-sm font-medium mb-2">Music Preview (optional)</label>
+          <AudioUploader value={previewAudio} onChange={setPreviewAudio} />
+          <p className="text-xs text-gray-500 mt-2">Upload a 30-second MP3 preview.</p>
         </section>
 
         <section>

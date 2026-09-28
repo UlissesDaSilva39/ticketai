@@ -1,4 +1,4 @@
-export type UserRole = "attendee" | "organizer" | "admin";
+﻿export type UserRole = "attendee" | "organizer" | "admin";
 
 export interface Profile {
   id: string;
@@ -72,6 +72,7 @@ export interface Event {
   ticket_types: TicketType[];
   fee_handling: "absorb" | "pass";
   views: number;
+  preview_audio_url: string | null;
   featured_until: string | null;
   featured_tier: string | null;
   featured_paid: number | null;

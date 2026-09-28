@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     const {
       title, description, startDate, eventType,
       heroImage, ticketTypes, status, venueId,
+      previewAudioUrl,
     } = body;
 
     if (!title || !startDate) {
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
       event_type: eventType || "in-person",
       status: status || "draft",
       hero_image: heroImage || null,
+      preview_audio_url: previewAudioUrl || null,
       ticket_types: ticketTypes || [],
       fee_handling: "pass",
     };

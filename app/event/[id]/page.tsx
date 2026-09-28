@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import type { Event } from "@/lib/types";
 import ViewTracker from "@/components/ViewTracker";
 import WaitlistButton from "@/components/WaitlistButton";
+import FollowButton from "@/components/FollowButton";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,6 @@ export async function generateMetadata({
     .single();
 
   if (!event) return { title: "Event not found" };
-
   const desc = event.description || "Get tickets on TicketAI.";
 
   return {
@@ -67,7 +67,6 @@ export default async function EventPage({
     ? Math.min(...e.ticket_types.map((t) => Number(t.price)))
     : 0;
 
-  // Calculate total capacity and sold count
   const totalCapacity = (e.ticket_types || []).reduce(
     (sum, t) => sum + Number(t.quantity || 0),
     0
@@ -81,6 +80,24 @@ export default async function EventPage({
 
   const isSoldOut = totalCapacity > 0 && (soldCount || 0) >= totalCapacity;
 
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const { count: followerCount } = await supabase
+    .from("follows")
+    .select("*", { count: "exact", head: true })
+    .eq("organizer_id", e.organizer_id);
+
+  let userFollowing = false;
+  if (user) {
+    const { data: follow } = await supabase
+      .from("follows")
+      .select("id")
+      .eq("follower_id", user.id)
+      .eq("organizer_id", e.organizer_id)
+      .maybeSingle();
+    userFollowing = !!follow;
+  }
+
   return (
     <div>
       <ViewTracker eventId={e.id} />
@@ -93,8 +110,29 @@ export default async function EventPage({
           <h1 className="text-5xl md:text-7xl font-bold text-white leading-none uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
             {e.title}
           </h1>
+          <div className="flex flex-wrap items-center gap-3 mt-6">
+            <FollowButton
+              organizerId={e.organizer_id}
+              initialFollowing={userFollowing}
+              initialCount={followerCount || 0}
+            />
+            {e.preview_audio_url && (
+              <a
+                href={e.preview_audio_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00FF87] text-black text-sm font-medium rounded-full hover:bg-[#00e67a]"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                Play Preview
+              </a>
+            )}
+          </div>
         </div>
       </div>
+
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
