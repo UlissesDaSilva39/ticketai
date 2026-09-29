@@ -1,0 +1,86 @@
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+
+export default function SearchFilters() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [type, setType] = useState(searchParams.get("type") || "all");
+  const [sort, setSort] = useState(searchParams.get("sort") || "upcoming");
+
+  const apply = () => {
+    const params = new URLSearchParams();
+    if (query) params.set("q", query);
+    if (type !== "all") params.set("type", type);
+    if (sort !== "upcoming") params.set("sort", sort);
+    const qs = params.toString();
+    router.push(qs ? "/search?" + qs : "/search");
+  };
+
+  const clear = () => {
+    setQuery("");
+    setType("all");
+    setSort("upcoming");
+    router.push("/search");
+  };
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+      <div className="flex flex-col md:flex-row gap-3 mb-4">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") apply(); }}
+          placeholder="Search events, artists, venues..."
+          className="flex-1 px-5 py-3 border border-gray-300 rounded-full focus:border-black focus:outline-none"
+        />
+        <button
+          onClick={apply}
+          className="px-8 py-3 bg-black text-white font-medium rounded-full hover:bg-gray-800"
+        >
+          Search
+        </button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-xs uppercase tracking-widest text-gray-500 mr-2">Filters</span>
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:border-black focus:outline-none"
+        >
+          <option value="all">All Types</option>
+          <option value="in-person">In Person</option>
+          <option value="live-stream">Live Stream</option>
+          <option value="hybrid">Hybrid</option>
+        </select>
+
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:border-black focus:outline-none"
+        >
+          <option value="upcoming">Upcoming</option>
+          <option value="newest">Newest</option>
+          <option value="popular">Most Popular</option>
+        </select>
+
+        <button
+          onClick={apply}
+          className="px-5 py-2 text-sm font-medium border-2 border-black rounded-full hover:bg-gray-50"
+        >
+          Apply
+        </button>
+        <button
+          onClick={clear}
+          className="px-5 py-2 text-sm text-gray-500 hover:text-black"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+  );
+}

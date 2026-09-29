@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
@@ -50,6 +50,7 @@ export default async function OrganizerDashboard() {
           <p className="text-gray-500 mt-2">Signed in as {user.email}</p>
         </div>
         <div className="flex flex-wrap gap-3">
+          <Link href="/organizer/profile" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Profile</Link>
           <Link href="/organizer/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Analytics</Link>
           <Link href="/organizer/campaigns" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Campaigns</Link>
           <Link href="/venue/dashboard" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">Venues</Link>
