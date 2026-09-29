@@ -6,6 +6,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { TicketType } from "@/lib/types";
 import AudioUploader from "@/components/AudioUploader";
+import SeatMapEditor from "@/components/SeatMapEditor";
 
 type VenueOption = {
   id: string;
@@ -24,6 +25,8 @@ export default function NewEventPage() {
   const [venueId, setVenueId] = useState("");
   const [heroImage, setHeroImage] = useState("");
   const [previewAudio, setPreviewAudio] = useState("");
+  const [hasSeatmap, setHasSeatmap] = useState(false);
+  const [seatmapConfig, setSeatmapConfig] = useState<{ rows: Array<{ label: string; price: number; seats: string[] }> }>({ rows: [] });
   const [ticketTypes, setTicketTypes] = useState<TicketType[]>([
     { name: "General Admission", price: 25, quantity: 100 },
   ]);
@@ -72,6 +75,7 @@ export default function NewEventPage() {
           title, description, startDate, eventType,
           venueId, heroImage, ticketTypes, status,
           previewAudioUrl: previewAudio,
+          seatmapConfig: hasSeatmap ? seatmapConfig : null,
         }),
       });
       const data = await res.json();
@@ -146,9 +150,21 @@ export default function NewEventPage() {
         </section>
 
         <section>
-          <label className="block text-sm font-medium mb-2">Music Preview (optional)</label>
-          <AudioUploader value={previewAudio} onChange={setPreviewAudio} />
-          <p className="text-xs text-gray-500 mt-2">Upload a 30-second MP3 preview.</p>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={hasSeatmap}
+              onChange={(e) => setHasSeatmap(e.target.checked)}
+              className="w-5 h-5"
+            />
+            <span className="text-sm font-medium">Enable Seat Map (reserved seating)</span>
+          </label>
+          <p className="text-xs text-gray-500 mt-2">Let fans pick their exact seat at checkout.</p>
+          {hasSeatmap && (
+            <div className="mt-4">
+              <SeatMapEditor value={seatmapConfig} onChange={setSeatmapConfig} />
+            </div>
+          )}
         </section>
 
         <section>

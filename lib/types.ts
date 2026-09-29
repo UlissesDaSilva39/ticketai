@@ -1,4 +1,4 @@
-﻿export type UserRole = "attendee" | "organizer" | "admin";
+export type UserRole = "attendee" | "organizer" | "admin";
 
 export interface Profile {
   id: string;
@@ -57,6 +57,7 @@ export interface TicketType {
 }
 
 export interface Event {
+  seatmap_config?: { rows: { label: string; price: number; seats: string[] }[] } | null;
   id: string;
   organizer_id: string;
   venue_id: string | null;
@@ -99,6 +100,7 @@ export interface Order {
 }
 
 export interface Ticket {
+  seat_label?: string | null;
   id: string;
   event_id: string;
   order_id: string;

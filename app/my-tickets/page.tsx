@@ -72,6 +72,7 @@ export default async function MyTicketsPage() {
                     <p className="text-xs text-gray-400 font-mono break-all mb-4">
                       {ticket.qr_code}
                     </p>
+                    {ticket.seat_label && (<p className="text-sm font-bold mb-2">Seat {ticket.seat_label}</p>)}
                     {ticket.checked_in_at && (
                       <p className="text-xs text-gray-500 mb-4">
                         Checked in {new Date(ticket.checked_in_at).toLocaleString("en-GB")}

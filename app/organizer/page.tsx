@@ -90,7 +90,7 @@ export default async function OrganizerDashboard() {
               <div className="flex-1">
                 <h3 className="font-bold text-lg mb-1">{event.title}</h3>
                 <p className="text-sm text-gray-500">
-                  {new Date(event.start_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} Â· {event.status}
+                  {new Date(event.start_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} · {event.status}
                 </p>
               </div>
               <div className="flex gap-2">

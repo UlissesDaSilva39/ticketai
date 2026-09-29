@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
         secondaryFields: [
           { label: "DATE", value: eventDate },
           { label: "TICKET TYPE", value: ticket.ticket_type },
+          { label: "SEAT", value: ticket.seat_label || "General" },
         ],
         backFields: [
           { label: "Ticket ID", value: ticket.qr_code },

@@ -93,6 +93,7 @@ export async function POST(req: NextRequest) {
           ticket_type: ticketType,
           price: price,
           qr_code: crypto.randomUUID(),
+          seat_label: seats[seatIndex++] ?? null,
           status: "valid",
         })
         .select()
@@ -159,6 +160,7 @@ export async function POST(req: NextRequest) {
     const userId = metadata.userId;
     const tickets = JSON.parse(metadata.tickets || "[]");
     const referralCode = metadata.referralCode || null;
+      const seats = JSON.parse(metadata.seats || "[]");
     const subtotal = Number(metadata.subtotal || 0);
     const processingFee = Number(metadata.processingFee || 0);
     const platformFee = Number(metadata.platformFee || 0);
@@ -225,6 +227,8 @@ export async function POST(req: NextRequest) {
       status: string;
     }> = [];
 
+    const seats: string[] = JSON.parse(metadata.seats || "[]");
+    let seatIndex = 0;
     for (const t of tickets) {
       const matchedTT = eventData?.ticket_types?.find(
         (x: { name: string; price: number }) => x.name === t.name

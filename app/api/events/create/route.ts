@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
       title, description, startDate, eventType,
       heroImage, ticketTypes, status, venueId,
       previewAudioUrl,
+      seatmapConfig,
     } = body;
 
     if (!title || !startDate) {
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
       status: status || "draft",
       hero_image: heroImage || null,
       preview_audio_url: previewAudioUrl || null,
+      seatmap_config: seatmapConfig || null,
       ticket_types: ticketTypes || [],
       fee_handling: "pass",
     };

@@ -1,3 +1,4 @@
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
@@ -9,7 +10,32 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
-    const { eventId, tickets } = await req.json();
+    const { eventId, tickets, seats } = await req.json();
+
+    if (Array.isArray(seats) && seats.length > 0) {
+      const qty = (tickets as { qty: number }[]).reduce((a, t) => a + t.qty, 0);
+      const labels: string[] = seats.map((s: { label: string }) => s.label);
+      if (labels.length !== qty || new Set(labels).size !== labels.length) {
+        return NextResponse.json({ error: "Select exactly one seat per ticket" }, { status: 400 });
+      }
+      const admin = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      const { data: ev } = await admin.from("events").select("seatmap_config").eq("id", eventId).single();
+      const valid = new Set<string>(
+        ((ev?.seatmap_config?.rows ?? []) as { seats: string[] }[]).flatMap((r) => r.seats)
+      );
+      if (labels.some((l) => !valid.has(l))) {
+        return NextResponse.json({ error: "Invalid seat selected" }, { status: 400 });
+      }
+      const { data: taken } = await admin
+        .from("tickets").select("seat_label")
+        .eq("event_id", eventId).in("seat_label", labels).in("status", ["valid", "used"]);
+      if (taken && taken.length > 0) {
+        return NextResponse.json({ error: "Some seats were just taken. Please pick again." }, { status: 409 });
+      }
+    }
 
     const cookieStore = await cookies();
     const referralCode = cookieStore.get("referral_code")?.value || null;
@@ -60,6 +86,7 @@ export async function POST(req: NextRequest) {
         eventId,
         userId: user.id,
         tickets: JSON.stringify(tickets),
+        seats: JSON.stringify(seats || []),
         referralCode: referralCode || "",
         subtotal: subtotal.toFixed(2),
         processingFee: processingFee.toFixed(2),

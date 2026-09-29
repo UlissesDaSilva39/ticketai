@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Event } from "@/lib/types";
+import SeatMap from "@/components/SeatMap";
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
@@ -12,6 +13,18 @@ function CheckoutContent() {
   const [selectedTickets, setSelectedTickets] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
+  const [selectedSeats, setSelectedSeats] = useState<Array<{ label: string; price: number; row: string }>>([]);
+
+  const [reservedSeats, setReservedSeats] = useState<string[]>([]);
+  const totalQty = Object.values(selectedTickets).reduce((a, b) => a + b, 0);
+  useEffect(() => { setSelectedSeats([]); }, [totalQty]);
+  useEffect(() => {
+    if (!eventId) return;
+    fetch("/api/events/" + eventId + "/reserved-seats")
+      .then((r) => r.json())
+      .then((d) => setReservedSeats(d.seats || []))
+      .catch(() => {});
+  }, [eventId]);
 
   useEffect(() => {
     if (!eventId) { setLoading(false); return; }
@@ -39,7 +52,7 @@ function CheckoutContent() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, tickets }),
+        body: JSON.stringify({ eventId, tickets, seats: selectedSeats }),
       });
 
       const data = await res.json();
@@ -81,6 +94,21 @@ function CheckoutContent() {
             ))}
           </div>
         </section>
+        {event?.seatmap_config && event.seatmap_config.rows?.length > 0 && (
+          <section>
+            <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>PICK YOUR SEATS</h2>
+            <SeatMap
+              key={totalQty}
+              config={event.seatmap_config}
+              reservedSeats={reservedSeats}
+              maxSelectable={totalQty || 1}
+              onChange={setSelectedSeats}
+            />
+            {selectedSeats.length > 0 && (
+              <p className="text-sm text-gray-600 mt-3">Selected seats: {selectedSeats.map((s) => s.label).join(", ")}</p>
+            )}
+          </section>
+        )}
         <section>
           <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>2. QUANTITY</h2>
           <div className="flex items-center gap-4">
