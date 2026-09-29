@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Ticket, Event } from "@/lib/types";
 import ReturnButton from "./ReturnButton";
+import WalletButton from "@/components/WalletButton";
 
 export const dynamic = "force-dynamic";
 
@@ -89,6 +90,7 @@ export default async function MyTicketsPage() {
                         >
                           Print Ticket
                         </Link>
+                        <WalletButton ticketId={ticket.id} />
                         <ReturnButton ticketId={ticket.id} />
                       </div>
                     )}
@@ -104,7 +106,7 @@ export default async function MyTicketsPage() {
                       />
                     ) : (
                       <div className="text-center text-gray-400">
-                        <p className="text-4xl mb-2">{isUsed ? "✓" : isReturned ? "↩" : "✗"}</p>
+                        <p className="text-4xl mb-2">{isUsed ? "Y" : isReturned ? "↩" : "X"}</p>
                         <p className="text-xs uppercase tracking-widest">
                           {isUsed ? "Used" : isReturned ? "Returned" : "Resold"}
                         </p>
