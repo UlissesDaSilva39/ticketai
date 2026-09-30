@@ -76,6 +76,12 @@ export async function POST(req: NextRequest) {
     const price = Number(metadata.price || 0);
 
     try {
+      const { data: orig } = await admin
+        .from("tickets")
+        .select("seat_label")
+        .eq("id", originalTicketId)
+        .single();
+
       await admin
         .from("tickets")
         .update({
@@ -305,6 +311,7 @@ export async function POST(req: NextRequest) {
             qr_code: t.qr_code,
           })),
           totalAmount: total,
+          attachPdf: false,
         });
       } catch (e) {
         console.error("Email failed:", e);
@@ -319,5 +326,7 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ received: true });
 }
+
+
 
 

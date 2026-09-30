@@ -1,4 +1,3 @@
-﻿import AskTicketAI from "@/components/AskTicketAI";
 import { createClient } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import VisitTracker from "@/components/VisitTracker";
@@ -126,7 +125,6 @@ export default async function HomePage() {
           )}
         </div>
       </section>
-      <AskTicketAI />
     </div>
   );
 }
