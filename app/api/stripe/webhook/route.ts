@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { sendTicketEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
           ticket_type: ticketType,
           price: price,
           qr_code: crypto.randomUUID(),
-          seat_label: seats[seatIndex++] ?? null,
+          seat_label: orig?.seat_label ?? null,
           status: "valid",
         })
         .select()
@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
     const userId = metadata.userId;
     const tickets = JSON.parse(metadata.tickets || "[]");
     const referralCode = metadata.referralCode || null;
-      const seats = JSON.parse(metadata.seats || "[]");
+
     const subtotal = Number(metadata.subtotal || 0);
     const processingFee = Number(metadata.processingFee || 0);
     const platformFee = Number(metadata.platformFee || 0);
@@ -282,7 +282,7 @@ export async function POST(req: NextRequest) {
     const { data: insertedTickets } = await admin
       .from("tickets")
       .insert(ticketsToInsert)
-      .select("id, ticket_type, price, qr_code");
+      .select("id, ticket_type, price, qr_code, seat_label");
 
     const buyerEmail = session.customer_details?.email;
     if (buyerEmail && insertedTickets) {
@@ -319,3 +319,5 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ received: true });
 }
+
+
