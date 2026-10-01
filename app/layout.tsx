@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter, Antonio } from "next/font/google";
 import "./globals.css";
 
@@ -53,11 +53,10 @@ export default function RootLayout({
               <a href="/" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Discover</a>
               <a href="/search" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Search</a>
               <a href="/for-promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Become a promoter</a>
-              <a href="/for-promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Become a promoter</a>
-              <a href="/for-venues" className="text-sm font-medium hover:opacity-70 hidden sm:inline">List your venue</a>
+                           <a href="/for-venues" className="text-sm font-medium hover:opacity-70 hidden sm:inline">List your venue</a>
               <a href="/promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Promoters</a>
               <a href="/my-tickets" className="text-sm font-medium hover:opacity-70 hidden sm:inline">My Tickets</a>
-              <a href="/organizer" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Organizer</a>
+              <a href="/venue/dashboard" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Venue Boards</a>
               <a href="/login" className="px-5 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800">Sign In</a>
             </nav>
           </div>
@@ -79,6 +78,9 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+
 
 
 
