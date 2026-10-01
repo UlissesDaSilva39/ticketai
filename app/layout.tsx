@@ -52,6 +52,7 @@ export default function RootLayout({
             <nav className="flex items-center gap-6">
               <a href="/" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Discover</a>
               <a href="/search" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Search</a>
+              <a href="/for-promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Become a promoter</a>
               <a href="/promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Promoters</a>
               <a href="/my-tickets" className="text-sm font-medium hover:opacity-70 hidden sm:inline">My Tickets</a>
               <a href="/organizer" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Organizer</a>
@@ -76,3 +77,11 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+
+
+
+
+
+
