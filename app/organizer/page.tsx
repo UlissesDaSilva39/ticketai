@@ -420,8 +420,10 @@ export default function OrganizerDashboard() {
                       </td>
 
                       <td className="px-6 py-4 text-sm font-medium">
-                        {money(Number(order.amount || 0))}
-                      </td>
+<td className="px-6 py-4 text-sm">
+                        {money(Number(order.price || 0))}
+                     </td>
+ </td>
 
                       <td className="px-6 py-4 text-sm text-gray-500">
                         {date(order.created_at)}
@@ -469,3 +471,5 @@ export default function OrganizerDashboard() {
     </main>
   );
 }
+
+

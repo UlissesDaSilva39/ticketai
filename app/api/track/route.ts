@@ -1,5 +1,17 @@
-import { NextResponse } from "next/server";
+ import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+
+function inferChannel(referrer: string | null | undefined): string {
+  if (!referrer) return "Direct";
+  const r = referrer.toLowerCase();
+  if (r.includes("instagram.com")) return "Instagram";
+  if (r.includes("facebook.com") || r.includes("fb.com") || r.includes("l.facebook.com")) return "Facebook";
+  if (r.includes("google.com") || r.includes("googleadservices.com")) return "Google";
+  if (r.includes("tiktok.com")) return "TikTok";
+  if (r.includes("twitter.com") || r.includes("t.co") || r.includes("x.com")) return "Twitter/X";
+  if (r.includes("mail.google.com") || r.includes("outlook.com") || r.includes("mail.yahoo.com")) return "Email";
+  return "Organic";
+}
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
@@ -40,6 +52,7 @@ export async function POST(req: Request) {
     user_agent: ua,
     ip_hash: ipHash,
     referrer: referrer ?? null,
+    channel: inferChannel(referrer),
   });
 
   await supabase.rpc("increment_campaign_clicks", {

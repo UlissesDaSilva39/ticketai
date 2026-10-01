@@ -431,7 +431,7 @@ export default function OrganizerEventAnalyticsPage() {
             </p>
 
             <p className="mt-3 text-4xl font-bold text-gray-900">
-              {summary.daysUntilEvent < 0 ? "Event passed" : salesPace.requiredSalesPerDay > 0 ? `${salesPace.requiredSalesPerDay.toFixed(1)} tickets/day` : "-"}
+              {countdown.daysUntilEvent < 0 ? "Event passed" : salesPace.requiredSalesPerDay > 0 ? `${salesPace.requiredSalesPerDay.toFixed(1)} tickets/day` : "-"}
             </p>
 
             <p className="mt-1 text-sm text-gray-500">

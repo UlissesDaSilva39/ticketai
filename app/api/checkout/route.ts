@@ -1,8 +1,20 @@
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { stripe } from "@/lib/stripe";
+
+function inferChannel(ref: string | null): string {
+  if (!ref) return "Direct";
+  const r = ref.toLowerCase();
+  if (r.includes("instagram.com")) return "Instagram";
+  if (r.includes("facebook.com") || r.includes("fb.com") || r.includes("l.facebook.com")) return "Facebook";
+  if (r.includes("google.com") || r.includes("googleadservices.com")) return "Google";
+  if (r.includes("tiktok.com")) return "TikTok";
+  if (r.includes("twitter.com") || r.includes("t.co") || r.includes("x.com")) return "Twitter/X";
+  if (r.includes("mail.google.com") || r.includes("outlook.com") || r.includes("mail.yahoo.com")) return "Email";
+  return "Organic";
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,6 +33,8 @@ export async function POST(req: NextRequest) {
         .maybeSingle();
       if (c) campaignId = c.id;
     }
+
+    const channel = inferChannel(req.headers.get("referer"));
 
     if (Array.isArray(seats) && seats.length > 0) {
       const qty = (tickets as { qty: number }[]).reduce((a, t) => a + t.qty, 0);
@@ -103,6 +117,7 @@ export async function POST(req: NextRequest) {
         platformFee: platformFee.toFixed(2),
         campaignId: campaignId || "",
         campaignCode: campaignCode || "",
+        channel: channel,
       },
     });
 

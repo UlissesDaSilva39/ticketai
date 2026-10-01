@@ -81,6 +81,16 @@ export default async function VenuePage({
     }
   }
 
+  const likeCounts: Record<string, number> = {};
+  const userLikes: Record<string, boolean> = {};
+  const followerCounts: Record<string, number> = {};
+  const userFollows: Record<string, boolean> = {};
+
+  const likeCounts: Record<string, number> = {};
+  const userLikes: Record<string, boolean> = {};
+  const followerCounts: Record<string, number> = {};
+  const userFollows: Record<string, boolean> = {};
+
   return (
     <div>
       <div className="relative h-[50vh] bg-gray-200">
@@ -147,4 +157,6 @@ export default async function VenuePage({
     </div>
   );
 }
+
+
 
