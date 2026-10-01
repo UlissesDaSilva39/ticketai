@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 function getCapacity(event: any) {
   const ticketTypes = Array.isArray(event.ticket_types)
@@ -31,7 +31,7 @@ export async function GET(
   try {
     const { id } = await context.params;
 
-    const supabase = await createClient();
+    const supabase = await createServerSupabase();
 
     const {
       data: { user },

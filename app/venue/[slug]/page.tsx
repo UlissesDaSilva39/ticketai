@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -12,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: venue } = await supabase
     .from("venues")
     .select("name, description, hero_image, city")
@@ -47,7 +47,7 @@ export default async function VenuePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const { data: venue } = await supabase
     .from("venues")
@@ -147,3 +147,4 @@ export default async function VenuePage({
     </div>
   );
 }
+

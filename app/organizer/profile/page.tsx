@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import ProfileForm from "./ProfileForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
@@ -37,3 +37,4 @@ export default async function ProfilePage() {
     </div>
   );
 }
+

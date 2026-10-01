@@ -1,6 +1,6 @@
-ï»¿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +22,7 @@ type EventRow = {
 };
 
 export default async function VenueDashboard() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
@@ -73,7 +73,7 @@ export default async function VenueDashboard() {
         </div>
         <div className="bg-gray-50 rounded-lg p-6">
           <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Earned</p>
-          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"Â£" + totalRevenue.toFixed(2)}</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"£" + totalRevenue.toFixed(2)}</p>
         </div>
       </div>
 
@@ -92,14 +92,14 @@ export default async function VenueDashboard() {
                 <div>
                   <h2 className="text-2xl font-bold mb-1">{v.name}</h2>
                   <p className="text-sm text-gray-500">
-                    {v.city || "â€”"}
-                    {v.capacity ? " Â· " + v.capacity + " capacity" : ""}
+                    {v.city || "—"}
+                    {v.capacity ? " · " + v.capacity + " capacity" : ""}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Total Earned</p>
                   <p className="text-3xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>
-                    {"Â£" + Number(v.total_revenue || 0).toFixed(2)}
+                    {"£" + Number(v.total_revenue || 0).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -128,3 +128,4 @@ export default async function VenueDashboard() {
     </div>
   );
 }
+

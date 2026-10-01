@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ResaleCheckoutButton from "./ResaleCheckoutButton";
@@ -11,7 +11,7 @@ export default async function ResalePage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const { data: ticket } = await supabase
     .from("tickets")
@@ -84,3 +84,4 @@ export default async function ResalePage({
     </div>
   );
 }
+

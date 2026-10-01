@@ -754,7 +754,12 @@ export default function CampaignDetailPage() {
             </section>
           </div>
         </div>
+
+        <div className="mt-8">
+          
+        </div>
       </div>
     </main>
   );
 }
+

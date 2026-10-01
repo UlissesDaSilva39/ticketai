@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(req: NextRequest) {
@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const { organizerId } = await req.json();
     if (!organizerId) return NextResponse.json({ error: "organizerId required" }, { status: 400 });
 
-    const supabase = await createClient();
+    const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Please sign in to follow" }, { status: 401 });
     if (user.id === organizerId) return NextResponse.json({ error: "Cannot follow yourself" }, { status: 400 });
@@ -41,3 +41,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
+

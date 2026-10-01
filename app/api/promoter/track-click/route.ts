@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "referralCode required" }, { status: 400 });
     }
 
-    const supabase = await createClient();
+    const supabase = await createServerSupabase();
 
     const { data: pe } = await supabase
       .from("promoter_events")
@@ -28,3 +28,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false }, { status: 200 });
   }
 }
+

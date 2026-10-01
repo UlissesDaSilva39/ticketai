@@ -9,6 +9,7 @@ import SeatMap from "@/components/SeatMap";
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const eventId = searchParams.get("event") || "";
+  const campaignCode = searchParams.get("campaign") || "";
   const [event, setEvent] = useState<Event | null>(null);
   const [selectedTickets, setSelectedTickets] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -52,7 +53,7 @@ function CheckoutContent() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, tickets, seats: selectedSeats }),
+        body: JSON.stringify({ eventId, tickets, seats: selectedSeats, campaignCode }),
       });
 
       const data = await res.json();
@@ -144,3 +145,7 @@ export default function CheckoutPage() {
     </Suspense>
   );
 }
+
+
+
+

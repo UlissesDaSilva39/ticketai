@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import type { Ticket, Event } from "@/lib/types";
 import ReturnButton from "./ReturnButton";
 import WalletButton from "@/components/WalletButton";
@@ -8,7 +8,7 @@ import WalletButton from "@/components/WalletButton";
 export const dynamic = "force-dynamic";
 
 export default async function MyTicketsPage() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
@@ -123,3 +123,4 @@ export default async function MyTicketsPage() {
     </div>
   );
 }
+

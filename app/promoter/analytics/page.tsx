@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,7 @@ type PromoterEventRow = {
 };
 
 export default async function PromoterAnalytics() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
@@ -146,3 +146,4 @@ export default async function PromoterAnalytics() {
     </div>
   );
 }
+

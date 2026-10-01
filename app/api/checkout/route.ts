@@ -1,16 +1,26 @@
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { stripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = await createClient();
+    const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
-    const { eventId, tickets, seats } = await req.json();
+    const { eventId, tickets, seats, campaignCode } = await req.json();
+
+    let campaignId: string | null = null;
+    if (campaignCode) {
+      const { data: c } = await supabase
+        .from("campaigns")
+        .select("id")
+        .eq("tracking_code", campaignCode)
+        .maybeSingle();
+      if (c) campaignId = c.id;
+    }
 
     if (Array.isArray(seats) && seats.length > 0) {
       const qty = (tickets as { qty: number }[]).reduce((a, t) => a + t.qty, 0);
@@ -91,6 +101,8 @@ export async function POST(req: NextRequest) {
         subtotal: subtotal.toFixed(2),
         processingFee: processingFee.toFixed(2),
         platformFee: platformFee.toFixed(2),
+        campaignId: campaignId || "",
+        campaignCode: campaignCode || "",
       },
     });
 

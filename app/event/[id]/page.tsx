@@ -1,9 +1,11 @@
-import { createClient } from "@/lib/supabase/server";
+import { Suspense } from "react";
+import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { Event } from "@/lib/types";
 import ViewTracker from "@/components/ViewTracker";
+import CheckoutLink from "@/components/CheckoutLink";
 import WaitlistButton from "@/components/WaitlistButton";
 import FollowButton from "@/components/FollowButton";
 
@@ -16,7 +18,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
 
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const { data: event } = await supabase
     .from("events")
@@ -65,7 +67,7 @@ export default async function EventPage({
 }) {
   const { id } = await params;
 
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const { data: event } = await supabase
     .from("events")
@@ -144,7 +146,7 @@ export default async function EventPage({
 
   return (
     <div>
-      <ViewTracker eventId={e.id} />
+      <Suspense fallback={null}><ViewTracker eventId={e.id} /></Suspense>
 
       <div className="relative h-[60vh] bg-gray-200">
         {e.hero_image && (
@@ -281,12 +283,14 @@ export default async function EventPage({
                     £{lowestPrice.toFixed(2)}
                   </p>
 
-                  <Link
-                    href={"/checkout?event=" + e.id}
-                    className="block w-full py-4 bg-black text-white text-center font-medium rounded-full hover:bg-gray-800 transition-colors"
-                  >
-                    Get Tickets
-                  </Link>
+                  <Suspense fallback={null}>
+  <CheckoutLink
+    eventId={e.id}
+    className="block w-full py-4 bg-black text-white text-center font-medium rounded-full hover:bg-gray-800 transition-colors"
+  >
+    Get Tickets
+  </CheckoutLink>
+</Suspense>
 
                   {totalCapacity > 0 && (
                     <p className="text-xs text-gray-500 text-center mt-3">
@@ -303,3 +307,11 @@ export default async function EventPage({
     </div>
   );
 }
+
+
+
+
+
+
+
+

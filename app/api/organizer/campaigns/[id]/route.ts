@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 const VALID_OBJECTIVES = [
   "ticket_sales",
@@ -17,7 +17,7 @@ const VALID_STATUSES = [
 ];
 
 async function getUser() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const {
     data: { user },

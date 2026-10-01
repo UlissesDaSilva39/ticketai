@@ -1,5 +1,5 @@
-﻿import AskTicketAI from "@/components/AskTicketAI";
-import { createClient } from "@/lib/supabase/server";
+import AskTicketAI from "@/components/AskTicketAI";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import VisitTracker from "@/components/VisitTracker";
 import type { Event } from "@/lib/types";
@@ -7,7 +7,7 @@ import type { Event } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const { data: stats } = await supabase
     .from("site_stats")
@@ -130,3 +130,4 @@ export default async function HomePage() {
     </div>
   );
 }
+

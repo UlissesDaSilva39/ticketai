@@ -46,11 +46,13 @@ export default function NewCampaignPage() {
   const [ageMax, setAgeMax] = useState("65");
   const [interests, setInterests] = useState("");
 
-  const [channels, setChannels] = useState<string[]>([
+  const [channels, setChannels] = useState<string[]>([  
     "Instagram",
     "Facebook",
   ]);
 
+  const [suggesting, setSuggesting] = useState(false);
+  const [suggestionReasoning, setSuggestionReasoning] = useState<string[]>([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -93,7 +95,37 @@ export default function NewCampaignPage() {
     loadEvents();
   }, [eventId]);
 
-  function toggleChannel(channel: string) {
+  async function suggestAudience() {
+    if (!eventId) {
+      setError("Pick an event first");
+      return;
+    }
+    setSuggesting(true);
+    setError("");
+    setSuggestionReasoning([]);
+    try {
+      const res = await fetch("/api/organizer/audience/suggest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed");
+      const s = data.suggestion;
+      setLocation(s.location || "");
+      setAgeMin(String(s.ageMin));
+      setAgeMax(String(s.ageMax));
+      setInterests((s.interests || []).join(", "));
+      setChannels(s.channels || []);
+      setSuggestionReasoning(s.reasoning || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to suggest audience");
+    } finally {
+      setSuggesting(false);
+    }
+  }
+
+    function toggleChannel(channel: string) {
     setChannels((current) =>
       current.includes(channel)
         ? current.filter((item) => item !== channel)
@@ -336,9 +368,25 @@ export default function NewCampaignPage() {
           </section>
 
           <section className="rounded-xl border bg-white p-6">
-            <h2 className="text-lg font-semibold">
-              Audience
-            </h2>
+            <div className="flex items-center justify-between">
+  <h2 className="text-lg font-semibold">Audience</h2>
+  <button
+    type="button"
+    onClick={suggestAudience}
+    disabled={suggesting}
+    className="rounded-lg border border-black px-4 py-2 text-sm font-medium hover:bg-black hover:text-white disabled:opacity-50"
+  >
+    {suggesting ? "Analysing..." : "Suggest audience"}
+  </button>
+</div>
+
+{suggestionReasoning.length > 0 && (
+  <ul className="mt-4 space-y-1 rounded-lg bg-gray-50 p-4 text-xs text-gray-600">
+    {suggestionReasoning.map((r, i) => (
+      <li key={i}>- {r}</li>
+    ))}
+  </ul>
+)}
 
             <div className="mt-5 grid gap-5">
               <div>
@@ -501,3 +549,9 @@ export default function NewCampaignPage() {
     </main>
   );
 }
+
+
+
+
+
+

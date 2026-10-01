@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -17,7 +17,7 @@ export default async function SearchPage({
   const type = params.type || "all";
   const sort = params.sort || "upcoming";
 
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   let query = supabase.from("events").select("*").eq("status", "published");
 
@@ -83,3 +83,4 @@ export default async function SearchPage({
     </div>
   );
 }
+

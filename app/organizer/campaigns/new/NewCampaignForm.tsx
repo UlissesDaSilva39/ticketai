@@ -102,3 +102,5 @@ export default function NewCampaignForm({ events }: { events: Array<{ id: string
     </div>
   );
 }
+
+

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import FollowButton from "@/components/FollowButton";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: profile } = await supabase
     .from("profiles")
     .select("full_name")
@@ -29,7 +29,7 @@ export default async function OrganizerProfilePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -154,3 +154,4 @@ export default async function OrganizerProfilePage({
     </div>
   );
 }
+

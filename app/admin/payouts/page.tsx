@@ -1,5 +1,5 @@
-Ôªøimport { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,7 @@ type PayoutRow = {
 };
 
 export default async function AdminPayoutsPage() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
@@ -57,7 +57,7 @@ export default async function AdminPayoutsPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
-      <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>ADMIN ¬∑ PAYOUTS</h1>
+      <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>ADMIN ∑ PAYOUTS</h1>
       <p className="text-gray-500 mb-10">Review and mark payouts as paid.</p>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
@@ -66,8 +66,8 @@ export default async function AdminPayoutsPage() {
           <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{pending.length}</p>
         </div>
         <div className="bg-yellow-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-yellow-700 mb-2">Pending ¬£</p>
-          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"¬£" + totalPendingAmount.toFixed(2)}</p>
+          <p className="text-xs uppercase tracking-widest text-yellow-700 mb-2">Pending £</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"£" + totalPendingAmount.toFixed(2)}</p>
         </div>
         <div className="bg-gray-50 rounded-lg p-6">
           <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Paid</p>
@@ -75,7 +75,7 @@ export default async function AdminPayoutsPage() {
         </div>
         <div className="bg-[#00FF87] rounded-lg p-6">
           <p className="text-xs uppercase tracking-widest mb-2">Total Paid</p>
-          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"¬£" + totalPaidAmount.toFixed(2)}</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"£" + totalPaidAmount.toFixed(2)}</p>
         </div>
       </div>
 
@@ -94,7 +94,7 @@ export default async function AdminPayoutsPage() {
                   <h3 className="font-bold text-lg mb-1">{p.promoters?.display_name || "Unknown Promoter"}</h3>
                   <p className="text-sm text-gray-600">Requested {new Date(p.requested_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</p>
                 </div>
-                <p className="text-3xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"¬£" + Number(p.amount).toFixed(2)}</p>
+                <p className="text-3xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"£" + Number(p.amount).toFixed(2)}</p>
               </div>
 
               <div className="bg-white rounded-lg p-4 mb-4 text-sm">
@@ -132,19 +132,20 @@ export default async function AdminPayoutsPage() {
               <div>
                 <p className="font-bold">{p.promoters?.display_name || "Promoter"}</p>
                 <p className="text-sm text-gray-500">
-                  Paid {p.paid_at ? new Date(p.paid_at).toLocaleDateString("en-GB") : "‚Äî"}
-                  {p.reference ? " ¬∑ Ref: " + p.reference : ""}
+                  Paid {p.paid_at ? new Date(p.paid_at).toLocaleDateString("en-GB") : "ó"}
+                  {p.reference ? " ∑ Ref: " + p.reference : ""}
                 </p>
               </div>
-              <p className="font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"¬£" + Number(p.amount).toFixed(2)}</p>
+              <p className="font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{"£" + Number(p.amount).toFixed(2)}</p>
             </div>
           ))}
         </div>
       )}
 
       <div className="mt-12 text-center">
-        <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">‚Üê Back to Dashboard</Link>
+        <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">? Back to Dashboard</Link>
       </div>
     </div>
   );
 }
+

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 const DEEPSEEK_URL = "https://api.deepseek.com/chat/completions";
 
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 2: search real events
-    const supabase = await createClient();
+    const supabase = await createServerSupabase();
     const { data } = await supabase
       .from("events")
       .select(
@@ -185,3 +185,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

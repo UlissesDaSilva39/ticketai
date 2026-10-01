@@ -1,10 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function PromotersPage() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
 
   const { data: promoters } = await supabase
     .from("promoters")

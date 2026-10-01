@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ type OrderRow = {
 };
 
 export default async function OrganizerAnalytics() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
@@ -140,3 +140,4 @@ export default async function OrganizerAnalytics() {
     </div>
   );
 }
+

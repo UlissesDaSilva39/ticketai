@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { sendTicketEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -319,6 +319,25 @@ export async function POST(req: NextRequest) {
     }
 
     console.log("Order created from webhook:", order.id);
+    // ===== CAMPAIGN CONVERSION TRACKING =====
+    const campaignId = metadata.campaignId;
+    if (campaignId) {
+      try {
+        await admin.from("campaign_events").insert({
+          campaign_id: campaignId,
+          event_id: eventId,
+          type: "conversion",
+          order_id: order.id,
+          revenue: total,
+        });
+        await admin.rpc("increment_campaign_conversion", {
+          campaign_id_in: campaignId,
+          revenue_in: total,
+        });
+      } catch (conversionErr) {
+        console.error("Campaign conversion tracking failed:", conversionErr);
+      }
+    }
   } catch (err) {
     console.error("Webhook processing error:", err);
     return NextResponse.json({ error: "Processing failed" }, { status: 500 });
@@ -326,6 +345,7 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ received: true });
 }
+
 
 
 
