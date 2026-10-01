@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿ import type { Metadata } from "next";
 import { Inter, Antonio } from "next/font/google";
 import "./globals.css";
 
@@ -53,7 +53,7 @@ export default function RootLayout({
               <a href="/" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Discover</a>
               <a href="/search" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Search</a>
               <a href="/for-promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Become a promoter</a>
-                           <a href="/for-venues" className="text-sm font-medium hover:opacity-70 hidden sm:inline">List your venue</a>
+              <a href="/for-venues" className="text-sm font-medium hover:opacity-70 hidden sm:inline">List your venue</a>
               <a href="/promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Promoters</a>
               <a href="/my-tickets" className="text-sm font-medium hover:opacity-70 hidden sm:inline">My Tickets</a>
               <a href="/venue/dashboard" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Venue Boards</a>
@@ -68,6 +68,7 @@ export default function RootLayout({
               <a href="/terms" className="text-gray-500 hover:text-black">Terms of Service</a>
               <a href="/privacy" className="text-gray-500 hover:text-black">Privacy Policy</a>
               <a href="/refunds" className="text-gray-500 hover:text-black">Refund Policy</a>
+              <a href="/contact" className="text-gray-500 hover:text-black">Contact</a>
             </div>
             <p className="text-center text-sm text-gray-500">
               {"\u00A9 " + new Date().getFullYear() + " TicketAI. All rights reserved."}
@@ -78,14 +79,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
