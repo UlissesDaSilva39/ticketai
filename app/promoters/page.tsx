@@ -30,7 +30,7 @@ export default async function PromotersPage() {
           href="/promoter/dashboard"
           className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800"
         >
-          Become a Promoter
+          Promoter Dashboard
         </Link>
       </div>
 
@@ -77,3 +77,4 @@ export default async function PromotersPage() {
     </div>
   );
 }
+
