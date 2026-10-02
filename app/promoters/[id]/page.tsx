@@ -1,7 +1,8 @@
- import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
+import FollowButton from "@/components/FollowButton";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,9 @@ type Promoter = {
   city: string | null;
   commission_rate: number | null;
   verified: boolean;
+  contact_email: string | null;
+  contact_phone: string | null;
+  website: string | null;
   created_at: string;
 };
 
@@ -97,7 +101,6 @@ export default async function PromoterProfilePage({
 
   const p = promoter as Promoter;
 
-  // Which user is viewing?
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -177,6 +180,57 @@ export default async function PromoterProfilePage({
 
           {p.bio && (
             <p className="mt-6 text-lg text-gray-700 max-w-3xl">{p.bio}</p>
+          )}
+
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <FollowButton
+              targetType="promoter"
+              targetId={p.id}
+              initialCount={0}
+              label="Follow"
+            />
+            {p.contact_email && (
+              <a
+                href={"mailto:" + p.contact_email}
+                className="rounded-full border-2 border-black px-5 py-2 text-sm font-medium hover:bg-black hover:text-white"
+              >
+                Message
+              </a>
+            )}
+          </div>
+
+          {(p.contact_email || p.contact_phone || p.website) && (
+            <div className="mt-6 flex flex-wrap gap-6 text-sm text-gray-600">
+              {p.contact_email && (
+                <p>
+                  Email:{" "}
+                  <span className="text-black font-medium">
+                    {p.contact_email}
+                  </span>
+                </p>
+              )}
+              {p.contact_phone && (
+                <p>
+                  Phone:{" "}
+                  <span className="text-black font-medium">
+                    {p.contact_phone}
+                  </span>
+                </p>
+              )}
+              {p.website && (
+                <p>
+                  Website:{" "}
+                  <a
+                    href={p.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-black font-medium underline"
+                  >
+                    {p.website}
+                  </a>
+                </p>
+              )}
+            </div>
           )}
 
           <div className="mt-8 flex flex-wrap gap-3">
