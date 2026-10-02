@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 type AIResult = {
+  campaignName: string;
   audience: {
     location: string;
     ageMin: number;
@@ -27,6 +28,7 @@ type AIResult = {
 };
 
 type ApplyPayload = {
+  campaignName: string;
   location: string;
   ageMin: string;
   ageMax: string;
@@ -34,6 +36,8 @@ type ApplyPayload = {
   channels: string[];
   budget: string;
   dailyBudget: string;
+  startDate: string;
+  endDate: string;
 };
 
 export default function AIBuilder({
@@ -79,7 +83,13 @@ export default function AIBuilder({
       console.log("No result — bailing out");
       return;
     }
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const startDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const end = new Date(now.getTime() + (result.duration_days || 14) * 86400000);
+    const endDate = `${end.getFullYear()}-${pad(end.getMonth() + 1)}-${pad(end.getDate())}T${pad(end.getHours())}:${pad(end.getMinutes())}`;
     const payload = {
+      campaignName: result.campaignName || "",
       location: result.audience.location || "",
       ageMin: String(result.audience.ageMin ?? 18),
       ageMax: String(result.audience.ageMax ?? 65),
@@ -87,8 +97,9 @@ export default function AIBuilder({
       channels: result.channels || [],
       budget: String(result.budget.total ?? ""),
       dailyBudget: String(result.budget.daily ?? ""),
+      startDate,
+      endDate,
     };
-    console.log("Payload =", payload);
     onApply(payload);
     console.log("onApply called");
   }

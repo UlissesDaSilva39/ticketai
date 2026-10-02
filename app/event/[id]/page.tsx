@@ -170,11 +170,7 @@ export default async function EventPage({
           </h1>
 
           <div className="flex flex-wrap items-center gap-3 mt-6">
-            <FollowButton
-              organizerId={e.organizer_id}
-              initialFollowing={userFollowing}
-              initialCount={followerCount || 0}
-            />
+            <FollowButton targetType="promoter" targetId={e.organizer_id} initialCount={0} label="Follow organizer" variant="light" />
 
             {e.preview_audio_url && (
               <a

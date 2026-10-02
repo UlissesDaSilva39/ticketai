@@ -1,4 +1,4 @@
- export type UserRole = "attendee" | "promoter" | "venue" | "admin";
+export type UserRole = "attendee" | "promoter" | "venue" | "admin";
 
 export interface Profile {
   id: string;
@@ -6,6 +6,9 @@ export interface Profile {
   role: UserRole;
   stripe_customer_id: string | null;
   stripe_account_id: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  website: string | null;
   created_at: string;
 }
 
@@ -46,6 +49,9 @@ export interface Venue {
   verified: boolean;
   revenue_share_percent: number;
   total_revenue: number;
+  contact_email: string | null;
+  contact_phone: string | null;
+  website: string | null;
   created_at: string;
 }
 

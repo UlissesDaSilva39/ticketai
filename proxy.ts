@@ -10,7 +10,7 @@ const PROTECTED_PREFIXES = [
   "/admin",
 ];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest)  {
   const path = request.nextUrl.pathname;
   const ref = request.nextUrl.searchParams.get("ref");
   const origin = request.nextUrl.origin;
