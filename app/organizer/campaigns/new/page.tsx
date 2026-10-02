@@ -1,8 +1,9 @@
-"use client";
+ "use client";
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import AIBuilder from "./AIBuilder";
 
 type EventItem = {
   id: string;
@@ -46,7 +47,7 @@ export default function NewCampaignPage() {
   const [ageMax, setAgeMax] = useState("65");
   const [interests, setInterests] = useState("");
 
-  const [channels, setChannels] = useState<string[]>([  
+  const [channels, setChannels] = useState<string[]>([
     "Instagram",
     "Facebook",
   ]);
@@ -125,12 +126,30 @@ export default function NewCampaignPage() {
     }
   }
 
-    function toggleChannel(channel: string) {
+  function toggleChannel(channel: string) {
     setChannels((current) =>
       current.includes(channel)
         ? current.filter((item) => item !== channel)
         : [...current, channel]
     );
+  }
+
+  function handleApplyAI(data: {
+    location: string;
+    ageMin: string;
+    ageMax: string;
+    interests: string;
+    channels: string[];
+    budget: string;
+    dailyBudget: string;
+  }) {
+    setLocation(data.location);
+    setAgeMin(data.ageMin);
+    setAgeMax(data.ageMax);
+    setInterests(data.interests);
+    setChannels(data.channels);
+    if (data.budget) setBudget(data.budget);
+    if (data.dailyBudget) setDailyBudget(data.dailyBudget);
   }
 
   async function handleSubmit(
@@ -233,6 +252,12 @@ export default function NewCampaignPage() {
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
             {error}
+          </div>
+        )}
+
+        {eventId && (
+          <div className="mb-6">
+            <AIBuilder eventId={eventId} onApply={handleApplyAI} />
           </div>
         )}
 
@@ -369,24 +394,24 @@ export default function NewCampaignPage() {
 
           <section className="rounded-xl border bg-white p-6">
             <div className="flex items-center justify-between">
-  <h2 className="text-lg font-semibold">Audience</h2>
-  <button
-    type="button"
-    onClick={suggestAudience}
-    disabled={suggesting}
-    className="rounded-lg border border-black px-4 py-2 text-sm font-medium hover:bg-black hover:text-white disabled:opacity-50"
-  >
-    {suggesting ? "Analysing..." : "Suggest audience"}
-  </button>
-</div>
+              <h2 className="text-lg font-semibold">Audience</h2>
+              <button
+                type="button"
+                onClick={suggestAudience}
+                disabled={suggesting}
+                className="rounded-lg border border-black px-4 py-2 text-sm font-medium hover:bg-black hover:text-white disabled:opacity-50"
+              >
+                {suggesting ? "Analysing..." : "Suggest audience"}
+              </button>
+            </div>
 
-{suggestionReasoning.length > 0 && (
-  <ul className="mt-4 space-y-1 rounded-lg bg-gray-50 p-4 text-xs text-gray-600">
-    {suggestionReasoning.map((r, i) => (
-      <li key={i}>- {r}</li>
-    ))}
-  </ul>
-)}
+            {suggestionReasoning.length > 0 && (
+              <ul className="mt-4 space-y-1 rounded-lg bg-gray-50 p-4 text-xs text-gray-600">
+                {suggestionReasoning.map((r, i) => (
+                  <li key={i}>- {r}</li>
+                ))}
+              </ul>
+            )}
 
             <div className="mt-5 grid gap-5">
               <div>
@@ -549,9 +574,3 @@ export default function NewCampaignPage() {
     </main>
   );
 }
-
-
-
-
-
-

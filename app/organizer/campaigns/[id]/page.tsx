@@ -1,8 +1,9 @@
-"use client";
+ "use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import PromoCodes from "./PromoCodes";
 
 type Campaign = {
   id: string;
@@ -756,10 +757,9 @@ export default function CampaignDetailPage() {
         </div>
 
         <div className="mt-8">
-          
+          <PromoCodes campaignId={campaign.id} />
         </div>
       </div>
     </main>
   );
 }
-

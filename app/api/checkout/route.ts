@@ -1,4 +1,4 @@
- import { createClient as createAdminClient } from "@supabase/supabase-js";
+﻿ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
-    const { eventId, tickets, seats, campaignCode } = await req.json();
+    const { eventId, tickets, seats, campaignCode, promoCode } = await req.json();
 
     let campaignId: string | null = null;
     if (campaignCode) {
@@ -32,6 +32,32 @@ export async function POST(req: NextRequest) {
         .eq("tracking_code", campaignCode)
         .maybeSingle();
       if (c) campaignId = c.id;
+    }
+
+    // Validate promo code (server-side)
+    let promo: { id: string; code: string; discount_type: string; discount_value: number } | null = null;
+    if (promoCode) {
+      const normalized = String(promoCode).trim().toUpperCase();
+      const { data: p } = await supabase
+        .from("promo_codes")
+        .select("id, code, discount_type, discount_value, max_uses, times_used, expires_at, active, event_id")
+        .eq("code", normalized)
+        .eq("active", true)
+        .maybeSingle();
+
+      if (p) {
+        const expired = p.expires_at && new Date(p.expires_at) < new Date();
+        const exhausted = p.max_uses != null && p.times_used >= p.max_uses;
+        const wrongEvent = p.event_id && p.event_id !== eventId;
+        if (!expired && !exhausted && !wrongEvent) {
+          promo = {
+            id: p.id,
+            code: p.code,
+            discount_type: p.discount_type,
+            discount_value: Number(p.discount_value),
+          };
+        }
+      }
     }
 
     const channel = inferChannel(req.headers.get("referer"));
@@ -94,8 +120,28 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const processingFee = subtotal * 0.029;
-    const platformFee = subtotal * 0.02;
+    const discountAmount = promo
+      ? promo.discount_type === "percent"
+        ? subtotal * (promo.discount_value / 100)
+        : Math.min(promo.discount_value, subtotal)
+      : 0;
+
+    const discountedSubtotal = Math.max(0, subtotal - discountAmount);
+    const processingFee = discountedSubtotal * 0.029;
+    const platformFee = discountedSubtotal * 0.02;
+
+    // Apply discount via a Stripe coupon (Stripe rejects negative
+    // unit_amount in price_data)
+    let discountsParam: Array<{ coupon: string }> | undefined;
+    if (discountAmount > 0 && promo) {
+      const coupon = await stripe.coupons.create({
+        amount_off: Math.round(discountAmount * 100),
+        currency: "gbp",
+        duration: "once",
+        name: "Discount (" + promo.code + ")",
+      });
+      discountsParam = [{ coupon: coupon.id }];
+    }
 
     const origin = process.env.NEXT_PUBLIC_ROOT_URL || "http://localhost:3000";
 
@@ -103,6 +149,7 @@ export async function POST(req: NextRequest) {
       mode: "payment",
       payment_method_types: ["card"],
       line_items: lineItems,
+      discounts: discountsParam,
       success_url: origin + "/confirmation?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: origin + "/checkout?event=" + eventId,
       customer_email: user.email || undefined,
@@ -113,13 +160,29 @@ export async function POST(req: NextRequest) {
         seats: JSON.stringify(seats || []),
         referralCode: referralCode || "",
         subtotal: subtotal.toFixed(2),
+        discountAmount: discountAmount.toFixed(2),
+        discountedSubtotal: discountedSubtotal.toFixed(2),
+        discountedTotal: (discountedSubtotal + processingFee).toFixed(2),
         processingFee: processingFee.toFixed(2),
         platformFee: platformFee.toFixed(2),
         campaignId: campaignId || "",
         campaignCode: campaignCode || "",
         channel: channel,
+        promoCode: promo ? promo.code : "",
       },
     });
+
+    // Increment promo usage
+    if (promo) {
+      const admin = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      await admin
+        .from("promo_codes")
+        .update({ times_used: (await admin.from("promo_codes").select("times_used").eq("id", promo.id).single()).data?.times_used + 1 })
+        .eq("id", promo.id);
+    }
 
     return NextResponse.json({ url: session.url, sessionId: session.id });
   } catch (err) {

@@ -170,7 +170,7 @@ export async function POST(req: NextRequest) {
     const subtotal = Number(metadata.subtotal || 0);
     const processingFee = Number(metadata.processingFee || 0);
     const platformFee = Number(metadata.platformFee || 0);
-    const total = subtotal + processingFee;
+    const total = metadata.discountedTotal ? Number(metadata.discountedTotal) : subtotal + processingFee;
 
     let promoterEvent: { id: string; commission_rate: number } | null = null;
     if (referralCode) {
@@ -217,6 +217,8 @@ export async function POST(req: NextRequest) {
         venue_revenue: venueRevenue,
         stripe_payment_intent_id: session.payment_intent,
         stripe_checkout_session_id: session.id,
+        promo_code: metadata.promoCode || null,
+        discount_amount: Number(metadata.discountAmount || 0),
       })
       .select()
       .single();
