@@ -54,6 +54,7 @@ export default function NewCampaignPage() {
 
   const [suggesting, setSuggesting] = useState(false);
   const [suggestionReasoning, setSuggestionReasoning] = useState<string[]>([]);
+  const [aiApplied, setAiApplied] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -135,6 +136,7 @@ export default function NewCampaignPage() {
   }
 
   function handleApplyAI(data: {
+    campaignName: string;
     location: string;
     ageMin: string;
     ageMax: string;
@@ -142,7 +144,10 @@ export default function NewCampaignPage() {
     channels: string[];
     budget: string;
     dailyBudget: string;
+    startDate: string;
+    endDate: string;
   }) {
+    if (data.campaignName && !name.trim()) setName(data.campaignName);
     setLocation(data.location);
     setAgeMin(data.ageMin);
     setAgeMax(data.ageMax);
@@ -150,6 +155,10 @@ export default function NewCampaignPage() {
     setChannels(data.channels);
     if (data.budget) setBudget(data.budget);
     if (data.dailyBudget) setDailyBudget(data.dailyBudget);
+    if (data.startDate) setStartDate(data.startDate);
+    if (data.endDate) setEndDate(data.endDate);
+    setAiApplied(true);
+    setTimeout(() => setAiApplied(false), 6000);
   }
 
   async function handleSubmit(
@@ -255,6 +264,15 @@ export default function NewCampaignPage() {
           </div>
         )}
 
+        {aiApplied && (
+          <div className="mb-6 rounded-lg border-2 border-green-500 bg-green-50 p-4 text-green-800">
+            <p className="font-semibold">✓ AI campaign applied</p>
+            <p className="mt-1 text-sm">
+              Your form has been filled in. Review the details below and edit anything you like before creating the campaign.
+            </p>
+          </div>
+        )}
+
         {eventId && (
           <div className="mb-6">
             <AIBuilder eventId={eventId} onApply={handleApplyAI} />
@@ -265,7 +283,7 @@ export default function NewCampaignPage() {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          <section className="rounded-xl border bg-white p-6">
+          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Campaign Basics
             </h2>
@@ -350,7 +368,7 @@ export default function NewCampaignPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Budget
             </h2>
@@ -392,7 +410,7 @@ export default function NewCampaignPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Audience</h2>
               <button
@@ -486,7 +504,7 @@ export default function NewCampaignPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Channels
             </h2>
@@ -513,7 +531,7 @@ export default function NewCampaignPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Campaign Schedule
             </h2>
