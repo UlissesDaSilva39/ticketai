@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import { useState } from "react";
 
@@ -73,8 +73,13 @@ export default function AIBuilder({
   }
 
   function apply() {
-    if (!result) return;
-    onApply({
+    console.log("APPLY CLICKED");
+    console.log("result =", result);
+    if (!result) {
+      console.log("No result — bailing out");
+      return;
+    }
+    const payload = {
       location: result.audience.location || "",
       ageMin: String(result.audience.ageMin ?? 18),
       ageMax: String(result.audience.ageMax ?? 65),
@@ -82,7 +87,10 @@ export default function AIBuilder({
       channels: result.channels || [],
       budget: String(result.budget.total ?? ""),
       dailyBudget: String(result.budget.daily ?? ""),
-    });
+    };
+    console.log("Payload =", payload);
+    onApply(payload);
+    console.log("onApply called");
   }
 
   return (
