@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+ import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,11 @@ export default async function PromotersPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {list.map((p) => (
-            <div key={p.id} className="border border-gray-200 rounded-lg p-6">
+            <Link
+              key={p.id}
+              href={"/promoters/" + p.id}
+              className="border border-gray-200 rounded-lg p-6 transition hover:border-black block"
+            >
               <h3 className="font-bold text-xl mb-1">{p.display_name}</h3>
               {p.city && (
                 <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">
@@ -70,11 +74,10 @@ export default async function PromotersPage() {
                   </span>
                 )}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
     </div>
   );
 }
-
