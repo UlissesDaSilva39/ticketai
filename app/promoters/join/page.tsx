@@ -18,6 +18,9 @@ export default function PromoterJoinPage() {
   const [instagram, setInstagram] = useState("");
   const [tiktok, setTiktok] = useState("");
   const [youtube, setYoutube] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [website, setWebsite] = useState("");
 
   useEffect(() => {
     const supabase = createClient();
@@ -46,11 +49,14 @@ export default function PromoterJoinPage() {
           instagram: instagram.trim() || null,
           tiktok: tiktok.trim() || null,
           youtube: youtube.trim() || null,
+          contact_email: contactEmail.trim() || null,
+          contact_phone: contactPhone.trim() || null,
+          website: website.trim() || null,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to join");
-      router.push("/organizer");
+      router.push("/promoter/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to join");
       setSubmitting(false);
@@ -191,9 +197,7 @@ export default function PromoterJoinPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  TikTok
-                </label>
+                <label className="block text-sm font-medium mb-2">TikTok</label>
                 <div className="flex items-center rounded-lg border overflow-hidden">
                   <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm">
                     @
@@ -220,6 +224,57 @@ export default function PromoterJoinPage() {
                     onChange={(e) => setYoutube(e.target.value)}
                     placeholder="yourchannel"
                     className="flex-1 px-3 py-3 outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-xl border bg-white p-6">
+            <h2 className="text-lg font-semibold mb-4">Contact details</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Shown on your public profile so promoters and attendees can
+              reach you. Optional, but recommended.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Contact email
+                </label>
+                <input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="bookings@yourdomain.com"
+                  className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
+                />
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
+                    placeholder="+44 7700 900000"
+                    className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Website
+                  </label>
+                  <input
+                    type="url"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    placeholder="https://yourdomain.com"
+                    className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
                   />
                 </div>
               </div>

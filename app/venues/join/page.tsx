@@ -20,6 +20,9 @@ export default function VenueJoinPage() {
   const [capacity, setCapacity] = useState("");
   const [description, setDescription] = useState("");
   const [heroImage, setHeroImage] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [website, setWebsite] = useState("");
 
   useEffect(() => {
     const supabase = createClient();
@@ -51,6 +54,9 @@ export default function VenueJoinPage() {
           description: description.trim() || null,
           hero_image: heroImage.trim() || null,
           status: "published",
+          contact_email: contactEmail.trim() || null,
+          contact_phone: contactPhone.trim() || null,
+          website: website.trim() || null,
         }),
       });
       const data = await res.json();
@@ -223,7 +229,9 @@ export default function VenueJoinPage() {
           </section>
 
           <section className="rounded-xl border bg-white p-6">
-            <h2 className="text-lg font-semibold mb-4">Description & photos</h2>
+            <h2 className="text-lg font-semibold mb-4">
+              Description &amp; photos
+            </h2>
 
             <div className="space-y-4">
               <div>
@@ -252,6 +260,59 @@ export default function VenueJoinPage() {
                 <p className="mt-1 text-xs text-gray-500">
                   Paste a link to a photo. You can add more later.
                 </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-xl border bg-white p-6">
+            <h2 className="text-lg font-semibold mb-4">
+              Contact for promoters
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Promoters will use this to book your venue. Shown on your public
+              venue page.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Contact email
+                </label>
+                <input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="bookings@yourvenue.com"
+                  className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
+                />
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
+                    placeholder="+44 20 7946 0000"
+                    className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Website
+                  </label>
+                  <input
+                    type="url"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    placeholder="https://yourvenue.com"
+                    className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
+                  />
+                </div>
               </div>
             </div>
           </section>

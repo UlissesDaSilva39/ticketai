@@ -13,12 +13,12 @@ export async function POST(req: NextRequest) {
       city, county, postcode, country, latitude, longitude,
       capacity, standing_capacity, seated_capacity,
       hero_image, status, revenue_share_percent,
+      contact_email, contact_phone, website,
     } = body;
 
     if (!name) return NextResponse.json({ error: "Venue name required" }, { status: 400 });
 
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-
     const { data, error } = await supabase
       .from("venues")
       .insert({
@@ -41,6 +41,9 @@ export async function POST(req: NextRequest) {
         hero_image: hero_image || null,
         status: status || "draft",
         revenue_share_percent: revenue_share_percent ? Number(revenue_share_percent) : 15,
+        contact_email: contact_email || null,
+        contact_phone: contact_phone || null,
+        website: website || null,
       })
       .select()
       .single();
@@ -52,8 +55,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-
-
-
-
-
