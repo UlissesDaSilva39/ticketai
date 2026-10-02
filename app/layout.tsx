@@ -52,6 +52,7 @@ export default function RootLayout({
             <nav className="flex items-center gap-6">
               <a href="/" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Discover</a>
               <a href="/search" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Search</a>
+              <a href="/venues" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Venues</a>
               <a href="/for-promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Become a promoter</a>
               <a href="/for-venues" className="text-sm font-medium hover:opacity-70 hidden sm:inline">List your venue</a>
               <a href="/promoters" className="text-sm font-medium hover:opacity-70 hidden sm:inline">Promoters</a>
