@@ -313,7 +313,7 @@ export async function POST(req: NextRequest) {
             qr_code: t.qr_code,
           })),
           totalAmount: total,
-          attachPdf: false,
+          attachPdf: true,
         });
       } catch (e) {
         console.error("Email failed:", e);

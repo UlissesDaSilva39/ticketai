@@ -1,4 +1,4 @@
- import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +13,23 @@ export default async function PromotersPage() {
 
   const list = promoters || [];
 
+  // Fetch signed-in user's role
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let role: string | null = null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    role = profile?.role ?? null;
+  }
+
+  const canAccessDashboard = role === "promoter" || role === "admin";
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       <h1
@@ -22,16 +39,26 @@ export default async function PromotersPage() {
         PROMOTERS
       </h1>
       <p className="text-gray-500 mb-10 max-w-2xl">
-        Creators who bring audiences to events. Get paid for every ticket sold through your unique code.
+        Creators who bring audiences to events. Get paid for every ticket sold
+        through your unique code.
       </p>
 
       <div className="mb-10">
-        <Link
-          href="/promoter/dashboard"
-          className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800"
-        >
-          Promoter Dashboard
-        </Link>
+        {canAccessDashboard ? (
+          <Link
+            href="/promoter/dashboard"
+            className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800"
+          >
+            Promoter Dashboard
+          </Link>
+        ) : (
+          <Link
+            href="/for-promoters"
+            className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800"
+          >
+            Become a promoter
+          </Link>
+        )}
       </div>
 
       {list.length === 0 ? (
@@ -55,7 +82,9 @@ export default async function PromotersPage() {
                 </p>
               )}
               {p.bio && (
-                <p className="text-sm text-gray-600 mb-4 line-clamp-3">{p.bio}</p>
+                <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                  {p.bio}
+                </p>
               )}
               <div className="flex flex-wrap gap-2 text-xs">
                 {p.instagram && (

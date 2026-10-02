@@ -1,4 +1,4 @@
-import Link from "next/link";
+ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -96,6 +96,25 @@ export default async function PromoterProfilePage({
   if (!promoter) return notFound();
 
   const p = promoter as Promoter;
+
+  // Which user is viewing?
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let viewerRole: string | null = null;
+  if (user) {
+    const { data: viewerProfile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    viewerRole = viewerProfile?.role ?? null;
+  }
+
+  const isOwner = user?.id === p.user_id;
+  const isAdmin = viewerRole === "admin";
+  const showStats = isOwner || isAdmin;
 
   const { data: promoterEvents } = await supabase
     .from("promoter_events")
@@ -195,27 +214,29 @@ export default async function PromoterProfilePage({
         </div>
       </section>
 
-      {/* STATS */}
-      <section className="max-w-5xl mx-auto px-6 py-10">
-        <div className="grid gap-4 md:grid-cols-4">
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">Events promoted</p>
-            <p className="mt-2 text-3xl font-bold">{links.length}</p>
+      {/* STATS — only visible to the profile owner and admins */}
+      {showStats && (
+        <section className="max-w-5xl mx-auto px-6 py-10">
+          <div className="grid gap-4 md:grid-cols-4">
+            <div className="rounded-xl border bg-white p-5">
+              <p className="text-sm text-gray-500">Events promoted</p>
+              <p className="mt-2 text-3xl font-bold">{links.length}</p>
+            </div>
+            <div className="rounded-xl border bg-white p-5">
+              <p className="text-sm text-gray-500">Total clicks</p>
+              <p className="mt-2 text-3xl font-bold">{totalClicks}</p>
+            </div>
+            <div className="rounded-xl border bg-white p-5">
+              <p className="text-sm text-gray-500">Conversions</p>
+              <p className="mt-2 text-3xl font-bold">{totalConversions}</p>
+            </div>
+            <div className="rounded-xl border bg-white p-5">
+              <p className="text-sm text-gray-500">Revenue driven</p>
+              <p className="mt-2 text-3xl font-bold">{money(totalRevenue)}</p>
+            </div>
           </div>
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">Total clicks</p>
-            <p className="mt-2 text-3xl font-bold">{totalClicks}</p>
-          </div>
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">Conversions</p>
-            <p className="mt-2 text-3xl font-bold">{totalConversions}</p>
-          </div>
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">Revenue driven</p>
-            <p className="mt-2 text-3xl font-bold">{money(totalRevenue)}</p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* UPCOMING EVENTS */}
       <section className="max-w-5xl mx-auto px-6 pb-16">
