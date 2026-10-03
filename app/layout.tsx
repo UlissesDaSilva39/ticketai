@@ -14,15 +14,25 @@ const antonio = Antonio({
   subsets: ["latin"],
   weight: ["400", "700"],
 });
+export const viewport = {
+  themeColor: "#00FF87",
+};
 
 const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
 
 export const metadata: Metadata = {
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "TicketAI",
+  },
   metadataBase: new URL(SITE_URL),
   title: {
     default: "TicketAI - Find Your Next Event",
     template: "%s | TicketAI",
   },
+  
   description:
     "AI-powered event discovery and ticketing. Find live events, buy tickets, and support venues and promoters.",
   openGraph: {

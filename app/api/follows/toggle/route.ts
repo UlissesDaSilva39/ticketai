@@ -28,24 +28,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Resolve the followable "target_id" and the target's owner.
+    // For promoters, callers may pass either promoters.id or promoters.user_id.
+    // For venues, targetId is always venues.id.
+    let resolvedTargetId: string | null = null;
     let ownerId: string | null = null;
+
     if (targetType === "promoter") {
       const { data } = await supabase
         .from("promoters")
-        .select("user_id")
-        .eq("id", targetId)
+        .select("id, user_id")
+        .or(`id.eq.${targetId},user_id.eq.${targetId}`)
         .maybeSingle();
-      ownerId = data?.user_id ?? null;
+
+      if (data) {
+        resolvedTargetId = data.id;
+        ownerId = data.user_id;
+      }
     } else {
       const { data } = await supabase
         .from("venues")
-        .select("organizer_id")
+        .select("id, organizer_id")
         .eq("id", targetId)
         .maybeSingle();
-      ownerId = data?.organizer_id ?? null;
+
+      if (data) {
+        resolvedTargetId = data.id;
+        ownerId = data.organizer_id;
+      }
     }
 
-    if (!ownerId) {
+    if (!resolvedTargetId) {
       return NextResponse.json({ error: "Target not found" }, { status: 404 });
     }
     if (ownerId === user.id) {
@@ -55,12 +68,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Toggle the follow row for the resolved id
     const { data: existing } = await supabase
       .from("follows")
       .select("id")
       .eq("follower_id", user.id)
       .eq("target_type", targetType)
-      .eq("target_id", targetId)
+      .eq("target_id", resolvedTargetId)
       .maybeSingle();
 
     let following = false;
@@ -71,7 +85,7 @@ export async function POST(req: NextRequest) {
       await supabase.from("follows").insert({
         follower_id: user.id,
         target_type: targetType,
-        target_id: targetId,
+        target_id: resolvedTargetId,
       });
       following = true;
     }
@@ -80,7 +94,7 @@ export async function POST(req: NextRequest) {
       .from("follows")
       .select("*", { count: "exact", head: true })
       .eq("target_type", targetType)
-      .eq("target_id", targetId);
+      .eq("target_id", resolvedTargetId);
 
     return NextResponse.json({ following, count: count || 0 });
   } catch (err) {
