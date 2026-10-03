@@ -180,9 +180,18 @@ export default async function RootLayout({
               {user && username && (
                 <a
                   href={`/u/${username}`}
-                  className="relative text-sm font-medium hover:opacity-70 hidden sm:inline"
+                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
                 >
                   My Profile
+                </a>
+              )}
+
+              {user && (
+                <a
+                  href="/notifications"
+                  className="relative text-sm font-medium hover:opacity-70 hidden sm:inline"
+                >
+                  Notifications
                   {pendingRequestCount > 0 && (
                     <span className="absolute -top-1 -right-2 w-2 h-2 bg-red-500 rounded-full" />
                   )}

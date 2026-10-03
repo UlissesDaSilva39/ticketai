@@ -8,6 +8,7 @@ import ViewTracker from "@/components/ViewTracker";
 import CheckoutLink from "@/components/CheckoutLink";
 import WaitlistButton from "@/components/WaitlistButton";
 import FollowButton from "@/components/FollowButton";
+import ShareButton from "@/components/ShareButton";
 import InterestButtons from "@/components/InterestButtons";
 import ReviewsSection from "@/components/ReviewsSection";
 import FriendsGoing from "@/components/FriendsGoing";
@@ -332,6 +333,8 @@ export default async function EventPage({
               label="Follow organizer"
               variant="light"
             />
+
+            <ShareButton url={`${SITE_URL}/event/${e.id}`} title={e.title} />
 
             {e.preview_audio_url && (
               <a
