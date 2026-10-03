@@ -11,7 +11,7 @@ import FollowButton from "@/components/FollowButton";
 import ShareButton from "@/components/ShareButton";
 import InterestButtons from "@/components/InterestButtons";
 import ReviewsSection from "@/components/ReviewsSection";
-import FriendsGoing from "@/components/FriendsGoing";
+import EventTabs from "@/components/EventTabs";
 
 export const dynamic = "force-dynamic";
 
@@ -132,10 +132,14 @@ export async function generateMetadata({
 
 export default async function EventPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }) {
   const { id } = await params;
+  const { tab } = await searchParams;
+  const activeTab = tab || "about";
 
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
@@ -362,6 +366,16 @@ export default async function EventPage({
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
+
+            <EventTabs
+              activeTab={activeTab}
+              tabs={[
+                { id: "about", label: "About" },
+                { id: "lineup", label: "Lineup" },
+                { id: "reviews", label: "Reviews" },
+                { id: "good-to-know", label: "Good to Know" },
+              ]}
+            />
             <div className="flex flex-wrap items-center gap-4 mb-8 text-lg">
               <span className="font-medium">
                 {startDate.toLocaleDateString("en-GB", {
@@ -381,25 +395,29 @@ export default async function EventPage({
                   >
                     {e.venues.name}
                   </Link>
-                  {e.venues.city ? " ÃÆÃ¢â¬Å¡ÃâÂ· " + e.venues.city : ""}
+                  {e.venues.city ? " · " + e.venues.city : ""}
                 </span>
               )}
             </div>
 
-            <h2
-              className="text-3xl font-bold mb-4 uppercase"
-              style={{
-                fontFamily: "var(--font-antonio)",
-              }}
-            >
-              About This Event
-            </h2>
+            {activeTab === "about" && (
+              <>
+                <h2
+                  className="text-3xl font-bold mb-4 uppercase"
+                  style={{
+                    fontFamily: "var(--font-antonio)",
+                  }}
+                >
+                  About This Event
+                </h2>
 
-            <p className="text-gray-700 leading-relaxed">
-              {e.description || "No description yet."}
-            </p>
+                <p className="text-gray-700 leading-relaxed">
+                  {e.description || "No description yet."}
+                </p>
+              </>
+            )}
 
-          {Array.isArray(e.lineup) && e.lineup.length > 0 && (
+          {activeTab === "lineup" && Array.isArray(e.lineup) && e.lineup.length > 0 && (
             <div className="mb-12">
               <h2
                 className="text-3xl font-bold mb-4 uppercase"
@@ -433,13 +451,16 @@ export default async function EventPage({
               </div>
             </div>
           )}
-          <ReviewsSection
-            eventId={e.id}
-            initialReviews={reviews}
-            currentUserId={user?.id ?? null}
-            canReview={canReview}
-          />
+          {activeTab === "reviews" && (
+            <ReviewsSection
+              eventId={e.id}
+              initialReviews={reviews}
+              currentUserId={user?.id ?? null}
+              canReview={canReview}
+            />
+          )}
 
+          {activeTab === "good-to-know" && (
           <div className="mb-12">
             <h2 className="text-3xl font-bold mt-12 mb-4 uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
               GOOD TO KNOW
@@ -471,6 +492,7 @@ export default async function EventPage({
               </div>
             </dl>
           </div>
+          )}
 
             <h2
               className="text-3xl font-bold mt-12 mb-4 uppercase"
