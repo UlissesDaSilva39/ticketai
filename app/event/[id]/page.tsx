@@ -9,6 +9,7 @@ import CheckoutLink from "@/components/CheckoutLink";
 import WaitlistButton from "@/components/WaitlistButton";
 import FollowButton from "@/components/FollowButton";
 import InterestButtons from "@/components/InterestButtons";
+import ReviewsSection from "@/components/ReviewsSection";
 import FriendsGoing from "@/components/FriendsGoing";
 
 export const dynamic = "force-dynamic";
@@ -226,6 +227,24 @@ export default async function EventPage({
 
   const isSoldOut = totalCapacity > 0 && sold >= totalCapacity;
 
+  const { data: reviewsData } = await supabase
+    .from("event_reviews")
+    .select("id, rating, comment, user_id, created_at, profiles!inner(full_name, username)")
+    .eq("event_id", id)
+    .order("created_at", { ascending: false });
+
+  const reviews = (reviewsData || []).map((r: { id: string; rating: number; comment: string | null; user_id: string; created_at: string; profiles: { full_name: string | null; username: string | null } | { full_name: string | null; username: string | null }[] }) => ({
+    id: r.id,
+    rating: r.rating,
+    comment: r.comment,
+    user_id: r.user_id,
+    created_at: r.created_at,
+    profiles: Array.isArray(r.profiles) ? r.profiles[0] : r.profiles,
+  }));
+
+  const myReview = user ? reviews.find((r) => r.user_id === user.id) : null;
+  const canReview = !!user && !!myInterest;
+
   return (
     <div>
       <EventStructuredData event={e} />
@@ -411,6 +430,13 @@ export default async function EventPage({
               </div>
             </div>
           )}
+          <ReviewsSection
+            eventId={e.id}
+            initialReviews={reviews}
+            currentUserId={user?.id ?? null}
+            canReview={canReview}
+          />
+
           <div className="mb-12">
             <h2 className="text-3xl font-bold mt-12 mb-4 uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
               GOOD TO KNOW
