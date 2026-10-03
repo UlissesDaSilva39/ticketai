@@ -304,6 +304,14 @@ export default function OrganizerEventAnalyticsPage() {
               {event.title}
             </h1>
 
+      <Link
+        href={"/organizer/events/" + params.id + "/lineup"}
+        className="inline-block mt-4 px-5 py-2.5 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800"
+      >
+        Manage lineup
+      </Link>
+
+
             <p className="mt-1 text-sm text-gray-500">
               Event analytics
             </p>

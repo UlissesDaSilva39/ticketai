@@ -159,6 +159,15 @@ export default async function RootLayout({
                 </a>
               )}
 
+              {isPromoter && (
+                <a
+                  href="/organizer"
+                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+                >
+                  Dashboard
+                </a>
+              )}
+
               {isVenue && (
                 <a
                   href="/venue/dashboard"
