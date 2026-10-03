@@ -82,12 +82,8 @@ export default async function AttendeesPage({
           {profiles.map((p) => {
             const isSelf = user?.id === p.id;
             const isFriend = friendIds.includes(p.id);
-            const initials = (p.full_name || "?")
-              .split(" ")
-              .map((w) => w[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase();
+            const displayName = (p.full_name && p.full_name.trim()) || p.username || "Someone";
+            const initials = displayName.trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "?";
 
             return (
               <li key={p.id} className="py-4 flex items-center gap-4">

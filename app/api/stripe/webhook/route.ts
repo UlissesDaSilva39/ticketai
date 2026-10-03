@@ -291,6 +291,25 @@ export async function POST(req: NextRequest) {
       .from("tickets")
       .insert(ticketsToInsert)
       .select("id, ticket_type, price, qr_code, seat_label");
+    // Auto-mark buyer as going to the event
+    console.log("[auto-mark] userId=", userId, "eventId=", eventId);
+    if (userId && eventId) {
+      try {
+        const { error: autoMarkError } = await admin
+          .from("event_interest")
+          .upsert(
+            { user_id: userId, event_id: eventId, status: "going" },
+            { onConflict: "user_id,event_id" }
+          )
+          .select();
+        if (autoMarkError) {
+          console.error("Auto-mark upsert error:", autoMarkError);
+        }
+      } catch (e) {
+        console.error("Auto-mark going failed:", e);
+      }
+      console.log("[auto-mark] upsert done for", userId, "->", eventId);
+    }
 
     const buyerEmail = session.customer_details?.email;
     if (buyerEmail && insertedTickets) {

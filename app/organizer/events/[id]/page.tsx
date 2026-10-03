@@ -374,7 +374,7 @@ export default function OrganizerEventAnalyticsPage() {
 
             <p className="mt-3 text-4xl font-bold text-gray-900">
               {countdown.daysUntilEvent === null
-                ? "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"
+                ? "ÃƒÂ¢Ã¢?šÂ¬Ã¢â‚¬Â"
                 : countdown.daysUntilEvent < 0
                 ? "Event passed"
                 : countdown.daysUntilEvent === 0
