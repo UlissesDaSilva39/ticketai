@@ -3,7 +3,7 @@ const p = "app/api/cron/event-reminders/route.ts";
 let t = fs.readFileSync(p, "utf8");
 const before = t;
 
-if (t.includes("test mode") || t.includes("searchParams.get(\"test\")")) {
+if (t.includes("searchParams.get(\"test\")")) {
   console.log("Test mode already present.");
   process.exit(0);
 }
@@ -31,6 +31,6 @@ if (t.includes(anchor)) {
   fs.writeFileSync(p, t);
   console.log("Test mode added.");
 } else {
-  console.log("Anchor not found. Paste the top of the route file:");
+  console.log("Anchor not found.");
   console.log(t.slice(0, 800));
 }
