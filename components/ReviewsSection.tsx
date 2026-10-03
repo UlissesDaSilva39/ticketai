@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Review = {
@@ -37,6 +37,10 @@ export default function ReviewsSection({
 }) {
   const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
+
+  useEffect(() => {
+    setReviews(initialReviews);
+  }, [initialReviews]);
   const [rating, setRating] = useState<number>(5);
   const [comment, setComment] = useState<string>("");
   const [busy, setBusy] = useState(false);

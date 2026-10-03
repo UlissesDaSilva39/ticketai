@@ -227,7 +227,7 @@ export default async function EventPage({
 
   const isSoldOut = totalCapacity > 0 && sold >= totalCapacity;
 
-  const { data: reviewsData } = await supabase
+  const { data: reviewsData, error: reviewsError } = await supabase
     .from("event_reviews")
     .select("id, rating, comment, user_id, created_at, profiles!inner(full_name, username)")
     .eq("event_id", id)

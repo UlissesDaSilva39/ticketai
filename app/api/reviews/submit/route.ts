@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
-    // Eligibility: user must have a going or interested row for this event
     const { data: interest } = await supabase
       .from("event_interest")
       .select("id")
@@ -39,7 +38,9 @@ export async function POST(req: NextRequest) {
       .select()
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
     return NextResponse.json({ review: data });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed";
