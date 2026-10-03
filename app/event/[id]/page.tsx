@@ -377,6 +377,40 @@ export default async function EventPage({
               {e.description || "No description yet."}
             </p>
 
+          {Array.isArray(e.lineup) && e.lineup.length > 0 && (
+            <div className="mb-12">
+              <h2
+                className="text-3xl font-bold mb-4 uppercase"
+                style={{ fontFamily: "var(--font-antonio)" }}
+              >
+                LINEUP
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {e.lineup.map((artist: { name: string; time?: string; photo?: string; bio?: string }, i: number) => (
+                  <div key={i} className="group">
+                    {artist.photo && (
+                      <div className="relative aspect-square overflow-hidden rounded-2xl mb-3 bg-gray-200 text-transparent text-[1px] leading-none">
+                        <img
+                          src={artist.photo}
+                          alt={artist.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 text-transparent"
+                        />
+                      </div>
+                    )}
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h3 className="font-bold text-lg">{artist.name}</h3>
+                      {artist.time && (
+                        <span className="text-xs text-gray-500 font-mono">{artist.time}</span>
+                      )}
+                    </div>
+                    {artist.bio && (
+                      <p className="text-sm text-gray-600 mt-1">{artist.bio}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="mb-12">
             <h2 className="text-3xl font-bold mt-12 mb-4 uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
               GOOD TO KNOW
