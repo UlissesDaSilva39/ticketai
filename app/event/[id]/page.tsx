@@ -8,8 +8,81 @@ import ViewTracker from "@/components/ViewTracker";
 import CheckoutLink from "@/components/CheckoutLink";
 import WaitlistButton from "@/components/WaitlistButton";
 import FollowButton from "@/components/FollowButton";
+import InterestButtons from "@/components/InterestButtons";
+import FriendsGoing from "@/components/FriendsGoing";
 
 export const dynamic = "force-dynamic";
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+
+type EventWithVenue = Event & {
+  venues: { name: string; slug: string; city: string } | null;
+};
+
+function EventStructuredData({ event }: { event: EventWithVenue }) {
+  const prices = (event.ticket_types || []).map((t) => Number(t.price));
+  const lowPrice = prices.length > 0 ? Math.min(...prices) : 0;
+
+  const json = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    startDate: event.start_date,
+    endDate: event.end_date || event.start_date,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode:
+      event.event_type === "live-stream"
+        ? "https://schema.org/OnlineEventAttendanceMode"
+        : event.event_type === "hybrid"
+        ? "https://schema.org/MixedEventAttendanceMode"
+        : "https://schema.org/OfflineEventAttendanceMode",
+    location: event.venues
+      ? {
+          "@type": "Place",
+          name: event.venues.name,
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: event.venues.city || "",
+            addressCountry: "GB",
+          },
+        }
+      : event.stream_url
+      ? {
+          "@type": "VirtualLocation",
+          url: event.stream_url,
+        }
+      : undefined,
+    image: event.hero_image ? [event.hero_image] : undefined,
+    description: event.description || undefined,
+    offers: {
+      "@type": "Offer",
+      url: `${SITE_URL}/event/${event.id}`,
+      priceCurrency: "GBP",
+      price: lowPrice,
+      priceValidUntil: event.start_date,
+      availability:
+        lowPrice > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/SoldOut",
+      validFrom: event.created_at,
+    },
+    organizer: {
+      "@type": "Organization",
+      name: "TicketAI",
+      url: SITE_URL,
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(json).replace(/</g, "\\u003c"),
+      }}
+    />
+  );
+}
 
 export async function generateMetadata({
   params,
@@ -19,6 +92,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   const supabase = await createServerSupabase();
+  const { data: { user } } = await supabase.auth.getUser();
 
   const { data: event } = await supabase
     .from("events")
@@ -42,13 +116,7 @@ export async function generateMetadata({
       description: desc,
       type: "website",
       images: event.hero_image
-        ? [
-            {
-              url: event.hero_image,
-              width: 1200,
-              height: 630,
-            },
-          ]
+        ? [{ url: event.hero_image, width: 1200, height: 630 }]
         : [],
     },
     twitter: {
@@ -68,6 +136,7 @@ export default async function EventPage({
   const { id } = await params;
 
   const supabase = await createServerSupabase();
+  const { data: { user } } = await supabase.auth.getUser();
 
   const { data: event } = await supabase
     .from("events")
@@ -79,19 +148,11 @@ export default async function EventPage({
     return notFound();
   }
 
-  const e = event as Event & {
-    venues: {
-      name: string;
-      slug: string;
-      city: string;
-    } | null;
-  };
+  const e = event as EventWithVenue;
 
   const startDate = new Date(e.start_date);
 
-  const ticketTypes = Array.isArray(e.ticket_types)
-    ? e.ticket_types
-    : [];
+  const ticketTypes = Array.isArray(e.ticket_types) ? e.ticket_types : [];
 
   const lowestPrice =
     ticketTypes.length > 0
@@ -116,37 +177,62 @@ export default async function EventPage({
 
   const remainingTickets = Math.max(totalCapacity - sold, 0);
 
-  const isSoldOut =
-    totalCapacity > 0 && sold >= totalCapacity;
+  const { data: interestData } = await supabase
+    .from("event_interest")
+    .select("user_id, status")
+    .eq("event_id", id);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const interestedCount = (interestData || []).filter(
+    (i) => i.status === "interested"
+  ).length;
+  const goingCount = (interestData || []).filter(
+    (i) => i.status === "going"
+  ).length;
 
-  const { count: followerCount } = await supabase
-    .from("follows")
-    .select("*", {
-      count: "exact",
-      head: true,
-    })
-    .eq("organizer_id", e.organizer_id);
-
-  let userFollowing = false;
-
+  let myInterest: "interested" | "going" | null = null;
   if (user) {
-    const { data: follow } = await supabase
-      .from("follows")
-      .select("id")
-      .eq("follower_id", user.id)
-      .eq("organizer_id", e.organizer_id)
-      .maybeSingle();
-
-    userFollowing = !!follow;
+    const mine = (interestData || []).find((i) => i.user_id === user.id);
+    if (mine) myInterest = mine.status as "interested" | "going";
   }
+
+  let friendsGoing: Array<{ id: string; full_name: string | null }> = [];
+  if (user) {
+    const { data: friendships } = await supabase
+      .from("friendships")
+      .select("user_id, friend_id")
+      .eq("status", "accepted")
+      .or("user_id.eq." + user.id + ",friend_id.eq." + user.id);
+
+    const friendIds = (friendships || []).map((f) =>
+      f.user_id === user.id ? f.friend_id : f.user_id
+    );
+
+    if (friendIds.length > 0) {
+      const goingFriendIds = (interestData || [])
+        .filter(
+          (i) => i.status === "going" && friendIds.includes(i.user_id)
+        )
+        .map((i) => i.user_id);
+
+      if (goingFriendIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("id, full_name")
+          .in("id", goingFriendIds);
+        friendsGoing = profiles || [];
+      }
+    }
+  }
+
+  const isSoldOut = totalCapacity > 0 && sold >= totalCapacity;
 
   return (
     <div>
-      <Suspense fallback={null}><ViewTracker eventId={e.id} /></Suspense>
+      <EventStructuredData event={e} />
+
+      <Suspense fallback={null}>
+        <ViewTracker eventId={e.id} />
+      </Suspense>
 
       <div className="relative h-[60vh] bg-gray-200">
         {e.hero_image && (
@@ -169,8 +255,36 @@ export default async function EventPage({
             {e.title}
           </h1>
 
+          <div className="mt-6">
+            <InterestButtons
+              eventId={e.id}
+              initialStatus={myInterest}
+              isSignedIn={!!user}
+            />
+            <FriendsGoing friends={friendsGoing} totalCount={goingCount} />
+            <p className="text-sm text-white/70 mt-3">
+              {interestedCount} interested · {goingCount} going
+              {goingCount > 0 && (
+                <>
+                  {" · "}
+                  <a
+                    href={`/event/${e.id}/attendees`}
+                    className="underline hover:text-white"
+                  >
+                    see all
+                  </a>
+                </>
+              )}
+            </p>
+          </div>
           <div className="flex flex-wrap items-center gap-3 mt-6">
-            <FollowButton targetType="promoter" targetId={e.organizer_id} initialCount={0} label="Follow organizer" variant="light" />
+            <FollowButton
+              targetType="promoter"
+              targetId={e.organizer_id}
+              initialCount={0}
+              label="Follow organizer"
+              variant="light"
+            />
 
             {e.preview_audio_url && (
               <a
@@ -217,7 +331,7 @@ export default async function EventPage({
                   >
                     {e.venues.name}
                   </Link>
-                  {e.venues.city ? " · " + e.venues.city : ""}
+                  {e.venues.city ? " Ã‚Â· " + e.venues.city : ""}
                 </span>
               )}
             </div>
@@ -253,7 +367,7 @@ export default async function EventPage({
                   <p className="font-medium">{t.name}</p>
 
                   <p className="font-bold">
-                    £{Number(t.price || 0).toFixed(2)}
+                    Ã‚Â£{Number(t.price || 0).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -266,9 +380,7 @@ export default async function EventPage({
                 <WaitlistButton eventId={e.id} />
               ) : (
                 <div className="bg-gray-50 rounded-lg p-8">
-                  <p className="text-sm text-gray-500 mb-2">
-                    From
-                  </p>
+                  <p className="text-sm text-gray-500 mb-2">From</p>
 
                   <p
                     className="text-5xl font-bold mb-6"
@@ -276,22 +388,19 @@ export default async function EventPage({
                       fontFamily: "var(--font-antonio)",
                     }}
                   >
-                    £{lowestPrice.toFixed(2)}
+                    Ã‚Â£{lowestPrice.toFixed(2)}
                   </p>
 
-                  <Suspense fallback={null}>
-  <CheckoutLink
-    eventId={e.id}
-    className="block w-full py-4 bg-black text-white text-center font-medium rounded-full hover:bg-gray-800 transition-colors"
-  >
-    Get Tickets
-  </CheckoutLink>
-</Suspense>
+                  <CheckoutLink
+                    eventId={e.id}
+                    className="block w-full py-4 bg-black text-white text-center font-medium rounded-full hover:bg-gray-800 transition-colors"
+                  >
+                    Get Tickets
+                  </CheckoutLink>
 
                   {totalCapacity > 0 && (
                     <p className="text-xs text-gray-500 text-center mt-3">
-                      {remainingTickets} of {totalCapacity} tickets
-                      remaining
+                      {remainingTickets} of {totalCapacity} tickets remaining
                     </p>
                   )}
                 </div>
@@ -303,11 +412,3 @@ export default async function EventPage({
     </div>
   );
 }
-
-
-
-
-
-
-
-
