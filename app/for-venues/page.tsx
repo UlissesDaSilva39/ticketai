@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "List your venue free — get discovered | TicketAI",
+  title: "List your venue free â get discovered | TicketAI",
   description:
     "Free to list. Get booked by promoters. Earn a share of every ticket sold at your venue. No monthly fee. No 12-month contract.",
 };
@@ -32,7 +32,7 @@ export default function ForVenuesPage() {
               href="/venues/join"
               className="rounded-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800"
             >
-              List your venue — free
+              List your venue â free
             </Link>
             <a
               href="#compare"
@@ -82,7 +82,7 @@ export default function ForVenuesPage() {
             </p>
             <p className="mt-3 text-gray-700">
               Occupancy, average ticket price, repeat bookings. Analytics
-              venues have never had — in real time.
+              venues have never had â in real time.
             </p>
           </div>
         </div>
@@ -191,7 +191,7 @@ export default function ForVenuesPage() {
               href="/venues/join"
               className="rounded-full bg-white text-black px-8 py-4 font-medium hover:bg-gray-100"
             >
-              List your venue — free
+              List your venue â free
             </Link>
           </div>
           <p className="mt-8 text-sm text-white/60">

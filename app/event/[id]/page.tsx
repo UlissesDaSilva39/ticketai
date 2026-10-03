@@ -195,7 +195,7 @@ export default async function EventPage({
     if (mine) myInterest = mine.status as "interested" | "going";
   }
 
-  let friendsGoing: Array<{ id: string; full_name: string | null }> = [];
+  let friendsGoing: Array<{ id: string; full_name: string | null; username: string | null }> = [];
   if (user) {
     const { data: friendships } = await supabase
       .from("friendships")
@@ -217,7 +217,7 @@ export default async function EventPage({
       if (goingFriendIds.length > 0) {
         const { data: profiles } = await supabase
           .from("profiles")
-          .select("id, full_name")
+          .select("id, full_name, username")
           .in("id", goingFriendIds);
         friendsGoing = profiles || [];
       }
@@ -263,10 +263,10 @@ export default async function EventPage({
             />
             <FriendsGoing friends={friendsGoing} totalCount={goingCount} />
             <p className="text-sm text-white/70 mt-3">
-              {interestedCount} interested · {goingCount} going
+              {interestedCount} interested Â· {goingCount} going
               {goingCount > 0 && (
                 <>
-                  {" · "}
+                  {" Â· "}
                   <a
                     href={`/event/${e.id}/attendees`}
                     className="underline hover:text-white"
@@ -331,7 +331,7 @@ export default async function EventPage({
                   >
                     {e.venues.name}
                   </Link>
-                  {e.venues.city ? " Ã‚Â· " + e.venues.city : ""}
+                  {e.venues.city ? " ÃÆÃ¢â¬Å¡ÃâÂ· " + e.venues.city : ""}
                 </span>
               )}
             </div>
@@ -367,7 +367,7 @@ export default async function EventPage({
                   <p className="font-medium">{t.name}</p>
 
                   <p className="font-bold">
-                    Ã‚Â£{Number(t.price || 0).toFixed(2)}
+                    £{Number(t.price || 0).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -388,7 +388,7 @@ export default async function EventPage({
                       fontFamily: "var(--font-antonio)",
                     }}
                   >
-                    Ã‚Â£{lowestPrice.toFixed(2)}
+                    £{lowestPrice.toFixed(2)}
                   </p>
 
                   <CheckoutLink

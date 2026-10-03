@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter, Antonio } from "next/font/google";
 import { createServerSupabase } from "@/lib/supabase/server";
 import SignOutButton from "@/components/SignOutButton";
@@ -60,13 +60,15 @@ export default async function RootLayout({
   } = await supabase.auth.getUser();
 
   let role: string | null = null;
+  let username: string | null = null;
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, username")
       .eq("id", user.id)
       .maybeSingle();
     role = profile?.role ?? null;
+    username = profile?.username ?? null;
   }
 
   const isAdmin = role === "admin";
@@ -164,6 +166,15 @@ export default async function RootLayout({
                   className="text-sm font-medium hover:opacity-70 hidden sm:inline"
                 >
                   Admin
+                </a>
+              )}
+
+              {user && username && (
+                <a
+                  href={`/u/${username}`}
+                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+                >
+                  My Profile
                 </a>
               )}
 

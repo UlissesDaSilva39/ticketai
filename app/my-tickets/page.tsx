@@ -67,7 +67,7 @@ export default async function MyTicketsPage() {
                       </p>
                     )}
                     <p className="text-sm text-gray-500 mb-4">
-                      {ticket.ticket_type} · £{Number(ticket.price).toFixed(2)}
+                      {ticket.ticket_type} Â· £{Number(ticket.price).toFixed(2)}
                     </p>
                     <p className="text-xs text-gray-400 font-mono break-all mb-4">
                       {ticket.qr_code}
@@ -107,7 +107,7 @@ export default async function MyTicketsPage() {
                       />
                     ) : (
                       <div className="text-center text-gray-400">
-                        <p className="text-4xl mb-2">{isUsed ? "Y" : isReturned ? "↩" : "X"}</p>
+                        <p className="text-4xl mb-2">{isUsed ? "Y" : isReturned ? "â©" : "X"}</p>
                         <p className="text-xs uppercase tracking-widest">
                           {isUsed ? "Used" : isReturned ? "Returned" : "Resold"}
                         </p>

@@ -107,14 +107,15 @@ export default async function PublicProfilePage({
               }
             />
           )}
-          {isOwnProfile && (
-            <Link
-              href="/organizer/profile"
-              className="inline-block px-5 py-2.5 border-2 border-black text-sm font-medium rounded-full hover:bg-gray-50"
-            >
-              Edit Profile
-            </Link>
-          )}
+          {isOwnProfile &&
+            (profile.role === "promoter" || profile.role === "admin") && (
+              <Link
+                href="/organizer/profile"
+                className="inline-block px-5 py-2.5 border-2 border-black text-sm font-medium rounded-full hover:bg-gray-50"
+              >
+                Edit Profile
+              </Link>
+            )}
         </div>
       </div>
 

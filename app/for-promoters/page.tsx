@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sell tickets free — no commission | TicketAI",
+  title: "Sell tickets free â no commission | TicketAI",
   description:
     "Free to use. No monthly fee. No per-ticket commission. Keep 100% of what your fans pay. Built-in campaign tracking and 3-day payouts.",
 };
@@ -32,7 +32,7 @@ export default function ForPromotersPage() {
               href="/promoters/join"
               className="rounded-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800"
             >
-              Start selling — it&apos;s free
+              Start selling â it&apos;s free
             </Link>
             <a
               href="#compare"
@@ -112,7 +112,7 @@ export default function ForPromotersPage() {
               {[
                 ["Listing fee", "£0", "£0", "£0"],
                 ["Per-ticket commission", "3.5% + 49p", "~5%", "£0"],
-                ["Payout delay", "5–30 days", "5 days", "3 days"],
+                ["Payout delay", "5â30 days", "5 days", "3 days"],
                 ["Built-in campaign tracking", "No", "No", "Yes"],
                 ["Click & conversion attribution", "No", "No", "Yes"],
                 ["AI campaign builder", "No", "No", "Coming"],
@@ -150,7 +150,7 @@ export default function ForPromotersPage() {
               {
                 n: "2",
                 t: "Share your link",
-                d: "One unique URL. Post it anywhere — Instagram, email, WhatsApp.",
+                d: "One unique URL. Post it anywhere â Instagram, email, WhatsApp.",
               },
               {
                 n: "3",
@@ -236,7 +236,7 @@ export default function ForPromotersPage() {
               href="/promoters/join"
               className="rounded-full bg-white text-black px-8 py-4 font-medium hover:bg-gray-100"
             >
-              Create your first event — free
+              Create your first event â free
             </Link>
           </div>
           <p className="mt-8 text-sm text-white/60">
