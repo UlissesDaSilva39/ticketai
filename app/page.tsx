@@ -1,4 +1,4 @@
- import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 
@@ -33,14 +33,32 @@ function priceFrom(types: Array<{ price: number }> | null) {
   return Math.min(...types.map((t) => Number(t.price)));
 }
 
-const CITIES = [
-  "London",
-  "Manchester",
-  "Birmingham",
-  "Bristol",
-  "Leeds",
-  "Glasgow",
-  "Brighton",
+const CITIES: Array<{ slug: string; name: string }> = [
+  { slug: "london", name: "London" },
+  { slug: "manchester", name: "Manchester" },
+  { slug: "birmingham", name: "Birmingham" },
+  { slug: "bristol", name: "Bristol" },
+  { slug: "leeds", name: "Leeds" },
+  { slug: "glasgow", name: "Glasgow" },
+  { slug: "brighton", name: "Brighton" },
+  { slug: "paris", name: "Paris" },
+  { slug: "berlin", name: "Berlin" },
+  { slug: "amsterdam", name: "Amsterdam" },
+  { slug: "barcelona", name: "Barcelona" },
+  { slug: "dublin", name: "Dublin" },
+  { slug: "new-york", name: "New York" },
+  { slug: "los-angeles", name: "Los Angeles" },
+  { slug: "miami", name: "Miami" },
+  { slug: "chicago", name: "Chicago" },
+  { slug: "san-francisco", name: "San Francisco" },
+  { slug: "toronto", name: "Toronto" },
+  { slug: "vancouver", name: "Vancouver" },
+  { slug: "montreal", name: "Montreal" },
+  { slug: "calgary", name: "Calgary" },
+  { slug: "sydney", name: "Sydney" },
+  { slug: "melbourne", name: "Melbourne" },
+  { slug: "brisbane", name: "Brisbane" },
+  { slug: "perth", name: "Perth" },
 ];
 
 export default async function HomePage() {
@@ -178,11 +196,11 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-3">
             {CITIES.map((city) => (
               <Link
-                key={city}
-                href={"/search?q=" + encodeURIComponent(city)}
+                key={city.slug}
+                href={"/" + city.slug}
                 className="rounded-full border-2 border-black px-6 py-3 font-medium hover:bg-black hover:text-white"
               >
-                {city}
+                {city.name}
               </Link>
             ))}
           </div>
