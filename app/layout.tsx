@@ -61,6 +61,7 @@ export default async function RootLayout({
 
   let role: string | null = null;
   let username: string | null = null;
+  let pendingRequestCount = 0;
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
@@ -69,6 +70,13 @@ export default async function RootLayout({
       .maybeSingle();
     role = profile?.role ?? null;
     username = profile?.username ?? null;
+
+    const { count } = await supabase
+      .from("friendships")
+      .select("*", { count: "exact", head: true })
+      .eq("friend_id", user.id)
+      .eq("status", "pending");
+    pendingRequestCount = count ?? 0;
   }
 
   const isAdmin = role === "admin";
@@ -172,9 +180,12 @@ export default async function RootLayout({
               {user && username && (
                 <a
                   href={`/u/${username}`}
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+                  className="relative text-sm font-medium hover:opacity-70 hidden sm:inline"
                 >
                   My Profile
+                  {pendingRequestCount > 0 && (
+                    <span className="absolute -top-1 -right-2 w-2 h-2 bg-red-500 rounded-full" />
+                  )}
                 </a>
               )}
 
