@@ -261,20 +261,48 @@ export default async function EventPage({
               initialStatus={myInterest}
               isSignedIn={!!user}
             />
-            <FriendsGoing friends={friendsGoing} totalCount={goingCount} />
+            {goingCount > 0 && (
+              <div className="mt-8 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 max-w-2xl">
+                <p className="text-white font-semibold mb-3">Who's going</p>
+                <div className="flex items-center gap-3">
+                  <div className="flex -space-x-3">
+                    {friendsGoing.slice(0, 6).map((f) => {
+                      const name = f.full_name || f.username || "?";
+                      return (
+                        <div
+                          key={f.id}
+                          title={name}
+                          className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold border-2 border-white"
+                        >
+                          {name.charAt(0).toUpperCase()}
+                        </div>
+                      );
+                    })}
+                    {goingCount > 6 && (
+                      <div className="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-bold border-2 border-white">
+                        +{goingCount - 6}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-white/80 text-sm">
+                    {friendsGoing.length > 0
+                      ? (friendsGoing[0].full_name || friendsGoing[0].username || "Someone").replace(/^./, (c) => c.toUpperCase()) +
+                        (goingCount > 1 ? " and " + (goingCount - 1) + (goingCount - 1 === 1 ? " other " : " others ") : " ") +
+                        (goingCount === 1 ? "is" : "are") +
+                        " going"
+                      : goingCount + " " + (goingCount === 1 ? "person is" : "people are") + " going"}
+                  </p>
+                </div>
+                <a
+                  href={`/event/${e.id}/attendees`}
+                  className="inline-block mt-3 text-sm text-white/70 underline hover:text-white"
+                >
+                  See all {goingCount} attendees →
+                </a>
+              </div>
+            )}
             <p className="text-sm text-white/70 mt-3">
-              {interestedCount} interested Â· {goingCount} going
-              {goingCount > 0 && (
-                <>
-                  {" Â· "}
-                  <a
-                    href={`/event/${e.id}/attendees`}
-                    className="underline hover:text-white"
-                  >
-                    see all
-                  </a>
-                </>
-              )}
+              {interestedCount} interested · {goingCount} going
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 mt-6">
@@ -348,6 +376,38 @@ export default async function EventPage({
             <p className="text-gray-700 leading-relaxed">
               {e.description || "No description yet."}
             </p>
+
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mt-12 mb-4 uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
+              GOOD TO KNOW
+            </h2>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+              <div>
+                <dt className="font-semibold text-gray-900">Doors open</dt>
+                <dd className="text-gray-600">7:00 PM</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-gray-900">Event ends</dt>
+                <dd className="text-gray-600">11:00 PM</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-gray-900">Venue</dt>
+                <dd className="text-gray-600">{e.venues?.name || "TBC"}{e.venues?.city ? ", " + e.venues.city : ""}</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-gray-900">Age restriction</dt>
+                <dd className="text-gray-600">18+ (ID required)</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-gray-900">Transport</dt>
+                <dd className="text-gray-600">Nearest station: TBC - Parking: TBC</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-gray-900">Accessibility</dt>
+                <dd className="text-gray-600">Step-free access - Companion tickets available</dd>
+              </div>
+            </dl>
+          </div>
 
             <h2
               className="text-3xl font-bold mt-12 mb-4 uppercase"

@@ -1,4 +1,4 @@
-﻿export const metadata = {
+export const metadata = {
   title: "Refund Policy — TicketAI",
   description: "How refunds work on TicketAI.",
 };

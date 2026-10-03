@@ -1,4 +1,4 @@
-﻿export const metadata = {
+export const metadata = {
   title: "Terms of Service — TicketAI",
   description: "Terms governing your use of TicketAI.",
 };

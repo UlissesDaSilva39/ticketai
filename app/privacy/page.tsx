@@ -1,4 +1,4 @@
-﻿export const metadata = {
+export const metadata = {
   title: "Privacy Policy — TicketAI",
   description: "How TicketAI collects, uses, and protects your data.",
 };
