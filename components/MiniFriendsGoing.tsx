@@ -38,12 +38,9 @@ export default function MiniFriendsGoing({
           </div>
         ))}
       </div>
-      <a
-        href={"/event/" + eventId + "/attendees"}
-        className="text-xs text-gray-600 hover:text-black"
-      >
-        {text} · See all {totalCount}
-      </a>
+      <span className="text-xs text-gray-600">
+        {text} · {totalCount} going
+      </span>
     </div>
   );
 }
