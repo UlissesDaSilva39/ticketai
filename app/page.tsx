@@ -1,4 +1,7 @@
 import Link from "next/link";
+import MiniInterestButtons from "@/components/MiniInterestButtons";
+import MiniFriendsGoing from "@/components/MiniFriendsGoing";
+import MiniFollowButton from "@/components/MiniFollowButton";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 
@@ -11,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 type TrendingEvent = {
+  organizer_id?: string | null;
   id: string;
   title: string;
   start_date: string | null;
@@ -66,13 +70,162 @@ export default async function HomePage() {
 
   const { data: trending } = await supabase
     .from("events")
-    .select("id, title, start_date, hero_image, ticket_types, venue_id")
+    .select("id, title, start_date, hero_image, ticket_types, venue_id, organizer_id")
     .eq("status", "published")
     .gte("start_date", new Date().toISOString())
     .order("views", { ascending: false })
     .limit(3);
 
   const events = (trending || []) as TrendingEvent[];
+
+  // Batch: interest counts + current user status
+  const eventIds = events.map((e) => e.id);
+  const interestByEvent: Record<string, { interested: number; going: number; mine: "interested" | "going" | null }> = {};
+  for (const id of eventIds) {
+    interestByEvent[id] = { interested: 0, going: 0, mine: null };
+  }
+
+  if (eventIds.length > 0) {
+    const { data: allInterest } = await supabase
+      .from("event_interest")
+      .select("event_id, user_id, status")
+      .in("event_id", eventIds);
+
+    for (const row of allInterest || []) {
+      const b = interestByEvent[row.event_id];
+      if (!b) continue;
+      if (row.status === "interested") b.interested++;
+      else if (row.status === "going") b.going++;
+    }
+  }
+
+  // Batch: current user's friendships
+  const { data: { user: currentUser } } = await supabase.auth.getUser();
+  let currentFriendIds: string[] = [];
+  if (currentUser) {
+    const { data: friendships } = await supabase
+      .from("friendships")
+      .select("user_id, friend_id")
+      .eq("status", "accepted")
+      .or("user_id.eq." + currentUser.id + ",friend_id.eq." + currentUser.id);
+    currentFriendIds = (friendships || []).map((f) =>
+      f.user_id === currentUser.id ? f.friend_id : f.user_id
+    );
+
+    // Set the current user's own status per event
+    const { data: myInterest } = await supabase
+      .from("event_interest")
+      .select("event_id, status")
+      .in("event_id", eventIds)
+      .eq("user_id", currentUser.id);
+    for (const row of myInterest || []) {
+      const b = interestByEvent[row.event_id];
+      if (b) b.mine = row.status as "interested" | "going";
+    }
+  }
+
+  // Batch: going users per event (for MiniFriendsGoing friends-first display)
+  const goingUsersByEvent: Record<string, Array<{ id: string; name: string; isFriend: boolean }>> = {};
+  if (eventIds.length > 0) {
+    const { data: goingRows } = await supabase
+      .from("event_interest")
+      .select("event_id, user_id")
+      .in("event_id", eventIds)
+      .eq("status", "going");
+
+    const goingUserIds = [...new Set((goingRows || []).map((r) => r.user_id))];
+    const profileById: Record<string, string> = {};
+    if (goingUserIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, full_name, username")
+        .in("id", goingUserIds);
+      for (const pr of profiles || []) {
+        profileById[pr.id] = pr.full_name || pr.username || "Someone";
+      }
+    }
+
+    for (const row of goingRows || []) {
+      if (!goingUsersByEvent[row.event_id]) goingUsersByEvent[row.event_id] = [];
+      goingUsersByEvent[row.event_id].push({
+        id: row.user_id,
+        name: profileById[row.user_id] || "Someone",
+        isFriend: currentFriendIds.includes(row.user_id),
+      });
+    }
+    // Sort: friends first
+    for (const id of Object.keys(goingUsersByEvent)) {
+      goingUsersByEvent[id].sort((a, b) => Number(b.isFriend) - Number(a.isFriend));
+    }
+  }
+
+  // Batch: follow counts for the organizers of these events
+  const organizerIds = [...new Set(events.map((e) => e.organizer_id).filter(Boolean))] as string[];
+  const followerCountByOrganizer: Record<string, number> = {};
+  for (const id of organizerIds) followerCountByOrganizer[id] = 0;
+  if (organizerIds.length > 0) {
+    const { data: followRows } = await supabase
+      .from("follows")
+      .select("target_id")
+      .eq("target_type", "promoter")
+      .in("target_id", organizerIds);
+    for (const row of followRows || []) {
+      if (followerCountByOrganizer[row.target_id] !== undefined) {
+        followerCountByOrganizer[row.target_id]++;
+      }
+    }
+  }
+
+  // Friends going this week (event ids)
+  const { data: { user } } = await supabase.auth.getUser();
+  let friendsGoingIds: string[] = [];
+  if (user) {
+    const { data: friendships } = await supabase
+      .from("friendships")
+      .select("user_id, friend_id")
+      .eq("status", "accepted")
+      .or("user_id.eq." + user.id + ",friend_id.eq." + user.id);
+
+    const friendIds = (friendships || []).map((f) =>
+      f.user_id === user.id ? f.friend_id : f.user_id
+    );
+
+    if (friendIds.length > 0) {
+      const weekFromNow = new Date();
+      weekFromNow.setDate(weekFromNow.getDate() + 7);
+
+      const { data: friendGoing } = await supabase
+        .from("event_interest")
+        .select("event_id")
+        .in("user_id", friendIds)
+        .eq("status", "going");
+
+      const candidateIds = [...new Set((friendGoing || []).map((r) => r.event_id))];
+
+      if (candidateIds.length > 0) {
+        const { data: upcomingFriendEvents } = await supabase
+          .from("events")
+          .select("id")
+          .in("id", candidateIds)
+          .eq("status", "published")
+          .gte("start_date", new Date().toISOString())
+          .lte("start_date", weekFromNow.toISOString());
+
+        friendsGoingIds = (upcomingFriendEvents || []).map((e) => e.id);
+      }
+    }
+  }
+
+  // Fetch event details for friends going
+  let friendsGoingEvents: TrendingEvent[] = [];
+  if (friendsGoingIds.length > 0) {
+    const { data: fg } = await supabase
+      .from("events")
+      .select("id, title, start_date, hero_image, ticket_types, venue_id")
+      .in("id", friendsGoingIds)
+      .limit(3);
+    friendsGoingEvents = (fg || []) as TrendingEvent[];
+  }
 
   return (
     <main className="min-h-screen bg-white">
@@ -121,6 +274,49 @@ export default async function HomePage() {
           <p className="mt-6 text-sm text-white/60">
             No booking fees · Free for promoters and venues
           </p>
+        </div>
+      </section>
+
+      <section className="max-w-4xl mx-auto px-6 -mt-6 relative z-10">
+        <form
+          action="/search"
+          method="get"
+          className="bg-white rounded-2xl shadow-2xl p-2 flex flex-col sm:flex-row items-stretch gap-2 border border-gray-100"
+        >
+          <input
+            name="q"
+            placeholder="House music this Saturday..."
+            className="flex-1 px-5 py-3 text-base outline-none rounded-xl"
+          />
+          <button
+            type="submit"
+            className="px-6 py-3 bg-black text-white text-sm font-semibold rounded-xl hover:bg-gray-800"
+          >
+            Find Events
+          </button>
+        </form>
+        <div className="mt-4 text-center text-sm text-gray-500">
+          Try: <a href="/search?q=house" className="underline hover:text-black">House music this Saturday</a> · <a href="/search?q=comedy" className="underline hover:text-black">Comedy tonight</a> · <a href="/search?q=under+30" className="underline hover:text-black">Events under 30</a>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2 justify-center">
+          {[
+            { label: "Tonight", href: "/search?when=tonight" },
+            { label: "This Weekend", href: "/search?when=weekend" },
+            { label: "Music", href: "/search?q=music" },
+            { label: "Live Music", href: "/search?q=live" },
+            { label: "Comedy", href: "/search?q=comedy" },
+            { label: "Festivals", href: "/search?q=festival" },
+            { label: "Clubs", href: "/search?q=club" },
+            { label: "Sports", href: "/search?q=sports" },
+          ].map((c) => (
+            <a
+              key={c.label}
+              href={c.href}
+              className="px-4 py-2 text-sm font-medium rounded-full border border-gray-300 hover:border-black hover:bg-black hover:text-white transition-colors"
+            >
+              {c.label}
+            </a>
+          ))}
         </div>
       </section>
 
@@ -176,12 +372,103 @@ export default async function HomePage() {
                         From £{from.toFixed(2)}
                       </p>
                     )}
+
+                    <MiniFriendsGoing
+                      eventId={e.id}
+                      friends={(goingUsersByEvent[e.id] || [])
+                        .filter((u) => u.isFriend)
+                        .map((u) => ({ id: u.id, name: u.name }))}
+                      totalCount={(interestByEvent[e.id] || { going: 0 }).going}
+                    />
+
+                    <div className="mt-3">
+                      <MiniInterestButtons
+                        eventId={e.id}
+                        initialStatus={(interestByEvent[e.id] || { mine: null }).mine}
+                        isSignedIn={!!currentUser}
+                        initialInterested={(interestByEvent[e.id] || { interested: 0 }).interested}
+                        initialGoing={(interestByEvent[e.id] || { going: 0 }).going}
+                      />
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between gap-2">
+                      {e.organizer_id && (
+                        <MiniFollowButton
+                          targetType="promoter"
+                          targetId={e.organizer_id}
+                          initialCount={followerCountByOrganizer[e.organizer_id] || 0}
+                        />
+                      )}
+                      <span className="rounded-full bg-black text-white px-4 py-2 text-xs font-medium">Get Tickets</span>
+                    </div>
                   </div>
                 </Link>
               );
             })}
           </div>
         )}
+      </section>
+
+      {/* TRENDING NOW — genre tiles */}
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+        <div className="flex items-end justify-between mb-6">
+          <h2
+            className="text-4xl md:text-5xl font-bold uppercase"
+            style={{ fontFamily: "var(--font-antonio)" }}
+          >
+            Trending now
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { name: "House", q: "house" },
+            { name: "Techno", q: "techno" },
+            { name: "Hip-Hop", q: "hip-hop" },
+            { name: "Afrobeats", q: "afrobeats" },
+            { name: "Live Music", q: "live" },
+            { name: "Comedy", q: "comedy" },
+            { name: "Festivals", q: "festival" },
+            { name: "Clubs", q: "club" },
+          ].map((g) => (
+            <a
+              key={g.name}
+              href={"/search?q=" + encodeURIComponent(g.q)}
+              className="flex items-center justify-center h-24 rounded-xl border border-gray-200 font-semibold hover:border-black hover:bg-black hover:text-white transition-colors"
+            >
+              {g.name}
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* SPECIAL OFFERS */}
+      <section className="border-t border-gray-200 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          <h2
+            className="text-4xl md:text-5xl font-bold uppercase mb-8"
+            style={{ fontFamily: "var(--font-antonio)" }}
+          >
+            Special offers
+          </h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              { title: "Early Bird", desc: "Save 20% on selected events", cta: "View offers" },
+              { title: "Group Offer", desc: "4 tickets for £60", cta: "Browse groups" },
+              { title: "Flash Sale", desc: "Until midnight only", cta: "See what's live" },
+            ].map((o) => (
+              <div key={o.title} className="rounded-xl border bg-white p-6">
+                <p className="text-xs uppercase tracking-widest text-gray-500">{o.title}</p>
+                <p className="mt-2 text-xl font-semibold">{o.desc}</p>
+                <a
+                  href="/search"
+                  className="mt-4 inline-block text-sm font-medium underline underline-offset-4"
+                >
+                  {o.cta}
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* CITIES */}
@@ -204,6 +491,24 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* DISCOVER MORE */}
+      <section className="border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 py-16 text-center">
+          <h2
+            className="text-3xl md:text-4xl font-bold uppercase mb-6"
+            style={{ fontFamily: "var(--font-antonio)" }}
+          >
+            Discover more
+          </h2>
+          <Link
+            href="/search"
+            className="inline-block rounded-full bg-black text-white px-8 py-4 font-semibold hover:bg-gray-800"
+          >
+            Browse all events
+          </Link>
         </div>
       </section>
 

@@ -20,6 +20,7 @@ const SITE_URL =
 
 type EventWithVenue = Event & {
   venues: { name: string; slug: string; city: string } | null;
+  lineup?: Array<{ name: string; time?: string; photo?: string; bio?: string }>;
 };
 
 function EventStructuredData({ event }: { event: EventWithVenue }) {

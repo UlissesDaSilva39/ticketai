@@ -238,6 +238,12 @@ export default async function RootLayout({
               </a>
             </div>
             <p className="text-center text-sm text-gray-500">
+              <span
+                className="block text-sm uppercase tracking-[0.3em] text-gray-400 mb-4"
+                style={{ fontFamily: "var(--font-antonio)" }}
+              >
+                Discover. Connect. Experience.
+              </span>
               {"\u00A9 " +
                 new Date().getFullYear() +
                 " TicketAI. All rights reserved."}

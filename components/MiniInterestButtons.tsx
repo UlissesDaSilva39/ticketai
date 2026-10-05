@@ -1,0 +1,86 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+
+export default function MiniInterestButtons({
+  eventId,
+  initialStatus,
+  isSignedIn,
+  initialInterested,
+  initialGoing,
+}: {
+  eventId: string;
+  initialStatus: "interested" | "going" | null;
+  isSignedIn: boolean;
+  initialInterested: number;
+  initialGoing: number;
+}) {
+  const [status, setStatus] = useState(initialStatus);
+  const [interested, setInterested] = useState(initialInterested);
+  const [going, setGoing] = useState(initialGoing);
+  const [busy, setBusy] = useState(false);
+  const [, startTransition] = useTransition();
+  const router = useRouter();
+
+  const toggle = async (next: "interested" | "going") => {
+    if (!isSignedIn) {
+      window.location.href = "/login";
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch("/api/event-interest/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, status: status === next ? null : next }),
+      });
+      const data = await res.json();
+      setStatus(data.status);
+      startTransition(() => {
+        router.refresh();
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div onClick={(e) => e.preventDefault()} className="flex flex-wrap gap-2">
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggle("interested");
+        }}
+        disabled={busy}
+        className={
+          "px-3 py-1.5 rounded-full text-xs font-medium transition-colors " +
+          (status === "interested"
+            ? "bg-[#00FF87] text-black"
+            : "border border-black text-black hover:bg-black hover:text-white")
+        }
+      >
+        {status === "interested" ? "Interested" : "I am Interested"}
+      </button>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggle("going");
+        }}
+        disabled={busy}
+        className={
+          "px-3 py-1.5 rounded-full text-xs font-medium transition-colors " +
+          (status === "going"
+            ? "bg-black text-white"
+            : "border border-black text-black hover:bg-black hover:text-white")
+        }
+      >
+        {status === "going" ? "Going" : "I am Going"}
+      </button>
+    </div>
+  );
+}
