@@ -118,15 +118,20 @@ export async function generateMetadata({
       title: event.title,
       description: desc,
       type: "website",
-      images: event.hero_image
-        ? [{ url: event.hero_image, width: 1200, height: 630 }]
-        : [],
+      images: [
+        {
+          url: "/api/og?event=" + id,
+          width: 1200,
+          height: 630,
+          alt: event.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: event.title,
       description: desc,
-      images: event.hero_image ? [event.hero_image] : [],
+      images: ["/api/og?event=" + id],
     },
   };
 }

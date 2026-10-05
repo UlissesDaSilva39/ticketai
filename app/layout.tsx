@@ -3,6 +3,7 @@ import { Inter, Antonio } from "next/font/google";
 import { createServerSupabase } from "@/lib/supabase/server";
 import SignOutButton from "@/components/SignOutButton";
 import ProfileDropdown from "@/components/ProfileDropdown";
+import InstallPrompt from "@/components/InstallPrompt";
 import "./globals.css";
 
 const inter = Inter({
@@ -182,6 +183,7 @@ export default async function RootLayout({
               {user ? (
                 <ProfileDropdown
                   username={username}
+                  email={user?.email ?? null}
                   role={role}
                   pendingRequestCount={pendingRequestCount}
                 />
@@ -197,6 +199,7 @@ export default async function RootLayout({
           </div>
         </header>
         <main>{children}</main>
+        <InstallPrompt />
         <footer className="border-t border-gray-200 mt-24 py-12">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">

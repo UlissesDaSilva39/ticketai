@@ -5,12 +5,14 @@ import Link from "next/link";
 
 type Props = {
   username: string | null;
+  email: string | null;
   role: string | null;
   pendingRequestCount: number;
 };
 
 export default function ProfileDropdown({
   username,
+  email,
   role,
   pendingRequestCount,
 }: Props) {
@@ -46,7 +48,7 @@ export default function ProfileDropdown({
         className="relative flex items-center gap-2 text-sm font-medium hover:opacity-70"
       >
         <span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
-          {(username || "?").charAt(0).toUpperCase()}
+          {(username || email?.split("@")[0] || "U").charAt(0).toUpperCase()}
         </span>
         <span className="hidden sm:inline">Profile</span>
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -14,11 +14,19 @@ export default function MiniFollowButton({
   const [following, setFollowing] = useState(false);
   const [count, setCount] = useState(initialCount);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const toggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setBusy(true);
+    setError(null);
+
+    // Optimistic update
+    const nextFollowing = !following;
+    setFollowing(nextFollowing);
+    setCount((c) => Math.max(0, c + (nextFollowing ? 1 : -1)));
+
     try {
       const res = await fetch("/api/follows/toggle", {
         method: "POST",
@@ -28,8 +36,20 @@ export default function MiniFollowButton({
       const data = await res.json();
       if (data.following !== undefined) {
         setFollowing(data.following);
-        setCount((c) => c + (data.following ? 1 : -1));
+        setCount(data.count !== undefined ? data.count : count);
+      } else if (data.error) {
+        // Roll back optimistic update
+        setFollowing(following);
+        setCount(count);
+        setError(data.error);
+        console.error("Follow toggle error:", data.error);
       }
+    } catch (err) {
+      setFollowing(following);
+      setCount(count);
+      const msg = err instanceof Error ? err.message : "Failed";
+      setError(msg);
+      console.error("Follow toggle exception:", err);
     } finally {
       setBusy(false);
     }
@@ -40,6 +60,7 @@ export default function MiniFollowButton({
       type="button"
       onClick={toggle}
       disabled={busy}
+      title={error || undefined}
       className={
         "px-3 py-1.5 rounded-full text-xs font-medium transition-colors " +
         (following
