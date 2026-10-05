@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Antonio } from "next/font/google";
 import { createServerSupabase } from "@/lib/supabase/server";
 import SignOutButton from "@/components/SignOutButton";
+import ProfileDropdown from "@/components/ProfileDropdown";
 import "./globals.css";
 
 const inter = Inter({
@@ -111,10 +112,22 @@ export default async function RootLayout({
                 Search
               </a>
               <a
+                href="/friends"
+                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+              >
+                Social
+              </a>
+              <a
                 href="/venues"
                 className="text-sm font-medium hover:opacity-70 hidden sm:inline"
               >
                 Venues
+              </a>
+              <a
+                href="/promoters"
+                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+              >
+                Promoters
               </a>
 
               {!user && (
@@ -134,13 +147,6 @@ export default async function RootLayout({
                 </>
               )}
 
-              <a
-                href="/promoters"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                Promoters
-              </a>
-
               {user && (
                 <a
                   href="/my-tickets"
@@ -150,65 +156,12 @@ export default async function RootLayout({
                 </a>
               )}
 
-              {isPromoter && (
-                <a
-                  href="/promoter/dashboard"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Promoter Dashboard
-                </a>
-              )}
-
-              {isPromoter && (
-                <a
-                  href="/organizer"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Dashboard
-                </a>
-              )}
-
-              {isVenue && (
-                <a
-                  href="/venue/dashboard"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Venue Dashboard
-                </a>
-              )}
-
-              {isAdmin && (
-                <a
-                  href="/admin"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Admin
-                </a>
-              )}
-
-              {user && username && (
-                <a
-                  href={`/u/${username}`}
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  My Profile
-                </a>
-              )}
-
-              {user && (
-                <a
-                  href="/notifications"
-                  className="relative text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Notifications
-                  {pendingRequestCount > 0 && (
-                    <span className="absolute -top-1 -right-2 w-2 h-2 bg-red-500 rounded-full" />
-                  )}
-                </a>
-              )}
-
               {user ? (
-                <SignOutButton />
+                <ProfileDropdown
+                  username={username}
+                  role={role}
+                  pendingRequestCount={pendingRequestCount}
+                />
               ) : (
                 <a
                   href="/login"
