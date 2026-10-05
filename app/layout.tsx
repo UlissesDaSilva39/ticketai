@@ -134,6 +134,13 @@ export default async function RootLayout({
                 </a>
               )}
               <a
+                href="/people"
+                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+              >
+                People
+              </a>
+
+              <a
                 href="/venues"
                 className="text-sm font-medium hover:opacity-70 hidden sm:inline"
               >
