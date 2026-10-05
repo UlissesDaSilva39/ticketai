@@ -1,0 +1,39 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function MessageButton({ otherUserId }: { otherUserId: string }) {
+  const [busy, setBusy] = useState(false);
+  const router = useRouter();
+
+  const start = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch("/api/messages/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otherUserId }),
+      });
+      const data = await res.json();
+      if (data.conversationId) {
+        router.push("/messages/" + data.conversationId);
+      } else {
+        console.error("Start message error:", data.error);
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={start}
+      disabled={busy}
+      className="inline-block px-5 py-2.5 border-2 border-black text-sm font-medium rounded-full hover:bg-gray-50 disabled:opacity-50"
+    >
+      {busy ? "Opening..." : "Message"}
+    </button>
+  );
+}

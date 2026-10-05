@@ -1,0 +1,126 @@
+"use client";
+
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
+
+type DayPoint = { date: string; revenue: number; tickets: number };
+type EventPoint = { name: string; revenue: number };
+
+export default function RevenueChart({
+  dailyData,
+  topEvents,
+}: {
+  dailyData: DayPoint[];
+  topEvents: EventPoint[];
+}) {
+  return (
+    <div className="space-y-8">
+      <div className="border border-gray-200 rounded-2xl p-6">
+        <h3
+          className="text-2xl font-bold uppercase mb-4"
+          style={{ fontFamily: "var(--font-antonio)" }}
+        >
+          Revenue over time
+        </h3>
+        {dailyData.length === 0 ? (
+          <p className="text-sm text-gray-500">No sales data yet.</p>
+        ) : (
+          <div style={{ width: "100%", height: 280 }}>
+            <ResponsiveContainer>
+              <LineChart data={dailyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="date" fontSize={12} stroke="#888" />
+                <YAxis fontSize={12} stroke="#888" />
+                <Tooltip
+                  contentStyle={{ borderRadius: 8, border: "1px solid #eee" }}
+                  formatter={(v: number) => "£" + Number(v).toFixed(2)}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#000000"
+                  strokeWidth={2}
+                  dot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </div>
+
+      <div className="border border-gray-200 rounded-2xl p-6">
+        <h3
+          className="text-2xl font-bold uppercase mb-4"
+          style={{ fontFamily: "var(--font-antonio)" }}
+        >
+          Tickets sold over time
+        </h3>
+        {dailyData.length === 0 ? (
+          <p className="text-sm text-gray-500">No sales data yet.</p>
+        ) : (
+          <div style={{ width: "100%", height: 280 }}>
+            <ResponsiveContainer>
+              <LineChart data={dailyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="date" fontSize={12} stroke="#888" />
+                <YAxis fontSize={12} stroke="#888" />
+                <Tooltip
+                  contentStyle={{ borderRadius: 8, border: "1px solid #eee" }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="tickets"
+                  stroke="#00c853"
+                  strokeWidth={2}
+                  dot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </div>
+
+      <div className="border border-gray-200 rounded-2xl p-6">
+        <h3
+          className="text-2xl font-bold uppercase mb-4"
+          style={{ fontFamily: "var(--font-antonio)" }}
+        >
+          Top events by revenue
+        </h3>
+        {topEvents.length === 0 ? (
+          <p className="text-sm text-gray-500">No events with sales yet.</p>
+        ) : (
+          <div style={{ width: "100%", height: Math.max(220, topEvents.length * 48) }}>
+            <ResponsiveContainer>
+              <BarChart data={topEvents} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis type="number" fontSize={12} stroke="#888" />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={180}
+                  fontSize={12}
+                  stroke="#888"
+                />
+                <Tooltip
+                  contentStyle={{ borderRadius: 8, border: "1px solid #eee" }}
+                  formatter={(v: number) => "£" + Number(v).toFixed(2)}
+                />
+                <Bar dataKey="revenue" fill="#000000" radius={[0, 6, 6, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

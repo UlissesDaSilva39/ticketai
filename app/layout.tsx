@@ -134,6 +134,14 @@ export default async function RootLayout({
                   Following
                 </a>
               )}
+              {user && (
+                <a
+                  href="/messages"
+                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+                >
+                  Messages
+                </a>
+              )}
               <a
                 href="/people"
                 className="text-sm font-medium hover:opacity-70 hidden sm:inline"

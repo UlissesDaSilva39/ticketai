@@ -1,6 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import FriendButton from "@/components/FriendButton";
+import MessageButton from "@/components/MessageButton";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Event } from "@/lib/types";
@@ -98,14 +99,17 @@ export default async function PublicProfilePage({
             </p>
           )}
           {!isOwnProfile && user && (
-            <FriendButton
-              friendId={profile.id}
-              initialStatus={
-                friendship === "pending" && friendshipIsIncoming
-                  ? null
-                  : friendship
-              }
-            />
+            <div className="flex flex-wrap gap-3">
+              <FriendButton
+                friendId={profile.id}
+                initialStatus={
+                  friendship === "pending" && friendshipIsIncoming
+                    ? null
+                    : friendship
+                }
+              />
+              <MessageButton otherUserId={profile.id} />
+            </div>
           )}
           {isOwnProfile && (
             <Link

@@ -1,0 +1,44 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createServerSupabase } from "@/lib/supabase/server";
+
+export async function POST(req: NextRequest) {
+  try {
+    const { conversationId, body } = await req.json();
+    if (!conversationId || !body || !body.trim()) {
+      return NextResponse.json({ error: "conversationId and body required" }, { status: 400 });
+    }
+
+    const supabase = await createServerSupabase();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+    const { data: conv } = await supabase
+      .from("conversations")
+      .select("id, participant_a, participant_b")
+      .eq("id", conversationId)
+      .maybeSingle();
+
+    if (!conv) return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
+    if (conv.participant_a !== user.id && conv.participant_b !== user.id) {
+      return NextResponse.json({ error: "Not your conversation" }, { status: 403 });
+    }
+
+    const { data, error } = await supabase
+      .from("messages")
+      .insert({ conversation_id: conversationId, sender_id: user.id, body: body.trim() })
+      .select("id, body, sender_id, created_at")
+      .single();
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+    await supabase
+      .from("conversations")
+      .update({ last_message_at: new Date().toISOString() })
+      .eq("id", conversationId);
+
+    return NextResponse.json({ message: data });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}

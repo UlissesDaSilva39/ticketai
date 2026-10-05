@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
+import RevenueChart from "@/components/RevenueChart";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,40 @@ export default async function OrganizerAnalytics() {
   });
 
   const sortedByViews = [...perEventStats].sort((a, b) => b.views - a.views);
+
+  // Daily aggregation for the last 30 days
+  const dayBuckets: Record<string, { revenue: number; tickets: number }> = {};
+  const now = new Date();
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    dayBuckets[key] = { revenue: 0, tickets: 0 };
+  }
+
+  for (const o of orders) {
+    const key = new Date(o.created_at).toISOString().slice(0, 10);
+    if (dayBuckets[key]) {
+      dayBuckets[key].revenue += Number(o.total_amount || 0);
+      const ticketCount = (o.tickets || []).reduce((s, x) => s + Number(x.qty || 0), 0);
+      dayBuckets[key].tickets += ticketCount;
+    }
+  }
+
+  const dailyData = Object.entries(dayBuckets).map(([date, v]) => ({
+    date: date.slice(5), // MM-DD
+    revenue: Number(v.revenue.toFixed(2)),
+    tickets: v.tickets,
+  }));
+
+  const topEvents = [...perEventStats]
+    .filter((s) => s.revenue > 0)
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 8)
+    .map((s) => ({
+      name: s.event.title.length > 30 ? s.event.title.slice(0, 30) + "…" : s.event.title,
+      revenue: Number(s.revenue.toFixed(2)),
+    }));
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -137,6 +172,12 @@ export default async function OrganizerAnalytics() {
           ))}
         </div>
       )}
+          <div className="mb-12">
+        <h2 className="text-3xl font-bold uppercase mb-6" style={{ fontFamily: "var(--font-antonio)" }}>
+          Charts
+        </h2>
+        <RevenueChart dailyData={dailyData} topEvents={topEvents} />
+      </div>
     </div>
   );
 }
