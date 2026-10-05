@@ -3,18 +3,26 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
+const CITIES = ["", "London", "Manchester", "Birmingham", "Bristol", "Leeds", "Glasgow", "Brighton"];
+
 export default function SearchFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [type, setType] = useState(searchParams.get("type") || "all");
   const [sort, setSort] = useState(searchParams.get("sort") || "upcoming");
+  const [city, setCity] = useState(searchParams.get("city") || "");
+  const [when, setWhen] = useState(searchParams.get("when") || "");
+  const [price, setPrice] = useState(searchParams.get("price") || "");
 
   const apply = () => {
     const params = new URLSearchParams();
     if (query) params.set("q", query);
     if (type !== "all") params.set("type", type);
     if (sort !== "upcoming") params.set("sort", sort);
+    if (city) params.set("city", city);
+    if (when) params.set("when", when);
+    if (price) params.set("price", price);
     const qs = params.toString();
     router.push(qs ? "/search?" + qs : "/search");
   };
@@ -23,6 +31,9 @@ export default function SearchFilters() {
     setQuery("");
     setType("all");
     setSort("upcoming");
+    setCity("");
+    setWhen("");
+    setPrice("");
     router.push("/search");
   };
 
@@ -47,6 +58,41 @@ export default function SearchFilters() {
 
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-xs uppercase tracking-widest text-gray-500 mr-2">Filters</span>
+
+        <select
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:border-black focus:outline-none"
+        >
+          <option value="">Any City</option>
+          {CITIES.filter(Boolean).map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+
+        <select
+          value={when}
+          onChange={(e) => setWhen(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:border-black focus:outline-none"
+        >
+          <option value="">Any Date</option>
+          <option value="weekend">This Weekend</option>
+          <option value="7days">Next 7 Days</option>
+          <option value="30days">Next 30 Days</option>
+        </select>
+
+        <select
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:border-black focus:outline-none"
+        >
+          <option value="">Any Price</option>
+          <option value="free">Free</option>
+          <option value="under20">Under 20 pounds</option>
+          <option value="20-50">20 to 50 pounds</option>
+          <option value="50plus">50 pounds plus</option>
+        </select>
+
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}

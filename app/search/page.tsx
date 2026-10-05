@@ -10,12 +10,15 @@ export const dynamic = "force-dynamic";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; type?: string; sort?: string }>;
+  searchParams: Promise<{ q?: string; type?: string; sort?: string; city?: string; when?: string; price?: string }>;
 }) {
   const params = await searchParams;
   const q = params.q || "";
   const type = params.type || "all";
   const sort = params.sort || "upcoming";
+  const city = params.city || "";
+  const when = params.when || "";
+  const price = params.price || "";
 
   const supabase = await createServerSupabase();
 
@@ -28,6 +31,36 @@ export default async function SearchPage({
     query = query.eq("event_type", type);
   }
 
+  // City filter — via venue lookup
+  if (city) {
+    const { data: venueRows } = await supabase
+      .from("venues")
+      .select("id")
+      .ilike("city", city);
+    const venueIds = (venueRows || []).map((v) => v.id);
+    if (venueIds.length > 0) {
+      query = query.in("venue_id", venueIds);
+    } else {
+      // No venues match — force no results
+      query = query.eq("id", "00000000-0000-0000-0000-000000000000");
+    }
+  }
+
+  // When filter
+  if (when === "7days" || when === "weekend") {
+    const end = new Date();
+    end.setDate(end.getDate() + (when === "weekend" ? 3 : 7));
+    query = query
+      .gte("start_date", new Date().toISOString())
+      .lte("start_date", end.toISOString());
+  } else if (when === "30days") {
+    const end = new Date();
+    end.setDate(end.getDate() + 30);
+    query = query
+      .gte("start_date", new Date().toISOString())
+      .lte("start_date", end.toISOString());
+  }
+
   if (sort === "newest") {
     query = query.order("created_at", { ascending: false });
   } else if (sort === "popular") {
@@ -37,7 +70,24 @@ export default async function SearchPage({
   }
 
   const { data: events } = await query;
-  const eventList = (events as Event[]) || [];
+  let eventList = (events as Event[]) || [];
+
+  // Price filter — post-fetch because ticket_types is JSON
+  if (price) {
+    const priceOf = (e: Event): number => {
+      const types = Array.isArray(e.ticket_types) ? e.ticket_types : [];
+      if (types.length === 0) return 0;
+      return Math.min(...types.map((t) => Number(t.price || 0)));
+    };
+    eventList = eventList.filter((e) => {
+      const p = priceOf(e);
+      if (price === "free") return p === 0;
+      if (price === "under20") return p > 0 && p < 20;
+      if (price === "20-50") return p >= 20 && p <= 50;
+      if (price === "50plus") return p > 50;
+      return true;
+    });
+  }
   const eventIds = eventList.map((e) => e.id);
 
   const soldMap: Record<string, number> = {};
