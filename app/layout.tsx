@@ -117,6 +117,22 @@ export default async function RootLayout({
               >
                 Social
               </a>
+              {user && (
+                <a
+                  href="/feed"
+                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+                >
+                  Feed
+                </a>
+              )}
+              {user && (
+                <a
+                  href="/following"
+                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+                >
+                  Following
+                </a>
+              )}
               <a
                 href="/venues"
                 className="text-sm font-medium hover:opacity-70 hidden sm:inline"

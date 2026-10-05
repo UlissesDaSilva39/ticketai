@@ -2,6 +2,7 @@ import Link from "next/link";
 import MiniInterestButtons from "@/components/MiniInterestButtons";
 import MiniFriendsGoing from "@/components/MiniFriendsGoing";
 import MiniFollowButton from "@/components/MiniFollowButton";
+import ShareButtonMini from "@/components/ShareButtonMini";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 
@@ -399,7 +400,13 @@ export default async function HomePage() {
                           initialCount={followerCountByOrganizer[e.organizer_id] || 0}
                         />
                       )}
-                      <span className="rounded-full bg-black text-white px-4 py-2 text-xs font-medium">Get Tickets</span>
+                      <div className="flex items-center gap-1">
+                        <ShareButtonMini
+                          url={"https://ticketai.org.uk/event/" + e.id}
+                          title={e.title}
+                        />
+                        <span className="rounded-full bg-black text-white px-4 py-2 text-xs font-medium">Get Tickets</span>
+                      </div>
                     </div>
                   </div>
                 </Link>
