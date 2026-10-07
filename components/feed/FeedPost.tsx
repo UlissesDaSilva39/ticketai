@@ -97,6 +97,7 @@ export default function FeedPost({
                     weekday: "short",
                     day: "numeric",
                     month: "short",
+                    timeZone: "UTC",
                   })
                 : "Date TBC"}
               {fromPrice !== null ? " · From £" + fromPrice.toFixed(2) : ""}

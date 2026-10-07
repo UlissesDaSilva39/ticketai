@@ -3,8 +3,11 @@ import { Inter, Antonio } from "next/font/google";
 import { createServerSupabase } from "@/lib/supabase/server";
 import SignOutButton from "@/components/SignOutButton";
 import ProfileDropdown from "@/components/ProfileDropdown";
+import SocialDropdown from "@/components/SocialDropdown";
+import NotificationBell from "@/components/NotificationBell";
 import InstallPrompt from "@/components/InstallPrompt";
 import MobileNav from "@/components/MobileNav";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -35,7 +38,6 @@ export const metadata: Metadata = {
     default: "TicketAI - Find Your Next Event",
     template: "%s | TicketAI",
   },
-  
   description:
     "AI-powered event discovery and ticketing. Find live events, buy tickets, and support venues and promoters.",
   openGraph: {
@@ -66,6 +68,7 @@ export default async function RootLayout({
   let username: string | null = null;
   let pendingRequestCount = 0;
   let unreadMessageCount = 0;
+  let notificationCount = 0;
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
@@ -82,7 +85,6 @@ export default async function RootLayout({
       .eq("status", "pending");
     pendingRequestCount = count ?? 0;
 
-    // Unread messages: rows in messages where conversation includes me, sender != me, read_at is null
     const { data: convs } = await supabase
       .from("conversations")
       .select("id")
@@ -97,11 +99,13 @@ export default async function RootLayout({
         .is("read_at", null);
       unreadMessageCount = uc ?? 0;
     }
+    const { count: nc } = await supabase
+      .from("notifications")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .is("read_at", null);
+    notificationCount = nc ?? 0;
   }
-
-  const isAdmin = role === "admin";
-  const isPromoter = role === "promoter" || isAdmin;
-  const isVenue = role === "venue" || isAdmin;
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -130,60 +134,20 @@ export default async function RootLayout({
               >
                 Search
               </a>
-              <a
-                href="/friends"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                Social
-              </a>
-              {user && (
-                <a
-                  href="/feed"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Feed
-                </a>
-              )}
-              {user && (
-                <a
-                  href="/following"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Following
-                </a>
-              )}
-              {user && (
-                <a
-                  href="/messages"
-                  className="relative text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  Messages
-                  {unreadMessageCount > 0 && (
-                    <span className="absolute -top-1 -right-3 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
-                      {unreadMessageCount}
-                    </span>
-                  )}
-                </a>
-              )}
-              <a
-                href="/people"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                People
-              </a>
 
-              <a
-                href="/venues"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                Venues
-              </a>
-              <a
-                href="/promoters"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                Promoters
-              </a>
+              <SocialDropdown
+                signedIn={!!user}
+                unreadMessageCount={unreadMessageCount}
+              />
+
+              {user && (
+                <a
+                  href="/my-tickets"
+                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+                >
+                  My Tickets
+                </a>
+              )}
 
               {!user && (
                 <>
@@ -202,16 +166,9 @@ export default async function RootLayout({
                 </>
               )}
 
-              {user && (
-                <a
-                  href="/my-tickets"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  My Tickets
-                </a>
-              )}
+              <NotificationBell signedIn={!!user} initialUnreadCount={notificationCount} />
 
-              {user ? (
+{user ? (
                 <ProfileDropdown
                   username={username}
                   email={user?.email ?? null}
@@ -261,8 +218,15 @@ export default async function RootLayout({
           </div>
         </footer>
         <MobileNav isSignedIn={!!user} />
-        <div className="h-14 sm:hidden" />
+        <div className="h-14 sm:hidden" />        <Toaster position="bottom-right" richColors />
+      
       </body>
     </html>
   );
 }
+
+
+
+
+
+
