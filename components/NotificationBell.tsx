@@ -1,0 +1,209 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
+import { loadPrefs, type Prefs, DEFAULT_PREFS } from "@/lib/preferences";
+
+type Notification = {
+  id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  href: string | null;
+  read_at: string | null;
+  created_at: string;
+};
+
+type Props = {
+  signedIn: boolean;
+  initialUnreadCount: number;
+};
+
+export default function NotificationBell({ signedIn, initialUnreadCount }: Props) {
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState<Notification[]>([]);
+  const [unread, setUnread] = useState(initialUnreadCount);
+  const [loading, setLoading] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("click", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!signedIn) return;
+    const supabase = createClient();
+    const channel = supabase
+      .channel("notifications-bell")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "notifications" },
+        (payload) => {
+          const row = payload.new as Notification;
+          setUnread((u) => u + 1);
+          setItems((prev) => (open ? [row, ...prev] : prev));
+          toast(row.title, {
+            description: row.body ?? undefined,
+            action: row.href
+              ? { label: "View", onClick: () => (window.location.href = row.href!) }
+              : undefined,
+          });
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [signedIn, open]);
+
+  async function loadAndMarkRead() {
+    if (!signedIn) return;
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      let enabledTypes: string[] | null = null;
+      if (user) {
+        const p = await loadPrefs(supabase, user.id);
+        enabledTypes = Object.entries(p).filter(([, v]) => v).map(([k]) => k);
+      }
+
+      let q = supabase
+        .from("notifications")
+        .select("id, type, title, body, href, read_at, created_at")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (enabledTypes) q = q.in("type", enabledTypes);
+      const { data, error } = await q;
+      if (error) throw error;
+      setItems(data ?? []);
+      setUnread(0);
+
+      const unreadIds = (data ?? []).filter((n) => !n.read_at).map((n) => n.id);
+      if (unreadIds.length > 0) {
+        await supabase
+          .from("notifications")
+          .update({ read_at: new Date().toISOString() })
+          .in("id", unreadIds);
+      }
+    } catch (err) {
+      console.error("Failed to load notifications", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function markAllRead() {
+    const supabase = createClient();
+    const now = new Date().toISOString();
+    await supabase.from("notifications").update({ read_at: now }).is("read_at", null);
+    setItems((prev) => prev.map((n) => ({ ...n, read_at: n.read_at ?? now })));
+    setUnread(0);
+  }
+
+  function handleToggle() {
+    const next = !open;
+    setOpen(next);
+    if (next) loadAndMarkRead();
+  }
+
+  if (!signedIn) return null;
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={handleToggle}
+        aria-label="Notifications"
+        aria-haspopup="true"
+        aria-expanded={open}
+        className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-gray-100 transition-colors"
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+        {unread > 0 && (
+          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-semibold flex items-center justify-center border-2 border-white">
+            {unread > 9 ? "9+" : unread}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
+        >
+          <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+            <p className="text-sm font-semibold">Notifications</p>
+            {unread > 0 && (
+              <button
+                type="button"
+                onClick={markAllRead}
+                className="text-xs text-gray-500 hover:text-black transition-colors"
+              >
+                Mark all as read
+              </button>
+            )}
+          </div>
+          <div className="max-h-96 overflow-y-auto">
+            {loading && (
+              <p className="px-4 py-6 text-sm text-gray-500 text-center">Loading...</p>
+            )}
+            {!loading && items.length === 0 && (
+              <div className="px-4 py-12 text-center">
+                <p className="text-4xl mb-3">🔔</p>
+                <p className="text-sm font-medium text-gray-900">All caught up</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  We&apos;ll let you know when something happens.
+                </p>
+              </div>
+            )}
+            {!loading &&
+              items.map((n) => (
+                <a
+                  key={n.id}
+                  href={n.href ?? "#"}
+                  className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm font-medium text-gray-900">{n.title}</p>
+                    {!n.read_at && (
+                      <span className="mt-1.5 min-w-[6px] h-1.5 rounded-full bg-blue-500 shrink-0" />
+                    )}
+                  </div>
+                  {n.body ? (
+                    <p className="text-xs text-gray-600 mt-0.5">{n.body}</p>
+                  ) : null}
+                  <p className="text-[11px] text-gray-400 mt-1">
+                    {new Date(n.created_at).toLocaleString()}
+                  </p>
+                </a>
+              ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

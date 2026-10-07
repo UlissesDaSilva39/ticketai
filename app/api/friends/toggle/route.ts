@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendFriendRequestEmail } from "@/lib/email";
+import { notifyServer } from "@/lib/notify-server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,17 +35,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
 
-    // Notify recipient by email (fire-and-forget)
+    // Look up sender profile once, use for both in-app notification and email
+    const admin = createAdminClient();
+    const { data: senderProfile } = await admin
+      .from("profiles")
+      .select("full_name, username")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const senderName = senderProfile?.full_name || senderProfile?.username || "Someone";
+    const senderUsername = senderProfile?.username || null;
+
+    // In-app notification
+    await notifyServer({
+      userId: friendId,
+      type: "friend_request",
+      title: "New friend request",
+      body: senderName + " wants to be friends",
+      href: "/friends/requests",
+    });
+
+    // Email (fire-and-forget)
     console.log("[friend-request] new request from", user.id, "to", friendId);
     try {
-      const admin = createAdminClient();
       const { data: recipientAuth, error: authErr } = await admin.auth.admin.getUserById(friendId);
       if (authErr) console.error("[friend-request] recipient lookup failed:", authErr.message);
-      const { data: senderProfile } = await admin
-        .from("profiles")
-        .select("full_name, username")
-        .eq("id", user.id)
-        .maybeSingle();
 
       console.log("[friend-request] recipient email:", recipientAuth?.user?.email || "(none)");
       console.log("[friend-request] sender profile:", senderProfile);
@@ -54,8 +69,8 @@ export async function POST(req: NextRequest) {
         await sendFriendRequestEmail({
           toEmail: recipientAuth.user.email,
           toName: recipientAuth.user.email.split("@")[0],
-          fromName: senderProfile?.full_name || senderProfile?.username || "Someone",
-          fromUsername: senderProfile?.username || null,
+          fromName: senderName,
+          fromUsername: senderUsername,
           siteUrl,
         });
       }

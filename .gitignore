@@ -50,3 +50,6 @@ out
 
 # production
 build
+
+# Archived one-off scripts
+_archive/

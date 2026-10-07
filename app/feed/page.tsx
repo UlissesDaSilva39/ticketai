@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 type FriendActivity = {
   id: string;
-  type: "going" | "interested" | "review" | "new_event";
+  type: "going" | "interested" | "review" | "new_event" | "follow";
   user_id: string;
   user_name: string;
   user_username: string | null;
@@ -181,6 +181,59 @@ export default async function FeedPage() {
     }
   }
 
+  // Friend follows — who has each friend followed?
+  if (friendIds.length > 0) {
+    const { data: friendFollows } = await supabase
+      .from("follows")
+      .select("id, follower_id, target_type, target_id, created_at")
+      .in("follower_id", friendIds)
+      .order("created_at", { ascending: false })
+      .limit(30);
+
+    // Fetch promoter names for these follows
+    const promoterIds = (friendFollows || [])
+      .filter((f) => f.target_type === "promoter")
+      .map((f) => f.target_id);
+
+    let promoterById: Record<string, string> = {};
+    if (promoterIds.length > 0) {
+      const { data: promoterRows } = await supabase
+        .from("promoters")
+        .select("id, display_name")
+        .in("id", promoterIds);
+      for (const p of promoterRows || []) {
+        promoterById[p.id] = p.display_name || "a promoter";
+      }
+    }
+
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name, username")
+      .in("id", friendIds);
+    const profileMap: Record<string, { name: string; username: string | null }> = {};
+    for (const p of profiles || []) {
+      profileMap[p.id] = { name: p.full_name || p.username || "Someone", username: p.username };
+    }
+
+    for (const f of friendFollows || []) {
+      const who = profileMap[f.follower_id];
+      if (!who) continue;
+      const targetName = f.target_type === "promoter" ? promoterById[f.target_id] || "a promoter" : "a venue";
+      activities.push({
+        id: "follow-" + f.id,
+        type: "follow",
+        user_id: f.follower_id,
+        user_name: who.name,
+        user_username: who.username,
+        created_at: f.created_at,
+        event_id: null,
+        event_title: targetName,
+        event_date: null,
+        event_image: null,
+      });
+    }
+  }
+
   activities.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
   const shown = activities.slice(0, 40);
 
@@ -287,6 +340,7 @@ export default async function FeedPage() {
                             {a.type === "interested" && <span className="text-gray-600"> is interested in </span>}
                             {a.type === "review" && <span className="text-gray-600"> reviewed </span>}
                             {a.type === "new_event" && <span className="text-gray-600"> announced a new event </span>}
+                            {a.type === "follow" && <span className="text-gray-600"> started following </span>}
                             {a.event_id && (
                               <Link href={"/event/" + a.event_id} className="font-medium hover:underline">
                                 {a.event_title}

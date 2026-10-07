@@ -12,6 +12,7 @@ import ShareButton from "@/components/ShareButton";
 import InterestButtons from "@/components/InterestButtons";
 import ReviewsSection from "@/components/ReviewsSection";
 import EventTabs from "@/components/EventTabs";
+import ShareSheet from "@/components/ShareSheet";
 
 export const dynamic = "force-dynamic";
 
@@ -344,7 +345,7 @@ export default async function EventPage({
               variant="light"
             />
 
-            <ShareButton url={`${SITE_URL}/event/${e.id}`} title={e.title} />
+            <ShareSheet url={`${SITE_URL}/event/${e.id}`} title={e.title} />
 
             {e.preview_audio_url && (
               <a

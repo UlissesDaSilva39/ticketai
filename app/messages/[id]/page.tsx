@@ -36,7 +36,7 @@ export default async function ConversationPage({
 
   const { data: messages } = await supabase
     .from("messages")
-    .select("id, sender_id, body, created_at")
+    .select("id, sender_id, body, created_at, attachment_url, attachment_type")
     .eq("conversation_id", id)
     .order("created_at", { ascending: true });
 
@@ -63,6 +63,7 @@ export default async function ConversationPage({
       <MessageThread
         conversationId={id}
         currentUserId={user.id}
+        otherUserName={otherName}
         initialMessages={(messages || []) as Array<{ id: string; sender_id: string; body: string; created_at: string }>}
       />
     </div>

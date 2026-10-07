@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendFriendAcceptedEmail } from "@/lib/email";
+import { notifyServer } from "@/lib/notify-server";
 
 export async function POST(req: NextRequest) {
   const supabase = await createServerSupabase();
@@ -29,13 +30,26 @@ export async function POST(req: NextRequest) {
         .eq("id", user.id)
         .maybeSingle();
 
+      const accepterName = accepterProfile?.full_name || accepterProfile?.username || "Someone";
+      const accepterUsername = accepterProfile?.username || null;
+
+      // In-app notification
+      await notifyServer({
+        userId: senderId,
+        type: "friend_accepted",
+        title: "Friend request accepted",
+        body: accepterName + " accepted your friend request",
+        href: "/friends",
+      });
+
+      // Email
       if (senderAuth?.user?.email) {
         const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
         await sendFriendAcceptedEmail({
           toEmail: senderAuth.user.email,
           toName: senderAuth.user.email.split("@")[0],
-          accepterName: accepterProfile?.full_name || accepterProfile?.username || "Someone",
-          accepterUsername: accepterProfile?.username || null,
+          accepterName,
+          accepterUsername,
           siteUrl,
         });
       }

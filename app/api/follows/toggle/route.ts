@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { notifyServer } from "@/lib/notify-server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,9 +29,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Resolve the followable "target_id" and the target's owner.
-    // For promoters, callers may pass either promoters.id or promoters.user_id.
-    // For venues, targetId is always venues.id.
     let resolvedTargetId: string | null = null;
     let ownerId: string | null = null;
 
@@ -68,7 +66,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Toggle the follow row for the resolved id
     const { data: existing } = await supabase
       .from("follows")
       .select("id")
@@ -88,6 +85,28 @@ export async function POST(req: NextRequest) {
         target_id: resolvedTargetId,
       });
       following = true;
+
+      // Notify the target's owner (only on follow, not unfollow)
+      if (ownerId) {
+        const { data: followerProfile } = await supabase
+          .from("profiles")
+          .select("full_name, username")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        const followerName = followerProfile?.full_name || followerProfile?.username || "Someone";
+        const followerUsername = followerProfile?.username || null;
+
+        await notifyServer({
+          userId: ownerId,
+          type: "follow",
+          title: "New follower",
+          body: followerName + " started following you",
+          href: targetType === "promoter"
+            ? "/promoters/" + resolvedTargetId
+            : "/venues/" + resolvedTargetId,
+        });
+      }
     }
 
     const { count } = await supabase

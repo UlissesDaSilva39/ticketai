@@ -1,75 +1,66 @@
 import type { MetadataRoute } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { CITIES } from "@/lib/cities";
+import { GENRES } from "@/lib/genres";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
-
-export const revalidate = 3600; // regenerate every hour
+const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createServerSupabase();
 
-  // Static pages
-  const staticPages: MetadataRoute.Sitemap = [
-    { url: SITE_URL, changeFrequency: "daily", priority: 1.0 },
-    { url: `${SITE_URL}/search`, changeFrequency: "daily", priority: 0.9 },
-    { url: `${SITE_URL}/venues`, changeFrequency: "daily", priority: 0.9 },
-    { url: `${SITE_URL}/promoters`, changeFrequency: "daily", priority: 0.8 },
-    { url: `${SITE_URL}/for-promoters`, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${SITE_URL}/for-venues`, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${SITE_URL}/contact`, changeFrequency: "monthly", priority: 0.4 },
-    { url: `${SITE_URL}/terms`, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${SITE_URL}/privacy`, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${SITE_URL}/refunds`, changeFrequency: "yearly", priority: 0.3 },
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: SITE_URL,                  lastModified: new Date(), changeFrequency: "daily",   priority: 1.0 },
+    { url: SITE_URL + "/search",      lastModified: new Date(), changeFrequency: "daily",   priority: 0.9 },
+    { url: SITE_URL + "/venues",      lastModified: new Date(), changeFrequency: "weekly",  priority: 0.8 },
+    { url: SITE_URL + "/promoters",   lastModified: new Date(), changeFrequency: "weekly",  priority: 0.8 },
   ];
 
-  // Events
+  const cityRoutes: MetadataRoute.Sitemap = CITIES.map((c) => ({
+    url: SITE_URL + "/events/" + c.slug,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.7,
+  }));
+
+  const genreRoutes: MetadataRoute.Sitemap = GENRES.map((g) => ({
+    url: SITE_URL + "/events/" + g.slug,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.7,
+  }));
+
   const { data: events } = await supabase
     .from("events")
     .select("id, created_at")
     .eq("status", "published")
-    .order("start_date", { ascending: false })
+    .order("created_at", { ascending: false })
     .limit(5000);
 
-  const eventPages: MetadataRoute.Sitemap = (events || []).map((e) => ({
-    url: `${SITE_URL}/event/${e.id}`,
-    lastModified: e.created_at ? new Date(e.created_at) : new Date(),
-    changeFrequency: "weekly",
-    priority: 0.9,
+  const eventRoutes: MetadataRoute.Sitemap = (events ?? []).map((e) => ({
+    url: SITE_URL + "/events/" + e.id,
+    lastModified: new Date(e.created_at),
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
   }));
 
-  // Venues
   const { data: venues } = await supabase
     .from("venues")
-    .select("slug, created_at")
-    .eq("status", "published")
-    .not("slug", "is", null)
-    .limit(5000);
-
-  const venuePages: MetadataRoute.Sitemap = (venues || []).map((v) => ({
-    url: `${SITE_URL}/venue/${v.slug}`,
-    lastModified: v.created_at ? new Date(v.created_at) : new Date(),
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
-
-  // Promoters
-  const { data: promoters } = await supabase
-    .from("promoters")
     .select("id, created_at")
-    .limit(5000);
+    .eq("status", "published")
+    .limit(2000);
 
-  const promoterPages: MetadataRoute.Sitemap = (promoters || []).map((p) => ({
-    url: `${SITE_URL}/promoters/${p.id}`,
-    lastModified: p.created_at ? new Date(p.created_at) : new Date(),
-    changeFrequency: "weekly",
-    priority: 0.7,
+  const venueRoutes: MetadataRoute.Sitemap = (venues ?? []).map((v) => ({
+    url: SITE_URL + "/venues/" + v.id,
+    lastModified: new Date(v.created_at),
+    changeFrequency: "weekly" as const,
+    priority: 0.6,
   }));
 
   return [
-    ...staticPages,
-    ...eventPages,
-    ...venuePages,
-    ...promoterPages,
+    ...staticRoutes,
+    ...cityRoutes,
+    ...genreRoutes,
+    ...eventRoutes,
+    ...venueRoutes,
   ];
 }

@@ -8,7 +8,7 @@ import TypingIndicator from "@/components/TypingIndicator";
 type Msg = {
   id: string;
   sender_id: string;
-  body: string;
+  body: string | null;
   created_at: string;
   attachment_url?: string | null;
   attachment_type?: string | null;

@@ -325,3 +325,41 @@ export async function sendEventReminderEmail(data: EventReminderEmailData) {
     console.error("Reminder email failed:", e);
   }
 }
+
+
+type NewMessageEmailData = {
+  toEmail: string;
+  toName: string | null;
+  fromName: string;
+  fromUsername: string | null;
+  messagePreview: string;
+  conversationUrl: string;
+};
+
+export async function sendNewMessageEmail(data: NewMessageEmailData) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("Resend not configured; skipping new message email.");
+    return;
+  }
+
+  const html =
+    '<div style="font-family: system-ui, -apple-system, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #111;">' +
+    '<h1 style="font-size: 22px; margin: 0 0 16px 0;">New message from ' + data.fromName + '</h1>' +
+    '<p style="font-size: 15px; line-height: 1.6; color: #333; margin: 0 0 20px 0; white-space: pre-wrap;">' +
+    data.messagePreview +
+    "</p>" +
+    '<a href="' + data.conversationUrl + '" style="display: inline-block; background: #000; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 600;">Reply</a>' +
+    "</div>";
+
+  try {
+    await resend.emails.send({
+      from: "TicketAI <onboarding@resend.dev>",
+      to: data.toEmail,
+      subject: "New message from " + data.fromName,
+      html,
+    });
+    console.log("New message email sent to", data.toEmail);
+  } catch (e) {
+    console.error("New message email failed:", e);
+  }
+}

@@ -131,18 +131,11 @@ export default function ProfileDropdown({
 
           <div className="py-2 border-t border-gray-100">
             <Link
-              href="/settings"
+              href="/organizer/profile"
               onClick={() => setOpen(false)}
               className="block px-4 py-2 text-sm hover:bg-gray-50"
             >
               Settings
-            </Link>
-            <Link
-              href="/settings/notifications"
-              onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm hover:bg-gray-50"
-            >
-              Notification preferences
             </Link>
           </div>
 

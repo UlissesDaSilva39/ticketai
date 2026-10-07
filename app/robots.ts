@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -12,17 +11,16 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/api/",
           "/admin/",
-          "/organizer/",
-          "/promoter/dashboard/",
-          "/venue/dashboard/",
-          "/my-tickets/",
-          "/checkout",
-          "/confirmation",
-          "/login",
+          "/dashboard/",
+          "/settings/",
+          "/my-tickets",
+          "/messages/",
+          "/notifications",
+          "/checkout/",
         ],
       },
     ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    sitemap: SITE_URL + "/sitemap.xml",
     host: SITE_URL,
   };
 }
