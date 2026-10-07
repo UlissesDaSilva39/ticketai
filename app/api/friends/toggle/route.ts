@@ -1,8 +1,9 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendFriendRequestEmail } from "@/lib/email";
 import { notifyServer } from "@/lib/notify-server";
+import { checkRateLimit, rateLimitResponse, getClientKey } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,6 +13,13 @@ export async function POST(req: NextRequest) {
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+    const rl = checkRateLimit({
+      key: getClientKey(req, user.id, "friends:toggle"),
+      limit: 20,
+      windowMs: 60_000,
+    });
+    if (!rl.ok) return rateLimitResponse(rl.resetAt);
     if (user.id === friendId) return NextResponse.json({ error: "Cannot add yourself" }, { status: 400 });
 
     const { data: existing } = await supabase

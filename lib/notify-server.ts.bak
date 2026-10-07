@@ -1,4 +1,4 @@
-﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 
 type NotifyInput = {
   userId: string;
@@ -10,6 +10,21 @@ type NotifyInput = {
 
 export async function notifyServer({ userId, type, title, body, href }: NotifyInput) {
   const supabase = await createServerSupabase();
+
+  // Respect notification preferences
+  const { data: prefs } = await supabase
+    .from("notification_preferences")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (prefs) {
+    const allowed = (prefs as Record<string, unknown>)[type];
+    if (allowed === false) {
+      return true; // silently skipped by user preference
+    }
+  }
+
   const { error } = await supabase.from("notifications").insert({
     user_id: userId,
     type,
@@ -17,6 +32,7 @@ export async function notifyServer({ userId, type, title, body, href }: NotifyIn
     body: body ?? null,
     href: href ?? null,
   });
+
   if (error) {
     console.error("[notifyServer] insert failed:", error.message);
     return false;

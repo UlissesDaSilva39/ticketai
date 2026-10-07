@@ -1,6 +1,7 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { notifyServer } from "@/lib/notify-server";
+import { checkRateLimit, rateLimitResponse, getClientKey } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,6 +29,13 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
     }
+
+    const rl = checkRateLimit({
+      key: getClientKey(req, user.id, "follows:toggle"),
+      limit: 30,
+      windowMs: 60_000,
+    });
+    if (!rl.ok) return rateLimitResponse(rl.resetAt);
 
     let resolvedTargetId: string | null = null;
     let ownerId: string | null = null;

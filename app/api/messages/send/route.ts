@@ -3,6 +3,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendNewMessageEmail } from "@/lib/email";
 import { notifyServer } from "@/lib/notify-server";
+import { checkRateLimit, rateLimitResponse, getClientKey } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,6 +15,13 @@ export async function POST(req: NextRequest) {
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+    const rl = checkRateLimit({
+      key: getClientKey(req, user.id, "messages:send"),
+      limit: 20,
+      windowMs: 60_000,
+    });
+    if (!rl.ok) return rateLimitResponse(rl.resetAt);
 
     const { data: conv } = await supabase
       .from("conversations")

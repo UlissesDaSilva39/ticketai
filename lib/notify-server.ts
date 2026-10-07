@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 type NotifyInput = {
   userId: string;
@@ -9,9 +9,8 @@ type NotifyInput = {
 };
 
 export async function notifyServer({ userId, type, title, body, href }: NotifyInput) {
-  const supabase = await createServerSupabase();
+  const supabase = createAdminClient();
 
-  // Respect notification preferences
   const { data: prefs } = await supabase
     .from("notification_preferences")
     .select("*")
@@ -20,15 +19,13 @@ export async function notifyServer({ userId, type, title, body, href }: NotifyIn
 
   if (prefs) {
     const allowed = (prefs as Record<string, unknown>)[type];
-    if (allowed === false) {
-      return true; // silently skipped by user preference
-    }
+    if (allowed === false) return true;
   }
 
   const { error } = await supabase.from("notifications").insert({
     user_id: userId,
-    type,
-    title,
+    type: type,
+    title: title,
     body: body ?? null,
     href: href ?? null,
   });
