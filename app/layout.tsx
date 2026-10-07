@@ -134,6 +134,12 @@ export default async function RootLayout({
               >
                 Search
               </a>
+              <a
+                href="/artists"
+                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
+              >
+                Artists
+              </a>
 
               <SocialDropdown
                 signedIn={!!user}

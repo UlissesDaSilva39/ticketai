@@ -126,7 +126,7 @@ export default async function RootLayout({
                 href="/"
                 className="text-sm font-medium hover:opacity-70 hidden sm:inline"
               >
-                Discover
+                Home
               </a>
               <a
                 href="/search"
