@@ -58,7 +58,7 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
 
   return (
     <div className="relative">
-      <div className="h-[360px] w-full bg-gradient-to-br from-black via-gray-800 to-gray-900 overflow-hidden">
+      <div className="h-[420px] w-full bg-gradient-to-br from-gray-900 via-black to-gray-800 overflow-hidden">
         {artist.cover_image ? (
           <img
             src={artist.cover_image}
@@ -68,9 +68,9 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
         ) : null}
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 -mt-20 relative">
+      <div className="max-w-6xl mx-auto px-6 -mt-32 relative">
         <div className="flex items-end gap-6 flex-wrap">
-          <div className="w-32 h-32 rounded-full bg-black text-white flex items-center justify-center text-4xl font-bold border-4 border-white shadow-xl shrink-0 overflow-hidden">
+          <div className="w-40 h-40 rounded-full bg-black text-white flex items-center justify-center text-5xl font-bold border-4 border-white shadow-xl shrink-0 overflow-hidden">
             {artist.avatar_url ? (
               <img
                 src={artist.avatar_url}
@@ -83,25 +83,28 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
           </div>
 
           <div className="flex-1 min-w-0 pb-2">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-2">
+              Artist
+            </p>
             <h1
-              className="text-4xl md:text-5xl font-bold tracking-tight uppercase"
+              className="text-5xl md:text-7xl font-bold tracking-tight uppercase leading-none"
               style={{ fontFamily: "var(--font-antonio)" }}
             >
               {name}
             </h1>
             {subtitle ? (
-              <p className="text-gray-600 mt-1">{subtitle}</p>
+              <p className="text-gray-600 mt-3 text-sm">{subtitle}</p>
             ) : null}
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mt-1">
               {count.toLocaleString()} follower{count === 1 ? "" : "s"}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 pb-2">
+          <div className="flex items-center gap-3 pb-3">
             {isOwner ? (
               <Link
                 href="/profile/edit"
-                className="px-5 py-2.5 text-sm font-medium rounded-full border-2 border-black hover:bg-gray-50"
+                className="px-6 py-3 text-sm font-medium rounded-full border-2 border-black hover:bg-gray-50 transition-colors"
               >
                 Edit profile
               </Link>
@@ -110,7 +113,7 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
                 onClick={toggleFollow}
                 disabled={busy}
                 className={
-                  "px-6 py-2.5 text-sm font-medium rounded-full transition-colors disabled:opacity-50 " +
+                  "px-8 py-3 text-sm font-medium rounded-full transition-all disabled:opacity-50 " +
                   (following
                     ? "bg-white border-2 border-black text-black hover:bg-gray-50"
                     : "bg-black text-white hover:bg-gray-800")

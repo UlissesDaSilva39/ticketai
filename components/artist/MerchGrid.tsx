@@ -1,32 +1,60 @@
-const MOCK_MERCH = [
-  { title: "Logo Tee", price: "25", emoji: "\uD83D\uDC55" },
-  { title: "Neon Hours Vinyl", price: "30", emoji: "\uD83D\uDCBF" },
-  { title: "Tour Poster", price: "15", emoji: "\uD83D\uDDBC" },
-];
+"use client";
 
-export default function MerchGrid() {
+import { useEffect, useState } from "react";
+
+type Item = {
+  id: string;
+  title: string;
+  price_pence: number;
+  image_url: string | null;
+};
+
+export default function MerchGrid({ artistId }: { artistId: string }) {
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/merch?artistId=" + artistId)
+      .then((r) => r.json())
+      .then((d) => setItems(d.items || []))
+      .finally(() => setLoading(false));
+  }, [artistId]);
+
+  if (loading) return null;
+  if (items.length === 0) return null;
+
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-          Merch
-        </p>
+      <div className="px-6 py-4 border-b border-gray-100">
+        <h2 className="text-lg font-bold">Merch</h2>
       </div>
-      <ul className="p-3 grid grid-cols-3 gap-3">
-        {MOCK_MERCH.map((m) => (
-          <li key={m.title} className="text-center">
-            <div className="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-3xl">
-              {m.emoji}
+      <ul className="p-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {items.map((m) => (
+          <li key={m.id} className="group">
+            <div className="aspect-square bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden">
+              {m.image_url ? (
+                <img
+                  src={m.image_url}
+                  alt=""
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                />
+              ) : (
+                <span className="text-3xl font-bold text-gray-300">
+                  {"£" + (m.price_pence / 100).toFixed(0)}
+                </span>
+              )}
             </div>
-            <p className="text-xs font-medium mt-2 truncate">{m.title}</p>
-            <p className="text-xs text-gray-500">
-              {"\u00A3" + m.price}
+            <p className="text-sm font-medium mt-3 truncate">{m.title}</p>
+            <p className="text-sm font-bold mt-0.5">
+              {"£" + (m.price_pence / 100).toFixed(2)}
             </p>
           </li>
         ))}
       </ul>
-      <div className="px-4 py-2 border-t border-gray-100 text-center">
-        <p className="text-[11px] text-gray-400">Demo - store coming soon</p>
+      <div className="px-6 py-3 border-t border-gray-100 text-center">
+        <p className="text-[10px] uppercase tracking-wider text-gray-400">
+          Checkout coming soon
+        </p>
       </div>
     </div>
   );

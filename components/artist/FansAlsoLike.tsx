@@ -14,12 +14,10 @@ export default function FansAlsoLike({ artists }: { artists: Other[] }) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-          Fans Also Like
-        </p>
+      <div className="px-6 py-4 border-b border-gray-100">
+        <h2 className="text-lg font-bold">Fans Also Like</h2>
       </div>
-      <ul className="p-3 grid grid-cols-2 gap-3">
+      <ul className="p-4 grid grid-cols-2 gap-3">
         {artists.slice(0, 4).map((a) => {
           const name = a.full_name || a.username || "Artist";
           const initials = name
@@ -32,9 +30,9 @@ export default function FansAlsoLike({ artists }: { artists: Other[] }) {
             <li key={a.id}>
               <Link
                 href={a.username ? "/artists/" + a.username : "#"}
-                className="flex items-center gap-2 group"
+                className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors group"
               >
-                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold shrink-0 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
                   {a.avatar_url ? (
                     <img src={a.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -42,11 +40,11 @@ export default function FansAlsoLike({ artists }: { artists: Other[] }) {
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium truncate group-hover:underline">
+                  <p className="text-sm font-bold truncate group-hover:underline">
                     {name}
                   </p>
-                  <p className="text-[10px] text-gray-500 truncate">
-                    {a.genre || a.city || ""}
+                  <p className="text-xs text-gray-500 truncate">
+                    {a.genre || a.city || "Artist"}
                   </p>
                 </div>
               </Link>

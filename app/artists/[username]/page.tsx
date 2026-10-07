@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import {
   fetchArtistByUsername,
@@ -21,7 +20,7 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ username: string }>;
-}): Promise<Metadata> {
+}) {
   const { username } = await params;
   const supabase = await createServerSupabase();
   const artist = await fetchArtistByUsername(supabase, username);
@@ -88,7 +87,7 @@ export default async function ArtistPage({
         isOwner={isOwner}
       />
 
-      <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+      <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
         <aside className="space-y-4">
           <ProfileCard
             artist={{
@@ -113,10 +112,10 @@ export default async function ArtistPage({
         </aside>
 
         <main className="space-y-4 min-w-0">
-          <TopTracks />
+          <TopTracks artistId={artist.id} />
           <UpcomingShows shows={events} />
           <FansAlsoLike artists={similar} />
-          <MerchGrid />
+          <MerchGrid artistId={artist.id} />
           <Comments
             profileId={artist.id}
             currentUserId={user?.id ?? null}

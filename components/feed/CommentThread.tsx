@@ -6,19 +6,19 @@ import { timeAgo } from "@/lib/posts";
 
 type Comment = {
   id: string;
-  profile_id: string;
+  post_id: string;
   author_id: string;
   body: string;
   created_at: string;
   author: { id: string; username: string | null; full_name: string | null } | null;
 };
 
-export default function Comments({
-  profileId,
+export default function CommentThread({
+  postId,
   currentUserId,
   currentUserInitials,
 }: {
-  profileId: string;
+  postId: string;
   currentUserId: string | null;
   currentUserInitials: string;
 }) {
@@ -29,7 +29,7 @@ export default function Comments({
 
   const load = async () => {
     try {
-      const res = await fetch("/api/profile-comments?profileId=" + profileId);
+      const res = await fetch("/api/posts/comment/list?postId=" + postId);
       const data = await res.json();
       setComments(data.comments || []);
     } catch {
@@ -40,7 +40,7 @@ export default function Comments({
   useEffect(() => {
     load().finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileId]);
+  }, [postId]);
 
   const submit = async () => {
     if (!body.trim() || busy) return;
@@ -48,10 +48,10 @@ export default function Comments({
     const text = body.trim();
     setBody("");
     try {
-      await fetch("/api/profile-comments", {
+      await fetch("/api/posts/comment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profileId, body: text }),
+        body: JSON.stringify({ postId, body: text }),
       });
       await load();
     } finally {
@@ -60,17 +60,13 @@ export default function Comments({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100">
-        <h2 className="text-lg font-bold">Comments</h2>
-      </div>
-
-      <div className="px-6 py-4 space-y-4 max-h-96 overflow-y-auto">
+    <div className="border-t border-gray-100 bg-gray-50">
+      <div className="max-h-80 overflow-y-auto px-4 py-3 space-y-3">
         {loading ? (
-          <p className="text-sm text-gray-500 text-center py-4">Loading...</p>
+          <p className="text-xs text-gray-500 text-center py-4">Loading...</p>
         ) : comments.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-4">
-            No comments yet. Say something nice.
+          <p className="text-xs text-gray-500 text-center py-4">
+            No comments yet. Be the first.
           </p>
         ) : (
           comments.map((c) => {
@@ -82,18 +78,18 @@ export default function Comments({
               .slice(0, 2)
               .toUpperCase();
             return (
-              <div key={c.id} className="flex gap-3">
+              <div key={c.id} className="flex gap-2">
                 <Link
                   href={c.author?.username ? "/u/" + c.author.username : "#"}
-                  className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-[11px] font-bold shrink-0"
+                  className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-[10px] font-bold shrink-0"
                 >
                   {initials}
                 </Link>
-                <div className="flex-1">
+                <div className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2">
                   <div className="flex items-baseline gap-2">
                     <Link
                       href={c.author?.username ? "/u/" + c.author.username : "#"}
-                      className="text-sm font-bold hover:underline"
+                      className="text-xs font-semibold hover:underline"
                     >
                       {name}
                     </Link>
@@ -101,7 +97,7 @@ export default function Comments({
                       {timeAgo(c.created_at)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-700 mt-1 whitespace-pre-wrap break-words">
+                  <p className="text-sm mt-0.5 whitespace-pre-wrap break-words">
                     {c.body}
                   </p>
                 </div>
@@ -112,8 +108,8 @@ export default function Comments({
       </div>
 
       {currentUserId ? (
-        <div className="border-t border-gray-100 px-4 py-3 flex items-center gap-3 bg-gray-50">
-          <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-[11px] font-bold shrink-0">
+        <div className="border-t border-gray-200 bg-white px-4 py-2 flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-[10px] font-bold shrink-0">
             {currentUserInitials}
           </div>
           <input
@@ -122,24 +118,22 @@ export default function Comments({
             onKeyDown={(e) => {
               if (e.key === "Enter") submit();
             }}
-            placeholder="Write a comment..."
-            className="flex-1 text-sm px-4 py-2.5 bg-white border border-gray-300 rounded-full outline-none focus:border-black"
+            placeholder="Add a comment..."
+            className="flex-1 text-sm px-3 py-1.5 border border-gray-300 rounded-full outline-none focus:border-black"
             disabled={busy}
           />
           <button
+            type="button"
             onClick={submit}
             disabled={busy || !body.trim()}
-            className="text-xs font-medium px-5 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 disabled:opacity-50"
+            className="text-xs font-medium px-3 py-1.5 bg-black text-white rounded-full hover:bg-gray-800 disabled:opacity-50"
           >
-            Send
+            {busy ? "..." : "Send"}
           </button>
         </div>
       ) : (
-        <div className="border-t border-gray-100 px-6 py-4 text-center bg-gray-50">
-          <Link
-            href="/login"
-            className="text-sm text-gray-600 hover:text-black underline"
-          >
+        <div className="border-t border-gray-200 bg-white px-4 py-3 text-center">
+          <Link href="/login" className="text-xs text-gray-600 hover:text-black underline">
             Sign in to comment
           </Link>
         </div>
