@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/event-reminders?secret=cron-f5f06e40-cf71-410c-a009-01d400827382",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
