@@ -43,11 +43,12 @@ export default function FriendButton({
 
   return (
     <button
+      type="button"
       onClick={toggle}
       disabled={busy || status === "pending"}
       className={"px-5 py-2.5 text-sm font-medium rounded-full transition-colors " + style}
     >
-      {label}
+      {busy ? "…" : label}
     </button>
   );
 }

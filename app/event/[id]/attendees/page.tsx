@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import FriendButton from "@/components/FriendButton";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 export default async function AttendeesPage({
   params,
@@ -23,13 +25,24 @@ export default async function AttendeesPage({
 
   const { data: { user } } = await supabase.auth.getUser();
 
+  const { data: tickets } = await supabase
+    .from("tickets")
+    .select("user_id")
+    .eq("event_id", id)
+    .in("status", ["valid", "used"]);
+
+  const userIdSet = new Set<string>();
+  for (const t of tickets || []) userIdSet.add(t.user_id);
+
   const { data: going } = await supabase
     .from("event_interest")
     .select("user_id")
     .eq("event_id", id)
     .eq("status", "going");
 
-  const userIds = (going || []).map((g) => g.user_id);
+  for (const g of going || []) userIdSet.add(g.user_id);
+
+  const userIds = Array.from(userIdSet);
 
   let profiles: Array<{
     id: string;
@@ -57,51 +70,65 @@ export default async function AttendeesPage({
     );
   }
 
+  const others = profiles.filter((p) => p.id !== user?.id);
+  const totalGoing = profiles.length;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <Link
-        href={`/event/${event.id}`}
+        href={"/event/" + event.id}
         className="text-sm text-gray-500 hover:underline"
       >
-        ← Back to event
+        Back to event
       </Link>
 
-      <h1
-        className="text-5xl font-bold uppercase mt-4 mb-8"
-        style={{ fontFamily: "var(--font-antonio)" }}
-      >
-        Going to {event.title}
-      </h1>
+      <h1 className="text-4xl font-bold mt-4 mb-2">Who is going</h1>
+      <p className="text-gray-600 mb-8">
+        {totalGoing} {totalGoing === 1 ? "person is" : "people are"} attending{" "}
+        <span className="font-medium text-gray-900">{event.title}</span>
+      </p>
 
-      {profiles.length === 0 ? (
-        <p className="text-gray-500">
-          No one has marked themselves as going yet.
-        </p>
+      {others.length === 0 ? (
+        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-12 text-center">
+          <p className="text-gray-900 font-medium mb-1">
+            {totalGoing === 0
+              ? "No one has registered yet"
+              : "You are the only one going so far"}
+          </p>
+          <p className="text-gray-600 text-sm">
+            {totalGoing === 0
+              ? "Be the first to grab a ticket."
+              : "Invite friends - more will show up soon."}
+          </p>
+        </div>
       ) : (
-        <ul className="divide-y divide-gray-200">
-          {profiles.map((p) => {
-            const isSelf = user?.id === p.id;
+        <ul className="divide-y divide-gray-200 border border-gray-200 rounded-2xl overflow-hidden">
+          {others.map((p) => {
+            const name = p.full_name || p.username || "Someone";
+            const initials = name
+              .split(" ")
+              .map((w) => w[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase();
             const isFriend = friendIds.includes(p.id);
-            const displayName = (p.full_name && p.full_name.trim()) || p.username || "Someone";
-            const initials = displayName.trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "?";
-
             return (
-              <li key={p.id} className="py-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center text-lg font-bold flex-shrink-0">
+              <li key={p.id} className="p-4 flex items-center gap-4 hover:bg-gray-50">
+                <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-bold flex-shrink-0">
                   {initials}
                 </div>
                 <div className="flex-1 min-w-0">
                   <Link
-                    href={p.username ? `/u/${p.username}` : "#"}
+                    href={p.username ? "/u/" + p.username : "#"}
                     className="font-medium hover:underline"
                   >
-                    {p.full_name || p.username || "Someone"}
+                    {name}
                   </Link>
                   {p.username && (
                     <p className="text-sm text-gray-500">@{p.username}</p>
                   )}
                 </div>
-                {!isSelf && user && (
+                {user && (
                   <FriendButton
                     friendId={p.id}
                     initialStatus={isFriend ? "accepted" : null}
