@@ -27,21 +27,21 @@ export default function ProfileCard({ artist, stats }: Props) {
     .toUpperCase();
 
   const links: Array<{ label: string; url: string; glyph: string }> = [];
-  if (artist.website) links.push({ label: "Website", url: artist.website, glyph: "🌐" });
+  if (artist.website) links.push({ label: "Website", url: artist.website, glyph: "◉" });
   if (artist.instagram)
     links.push({
       label: "Instagram",
       url: "https://instagram.com/" + artist.instagram.replace("@", ""),
-      glyph: "📷",
+      glyph: "◎",
     });
   if (artist.twitter)
     links.push({
       label: "Twitter / X",
       url: "https://twitter.com/" + artist.twitter.replace("@", ""),
-      glyph: "𝕏",
+      glyph: "✕",
     });
-  if (artist.spotify) links.push({ label: "Spotify", url: artist.spotify, glyph: "🎵" });
-  if (artist.youtube) links.push({ label: "YouTube", url: artist.youtube, glyph: "▶" });
+  if (artist.spotify) links.push({ label: "Spotify", url: artist.spotify, glyph: "♫" });
+  if (artist.youtube) links.push({ label: "YouTube", url: artist.youtube, glyph: "▷" });
   if (artist.soundcloud)
     links.push({ label: "SoundCloud", url: artist.soundcloud, glyph: "☁" });
 
@@ -112,7 +112,7 @@ export default function ProfileCard({ artist, stats }: Props) {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-gray-700 hover:text-black"
                 >
-                  <span className="text-base">{l.glyph}</span>
+                  <span className="text-base w-4 text-center">{l.glyph}</span>
                   <span>{l.label}</span>
                 </a>
               </li>
