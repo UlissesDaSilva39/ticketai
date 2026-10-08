@@ -78,3 +78,9 @@ testautomation/.env.test
 testautomation/report/
 testautomation/artifacts/
 testautomation/node_modules/
+
+playwright-report/
+test-results/
+testautomation/node_modules/
+audit*.ps1
+*.bak
