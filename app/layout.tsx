@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter, Antonio } from "next/font/google";
 import { createServerSupabase } from "@/lib/supabase/server";
 import SignOutButton from "@/components/SignOutButton";
 import ProfileDropdown from "@/components/ProfileDropdown";
 import SocialDropdown from "@/components/SocialDropdown";
+import ArtistsDropdown from "@/components/ArtistsDropdown";
 import NotificationBell from "@/components/NotificationBell";
 import InstallPrompt from "@/components/InstallPrompt";
 import MobileNav from "@/components/MobileNav";
@@ -134,12 +135,7 @@ export default async function RootLayout({
               >
                 Search
               </a>
-              <a
-                href="/artists"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                Artists
-              </a>
+              <ArtistsDropdown />
 
               <SocialDropdown
                 signedIn={!!user}

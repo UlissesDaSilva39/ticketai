@@ -1,0 +1,34 @@
+﻿import type { Metadata } from "next";
+import ArtistRegisterForm from "@/components/ArtistRegisterForm";
+
+export const metadata: Metadata = {
+  title: "Artist Registration",
+  description:
+    "Register as an artist on TicketAI. Get discovered by promoters, venues, and fans.",
+};
+
+export default function ArtistRegisterPage() {
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <div className="max-w-3xl mx-auto px-4 py-12">
+        <section className="mb-8">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-3">
+            Join the stage
+          </p>
+          <h1
+            className="text-4xl sm:text-5xl font-bold tracking-tight mb-3"
+            style={{ fontFamily: "var(--font-antonio)" }}
+          >
+            Artist Registration
+          </h1>
+          <p className="text-gray-600 max-w-xl">
+            Register as an artist on TicketAI and add your details. Get discovered
+            by promoters, venues, and fans all in one place.
+          </p>
+        </section>
+
+        <ArtistRegisterForm />
+      </div>
+    </div>
+  );
+}
