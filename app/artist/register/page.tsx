@@ -1,4 +1,6 @@
 ﻿import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { createServerSupabase } from "@/lib/supabase/server";
 import ArtistRegisterForm from "@/components/ArtistRegisterForm";
 
 export const metadata: Metadata = {
@@ -7,7 +9,14 @@ export const metadata: Metadata = {
     "Register as an artist on TicketAI. Get discovered by promoters, venues, and fans.",
 };
 
-export default function ArtistRegisterPage() {
+export default async function ArtistRegisterPage() {
+  const supabase = await createServerSupabase();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login?next=/artist/register");
+  }
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-3xl mx-auto px-4 py-12">

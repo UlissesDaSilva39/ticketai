@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { fetchFeed, fetchEventsForPosts } from "@/lib/posts";
@@ -23,6 +23,13 @@ export default async function HomePage() {
   if (!user) {
     return <MarketingLanding />;
   }
+
+  const { data: myArtist } = await supabase
+    .from("artists")
+    .select("slug, name")
+    .eq("owner_id", user.id)
+    .eq("status", "active")
+    .maybeSingle();
 
   const [profileResult, eventsResult, friendshipsResult, followsResult] = await Promise.all([
     supabase.from("profiles").select("id, username, full_name, role").eq("id", user.id).maybeSingle(),
@@ -95,6 +102,27 @@ export default async function HomePage() {
         </div>
 
         <main className="space-y-4">
+          {myArtist && (
+            <Link
+              href={`/artist/${myArtist.slug}`}
+              className="block bg-black text-white rounded-2xl p-4 hover:bg-gray-800 transition"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium">
+                    You have an artist page
+                  </p>
+                  <p className="text-xs opacity-80 mt-0.5">
+                    {myArtist.name} · @{myArtist.slug}
+                  </p>
+                </div>
+                <span className="text-sm font-medium whitespace-nowrap">
+                  View page →
+                </span>
+              </div>
+            </Link>
+          )}
+
           <PostComposer
             userName={profile?.full_name || profile?.username || "there"}
             initials={(profile?.full_name || profile?.username || "U").split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()}

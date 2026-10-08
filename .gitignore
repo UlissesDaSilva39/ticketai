@@ -55,3 +55,26 @@ build
 _archive/
 
 *.bak
+
+# Playwright test creds
+testautomation/.env.test
+testautomation/report/
+testautomation/artifacts/
+testautomation/test-results/
+
+# Playwright test artifacts
+testautomation/.env.test
+testautomation/report/
+testautomation/artifacts/
+testautomation/test-results/
+
+# Playwright / Cucumber test artifacts
+testautomation/.env.test
+testautomation/report/
+testautomation/node_modules/
+
+# Playwright artifacts
+testautomation/.env.test
+testautomation/report/
+testautomation/artifacts/
+testautomation/node_modules/

@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-type Role = "attendee" | "promoter" | "venue";
+type Role = "attendee" | "promoter" | "venue" | "artist";
 
 function LoginContent() {
   const router = useRouter();
@@ -38,6 +38,8 @@ function LoginContent() {
                   ? "/promoter/dashboard"
                   : r === "venue"
                   ? "/venue/dashboard"
+                  : r === "artist"
+                  ? "/artist/register"
                   : "/my-tickets"
               );
             });
@@ -172,6 +174,16 @@ function LoginContent() {
                   onChange={() => setRole("venue")}
                 />
                 <span className="text-sm">List my venue</span>
+              </label>
+              <label className="flex items-center gap-3 rounded-lg border border-gray-300 p-3 cursor-pointer hover:border-black">
+                <input
+                  type="radio"
+                  name="role"
+                  value="artist"
+                  checked={role === "artist"}
+                  onChange={() => setRole("artist")}
+                />
+                <span className="text-sm">Register as an artist</span>
               </label>
             </div>
           </div>

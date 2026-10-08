@@ -4,6 +4,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import SignOutButton from "@/components/SignOutButton";
 import ProfileDropdown from "@/components/ProfileDropdown";
 import SocialDropdown from "@/components/SocialDropdown";
+import MyArtistLink from "@/components/MyArtistLink";
 import ArtistsDropdown from "@/components/ArtistsDropdown";
 import NotificationBell from "@/components/NotificationBell";
 import InstallPrompt from "@/components/InstallPrompt";
@@ -67,6 +68,7 @@ export default async function RootLayout({
 
   let role: string | null = null;
   let username: string | null = null;
+  let artistSlug: string | null = null;
   let pendingRequestCount = 0;
   let unreadMessageCount = 0;
   let notificationCount = 0;
@@ -78,6 +80,14 @@ export default async function RootLayout({
       .maybeSingle();
     role = profile?.role ?? null;
     username = profile?.username ?? null;
+
+    const { data: artistRow } = await supabase
+      .from("artists")
+      .select("slug")
+      .eq("owner_id", user.id)
+      .eq("status", "active")
+      .maybeSingle();
+    artistSlug = artistRow?.slug ?? null;
 
     const { count } = await supabase
       .from("friendships")
@@ -150,6 +160,7 @@ export default async function RootLayout({
                   My Tickets
                 </a>
               )}
+              {user && <MyArtistLink slug={artistSlug} />}
 
               {!user && (
                 <>
