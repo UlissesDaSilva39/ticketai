@@ -519,15 +519,7 @@ export default function ArtistRegisterForm() {
           </button>
         </div>
 
-        {submitted && (
-          <div
-            id="successBanner"
-            className="p-4 rounded-xl bg-green-50 border border-green-200 text-sm text-green-900"
-          >
-            Welcome to TicketAI, <strong>{form.artistName || "artist"}</strong>! Your
-            artist profile has been created.
-          </div>
-        )}
+
       </form>
     </section>
   );
