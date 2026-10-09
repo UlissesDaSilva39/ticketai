@@ -16,6 +16,7 @@ type Initial = {
   instagram: string;
   secondaryGenres: string[];
   slug: string;
+  cover_image?: string;
 };
 
 const GENRES = [
@@ -62,6 +63,8 @@ export default function ArtistEditForm({ initial }: { initial: Initial }) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [coverPreview, setCoverPreview] = useState<string>(initial.cover_image || "");
+  const [uploadingCover, setUploadingCover] = useState(false);
 
   const update = (key: keyof Initial, value: any) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -73,6 +76,27 @@ export default function ArtistEditForm({ initial }: { initial: Initial }) {
       prev.includes(g) ? prev.filter((v) => v !== g) : [...prev, g]
     );
 
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingCover(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/artists/upload-cover", {
+        method: "POST",
+        body: fd,
+      });
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || "Upload failed");
+      setCoverPreview(json.url);
+      setForm((f) => ({ ...f, cover_image: json.url }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingCover(false);
+    }
+  };
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -105,6 +129,29 @@ export default function ArtistEditForm({ initial }: { initial: Initial }) {
       onSubmit={submit}
       className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 space-y-6"
     >
+      <div>
+      <div>
+        <label className={labelBase}>Cover image</label>
+        {coverPreview && (
+          <img
+            src={coverPreview}
+            alt="Cover preview"
+            className="w-full h-40 object-cover rounded-xl border border-gray-200 mb-2"
+          />
+        )}
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={handleCoverUpload}
+          disabled={uploadingCover}
+          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-black file:text-white hover:file:bg-gray-800 disabled:opacity-60"
+        />
+        {uploadingCover && (
+          <p className="text-xs text-gray-500 mt-1">Uploading...</p>
+        )}
+      </div>
+      </div>
+
       <div>
         <label className={labelBase}>Artist name *</label>
         <input

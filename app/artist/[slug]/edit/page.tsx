@@ -63,6 +63,7 @@ export default async function ArtistEditPage({ params }: Props) {
             instagram: artist.instagram || "",
             secondaryGenres: artist.secondary_genres || [],
             slug: artist.slug,
+            cover_image: artist.cover_image || "",
           }}
         />
       </div>

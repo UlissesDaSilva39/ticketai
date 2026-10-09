@@ -57,6 +57,7 @@ export async function PATCH(request: Request, { params }: Params) {
         secondary_genres: Array.isArray(body.secondaryGenres)
           ? body.secondaryGenres
           : [],
+        cover_image: body.cover_image || null,
       })
       .eq("slug", slug);
 

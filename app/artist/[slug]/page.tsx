@@ -84,6 +84,17 @@ export default async function ArtistPage({ params }: Props) {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-5xl mx-auto px-4 py-8">
+        {artist.cover_image && (
+          <div className="mb-6 rounded-2xl overflow-hidden border border-gray-200">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={artist.cover_image}
+              alt={artist.name + " cover"}
+              className="w-full h-64 sm:h-80 object-cover"
+            />
+          </div>
+        )}
+
         <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 mb-6">
           <div className="flex flex-col sm:flex-row gap-6 items-start">
             {artist.avatar_url ? (
