@@ -45,7 +45,15 @@ export default function ArtistMusicSection({ spotifyUrl, artistName }: Props) {
         />
       ) : (
         <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
-          <p className="text-sm text-gray-500">No playlist available yet.</p>
+          <p className="text-sm text-gray-500 mb-3">No playlist available yet.</p>
+          <a
+            href={"https://open.spotify.com/search/" + encodeURIComponent(artistName)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-5 py-2 border border-gray-300 rounded-full text-sm font-medium hover:bg-white"
+          >
+            Search {artistName} on Spotify ↗
+          </a>
           {spotifyUrl && (
             <a href={spotifyUrl} target="_blank" rel="noopener noreferrer"
                className="inline-block mt-3 px-5 py-2 border border-gray-300 rounded-full text-sm font-medium hover:bg-white">

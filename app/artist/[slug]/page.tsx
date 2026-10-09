@@ -154,9 +154,11 @@ export default async function ArtistPage({ params }: Props) {
 
                 <button
                   type="button"
-                  className="px-5 py-2.5 border border-black text-sm font-medium rounded-full hover:bg-black hover:text-white transition"
+                  disabled
+                  title="Follow system coming soon"
+                  className="px-5 py-2.5 border border-gray-200 text-gray-400 text-sm font-medium rounded-full cursor-not-allowed"
                 >
-                  + Follow
+                  Follow (coming soon)
                 </button>
               </div>
             </div>
@@ -181,7 +183,7 @@ export default async function ArtistPage({ params }: Props) {
               <div className="flex items-baseline justify-between mb-4">
                 <h2 className="text-lg font-semibold">Upcoming shows</h2>
                 <Link
-                  href={`/search?artist=${artist.slug}`}
+                  href="/artists"
                   className="text-sm text-gray-500 hover:text-black"
                 >
                   See all
@@ -296,7 +298,7 @@ export default async function ArtistPage({ params }: Props) {
                   <dd>{artist.artist_type}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-gray-500">Since</dt>
+                  <dt className="text-gray-500">Joined</dt>
                   <dd>
                     {new Date(artist.created_at).toLocaleDateString("en-GB", {
                       month: "short",
