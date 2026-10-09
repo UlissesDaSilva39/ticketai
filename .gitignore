@@ -90,3 +90,9 @@ test-results/
 testautomation/node_modules/
 audit*.ps1
 *.bak
+
+playwright-report/
+test-results/
+testautomation/node_modules/
+audit*.ps1
+*.bak
