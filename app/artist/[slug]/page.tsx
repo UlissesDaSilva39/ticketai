@@ -5,6 +5,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import ArtistMusicSection from "@/components/artist/ArtistMusicSection";
 import ArtistBookingSection from "@/components/artist/ArtistBookingSection";
 import ArtistMessageButton from "@/components/artist/ArtistMessageButton";
+import ArtistFollowButton from "@/components/artist/ArtistFollowButton";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -48,6 +49,20 @@ export default async function ArtistPage({ params }: Props) {
 
   const { data: { user } } = await supabase.auth.getUser();
   const isOwner = !!(user && artist.owner_id === user.id);
+
+  const { count: followerCount } = await supabase
+    .from("artist_follows")
+    .select("*", { count: "exact", head: true })
+    .eq("artist_slug", slug);
+
+  const viewerFollows = user
+    ? !!(await supabase
+        .from("artist_follows")
+        .select("id")
+        .eq("follower_id", user.id)
+        .eq("artist_slug", slug)
+        .maybeSingle()).data
+    : false;
 
   const { data: events } = await supabase
     .from("events")
@@ -157,6 +172,15 @@ export default async function ArtistPage({ params }: Props) {
 
                 {isOwner && (
                   <a
+                    href={`/artist/${artist.slug}/inbox`}
+                    className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition"
+                  >
+                    Inbox
+                  </a>
+                )}
+
+                {isOwner && (
+                  <a
                     href={`/artist/${artist.slug}/edit`}
                     className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition"
                   >
@@ -164,14 +188,14 @@ export default async function ArtistPage({ params }: Props) {
                   </a>
                 )}
 
-                <button
-                  type="button"
-                  disabled
-                  title="Follow system coming soon"
-                  className="px-5 py-2.5 border border-gray-200 text-gray-400 text-sm font-medium rounded-full cursor-not-allowed"
-                >
-                  Follow (coming soon)
-                </button>
+                {!isOwner && (
+                  <ArtistFollowButton
+                    artistSlug={artist.slug}
+                    initialFollowing={viewerFollows}
+                    initialCount={followerCount ?? 0}
+                    signedIn={!!user}
+                  />
+                )}
               </div>
             </div>
           </div>

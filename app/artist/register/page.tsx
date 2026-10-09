@@ -17,6 +17,12 @@ export default async function ArtistRegisterPage() {
     redirect("/login?next=/artist/register");
   }
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username, full_name")
+    .eq("id", user.id)
+    .maybeSingle();
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-3xl mx-auto px-4 py-12">
@@ -36,7 +42,11 @@ export default async function ArtistRegisterPage() {
           </p>
         </section>
 
-        <ArtistRegisterForm />
+        <ArtistRegisterForm
+        defaultName={profile?.full_name ?? ""}
+        defaultHandle={profile?.username ?? ""}
+        defaultEmail={user.email ?? ""}
+      />
       </div>
     </div>
   );
