@@ -46,6 +46,9 @@ export default async function ArtistPage({ params }: Props) {
 
   if (!artist) notFound();
 
+  const { data: { user } } = await supabase.auth.getUser();
+  const isOwner = !!(user && artist.owner_id === user.id);
+
   const { data: events } = await supabase
     .from("events")
     .select("id, title, start_date, city")
@@ -149,6 +152,15 @@ export default async function ArtistPage({ params }: Props) {
                     className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition"
                   >
                     Website
+                  </a>
+                )}
+
+                {isOwner && (
+                  <a
+                    href={`/artist/${artist.slug}/edit`}
+                    className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition"
+                  >
+                    Edit profile
                   </a>
                 )}
 
