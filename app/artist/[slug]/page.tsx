@@ -6,6 +6,7 @@ import ArtistMusicSection from "@/components/artist/ArtistMusicSection";
 import ArtistBookingSection from "@/components/artist/ArtistBookingSection";
 import ArtistMessageButton from "@/components/artist/ArtistMessageButton";
 import ArtistFollowButton from "@/components/artist/ArtistFollowButton";
+import VerifiedBadge from "@/components/artist/VerifiedBadge";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -112,10 +113,11 @@ export default async function ArtistPage({ params }: Props) {
 
             <div className="flex-1 min-w-0">
               <h1
-                className="text-3xl sm:text-4xl font-bold tracking-tight"
+                className="text-3xl sm:text-4xl font-bold tracking-tight inline-flex items-center gap-2"
                 style={{ fontFamily: "var(--font-antonio)" }}
               >
                 {artist.name}
+                {artist.verified && <VerifiedBadge size={28} />}
               </h1>
               <p className="text-gray-500 mt-1">@{artist.handle}</p>
 
