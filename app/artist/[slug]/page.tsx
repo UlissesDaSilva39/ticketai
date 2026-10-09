@@ -2,6 +2,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
+import ArtistMusicSection from "@/components/artist/ArtistMusicSection";
+import ArtistBookingSection from "@/components/artist/ArtistBookingSection";
+import ArtistMessageButton from "@/components/artist/ArtistMessageButton";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -169,6 +172,11 @@ export default async function ArtistPage({ params }: Props) {
               </p>
             </section>
 
+            <ArtistMusicSection
+              spotifyUrl={artist.spotify}
+              artistName={artist.name}
+            />
+
             <section className="bg-white border border-gray-200 rounded-2xl p-6">
               <div className="flex items-baseline justify-between mb-4">
                 <h2 className="text-lg font-semibold">Upcoming shows</h2>
@@ -215,6 +223,11 @@ export default async function ArtistPage({ params }: Props) {
                 </ul>
               )}
             </section>
+
+            <ArtistBookingSection
+              artistSlug={artist.slug}
+              artistName={artist.name}
+            />
           </div>
 
           <aside className="space-y-6">
@@ -263,6 +276,11 @@ export default async function ArtistPage({ params }: Props) {
                 </ul>
               </section>
             )}
+
+            <ArtistMessageButton
+              artistSlug={artist.slug}
+              artistName={artist.name}
+            />
 
             <section className="bg-white border border-gray-200 rounded-2xl p-6">
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
