@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+﻿import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type PostAuthor = {
   id: string;
@@ -9,6 +9,8 @@ export type PostAuthor = {
 export type FeedPost = {
   id: string;
   author_id: string;
+  artist_slug: string | null;
+  artist?: { slug: string; name: string; avatar_url: string | null; verified: boolean } | null;
   author_type: string;
   body: string | null;
   event_id: string | null;
@@ -38,7 +40,7 @@ export async function fetchFeed(
 
   const { data: posts, error } = await supabase
     .from("posts")
-    .select("id, author_id, author_type, body, event_id, audio_url, image_url, like_count, comment_count, share_count, created_at")
+    .select("id, author_id, author_type, artist_slug, body, event_id, audio_url, image_url, like_count, comment_count, share_count, created_at")
     .order("created_at", { ascending: false })
     .limit(limit);
 
@@ -54,6 +56,13 @@ export async function fetchFeed(
   const profileMap = new Map<string, PostAuthor>();
   for (const p of profiles || []) profileMap.set(p.id, p);
 
+  const artistSlugs = Array.from(new Set((posts as any[]).map((row) => row.artist_slug).filter(Boolean)));
+  const { data: artists } = artistSlugs.length > 0
+    ? await supabase.from("artists").select("slug, name, avatar_url, verified").in("slug", artistSlugs)
+    : { data: [] as any[] };
+  const artistMap = new Map<string, any>();
+  for (const a of (artists as any[]) || []) artistMap.set(a.slug, a);
+
   let likedSet = new Set<string>();
   if (opts.userId) {
     const { data: likes } = await supabase
@@ -67,6 +76,7 @@ export async function fetchFeed(
   return posts.map((p) => ({
     ...p,
     author: profileMap.get(p.author_id) ?? null,
+    artist: (p as any).artist_slug ? artistMap.get((p as any).artist_slug) ?? null : null,
     liked_by_me: likedSet.has(p.id),
   }));
 }

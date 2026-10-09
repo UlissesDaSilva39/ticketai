@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  const { body, event_id, image_url, audio_url } = await req.json();
+  const { body, event_id, image_url, audio_url, artist_slug } = await req.json();
 
   if ((!body || !body.trim()) && !event_id && !image_url && !audio_url) {
     return NextResponse.json(
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       image_url: image_url ?? null,
       audio_url: audio_url ?? null,
     })
-    .select("id, author_id, author_type, body, event_id, image_url, audio_url, like_count, comment_count, share_count, created_at")
+    .select("id, author_id, author_type, artist_slug, body, event_id, image_url, audio_url, like_count, comment_count, share_count, created_at")
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
