@@ -8,6 +8,7 @@ import ArtistMessageButton from "@/components/artist/ArtistMessageButton";
 import ArtistFollowButton from "@/components/artist/ArtistFollowButton";
 import VerifiedBadge from "@/components/artist/VerifiedBadge";
 import SimilarArtists from "@/components/artist/SimilarArtists";
+import ArtistViewTracker from "@/components/artist/ArtistViewTracker";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -93,6 +94,7 @@ export default async function ArtistPage({ params }: Props) {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <ArtistViewTracker artistSlug={artist.slug} />
       <div className="max-w-5xl mx-auto px-4 py-8">
         {artist.cover_image && (
           <div className="mb-6 rounded-2xl overflow-hidden border border-gray-200">
@@ -102,8 +104,6 @@ export default async function ArtistPage({ params }: Props) {
               alt={artist.name + " cover"}
               className="w-full h-64 sm:h-80 object-cover"
             />
-
-            <SimilarArtists artists={similarArtists || []} />
           </div>
         )}
 
@@ -191,6 +191,15 @@ export default async function ArtistPage({ params }: Props) {
                     className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition"
                   >
                     Website
+                  </a>
+                )}
+
+                {isOwner && (
+                  <a
+                    href={`/artist/${artist.slug}/analytics`}
+                    className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition"
+                  >
+                    Analytics
                   </a>
                 )}
 
