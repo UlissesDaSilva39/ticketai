@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { notifyUser } from "@/lib/notifications";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -33,6 +34,22 @@ export async function POST(request: Request, { params }: Params) {
         { ok: false, error: error.message },
         { status: 500 }
       );
+    }
+
+    const { data: artist } = await supabase
+      .from("artists")
+      .select("owner_id, name")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    if (artist?.owner_id) {
+      await notifyUser(supabase, {
+        userId: artist.owner_id,
+        type: "message",
+        title: "New message for " + artist.name,
+        body: body.name + ": " + (body.message ?? "").slice(0, 80),
+        href: "/artist/" + slug + "/inbox",
+      });
     }
 
     return NextResponse.json({
