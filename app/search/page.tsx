@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+﻿import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -31,7 +31,7 @@ export default async function SearchPage({
     query = query.eq("event_type", type);
   }
 
-  // City filter — via venue lookup
+  // City filter â€” via venue lookup
   if (city) {
     const { data: venueRows } = await supabase
       .from("venues")
@@ -41,7 +41,7 @@ export default async function SearchPage({
     if (venueIds.length > 0) {
       query = query.in("venue_id", venueIds);
     } else {
-      // No venues match — force no results
+      // No venues match â€” force no results
       query = query.eq("id", "00000000-0000-0000-0000-000000000000");
     }
   }
@@ -70,9 +70,22 @@ export default async function SearchPage({
   }
 
   const { data: events } = await query;
+
+  let artistQuery = supabase
+    .from("artists")
+    .select("slug, name, handle, genre, city, country, avatar_url, artist_type")
+    .eq("status", "active");
+  if (q) {
+    artistQuery = artistQuery.or("name.ilike.%" + q + "%,handle.ilike.%" + q + "%,genre.ilike.%" + q + "%,city.ilike.%" + q + "%");
+  }
+  if (city) {
+    artistQuery = artistQuery.ilike("city", city);
+  }
+  artistQuery = artistQuery.order("name", { ascending: true }).limit(12);
+  const { data: artists } = await artistQuery;
   let eventList = (events as Event[]) || [];
 
-  // Price filter — post-fetch because ticket_types is JSON
+  // Price filter â€” post-fetch because ticket_types is JSON
   if (price) {
     const priceOf = (e: Event): number => {
       const types = Array.isArray(e.ticket_types) ? e.ticket_types : [];
@@ -105,7 +118,7 @@ export default async function SearchPage({
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/" className="text-sm text-gray-500 hover:text-black">← Back to Home</Link>
+        <Link href="/" className="text-sm text-gray-500 hover:text-black">â† Back to Home</Link>
       </div>
       <h1 className="text-5xl md:text-6xl font-bold mb-8 uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
         SEARCH EVENTS
@@ -118,6 +131,32 @@ export default async function SearchPage({
           {eventList.length} {eventList.length === 1 ? "event" : "events"} found
         </p>
       </div>
+      {artists && artists.length > 0 && (
+        <section className="mb-10">
+          <div className="flex items-baseline justify-between mb-4">
+            <h2 className="text-lg font-bold">Artists ({artists.length})</h2>
+            <Link href="/artists" className="text-xs text-gray-500 hover:text-black">See all</Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {artists.map((a) => (
+              <Link key={a.slug} href={"/artist/" + a.slug} className="bg-white border border-gray-200 rounded-2xl p-4 hover:border-black transition flex items-center gap-3">
+                {a.avatar_url ? (
+                  <img src={a.avatar_url} alt={a.name} className="w-12 h-12 rounded-full object-cover border border-gray-200 flex-shrink-0" />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-black text-white grid place-items-center font-bold text-sm flex-shrink-0">
+                    {(a.name || "?").split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()}
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <div className="font-medium text-sm truncate">{a.name}</div>
+                  <div className="text-xs text-gray-500 truncate">{a.genre}{a.city ? " · " + a.city : ""}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {eventList.length === 0 ? (
         <div className="bg-gray-50 rounded-lg p-16 text-center">
           <p className="text-lg text-gray-500 mb-4">No events match your search.</p>
