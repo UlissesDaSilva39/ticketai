@@ -7,6 +7,7 @@ import ArtistBookingSection from "@/components/artist/ArtistBookingSection";
 import ArtistMessageButton from "@/components/artist/ArtistMessageButton";
 import ArtistFollowButton from "@/components/artist/ArtistFollowButton";
 import VerifiedBadge from "@/components/artist/VerifiedBadge";
+import SimilarArtists from "@/components/artist/SimilarArtists";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -51,6 +52,14 @@ export default async function ArtistPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   const isOwner = !!(user && artist.owner_id === user.id);
 
+  const { data: similarArtists } = await supabase
+    .from("artists")
+    .select("slug, name, genre, city, avatar_url, verified")
+    .eq("status", "active")
+    .neq("slug", slug)
+    .or("genre.eq." + artist.genre + ",city.eq." + artist.city)
+    .limit(6);
+
   const { count: followerCount } = await supabase
     .from("artist_follows")
     .select("*", { count: "exact", head: true })
@@ -93,6 +102,8 @@ export default async function ArtistPage({ params }: Props) {
               alt={artist.name + " cover"}
               className="w-full h-64 sm:h-80 object-cover"
             />
+
+            <SimilarArtists artists={similarArtists || []} />
           </div>
         )}
 
@@ -279,6 +290,8 @@ export default async function ArtistPage({ params }: Props) {
               artistSlug={artist.slug}
               artistName={artist.name}
             />
+
+            <SimilarArtists artists={similarArtists || []} />
           </div>
 
           <aside className="space-y-6">
