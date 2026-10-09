@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -10,14 +10,22 @@ type MiniEvent = {
   hero_image?: string | null;
 };
 
+type OwnedArtist = {
+  slug: string;
+  name: string;
+  avatar_url: string | null;
+};
+
 type Props = {
   userName: string;
   initials: string;
   events: MiniEvent[];
+  ownedArtists?: OwnedArtist[];
 };
 
-export default function PostComposer({ userName, initials, events }: Props) {
+export default function PostComposer({ userName, initials, events, ownedArtists = [] }: Props) {
   const router = useRouter();
+  const [selectedArtist, setSelectedArtist] = useState<string | null>(null);
   const [body, setBody] = useState("");
   const [attachedEvent, setAttachedEvent] = useState<MiniEvent | null>(null);
   const [attachedImage, setAttachedImage] = useState<string | null>(null);
@@ -69,6 +77,7 @@ export default function PostComposer({ userName, initials, events }: Props) {
           event_id: attachedEvent?.id || null,
           image_url: attachedImage,
           audio_url: null,
+          artist_slug: selectedArtist,
         }),
       });
       const data = await res.json();
@@ -159,6 +168,31 @@ export default function PostComposer({ userName, initials, events }: Props) {
           )}
         </div>
       ) : null}
+
+      {ownedArtists.length > 0 && (
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <p className="text-xs text-gray-500 mb-2">Post as:</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setSelectedArtist(null)}
+              className={"px-3 py-1.5 rounded-full text-xs font-medium border transition " + (!selectedArtist ? "bg-black text-white border-black" : "bg-white text-gray-700 border-gray-300 hover:border-gray-500")}
+            >
+              {userName}
+            </button>
+            {ownedArtists.map((a) => (
+              <button
+                key={a.slug}
+                type="button"
+                onClick={() => setSelectedArtist(a.slug)}
+                className={"px-3 py-1.5 rounded-full text-xs font-medium border transition " + (selectedArtist === a.slug ? "bg-black text-white border-black" : "bg-white text-gray-700 border-gray-300 hover:border-gray-500")}
+              >
+                {a.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
         <div className="flex items-center gap-2">

@@ -53,6 +53,12 @@ export default async function HomePage() {
   const friendships = friendshipsResult.data;
   const follows = followsResult.data;
 
+  const { data: ownedArtists } = await supabase
+    .from("artists")
+    .select("slug, name, avatar_url")
+    .eq("owner_id", user.id)
+    .eq("status", "active");
+
   const friendIds = (friendships || []).map((f) =>
     f.user_id === user.id ? f.friend_id : f.user_id
   );
@@ -127,6 +133,7 @@ export default async function HomePage() {
             userName={profile?.full_name || profile?.username || "there"}
             initials={(profile?.full_name || profile?.username || "U").split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()}
             events={(allEvents ?? []).map((e) => ({ id: e.id, title: e.title, start_date: e.start_date }))}
+            ownedArtists={ownedArtists ?? []}
           />
 
           <FeedTabs />

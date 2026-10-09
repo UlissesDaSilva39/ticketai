@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -17,8 +17,14 @@ export default function FeedPost({
   const [busy, setBusy] = useState(false);
 
   const author = post.author;
-  const name = author?.full_name || author?.username || "Someone";
-  const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const artist = post.artist;
+  const isArtistPost = !!artist;
+  const displayName = artist?.name || author?.full_name || author?.username || "Someone";
+  const displayInitials = displayName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const displayHref = artist ? "/artist/" + artist.slug : (author?.username ? "/u/" + author.username : "#");
+  const displayAvatar = artist?.avatar_url || null;
+  const name = displayName;
+  const initials = displayInitials;
 
   const like = async () => {
     if (busy) return;
@@ -62,7 +68,7 @@ export default function FeedPost({
             {name}
           </Link>
           <p className="text-xs text-gray-500">
-            {post.author_type !== "user" ? "@" + (author?.username || "user") + " · " : ""}
+            {post.author_type !== "user" ? "@" + (author?.username || "user") + " Â· " : ""}
             {timeAgo(post.created_at)}
           </p>
         </div>
@@ -97,10 +103,10 @@ export default function FeedPost({
                     weekday: "short",
                     day: "numeric",
                     month: "short",
-                    timeZone: "UTC",
+                    timeZone: "Europe/London",
                   })
                 : "Date TBC"}
-              {fromPrice !== null ? " · From £" + fromPrice.toFixed(2) : ""}
+              {fromPrice !== null ? " Â· From Â£" + fromPrice.toFixed(2) : ""}
             </p>
           </div>
         </Link>
@@ -112,15 +118,15 @@ export default function FeedPost({
           disabled={busy}
           className={"flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 " + (liked ? "text-red-500" : "")}
         >
-          <span>{liked ? "♥" : "♡"}</span>
+          <span>{liked ? "â™¥" : "â™¡"}</span>
           <span>{likes}</span>
         </button>
         <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100">
-          <span>💬</span>
+          <span>ðŸ’¬</span>
           <span>{post.comment_count}</span>
         </button>
         <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100">
-          <span>↗</span>
+          <span>â†—</span>
           <span>{post.share_count}</span>
         </button>
       </footer>

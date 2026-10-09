@@ -2,6 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const GENRE_LINKS = [
+  { href: "/genre/house", label: "House" },
+  { href: "/genre/techno", label: "Techno" },
+  { href: "/genre/jazz", label: "Jazz" },
+  { href: "/genre/hip-hop", label: "Hip-Hop" },
+];
+
 const LINKS = [
   { href: "/artists",           label: "Browse all artists" },
   { href: "/artist/register",   label: "Register as an artist" },

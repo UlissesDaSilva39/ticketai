@@ -29,11 +29,27 @@ export async function POST(req: NextRequest) {
     : profile?.role === "admin" ? "promoter"
     : "user";
 
+  let insertArtistSlug: string | null = null;
+  let insertAuthorType = authorType;
+  if (artist_slug && typeof artist_slug === "string") {
+    const { data: owned } = await supabase
+      .from("artists")
+      .select("slug")
+      .eq("slug", artist_slug)
+      .eq("owner_id", user.id)
+      .maybeSingle();
+    if (owned) {
+      insertArtistSlug = artist_slug;
+      insertAuthorType = "artist";
+    }
+  }
+
   const { data, error } = await supabase
     .from("posts")
     .insert({
       author_id: user.id,
-      author_type: authorType,
+      author_type: insertAuthorType,
+      artist_slug: insertArtistSlug,
       body: body ?? null,
       event_id: event_id ?? null,
       image_url: image_url ?? null,
