@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -271,18 +271,42 @@ export default async function ArtistPage({ params }: Props) {
                   <Calendar className="h-4 w-4" />
                   Upcoming shows
                 </h2>
-                <Link
-                  href="/artists"
-                  className="text-sm text-gray-500 hover:text-black"
-                >
-                  See all
-                </Link>
+                {events && events.length > 0 && (
+                  <Link
+                    href={`/artists/${artist.slug}`}
+                    className="text-sm text-gray-500 hover:text-black"
+                  >
+                    See all
+                  </Link>
+                )}
               </div>
 
               {!events || events.length === 0 ? (
-                <p className="text-sm text-gray-500">
-                  No upcoming shows yet. Follow {artist.name} to get notified.
-                </p>
+                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
+                  <Calendar className="mx-auto h-8 w-8 text-gray-400" />
+                  <div className="mt-3 text-sm font-medium text-gray-900">
+                    No upcoming shows yet
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Follow {artist.name} to get notified when they announce one.
+                  </p>
+                  <div className="mt-4 flex flex-wrap justify-center gap-2">
+                    <Link
+                      href="/events"
+                      className="rounded-full bg-black px-4 py-1.5 text-xs font-medium text-white hover:bg-gray-900 transition"
+                    >
+                      Explore similar events
+                    </Link>
+                    {artist.city && (
+                      <Link
+                        href={`/${artist.city.toLowerCase().replace(/\s+/g, "-")}`}
+                        className="rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium hover:bg-gray-100 transition"
+                      >
+                        Events in {artist.city}
+                      </Link>
+                    )}
+                  </div>
+                </div>
               ) : (
                 <ul className="divide-y divide-gray-200">
                   {events.map((ev) => (
@@ -376,7 +400,23 @@ export default async function ArtistPage({ params }: Props) {
                 Credits
               </h2>
               {credits.length === 0 ? (
-                <p className="text-sm text-gray-500">No credits listed yet.</p>
+                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
+                  <Music className="mx-auto h-8 w-8 text-gray-400" />
+                  <div className="mt-3 text-sm font-medium text-gray-900">
+                    No credits yet
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500 max-w-sm mx-auto">
+                    Artists with listed credits get more booking requests. Credits can include albums, remixes, production work, or writing.
+                  </p>
+                  {isOwner && (
+                    <Link
+                      href={`/artist/${artist.slug}/edit`}
+                      className="mt-4 inline-block rounded-full bg-black px-4 py-1.5 text-xs font-medium text-white hover:bg-gray-900 transition"
+                    >
+                      Add your credits
+                    </Link>
+                  )}
+                </div>
               ) : (
                 <ul className="divide-y divide-gray-100">
                   {credits.map((c, i) => (
