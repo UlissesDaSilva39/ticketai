@@ -11,6 +11,7 @@ import InstallPrompt from "@/components/InstallPrompt";
 import MobileNav from "@/components/MobileNav";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { Navbar } from '@/components/nav/Navbar';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,26 +34,26 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "TicketAI",
+    title: "GRID",
   },
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "TicketAI - Find Your Next Event",
-    template: "%s | TicketAI",
+    default: "GRID — The network for music.",
+    template: "%s | GRID",
   },
   description:
-    "AI-powered event discovery and ticketing. Find live events, buy tickets, and support venues and promoters.",
+    "The social and professional network for live music — discover events, connect with artists, book talent, and grow your career.",
   openGraph: {
     type: "website",
-    siteName: "TicketAI",
-    title: "TicketAI - Find Your Next Event",
-    description: "AI-powered event discovery and ticketing.",
+    siteName: "GRID",
+    title: "GRID — The network for music.",
+    description: "Discover events. Connect with artists. Book talent. Grow your career.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "TicketAI - Find Your Next Event",
-    description: "AI-powered event discovery and ticketing.",
+    title: "GRID — The network for music.",
+    description: "Discover events. Connect with artists. Book talent. Grow your career.",
   },
 };
 
@@ -123,82 +124,22 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${antonio.variable} font-sans antialiased bg-white text-black`}
       >
-        <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a
-              href="/"
-              className="text-2xl font-bold tracking-tight"
-              style={{ fontFamily: "var(--font-antonio)" }}
-            >
-              TICKETAI
-            </a>
-            <nav className="flex items-center gap-6">
-              <a
-                href="/"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                Home
-              </a>
-              <a
-                href="/search"
-                className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-              >
-                Search
-              </a>
-              <ArtistsDropdown />
-
-              <SocialDropdown
-                signedIn={!!user}
-                unreadMessageCount={unreadMessageCount}
-              />
-
-              {user && (
-                <a
-                  href="/my-tickets"
-                  className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                >
-                  My Tickets
-                </a>
-              )}
-              {user && <MyArtistLink slug={artistSlug} />}
-
-              {!user && (
-                <>
-                  <a
-                    href="/for-promoters"
-                    className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                  >
-                    Become a promoter
-                  </a>
-                  <a
-                    href="/for-venues"
-                    className="text-sm font-medium hover:opacity-70 hidden sm:inline"
-                  >
-                    List your venue
-                  </a>
-                </>
-              )}
-
-              <NotificationBell signedIn={!!user} initialUnreadCount={notificationCount} />
-
-{user ? (
-                <ProfileDropdown
-                  username={username}
-                  email={user?.email ?? null}
-                  role={role}
-                  pendingRequestCount={pendingRequestCount}
-                />
-              ) : (
-                <a
-                  href="/login"
-                  className="px-5 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800"
-                >
-                  Sign In
-                </a>
-              )}
-            </nav>
-          </div>
-        </header>
+        <Navbar
+          user={
+            user
+              ? {
+                  email: user.email ?? null,
+                  username,
+                  role,
+                  artistSlug,
+                  displayName: username,
+                  pendingRequestCount,
+                }
+              : null
+          }
+          notificationCount={notificationCount}
+        />
+        {/* OLD HEADER DISABLED FOR GRID REBRAND */}
         <main>{children}</main>
         <InstallPrompt />
         <footer className="border-t border-gray-200 mt-24 py-12">
@@ -222,11 +163,11 @@ export default async function RootLayout({
                 className="block text-sm uppercase tracking-[0.3em] text-gray-400 mb-4"
                 style={{ fontFamily: "var(--font-antonio)" }}
               >
-                Discover. Connect. Experience.
+                Discover · Connect · Create · Book · Grow
               </span>
               {"\u00A9 " +
                 new Date().getFullYear() +
-                " TicketAI. All rights reserved."}
+                " GRID. All rights reserved."}
             </p>
           </div>
         </footer>
@@ -237,6 +178,10 @@ export default async function RootLayout({
     </html>
   );
 }
+
+
+
+
 
 
 

@@ -1,0 +1,13 @@
+﻿{
+  "name": "GRID — The network for music.",
+  "short_name": "GRID",
+  "description": "Discover events. Connect with artists. Book talent. Grow your career.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#00FF87",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
