@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { PRIMARY_NAV } from '@/config/navigation';
 import { Logo } from './Logo';
