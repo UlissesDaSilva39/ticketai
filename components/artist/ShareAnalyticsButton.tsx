@@ -13,6 +13,7 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [days, setDays] = useState<7 | 30 | 90>(30);
 
   const handleShare = async () => {
     if (shareUrl) {
@@ -22,9 +23,10 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/artists/" + artistSlug + "/analytics-share", {
-        method: "POST",
-      });
+      const res = await fetch(
+        "/api/artists/" + artistSlug + "/analytics-share?days=" + days,
+        { method: "POST" }
+      );
       const data = await res.json();
       if (!data.ok) {
         setError(data.error || "Failed to create share link");
@@ -56,6 +58,16 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
 
   return (
     <>
+      <select
+        value={days}
+        onChange={(e) => setDays(Number(e.target.value) as 7 | 30 | 90)}
+        className="text-sm text-gray-700 border border-gray-300 rounded-lg px-2 py-1 mr-2"
+        aria-label="Expiration days"
+      >
+        <option value={7}>7 days</option>
+        <option value={30}>30 days</option>
+        <option value={90}>90 days</option>
+      </select>
       <button
         type="button"
         onClick={handleShare}

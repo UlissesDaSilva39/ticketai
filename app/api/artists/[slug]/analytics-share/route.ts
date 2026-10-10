@@ -17,6 +17,9 @@ export async function POST(request: Request, { params }: Params) {
   try {
     const { slug } = await params;
     const supabase = await createServerSupabase();
+    const url = new URL(request.url);
+    const daysParam = url.searchParams.get("days");
+    const days = daysParam === "7" || daysParam === "90" ? Number(daysParam) : 30;
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
@@ -57,7 +60,7 @@ export async function POST(request: Request, { params }: Params) {
 
     const token = generateToken();
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 30);
+    expiresAt.setDate(expiresAt.getDate() + days);
 
     const { data: share, error } = await supabase
       .from("analytics_shares")
