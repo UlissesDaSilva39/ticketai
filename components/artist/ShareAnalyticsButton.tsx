@@ -26,13 +26,18 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
         method: "POST",
       });
       const data = await res.json();
-      if (!data.ok) throw new Error(data.error || "Failed to create share link");
+      if (!data.ok) {
+        setError(data.error || "Failed to create share link");
+        setOpen(true);
+        return;
+      }
       const url = window.location.origin + "/share/analytics/" + data.token;
       setShareUrl(url);
       setExpiresAt(data.expiresAt);
       setOpen(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
+      setOpen(true);
     } finally {
       setLoading(false);
     }
@@ -81,39 +86,39 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
               </button>
             </div>
 
-            <p className="text-sm text-gray-600 mb-4">
-              Anyone with this link can view a read-only snapshot of your analytics.
-            </p>
-
-            {shareUrl && (
+            {error ? (
+              <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
+            ) : (
               <>
-                <div className="flex gap-2 mb-3">
-                  <input
-                    readOnly
-                    value={shareUrl}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-xs text-gray-700 bg-gray-50"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleCopy}
-                    className="px-4 py-2 bg-black text-white rounded-lg text-xs font-medium hover:bg-gray-800"
-                  >
-                    {copied ? "Copied" : "Copy"}
-                  </button>
-                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Anyone with this link can view a read-only snapshot of your analytics.
+                </p>
 
-                {expiresAt && (
-                  <p className="text-xs text-gray-500">
-                    Expires {new Date(expiresAt).toLocaleDateString("en-GB")}
-                  </p>
+                {shareUrl && (
+                  <>
+                    <div className="flex gap-2 mb-3">
+                      <input
+                        readOnly
+                        value={shareUrl}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-xs text-gray-700 bg-gray-50"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleCopy}
+                        className="px-4 py-2 bg-black text-white rounded-lg text-xs font-medium hover:bg-gray-800"
+                      >
+                        {copied ? "Copied" : "Copy"}
+                      </button>
+                    </div>
+
+                    {expiresAt && (
+                      <p className="text-xs text-gray-500">
+                        Expires {new Date(expiresAt).toLocaleDateString("en-GB")}
+                      </p>
+                    )}
+                  </>
                 )}
               </>
-            )}
-
-            {error && (
-              <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg mt-3">
-                {error}
-              </p>
             )}
           </div>
         </div>
