@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,7 @@ export default function InstallPrompt() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (localStorage.getItem("ticketai-install-dismissed") === "1") {
+    if (localStorage.getItem("GRID-install-dismissed") === "1") {
       setDismissed(true);
       return;
     }
@@ -34,13 +34,13 @@ export default function InstallPrompt() {
       setEvt(null);
     } else {
       setDismissed(true);
-      localStorage.setItem("ticketai-install-dismissed", "1");
+      localStorage.setItem("GRID-install-dismissed", "1");
     }
   };
 
   const close = () => {
     setDismissed(true);
-    localStorage.setItem("ticketai-install-dismissed", "1");
+    localStorage.setItem("GRID-install-dismissed", "1");
   };
 
   return (
@@ -49,7 +49,7 @@ export default function InstallPrompt() {
         T
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold">Install TicketAI</p>
+        <p className="text-sm font-semibold">Install GRID</p>
         <p className="text-xs text-white/70">Add to your home screen for quick access.</p>
       </div>
       <button
@@ -63,7 +63,7 @@ export default function InstallPrompt() {
         aria-label="Dismiss"
         className="text-white/50 hover:text-white text-lg leading-none flex-shrink-0"
       >
-        ×
+        Ã—
       </button>
     </div>
   );

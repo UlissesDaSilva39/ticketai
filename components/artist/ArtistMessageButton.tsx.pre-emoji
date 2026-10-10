@@ -1,8 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
-import { MessageCircle } from 'lucide-react';
 type Props = {
   artistSlug: string;
   artistName: string;
@@ -64,7 +63,7 @@ export default function ArtistMessageButton({ artistSlug, artistName }: Props) {
           onClick={() => setOpen(true)}
           className="w-full py-3 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition"
         >
-          <MessageCircle className="h-4 w-4" />  Message the artist
+          💬  Message the artist
         </button>
       </section>
 

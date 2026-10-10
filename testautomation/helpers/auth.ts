@@ -1,26 +1,30 @@
 ﻿import { Page, expect } from "@playwright/test";
 
-export const TEST_USERS = {
-  demo: {
-    email: process.env.DEMO_EMAIL || "demo@ticketai.org.uk",
-    password: process.env.DEMO_PASSWORD || "password123",
-  },
+export const CREDS = {
+  alice: [process.env.ALICE_EMAIL!, process.env.ALICE_PASSWORD!] as const,
+  bob: [process.env.BOB_EMAIL!, process.env.BOB_PASSWORD!] as const,
+  promoter: [process.env.PROMOTER_EMAIL!, process.env.PROMOTER_PASSWORD!] as const,
 };
 
-export async function signIn(page: Page, email: string, password: string) {
+export async function login(page: Page, email: string, password: string) {
   await page.goto("/login");
-  await page.getByLabel(/email/i).fill(email);
-  await page.getByLabel(/password/i).fill(password);
-  await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((url) => !url.pathname.startsWith("/login"), {
-    timeout: 15000,
-  });
+  const emailInput = page.getByLabel(/email/i).or(page.getByPlaceholder(/email/i)).or(page.locator("input[type=\"email\"]")).first();
+  const passwordInput = page.getByLabel(/password/i).or(page.getByPlaceholder(/password/i)).or(page.locator("input[type=\"password\"]")).first();
+  await emailInput.waitFor({ state: "visible" });
+  await emailInput.fill(email);
+  await passwordInput.fill(password);
+  await page.getByRole("button", { name: /sign in|log in|login/i }).first().click();
+  await page.waitForURL((u) => !u.pathname.includes("/login"), { timeout: 20000 });
 }
 
-export async function signInAsDemo(page: Page) {
-  await signIn(page, TEST_USERS.demo.email, TEST_USERS.demo.password);
+export async function logout(page: Page) {
+  const avatar = page.locator("[data-testid=\"avatar\"]").or(page.getByRole("button", { name: /profile|account|avatar/i })).first();
+  await avatar.click();
+  await page.getByRole("menuitem", { name: /sign out|log out/i }).first().click();
+  await page.waitForURL(/\/$|\/login/);
 }
 
-export async function expectSignedIn(page: Page) {
-  await expect(page).not.toHaveURL(/\/login/);
+export async function expectRedirectToLogin(page: Page, path: string) {
+  await page.goto(path);
+  await expect(page).toHaveURL(/\/login/);
 }

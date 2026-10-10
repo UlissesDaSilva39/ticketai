@@ -1,0 +1,538 @@
+﻿
+Path                                                             LineNumber Line      
+----                                                             ---------- ----      
+C:\Users\User\ticketai\app\artist\register\page.tsx                       9           
+                                                                            "Register 
+                                                                            as an     
+                                                                            artist on 
+                                                                            TicketAI. 
+                                                                            Get discov
+                                                                            ered by pr
+                                                                            omoters,  
+                                                                            venues,   
+                                                                            and       
+                                                                            fans.",   
+C:\Users\User\ticketai\app\artist\register\page.tsx                      40           
+                                                                                      
+                                                                            Register  
+                                                                            as an     
+                                                                            artist on 
+                                                                            TicketAI  
+                                                                            and add   
+                                                                            your      
+                                                                            details.  
+                                                                            Get       
+                                                                            discovered
+C:\Users\User\ticketai\app\artists\page.tsx                              12   descript
+                                                                            ion:      
+                                                                            "Discover 
+                                                                            events, pr
+                                                                            omoters,  
+                                                                            venues,   
+                                                                            and       
+                                                                            artists   
+                                                                            on TicketA
+                                                                            I.",      
+C:\Users\User\ticketai\app\contact\page.tsx                              54           
+                                                                              href="ma
+                                                                            ilto:hello
+                                                                            @ticketai.
+                                                                            app"      
+C:\Users\User\ticketai\app\contact\page.tsx                              60           
+                                                                              <p class
+                                                                            Name="mt-2
+                                                                             font-medi
+                                                                            um">hello@
+                                                                            ticketai.a
+                                                                            pp</p>    
+C:\Users\User\ticketai\app\contact\page.tsx                              63           
+                                                                              href="ma
+                                                                            ilto:promo
+                                                                            ters@ticke
+                                                                            tai.app"  
+C:\Users\User\ticketai\app\contact\page.tsx                              69           
+                                                                              <p class
+                                                                            Name="mt-2
+                                                                             font-medi
+                                                                            um">promot
+                                                                            ers@ticket
+                                                                            ai.app</p>
+C:\Users\User\ticketai\app\contact\page.tsx                              72           
+                                                                              href="ma
+                                                                            ilto:venue
+                                                                            s@ticketai
+                                                                            .app"     
+C:\Users\User\ticketai\app\contact\page.tsx                              78           
+                                                                              <p class
+                                                                            Name="mt-2
+                                                                             font-medi
+                                                                            um">venues
+                                                                            @ticketai.
+                                                                            app</p>   
+C:\Users\User\ticketai\app\event\[id]\page.tsx                           20   process.
+                                                                            env.NEXT_P
+                                                                            UBLIC_ROOT
+                                                                            _URL || "h
+                                                                            ttps://tic
+                                                                            ketai.org.
+                                                                            uk";      
+C:\Users\User\ticketai\app\event\[id]\page.tsx                           76           
+                                                                            name: "Tic
+                                                                            ketAI",   
+C:\Users\User\ticketai\app\event\[id]\page.tsx                          113   const   
+                                                                            desc = eve
+                                                                            nt.descrip
+                                                                            tion ||   
+                                                                            "Get      
+                                                                            tickets   
+                                                                            on TicketA
+                                                                            I.";      
+C:\Users\User\ticketai\app\for-promoters\page.tsx                         5   title:  
+                                                                            "Sell     
+                                                                            tickets   
+                                                                            free â  
+                                                                            no commiss
+                                                                            ion |     
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\for-promoters\page.tsx                       107           
+                                                                                      
+                                                                            TicketAI  
+C:\Users\User\ticketai\app\for-promoters\page.tsx                       201           
+                                                                                d:    
+                                                                            "Notify   
+                                                                            everyone  
+                                                                            who       
+                                                                            follows   
+                                                                            you on Tic
+                                                                            ketAI.",  
+C:\Users\User\ticketai\app\for-promoters\page.tsx                       243           
+                                                                              Question
+                                                                            s? <span c
+                                                                            lassName="
+                                                                            underline"
+                                                                            >hello@tic
+                                                                            ketai.app<
+                                                                            /span>    
+C:\Users\User\ticketai\app\for-venues\page.tsx                            5   title:  
+                                                                            "List     
+                                                                            your      
+                                                                            venue     
+                                                                            free â  
+                                                                            get discov
+                                                                            ered |    
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\for-venues\page.tsx                          105           
+                                                                                      
+                                                                            TicketAI  
+C:\Users\User\ticketai\app\for-venues\page.tsx                          198           
+                                                                              Question
+                                                                            s? <span c
+                                                                            lassName="
+                                                                            underline"
+                                                                            >hello@tic
+                                                                            ketai.app<
+                                                                            /span>    
+C:\Users\User\ticketai\app\genre\[genre]\page.tsx                        33     descri
+                                                                            ption:    
+                                                                            "Discover 
+                                                                            " + label 
+                                                                            + "       
+                                                                            artists   
+                                                                            on TicketA
+                                                                            I.",      
+C:\Users\User\ticketai\app\london\page.tsx                                8     "From 
+                                                                            warehouse 
+                                                                            raves in  
+                                                                            Hackney   
+                                                                            to jazz   
+                                                                            nights in 
+                                                                            Soho —    
+                                                                            find      
+                                                                            every     
+                                                                            London    
+                                                                            event on T
+                                                                            icketAI.",
+C:\Users\User\ticketai\app\organizer\campaigns\new\page.tsx             256           
+                                                                              Build a 
+                                                                            campaign  
+                                                                            around    
+                                                                            one of    
+                                                                            your      
+                                                                            TicketAI  
+C:\Users\User\ticketai\app\organizer\campaigns\page.tsx                 208           
+                                                                                your  
+                                                                            TicketAI  
+                                                                            growth    
+                                                                            engine.   
+C:\Users\User\ticketai\app\organizer\events\[id]\growth\page.tsx        445           
+                                                                                What  
+                                                                            TicketAI  
+                                                                            Is Seeing 
+C:\Users\User\ticketai\app\organizer\page.tsx                           162           
+                                                                                      
+                                                                            TicketAI  
+C:\Users\User\ticketai\app\organizer\page.tsx                           440           
+                                                                                      
+                                                                            TICKETAI  
+                                                                            AI        
+C:\Users\User\ticketai\app\privacy\page.tsx                               2   title:  
+                                                                            "Privacy  
+                                                                            Policy —  
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\privacy\page.tsx                               3   descript
+                                                                            ion: "How 
+                                                                            TicketAI  
+                                                                            collects, 
+                                                                            uses, and 
+                                                                            protects  
+                                                                            your      
+                                                                            data.",   
+C:\Users\User\ticketai\app\privacy\page.tsx                              18           
+                                                                                      
+                                                                            TicketAI (
+                                                                            &quot;we&q
+                                                                            uot;, &quo
+                                                                            t;us&quot;
+                                                                            ) is      
+                                                                            committed 
+                                                                            to protect
+                                                                            ing your  
+                                                                            privacy.  
+                                                                            This      
+                                                                            policy    
+C:\Users\User\ticketai\app\privacy\page.tsx                             102           
+                                                                              <a href=
+                                                                            "mailto:pr
+                                                                            ivacy@tick
+                                                                            etai.org.u
+                                                                            k" classNa
+                                                                            me="text-b
+                                                                            lack under
+                                                                            line">    
+C:\Users\User\ticketai\app\privacy\page.tsx                             103           
+                                                                                privac
+                                                                            y@ticketai
+                                                                            .org.uk   
+C:\Users\User\ticketai\app\privacy\page.tsx                             138           
+                                                                              <a href=
+                                                                            "mailto:pr
+                                                                            ivacy@tick
+                                                                            etai.org.u
+                                                                            k" classNa
+                                                                            me="text-b
+                                                                            lack under
+                                                                            line">    
+C:\Users\User\ticketai\app\privacy\page.tsx                             139           
+                                                                                privac
+                                                                            y@ticketai
+                                                                            .org.uk   
+C:\Users\User\ticketai\app\profile\page.tsx                              10           
+                                                                            <div class
+                                                                            Name={styl
+                                                                            es.logo}>T
+                                                                            icketAI</d
+                                                                            iv>       
+C:\Users\User\ticketai\app\promoters\join\layout.tsx                      4   title:  
+                                                                            "Become a 
+                                                                            promoter  
+                                                                            - free,   
+                                                                            no commiss
+                                                                            ion |     
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\promoters\join\layout.tsx                      5   descript
+                                                                            ion:      
+                                                                            "Join     
+                                                                            TicketAI  
+                                                                            as a      
+                                                                            promoter. 
+                                                                            Free to   
+                                                                            use. No co
+                                                                            mmission. 
+                                                                            No        
+                                                                            monthly   
+                                                                            fee.",    
+C:\Users\User\ticketai\app\promoters\[id]\page.tsx                       65         ? 
+                                                                            "Promoter 
+                                                                            on        
+                                                                            TicketAI  
+                                                                            · " + prom
+                                                                            oter.city 
+C:\Users\User\ticketai\app\promoters\[id]\page.tsx                       66         : 
+                                                                            "Promoter 
+                                                                            on TicketA
+                                                                            I"),      
+C:\Users\User\ticketai\app\refunds\page.tsx                               2   title:  
+                                                                            "Refund   
+                                                                            Policy —  
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\refunds\page.tsx                               3   descript
+                                                                            ion: "How 
+                                                                            refunds   
+                                                                            work on Ti
+                                                                            cketAI.", 
+C:\Users\User\ticketai\app\refunds\page.tsx                              18           
+                                                                              This    
+                                                                            policy    
+                                                                            explains  
+                                                                            when you  
+                                                                            can get a 
+                                                                            refund    
+                                                                            for a     
+                                                                            ticket    
+                                                                            purchased 
+                                                                            on        
+                                                                            TicketAI. 
+C:\Users\User\ticketai\app\refunds\page.tsx                              19           
+                                                                              The     
+                                                                            event     
+                                                                            organizer 
+                                                                            is respons
+                                                                            ible for  
+                                                                            the       
+                                                                            event.    
+                                                                            TicketAI  
+                                                                            processes 
+                                                                            refunds on
+C:\Users\User\ticketai\app\refunds\page.tsx                              70           
+                                                                                <a hre
+                                                                            f="mailto:
+                                                                            refunds@ti
+                                                                            cketai.org
+                                                                            .uk" class
+                                                                            Name="text
+                                                                            -black und
+                                                                            erline">  
+C:\Users\User\ticketai\app\refunds\page.tsx                              71           
+                                                                                  refu
+                                                                            nds@ticket
+                                                                            ai.org.uk 
+C:\Users\User\ticketai\app\refunds\page.tsx                             116           
+                                                                              <a href=
+                                                                            "mailto:re
+                                                                            funds@tick
+                                                                            etai.org.u
+                                                                            k" classNa
+                                                                            me="text-b
+                                                                            lack under
+                                                                            line">    
+C:\Users\User\ticketai\app\refunds\page.tsx                             117           
+                                                                                refund
+                                                                            s@ticketai
+                                                                            .org.uk   
+C:\Users\User\ticketai\app\share\analytics\[token]\page.tsx              41           
+                                                                            Go to     
+                                                                            TicketAI  
+C:\Users\User\ticketai\app\share\analytics\[token]\page.tsx             184           
+                                                                            Generated 
+                                                                            by        
+                                                                            TicketAI  
+                                                                            · numbers 
+                                                                            update in 
+                                                                            real-time 
+                                                                            while the 
+                                                                            link is   
+                                                                            active.   
+C:\Users\User\ticketai\app\terms\page.tsx                                 2   title:  
+                                                                            "Terms of 
+                                                                            Service — 
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\terms\page.tsx                                 3   descript
+                                                                            ion:      
+                                                                            "Terms    
+                                                                            governing 
+                                                                            your use  
+                                                                            of TicketA
+                                                                            I.",      
+C:\Users\User\ticketai\app\terms\page.tsx                                18           
+                                                                                      
+                                                                            TicketAI (
+                                                                            &quot;we&q
+                                                                            uot;, &quo
+                                                                            t;us&quot;
+                                                                            , &quot;ou
+                                                                            r&quot;)  
+                                                                            operates  
+                                                                            an AI-powe
+                                                                            red event 
+                                                                            discovery 
+C:\Users\User\ticketai\app\terms\page.tsx                                19           
+                                                                              and     
+                                                                            ticketing 
+                                                                            platform  
+                                                                            at ticketa
+                                                                            i.org.uk. 
+                                                                            These     
+                                                                            Terms of  
+                                                                            Service (&
+                                                                            quot;Terms
+                                                                            &quot;)   
+C:\Users\User\ticketai\app\terms\page.tsx                                43           
+                                                                              not     
+                                                                            with      
+                                                                            TicketAI. 
+                                                                            TicketAI  
+                                                                            acts as   
+                                                                            an interme
+                                                                            diary and 
+                                                                            payment   
+                                                                            agent.    
+C:\Users\User\ticketai\app\terms\page.tsx                                63           
+                                                                              If you  
+                                                                            create    
+                                                                            events on 
+                                                                            TicketAI, 
+                                                                            you agree 
+                                                                            that:     
+C:\Users\User\ticketai\app\terms\page.tsx                               105           
+                                                                                      
+                                                                            TicketAI  
+                                                                            provides  
+                                                                            the       
+                                                                            platform  
+                                                                            &quot;as  
+                                                                            is&quot;. 
+                                                                            We are    
+                                                                            not       
+                                                                            liable    
+                                                                            for       
+                                                                            events    
+                                                                            that are  
+C:\Users\User\ticketai\app\terms\page.tsx                               131           
+                                                                              <a href=
+                                                                            "mailto:le
+                                                                            gal@ticket
+                                                                            ai.org.uk"
+                                                                             className
+                                                                            ="text-bla
+                                                                            ck underli
+                                                                            ne">      
+C:\Users\User\ticketai\app\terms\page.tsx                               132           
+                                                                                legal@
+                                                                            ticketai.o
+                                                                            rg.uk     
+C:\Users\User\ticketai\app\venue\dashboard\page.tsx                      29           
+                                                                                      
+                                                                            Manage    
+                                                                            the       
+                                                                            venues    
+                                                                            you have  
+                                                                            listed on 
+                                                                            TicketAI. 
+C:\Users\User\ticketai\app\layout.tsx                                    30 const     
+                                                                            SITE_URL  
+                                                                            = process.
+                                                                            env.NEXT_P
+                                                                            UBLIC_ROOT
+                                                                            _URL || "h
+                                                                            ttps://tic
+                                                                            ketai.org.
+                                                                            uk";      
+C:\Users\User\ticketai\app\layout.tsx                                    37           
+                                                                            title: "Ti
+                                                                            cketAI",  
+C:\Users\User\ticketai\app\layout.tsx                                    41           
+                                                                            default:  
+                                                                            "TicketAI 
+                                                                            - Find    
+                                                                            Your Next 
+                                                                            Event",   
+C:\Users\User\ticketai\app\layout.tsx                                    42           
+                                                                            template: 
+                                                                            "%s |     
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\layout.tsx                                    48           
+                                                                            siteName: 
+                                                                            "TicketAI"
+                                                                            ,         
+C:\Users\User\ticketai\app\layout.tsx                                    49           
+                                                                            title:    
+                                                                            "TicketAI 
+                                                                            - Find    
+                                                                            Your Next 
+                                                                            Event",   
+C:\Users\User\ticketai\app\layout.tsx                                    55           
+                                                                            title:    
+                                                                            "TicketAI 
+                                                                            - Find    
+                                                                            Your Next 
+                                                                            Event",   
+C:\Users\User\ticketai\app\layout.tsx                                   170           
+                                                                                  "   
+                                                                            TicketAI. 
+                                                                            All       
+                                                                            rights res
+                                                                            erved."}  
+C:\Users\User\ticketai\app\manifest.ts                                    5     name: 
+                                                                            "TicketAI"
+                                                                            ,         
+C:\Users\User\ticketai\app\manifest.ts                                    6     short_
+                                                                            name: "Tic
+                                                                            ketAI",   
+C:\Users\User\ticketai\app\page.tsx                                      14   title: "
+                                                                            TicketAI",
+C:\Users\User\ticketai\app\robots.ts                                      3 const     
+                                                                            SITE_URL  
+                                                                            = process.
+                                                                            env.NEXT_P
+                                                                            UBLIC_ROOT
+                                                                            _URL || "h
+                                                                            ttps://tic
+                                                                            ketai.org.
+                                                                            uk";      
+C:\Users\User\ticketai\app\sitemap.ts                                     6 const     
+                                                                            SITE_URL  
+                                                                            = process.
+                                                                            env.NEXT_P
+                                                                            UBLIC_ROOT
+                                                                            _URL || "h
+                                                                            ttps://tic
+                                                                            ketai.org.
+                                                                            uk";      
+C:\Users\User\ticketai\components\AskTicketAI.tsx                        16 export    
+                                                                            default   
+                                                                            function A
+                                                                            skTicketAI
+                                                                            () {      
+C:\Users\User\ticketai\components\AskTicketAI.tsx                        60           
+                                                                            Ask       
+                                                                            TicketAI  
+C:\Users\User\ticketai\components\AskTicketAI.tsx                        80           
+                                                                            {loading  
+                                                                            ?         
+                                                                            "TicketAI 
+                                                                            is thinkin
+                                                                            g..." :   
+                                                                            "Ask      
+                                                                            TicketAI"}
+C:\Users\User\ticketai\components\InstallPrompt.tsx                      16     if (lo
+                                                                            calStorage
+                                                                            .getItem("
+                                                                            ticketai-i
+                                                                            nstall-dis
+                                                                            missed")  
+                                                                            === "1") {
+C:\Users\User\ticketai\components\InstallPrompt.tsx                      37       loca
+                                                                            lStorage.s
+                                                                            etItem("ti
+                                                                            cketai-ins
+                                                                            tall-dismi
+                                                                            ssed",    
+                                                                            "1");     
+C:\Users\User\ticketai\components\InstallPrompt.tsx                      43     localS
+                                                                            torage.set
+                                                                            Item("tick
+                                                                            etai-insta
+                                                                            ll-dismiss
+                                                                            ed", "1");
+C:\Users\User\ticketai\components\InstallPrompt.tsx                      52           
+                                                                            <p classNa
+                                                                            me="text-s
+                                                                            m font-sem
+                                                                            ibold">Ins
+                                                                            tall Ticke
+                                                                            tAI</p>   
+C:\Users\User\ticketai\config\brand.ts                                    8   oldDomai
+                                                                            n: 'ticket
+                                                                            ai.com',  
+
+

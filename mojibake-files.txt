@@ -1,0 +1,7 @@
+﻿C:\Users\User\ticketai\app\artist\[slug]\analytics\page.tsx
+C:\Users\User\ticketai\app\for-promoters\page.tsx
+C:\Users\User\ticketai\app\for-venues\page.tsx
+C:\Users\User\ticketai\app\my-tickets\page.tsx
+C:\Users\User\ticketai\app\organizer\events\[id]\page.tsx
+C:\Users\User\ticketai\app\search\page.tsx
+C:\Users\User\ticketai\components\feed\FeedPost.tsx

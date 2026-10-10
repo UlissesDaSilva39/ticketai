@@ -1,0 +1,5 @@
+﻿5:   title: "Sell tickets free â no commission | TicketAI",
+35:               Start selling â it&apos;s free
+115:                 ["Payout delay", "5â30 days", "5 days", "3 days"],
+153:                 d: "One unique URL. Post it anywhere â Instagram, email, WhatsApp.",
+239:               Create your first event â free

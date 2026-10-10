@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -43,7 +43,7 @@ export default function PostComposer({ userName, initials, events, ownedArtists 
     el.style.height = Math.min(el.scrollHeight, 200) + "px";
   }, [body]);
 
-  const onPickImage = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onPickImage = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
@@ -105,7 +105,7 @@ export default function PostComposer({ userName, initials, events, ownedArtists 
         <textarea
           ref={textareaRef}
           value={body}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setBody(e.target.value)}
+          onChange={(e) => setBody(e.target.value)}
           placeholder={"What's on your mind, " + userName + "?"}
           rows={1}
           className="flex-1 px-4 py-2 border border-gray-300 rounded-2xl outline-none focus:border-black resize-none"
@@ -233,4 +233,3 @@ export default function PostComposer({ userName, initials, events, ownedArtists 
     </div>
   );
 }
-

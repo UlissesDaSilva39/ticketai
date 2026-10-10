@@ -1,0 +1,379 @@
+﻿1: "use client";
+3: import { useEffect, useState } from "react";
+4: import Link from "next/link";
+5: import { useParams } from "next/navigation";
+7: type TicketTypeStat = {
+8:   name: string;
+9:   price: number;
+10:   capacity: number;
+12:   available: number;
+17: type RecentTicket = {
+18:   id: string;
+19:   ticket_type: string | null;
+20:   price: number | string | null;
+21:   status: string | null;
+22:   created_at: string | null;
+26:   date: string;
+27:   tickets: number;
+29:   cumulativeTickets: number;
+30:   cumulativeRevenue: number;
+33: type AnalyticsData = {
+35:     id: string;
+36:     title: string;
+37:     description?: string | null;
+38:     start_date: string | null;
+39:     status: string | null;
+40:     venue_id?: string | null;
+41:     hero_image?: string | null;
+45:     capacity: number;
+47:     available: number;
+54:   salesVelocity: {
+56:       tickets: number;
+58:       ticketsPerDay: number;
+62:       tickets: number;
+64:       ticketsPerDay: number;
+67:     lifetimeTicketsPerDay: number;
+68:     lifetimeRevenuePerDay: number;
+71:     firstSaleDate: string | null;
+72:     lastSaleDate: string | null;
+73:     daysSinceFirstSale: number;
+74:     daysSinceLastSale: number | null;
+78:     eventDate: string | null;
+79:     daysUntilEvent: number | null;
+80:     ticketsRemaining: number;
+85:     requiredSalesPerDay: number;
+87:     paceRatio: number | null;
+88:     daysAvailableForSales: number | null;
+91:   revenueScenarios: {
+92:     name: string;
+93:     ticketsPerDay: number;
+94:     additionalTickets: number;
+95:     additionalRevenue: number;
+99:   ticketTypeStats: TicketTypeStat[];
+101:   salesTimeline: SalesDay[];
+103:   orderAnalytics: {
+105:     averageTicketsPerOrder: number;
+110:   recentTickets: RecentTicket[];
+113: function money(value: number) {
+114:   return new Intl.NumberFormat("en-GB", {
+120: function number(value: number) {
+121:   return new Intl.NumberFormat("en-GB", {
+122:     maximumFractionDigits: 1,
+126: function formatDate(value: string | null) {
+127:   if (!value) return "Not specified";
+131:   if (Number.isNaN(date.getTime())) {
+135:   return date.toLocaleString("en-GB", {
+136:     dateStyle: "medium",
+137:     timeStyle: "short",
+141: function formatShortDate(value: string) {
+144:   if (Number.isNaN(date.getTime())) {
+148:   return date.toLocaleDateString("en-GB", {
+149:     day: "2-digit",
+154: function StatCard({
+159:   label: string;
+160:   value: string;
+161:   sub?: string;
+164:     <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+165:       <p className="text-sm font-medium text-gray-500">
+178:     </div>
+182: export default function OrganizerEventAnalyticsPage() {
+184:   const eventId = params?.id as string;
+187:     useState<AnalyticsData | null>(null);
+189:   const [loading, setLoading] =
+196:     if (!eventId) return;
+198:     async function loadAnalytics() {
+200:         setLoading(true);
+203:         const response = await fetch(
+204:           `/api/organizer/events/${eventId}`,
+210:         const result = await response.json();
+212:         if (!response.ok) {
+215:               "Unable to load event analytics"
+222:           "Event analytics error:",
+227:           err instanceof Error
+229:             : "Unable to load event analytics"
+231:       } finally {
+232:         setLoading(false);
+236:     loadAnalytics();
+237:   }, [eventId]);
+239:   if (loading) {
+241:       <main className="min-h-screen bg-gray-50 p-8">
+242:         <div className="mx-auto max-w-7xl">
+244:             Loading event analytics...
+246:         </div>
+247:       </main>
+251:   if (error || !data) {
+253:       <main className="min-h-screen bg-gray-50 p-8">
+254:         <div className="mx-auto max-w-7xl">
+255:           <Link
+256:             href="/organizer"
+257:             className="text-sm text-blue-600 hover:underline"
+259:             Back to organizer dashboard
+260:           </Link>
+262:           <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-5 text-red-700">
+263:             {error || "Analytics unavailable"}
+264:           </div>
+265:         </div>
+266:       </main>
+273:     salesVelocity,
+276:     revenueScenarios,
+277:     ticketTypeStats,
+278:     salesTimeline,
+279:     orderAnalytics,
+280:     recentTickets,
+283:   const paceRequired =
+284:     salesPace.requiredSalesPerDay > 0;
+288:     salesPace.requiredSalesPerDay;
+291:     <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+292:       <div className="mx-auto max-w-7xl space-y-8">
+294:         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+295:           <div>
+296:             <Link
+297:               href="/organizer"
+298:               className="text-sm text-blue-600 hover:underline"
+300:               Back to organizer dashboard
+301:             </Link>
+304:               {event.title}
+307:       <Link
+308:         href={"/organizer/events/" + params.id + "/lineup"}
+309:         className="inline-block mt-4 px-5 py-2.5 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800"
+311:         Manage lineup
+312:       </Link>
+316:               Event analytics
+319:             <div className="mt-3 flex flex-wrap gap-2">
+320:               <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+321:                 {event.status || "active"}
+327:             </div>
+328:           </div>
+330:           <Link
+331:             href={`/event/${event.id}`}
+332:             className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+334:             View Event
+335:           </Link>
+336:             <Link
+337:               href={`/organizer/events/${event.id}/growth`}
+338:               className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+340:               Event Intelligence
+341:             </Link>
+342:         </div>
+344:         <section>
+346:             Event Overview
+349:           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+351:               label="Tickets Sold"
+353:               sub={`of ${summary.capacity}`}
+365:               sub={`${number(orderAnalytics.averageTicketsPerOrder)} tickets/order`}
+370:               value={`${summary.occupancy.toFixed(1)}%`}
+371:               sub={`${summary.available} remaining`}
+373:           </div>
+374:         </section>
+376:         <section className="grid gap-6 lg:grid-cols-3">
+378:           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+379:             <p className="text-sm font-medium text-gray-500">
+384:               {countdown.daysUntilEvent === null
+385:                 ? "ÃƒÂ¢Ã¢?šÂ¬Ã¢â‚¬Â"
+386:                 : countdown.daysUntilEvent < 0
+388:                 : countdown.daysUntilEvent === 0
+390:                 : `${countdown.daysUntilEvent} days`}
+397:             <div className="mt-5 border-t pt-4">
+398:               <p className="text-xs uppercase tracking-wide text-gray-400">
+399:                 Tickets remaining
+402:               <p className="mt-1 text-xl font-semibold text-gray-900">
+403:                 {countdown.ticketsRemaining}
+405:             </div>
+406:           </div>
+408:           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+409:             <p className="text-sm font-medium text-gray-500">
+415:                 salesVelocity.currentSalesPace
+420:               tickets per day over the last 7 days
+423:             <div className="mt-5 border-t pt-4">
+424:               <p className="text-xs uppercase tracking-wide text-gray-400">
+428:               <p className="mt-1 text-xl font-semibold text-gray-900">
+430:                   salesVelocity.last7Days.revenuePerDay
+433:             </div>
+434:           </div>
+436:           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+437:             <p className="text-sm font-medium text-gray-500">
+438:               Required Sales Pace
+442:               {countdown.daysUntilEvent !== null && countdown.daysUntilEvent < 0 ? "Event passed" : salesPace.requiredSalesPerDay > 0 ? `${salesPace.requiredSalesPerDay.toFixed(1)} tickets/day` : "-"}
+446:               tickets per day to sell remaining inventory
+449:             {paceRequired ? (
+450:               <div className="mt-5 border-t pt-4">
+451:                 <p className="text-xs uppercase tracking-wide text-gray-400">
+452:                   Difference
+456:                   className={`mt-1 text-xl font-semibold ${
+467:                   )} tickets/day
+469:               </div>
+471:           </div>
+472:         </section>
+474:         <section>
+476:             Sales Velocity
+479:           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+482:               value={`${salesVelocity.last7Days.tickets} tickets`}
+483:               sub={money(salesVelocity.last7Days.revenue)}
+488:               value={`${salesVelocity.last14Days.tickets} tickets`}
+489:               sub={money(salesVelocity.last14Days.revenue)}
+493:               label="Lifetime Daily Pace"
+494:               value={`${number(salesVelocity.lifetimeTicketsPerDay)} tickets`}
+495:               sub={`${money(salesVelocity.lifetimeRevenuePerDay)}/day`}
+499:               label="Days Since Last Sale"
+501:                 salesVelocity.daysSinceLastSale === null
+503:                   : `${salesVelocity.daysSinceLastSale}`
+506:                 salesVelocity.lastSaleDate
+508:                       salesVelocity.lastSaleDate
+510:                   : undefined
+513:           </div>
+514:         </section>
+516:         <section>
+517:           <div className="mb-4 flex items-center justify-between">
+519:               Ticket Inventory
+523:               {summary.available} tickets remaining
+525:           </div>
+527:           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+528:             <div className="overflow-x-auto">
+529:               <table className="w-full min-w-[760px] text-sm">
+532:                     <th className="px-5 py-3 text-left font-medium text-gray-500">
+533:                       Ticket Type
+535:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+536:                       Price
+538:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+539:                       Capacity
+541:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+544:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+545:                       Remaining
+547:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+550:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+556:                 <tbody className="divide-y">
+557:                   {ticketTypeStats.map((type) => (
+559:                       <td className="px-5 py-4 font-medium text-gray-900">
+563:                       <td className="px-5 py-4 text-right text-gray-700">
+564:                         {money(type.price)}
+567:                       <td className="px-5 py-4 text-right text-gray-700">
+568:                         {type.capacity}
+571:                       <td className="px-5 py-4 text-right text-gray-700">
+575:                       <td className="px-5 py-4 text-right font-medium text-gray-900">
+576:                         {type.available}
+579:                       <td className="px-5 py-4 text-right text-gray-700">
+580:                         {type.occupancy.toFixed(1)}%
+583:                       <td className="px-5 py-4 text-right font-medium text-gray-900">
+589:                   {ticketTypeStats.length === 0 ? (
+595:                         No ticket types configured.
+601:             </div>
+602:           </div>
+603:         </section>
+605:         <section>
+607:             Sales Timeline
+610:           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+611:             <div className="overflow-x-auto">
+612:               <table className="w-full min-w-[700px] text-sm">
+615:                     <th className="px-5 py-3 text-left font-medium text-gray-500">
+618:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+619:                       Tickets
+621:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+624:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+625:                       Cumulative Tickets
+627:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+628:                       Cumulative Revenue
+633:                 <tbody className="divide-y">
+634:                   {[...salesTimeline]
+638:                         <td className="px-5 py-4 font-medium text-gray-900">
+642:                         <td className="px-5 py-4 text-right">
+643:                           {day.tickets}
+646:                         <td className="px-5 py-4 text-right">
+650:                         <td className="px-5 py-4 text-right">
+651:                           {day.cumulativeTickets}
+654:                         <td className="px-5 py-4 text-right font-medium">
+655:                           {money(day.cumulativeRevenue)}
+660:                   {salesTimeline.length === 0 ? (
+672:             </div>
+673:           </div>
+674:         </section>
+676:         <section>
+678:             Order Analytics
+681:           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+684:               value={`${orderAnalytics.orders}`}
+688:               label="Average Tickets / Order"
+690:                 orderAnalytics.averageTicketsPerOrder
+697:                 orderAnalytics.largestOrder
+704:                 orderAnalytics.smallestOrder
+707:           </div>
+708:         </section>
+710:         <section>
+711:           <div className="mb-4 flex items-center justify-between">
+712:             <div>
+714:                 Revenue Scenarios
+718:                 Illustrative scenarios using recent sales pace.
+719:                 These are not predictions.
+721:             </div>
+722:           </div>
+724:           <div className="grid gap-4 md:grid-cols-3">
+725:             {revenueScenarios.map((scenario) => (
+726:               <div
+727:                 key={scenario.name}
+728:                 className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+730:                 <p className="text-sm font-medium capitalize text-gray-500">
+731:                   {scenario.name} scenario
+735:                   {money(scenario.totalRevenue)}
+738:                 <div className="mt-4 space-y-2 text-sm text-gray-600">
+739:                   <div className="flex justify-between">
+740:                     <span>Tickets/day</span>
+741:                     <span className="font-medium">
+743:                         scenario.ticketsPerDay
+746:                   </div>
+748:                   <div className="flex justify-between">
+749:                     <span>Additional tickets</span>
+750:                     <span className="font-medium">
+752:                         scenario.additionalTickets
+755:                   </div>
+757:                   <div className="flex justify-between">
+758:                     <span>Additional revenue</span>
+759:                     <span className="font-medium">
+761:                         scenario.additionalRevenue
+764:                   </div>
+765:                 </div>
+766:               </div>
+768:           </div>
+769:         </section>
+771:         {salesVelocity.bestSalesDay ? (
+772:           <section>
+773:             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+774:               <p className="text-sm font-medium text-gray-500">
+775:                 Highest-volume sales day
+778:               <div className="mt-2 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+779:                 <div>
+782:                       salesVelocity.bestSalesDay.date
+787:                     {salesVelocity.bestSalesDay.tickets} tickets sold
+789:                 </div>
+791:                 <p className="text-xl font-semibold text-gray-900">
+793:                     salesVelocity.bestSalesDay.revenue
+796:               </div>
+797:             </div>
+798:           </section>
+801:         <section>
+803:             Recent Tickets
+806:           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+807:             <div className="overflow-x-auto">
+808:               <table className="w-full min-w-[650px] text-sm">
+811:                     <th className="px-5 py-3 text-left font-medium text-gray-500">
+812:                       Ticket
+814:                     <th className="px-5 py-3 text-left font-medium text-gray-500">
+817:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+818:                       Price
+820:                     <th className="px-5 py-3 text-left font-medium text-gray-500">
+823:                     <th className="px-5 py-3 text-right font-medium text-gray-500">
+829:                 <tbody className="divide-y">
+830:                   {recentTickets.map((ticket) => (
+831:                     <tr key={ticket.id}>
+833:                         {ticket.id.slice(0, 8)}
+837:                         {ticket.ticket_type || "Ticket"}
+840:                       <td className="px-5 py-4 text-right">
+842:                           Number(ticket.price || 0)
+847:                         <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
+848:                           {ticket.status || "valid"}
+852:                       <td className="px-5 py-4 text-right text-gray-500">
+854:                           ticket.created_at
+860:                   {recentTickets.length === 0 ? (
+866:                         No tickets recorded yet.
+872:             </div>
+873:           </div>
+874:         </section>
+876:       </div>
+877:     </main>

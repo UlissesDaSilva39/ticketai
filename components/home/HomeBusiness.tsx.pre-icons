@@ -1,5 +1,6 @@
-import { Plus, Mic, Building2, BarChart3 } from 'lucide-react';
+﻿export function HomeBusiness() {
 
+import { Plus, Mic, Building2, BarChart3 } from 'lucide-react';
 export function HomeBusiness() {
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -32,7 +33,7 @@ export function HomeBusiness() {
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { icon: Plus,       label: 'Create Event',   href: '/organizer/events/new' },
+            { icon: Plus,       label: 'Create Event',  href: '/organizer/events/new' },
             { icon: Mic,        label: 'Find Artists',  href: '/artists' },
             { icon: Building2,  label: 'Find Venues',   href: '/venues' },
             { icon: BarChart3,  label: 'View Analytics', href: '/organizer/analytics' },
@@ -54,3 +55,4 @@ export function HomeBusiness() {
     </main>
   );
 }
+
