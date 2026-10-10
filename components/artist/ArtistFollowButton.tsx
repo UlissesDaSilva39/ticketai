@@ -1,7 +1,9 @@
 ﻿"use client";
 
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { UserPlus, UserCheck } from "lucide-react";
 
 type Props = {
   artistSlug: string;
@@ -21,41 +23,59 @@ export default function ArtistFollowButton({
   const [count, setCount] = useState(initialCount);
   const [busy, setBusy] = useState(false);
 
-  const toggle = async () => {
+  async function toggle() {
     if (!signedIn) {
       router.push(`/login?next=/artist/${artistSlug}`);
       return;
     }
 
     setBusy(true);
-    const action = following ? "unfollow" : "follow";
+    const next = !following;
+    setFollowing(next);
+    setCount((n) => Math.max(n + (next ? 1 : -1), 0));
+
     try {
       const res = await fetch(`/api/artists/${artistSlug}/follow`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({ following: next }),
       });
-      const json = await res.json();
-      if (json.ok) {
-        setFollowing(json.following);
-        setCount(json.count);
-        router.refresh();
+
+      if (!res.ok) {
+        // Roll back on failure
+        setFollowing(!next);
+        setCount((n) => Math.max(n + (next ? -1 : 1), 0));
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
+      setFollowing(!next);
+      setCount((n) => Math.max(n + (next ? -1 : 1), 0));
     } finally {
       setBusy(false);
     }
-  };
+  }
 
   return (
     <button
-      type="button"
       onClick={toggle}
       disabled={busy}
-      className={"px-5 py-2.5 text-sm font-medium rounded-full transition disabled:opacity-60 " + (following ? "border border-gray-300 text-gray-700 hover:bg-gray-50" : "bg-black text-white hover:bg-gray-800")}
+      className={
+        "inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full transition disabled:opacity-50 " +
+        (following
+          ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+          : "bg-black text-white hover:bg-gray-800")
+      }
     >
-      {following ? "Following · " + count : "+ Follow · " + count}
+      {following ? (
+        <>
+          <UserCheck className="h-4 w-4" />
+          Following · {count}
+        </>
+      ) : (
+        <>
+          <UserPlus className="h-4 w-4" />
+          Follow · {count}
+        </>
+      )}
     </button>
   );
 }
