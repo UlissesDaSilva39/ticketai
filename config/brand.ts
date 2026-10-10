@@ -1,9 +1,7 @@
 ﻿export const BRAND = {
-  master: 'GRID',
-  full: 'MusicGrid',
-  tagline: 'The network for music.',
-  subTagline: 'Discover · Connect · Create · Book · Grow',
-  domain: 'grid.music',
-  legalName: 'MusicGrid Ltd',
-  oldDomain: 'ticketai.com',
+  name: 'GRID',
+  tagline: 'Discover · Connect · Create · Book · Grow',
+  domain: 'grid.app',
+  supportEmail: 'support@grid.app',
+  city: 'London',
 } as const;

@@ -1,16 +1,6 @@
-import type { NextConfig } from "next";
-import withPWAInit from "next-pwa";
-
-const withPWA = withPWAInit({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
-  buildExcludes: [/app-build-manifest.json$/],
-});
+﻿import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  outputFileTracingRoot: __dirname,
   experimental: {
     serverActions: {
       bodySizeLimit: "50mb",
@@ -18,4 +8,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPWA(nextConfig);
+export default nextConfig;

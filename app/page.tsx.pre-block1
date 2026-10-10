@@ -17,39 +17,18 @@ export default async function HomePage() {
   const now = new Date().toISOString();
   const in7Days = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const { data: events, error } = await supabase
+  const { data: events } = await supabase
     .from('events')
-    .select(`
-      id,
-      title,
-      start_date,
-      hero_image,
-      venue_id,
-      venues:venue_id ( name, city )
-    `)
+    .select('id, title, start_date, venue_name, city, image_url, price_min, price_max')
     .gte('start_date', now)
     .lte('start_date', in7Days)
     .order('start_date', { ascending: true })
     .limit(6);
 
-  if (error) console.error('[home] events query failed:', error);
-
-  // Normalise for HomeEventGrid
-  const normalised = (events ?? []).map((e: any) => ({
-    id: e.id,
-    title: e.title,
-    start_date: e.start_date,
-    image_url: e.hero_image ?? null,
-    venue_name: e.venues?.name ?? null,
-    city: e.venues?.city ?? null,
-    price_min: null as number | null,
-    price_max: null as number | null,
-  }));
-
   return (
     <HomeLoggedIn
       user={{ name: profile?.username ?? user.email?.split('@')[0] }}
-      events={normalised}
+      events={events ?? []}
     />
   );
 }
