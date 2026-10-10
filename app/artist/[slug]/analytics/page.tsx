@@ -1,7 +1,8 @@
-import { redirect, notFound } from "next/navigation";
+﻿import { redirect, notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
+import ShareAnalyticsButton from "@/components/artist/ShareAnalyticsButton";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -35,10 +36,26 @@ export default async function AnalyticsPage({ params }: Props) {
     supabase.from("artist_views").select("created_at").eq("artist_slug", slug).gte("created_at", thirtyDaysAgo.toISOString()).order("created_at", { ascending: true }),
   ]);
 
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const sevenIso = sevenDaysAgo.toISOString();
+
+  const [views7dRes, follows7dRes, bookings7dRes, messages7dRes] = await Promise.all([
+    supabase.from("artist_views").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
+    supabase.from("artist_follows").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
+    supabase.from("booking_requests").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
+    supabase.from("artist_messages").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
+  ]);
+
   const totalViews = viewsRes.count ?? 0;
   const totalFollows = followsRes.count ?? 0;
   const totalBookings = bookingsRes.count ?? 0;
   const totalMessages = messagesRes.count ?? 0;
+
+  const views7d = views7dRes.count ?? 0;
+  const follows7d = follows7dRes.count ?? 0;
+  const bookings7d = bookings7dRes.count ?? 0;
+  const messages7d = messages7dRes.count ?? 0;
 
   const dailyViews = new Map<string, number>();
   for (let i = 29; i >= 0; i--) {
@@ -74,30 +91,45 @@ export default async function AnalyticsPage({ params }: Props) {
             </h1>
             <p className="text-gray-600 mt-2">{artist.name}</p>
           </div>
+          <div className="flex items-center gap-4">
+            <ShareAnalyticsButton artistSlug={slug} />
           <Link
             href={"/artist/" + slug}
             className="text-sm text-gray-500 hover:text-black whitespace-nowrap"
           >
-            View profile →
+            View profile â†’
           </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           <div className="bg-white border border-gray-200 rounded-2xl p-5">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Views</p>
             <p className="text-3xl font-bold mt-1">{totalViews.toLocaleString()}</p>
+            <p className={"text-xs mt-2 " + (views7d > 0 ? "text-green-600" : "text-gray-400")}>
+              {views7d > 0 ? "↑ +" + views7d + " esta semana" : "→ 0 esta semana"}
+            </p>
           </div>
           <div className="bg-white border border-gray-200 rounded-2xl p-5">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Followers</p>
             <p className="text-3xl font-bold mt-1">{totalFollows.toLocaleString()}</p>
+            <p className={"text-xs mt-2 " + (follows7d > 0 ? "text-green-600" : "text-gray-400")}>
+              {follows7d > 0 ? "↑ +" + follows7d + " esta semana" : "→ 0 esta semana"}
+            </p>
           </div>
           <div className="bg-white border border-gray-200 rounded-2xl p-5">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Bookings</p>
             <p className="text-3xl font-bold mt-1">{totalBookings.toLocaleString()}</p>
+            <p className={"text-xs mt-2 " + (bookings7d > 0 ? "text-green-600" : "text-gray-400")}>
+              {bookings7d > 0 ? "↑ +" + bookings7d + " esta semana" : "→ 0 esta semana"}
+            </p>
           </div>
           <div className="bg-white border border-gray-200 rounded-2xl p-5">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Messages</p>
             <p className="text-3xl font-bold mt-1">{totalMessages.toLocaleString()}</p>
+            <p className={"text-xs mt-2 " + (messages7d > 0 ? "text-green-600" : "text-gray-400")}>
+              {messages7d > 0 ? "↑ +" + messages7d + " esta semana" : "→ 0 esta semana"}
+            </p>
           </div>
         </div>
 
