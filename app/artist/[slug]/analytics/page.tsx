@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import ShareAnalyticsButton from "@/components/artist/ShareAnalyticsButton";
+import SharedLinksPanel from "@/components/artist/SharedLinksPanel";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -150,6 +151,8 @@ export default async function AnalyticsPage({ params }: Props) {
             </div>
           )}
         </div>
+
+        <SharedLinksPanel artistSlug={slug} />
       </div>
     </div>
   );

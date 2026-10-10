@@ -101,3 +101,42 @@ export async function DELETE(request: Request, { params }: Params) {
     return NextResponse.json({ ok: false, error: "Invalid payload" }, { status: 400 });
   }
 }
+
+export async function GET(request: Request, { params }: Params) {
+  try {
+    const { slug } = await params;
+    const supabase = await createServerSupabase();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
+    }
+
+    const { data: artist } = await supabase
+      .from("artists")
+      .select("owner_id")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!artist) {
+      return NextResponse.json({ ok: false, error: "Artist not found" }, { status: 404 });
+    }
+    if (artist.owner_id !== user.id) {
+      return NextResponse.json({ ok: false, error: "Not your artist" }, { status: 403 });
+    }
+
+    const { data, error } = await supabase
+      .from("analytics_shares")
+      .select("token, created_at, expires_at")
+      .eq("artist_slug", slug)
+      .eq("created_by", user.id)
+      .gt("expires_at", new Date().toISOString())
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ ok: true, shares: data ?? [] });
+  } catch (err) {
+    console.error("analytics-share GET error:", err);
+    return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
+  }
+}
