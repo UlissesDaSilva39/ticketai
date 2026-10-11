@@ -1,8 +1,10 @@
-﻿import { redirect, notFound } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 
+import BookingResponseButtons from '@/components/booking/BookingResponseButtons';
+import ReplyOnGridButton from '@/components/messages/ReplyOnGridButton';
 type Props = { params: Promise<{ slug: string }> };
 
 export const metadata: Metadata = { title: "Artist inbox" };
@@ -111,10 +113,7 @@ export default async function InboxPage({ params }: Props) {
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 mb-2">
-                    <a href={`mailto:${b.email}`} className="hover:underline">
-                      {b.email}
-                    </a>
-                    {" · submitted "}
+                    submitted{" "}
                     {new Date(b.created_at).toLocaleDateString("en-GB", {
                       day: "numeric",
                       month: "short",
@@ -122,10 +121,17 @@ export default async function InboxPage({ params }: Props) {
                     })}
                   </p>
                   {b.message && (
-                    <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                    <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed mb-3">
                       {b.message}
                     </p>
                   )}
+                  <div className="flex flex-wrap items-start gap-3">
+                    <BookingResponseButtons
+                      bookingId={b.id}
+                      initialStatus={b.status || "pending"}
+                    />
+                    <ReplyOnGridButton email={b.email} name={b.name} />
+                  </div>
                 </li>
               ))}
             </ul>
@@ -159,14 +165,10 @@ export default async function InboxPage({ params }: Props) {
                       })}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 mb-2">
-                    <a href={`mailto:${m.email}`} className="hover:underline">
-                      {m.email}
-                    </a>
-                  </p>
-                  <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                  <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed mb-3">
                     {m.message}
                   </p>
+                  <ReplyOnGridButton email={m.email} name={m.name} />
                 </li>
               ))}
             </ul>
