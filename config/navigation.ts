@@ -1,6 +1,6 @@
 export const PRIMARY_NAV = [
   { key: 'home',        label: 'Home',           href: '/',                auth: 'any'  },
-  { key: 'discover',    label: 'Discover',       href: '/discover/artists', auth: 'any'  },
+  { key: 'discover',    label: 'Discover',       href: '/discover/artists', auth: 'any',  dropdown: 'discover' },
   { key: 'search',      label: 'Search',         href: '/search',          auth: 'any'  },
   { key: 'artists',     label: 'Artists',        href: '/artists',         auth: 'any',  dropdown: 'artists' },
   { key: 'social',      label: 'Social',         href: '/feed',            auth: 'user', dropdown: 'social' },
@@ -65,7 +65,24 @@ export const NETWORK_DROPDOWN = {
   ],
 } as const;
 
+
+export const DISCOVER_DROPDOWN = {
+  sections: [
+    { title: 'DISCOVER', items: [
+      { label: 'Artists',         href: '/discover/artists' },
+      { label: 'Venues',          href: '/discover/venues' },
+      { label: 'Promoters',       href: '/discover/promoters' },
+    ]},
+    { title: 'BROWSE', items: [
+      { label: 'Events',          href: '/events' },
+      { label: 'Opportunities',   href: '/opportunities' },
+      { label: 'Search',          href: '/search' },
+    ]},
+  ],
+} as const;
+
 export const DROPDOWN_MAP = {
+  discover: DISCOVER_DROPDOWN,
   artists: ARTISTS_DROPDOWN,
   social:  SOCIAL_DROPDOWN,
   network: NETWORK_DROPDOWN,
