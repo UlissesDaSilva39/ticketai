@@ -194,6 +194,12 @@ export default function PromoterDashboard() {
           <Link href="/promoter/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
             Analytics
           </Link>
+        <Link
+          href="/promoter/dashboard/sent-bookings"
+          className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50"
+        >
+          Sent bookings
+        </Link>
           <Link href="/promoter/payouts" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
             Payouts
           </Link>
