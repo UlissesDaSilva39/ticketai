@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import type { Event } from "@/lib/types";
 import SearchFilters from "@/components/SearchFilters";
 
+import { Sidebar } from '@/components/sidebar/Sidebar';
 export const dynamic = "force-dynamic";
 
 export default async function SearchPage({
@@ -116,7 +117,13 @@ export default async function SearchPage({
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
+        <div className="col-span-12 lg:col-span-3">
+          <Sidebar />
+        </div>
+        <div className="col-span-12 lg:col-span-9">
+
       <div className="mb-8">
         <Link href="/" className="text-sm text-gray-500 hover:text-black">â† Back to Home</Link>
       </div>
@@ -169,6 +176,9 @@ export default async function SearchPage({
           ))}
         </div>
       )}
+    
+        </div>
+      </div>
     </div>
   );
 }
