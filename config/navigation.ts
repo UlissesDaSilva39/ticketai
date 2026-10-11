@@ -1,11 +1,12 @@
-﻿export const PRIMARY_NAV = [
-  { key: 'home',        label: 'Home',           href: '/',           auth: 'any'  },
-  { key: 'search',      label: 'Search',         href: '/search',     auth: 'any'  },
-  { key: 'artists',     label: 'Artists',        href: '/artists',    auth: 'any',  dropdown: 'artists' },
-  { key: 'social',      label: 'Social',         href: '/feed',       auth: 'user', dropdown: 'social' },
-  { key: 'network',     label: 'Network',        href: '/network',    auth: 'user', dropdown: 'network' },
-  { key: 'tickets',     label: 'My Tickets',     href: '/my-tickets', auth: 'user' },
-  { key: 'artist-page', label: 'My artist page', href: '/artist',     auth: 'user' },
+export const PRIMARY_NAV = [
+  { key: 'home',        label: 'Home',           href: '/',                auth: 'any'  },
+  { key: 'discover',    label: 'Discover',       href: '/discover/artists', auth: 'any'  },
+  { key: 'search',      label: 'Search',         href: '/search',          auth: 'any'  },
+  { key: 'artists',     label: 'Artists',        href: '/artists',         auth: 'any',  dropdown: 'artists' },
+  { key: 'social',      label: 'Social',         href: '/feed',            auth: 'user', dropdown: 'social' },
+  { key: 'network',     label: 'Network',        href: '/network',         auth: 'user', dropdown: 'network' },
+  { key: 'tickets',     label: 'My Tickets',     href: '/my-tickets',      auth: 'user' },
+  { key: 'artist-page', label: 'My artist page', href: '/artist',          auth: 'user' },
 ] as const;
 
 export const ARTISTS_DROPDOWN = {
