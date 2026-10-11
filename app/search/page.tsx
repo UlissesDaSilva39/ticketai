@@ -125,7 +125,7 @@ export default async function SearchPage({
         <div className="col-span-12 lg:col-span-9">
 
       <div className="mb-8">
-        <Link href="/" className="text-sm text-gray-500 hover:text-black">â† Back to Home</Link>
+        <Link href="/" className="text-sm text-gray-500 hover:text-black">←Back to Home</Link>
       </div>
       <h1 className="text-5xl md:text-6xl font-bold mb-8 uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
         SEARCH EVENTS
