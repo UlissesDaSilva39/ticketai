@@ -1,0 +1,20 @@
+[33m6f48907[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix next.config.ts: remove next-pwa, clean up PWA leftovers
+[33ma9b7dbf[m feat(grid): rebrand to GRID + 3-column home + network + opportunities + lucide icons
+[33m0f7ae41[m polish(grid): trending indicator + sidebar spacing
+[33md2c9c28[m feat(grid): rebrand to GRID + 3-column home + network + opportunities
+[33m3e3b2f0[m feat(analytics): configurable share expiry (7/30/90 days)
+[33m50dac78[m chore: update lockfile (babel patch bumps)
+[33m0da164d[m feat(analytics): share links with 3-active limit and revoke
+[33mc7ae116[m feat(analytics): list and revoke active share links
+[33m34010aa[m feat(analytics): shareable read-only analytics snapshots
+[33ma1bcb49[m feat(artist): analytics dashboard with view tracking + artist posts fixes
+[33ma8d54b5[m feat: artist posts in feed (with known label bug)
+[33m195ef87[m feat: add artist_slug to posts (feed + create)
+[33m6d456fa[m feat(artist): similar artists + verified badge
+[33m5e27c12[m feat(artist): verification badge on profile heading
+[33m22d0f6d[m feat(artist): cover image upload with Supabase Storage
+[33mcda62cb[m feat(search): include artists in search results
+[33mc36f274[m feat(genre): artist grid pages by genre
+[33m20f25bb[m feat(artist): complete artist platform with realtime notifications
+[33mce09c4b[m feat(artist): notify artist on new booking/message via realtime bell
+[33ma2c6d85[m feat(artist): complete artist platform with follow, booking, inbox, and edit
