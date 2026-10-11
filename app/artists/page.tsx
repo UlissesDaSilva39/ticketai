@@ -5,6 +5,7 @@ import CardRow from "@/components/artist/CardRow";
 import LibrarySidebar from "@/components/artist/LibrarySidebar";
 import { priceFrom } from "@/lib/posts";
 
+import { Sidebar } from '@/components/sidebar/Sidebar';
 export const dynamic = "force-dynamic";
 
 export const metadata = {
@@ -143,6 +144,11 @@ export default async function ArtistsIndexPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
+        <div className="col-span-12 lg:col-span-3">
+          <Sidebar />
+        </div>
+        <div className="col-span-12 lg:col-span-9">
       <div className="max-w-[1400px] mx-auto px-4 py-6 flex gap-6">
         <LibrarySidebar
           signedIn={!!user}
@@ -372,6 +378,8 @@ export default async function ArtistsIndexPage() {
             </div>
           ) : null}
         </main>
+      </div>
+            </div>
       </div>
     </div>
   );

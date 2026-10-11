@@ -1,11 +1,17 @@
-﻿import styles from './profile.module.css';
+import styles from './profile.module.css';
 
+import { Sidebar } from '@/components/sidebar/Sidebar';
 export default function ProfilePage() {
   const highlights = ['Testimonials', 'Pricing', 'How it Works', 'FAQ', 'Team'];
   const posts = [1, 2, 3, 4, 5, 6];
 
   return (
-    <div className={styles.container}>
+    <div className="bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
+        <div className="col-span-12 lg:col-span-3">
+          <Sidebar />
+        </div>
+        <div className="col-span-12 lg:col-span-9">
       <nav className={styles.sidebar}>
         <div className={styles.logo}>TicketAI</div>
         <div className={styles.navLinks}>
@@ -80,6 +86,8 @@ export default function ProfilePage() {
           ))}
         </div>
       </main>
+            </div>
+      </div>
     </div>
   );
 }

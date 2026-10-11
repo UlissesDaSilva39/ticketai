@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 
+import { Sidebar } from '@/components/sidebar/Sidebar';
 export const dynamic = "force-dynamic";
 
 type FriendActivity = {
@@ -294,7 +295,12 @@ export default async function FeedPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
+    <div className="bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
+        <div className="col-span-12 lg:col-span-3">
+          <Sidebar />
+        </div>
+        <div className="col-span-12 lg:col-span-9">
       <h1
         className="text-5xl font-bold uppercase mb-8"
         style={{ fontFamily: "var(--font-antonio)" }}
@@ -411,6 +417,8 @@ export default async function FeedPage() {
           </div>
         </section>
       )}
+            </div>
+      </div>
     </div>
   );
 }

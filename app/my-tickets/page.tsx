@@ -5,6 +5,7 @@ import type { Ticket, Event } from "@/lib/types";
 import ReturnButton from "./ReturnButton";
 import WalletButton from "@/components/WalletButton";
 
+import { Sidebar } from '@/components/sidebar/Sidebar';
 export const dynamic = "force-dynamic";
 
 export default async function MyTicketsPage() {
@@ -32,7 +33,12 @@ export default async function MyTicketsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
+        <div className="col-span-12 lg:col-span-3">
+          <Sidebar />
+        </div>
+        <div className="col-span-12 lg:col-span-9">
       <div className="mb-8">
         <h1 className="text-5xl font-bold mb-2" style={{ fontFamily: "var(--font-antonio)" }}>MY TICKETS</h1>
         <p className="text-gray-500">Signed in as {user.email}</p>
@@ -120,6 +126,8 @@ export default async function MyTicketsPage() {
           })}
         </div>
       )}
+            </div>
+      </div>
     </div>
   );
 }
