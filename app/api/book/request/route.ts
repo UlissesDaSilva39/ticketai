@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +37,7 @@ export async function POST(req: Request) {
       message: message || null,
       name: promoter_name || user.email?.split("@")[0] || "Promoter",
       email: promoter_email || user.email || "",
+      promoter_id: user.id,
       status: "pending",
     })
     .select()
