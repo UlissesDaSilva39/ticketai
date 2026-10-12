@@ -1,0 +1,22 @@
+﻿-- Fans seed (additional profiles)
+INSERT INTO profiles (id, full_name, username, role, bio, avatar_url, city, is_public) VALUES
+(gen_random_uuid(), 'James Wilson', 'jameswilson', 'attendee', 'Music lover from London. Always looking for the next great gig.', 'https://randomuser.me/api/portraits/men/12.jpg', 'London', true),
+(gen_random_uuid(), 'Sarah Chen', 'sarahchen', 'attendee', 'Techno, house and everything in between.', 'https://randomuser.me/api/portraits/women/21.jpg', 'London', true),
+(gen_random_uuid(), 'Marcus Thompson', 'marcust', 'attendee', 'Vinyl collector. Rare groove DJ on weekends.', 'https://randomuser.me/api/portraits/men/33.jpg', 'Manchester', true),
+(gen_random_uuid(), 'Emily Rodriguez', 'emilyrod', 'attendee', 'Live music photographer.', 'https://randomuser.me/api/portraits/women/42.jpg', 'Bristol', true),
+(gen_random_uuid(), 'Daniel Park', 'danielpark', 'attendee', 'Drum and bass head from Leeds.', 'https://randomuser.me/api/portraits/men/44.jpg', 'Leeds', true),
+(gen_random_uuid(), 'Olivia Kumar', 'oliviak', 'attendee', 'Jazz and soul enthusiast.', 'https://randomuser.me/api/portraits/women/51.jpg', 'London', true),
+(gen_random_uuid(), 'Nathan Brown', 'nathanbrown', 'attendee', 'Weekend warrior. Mainly house.', 'https://randomuser.me/api/portraits/men/56.jpg', 'Birmingham', true),
+(gen_random_uuid(), 'Sophia Miller', 'sophiam', 'attendee', 'Indie kid. Shoegaze forever.', 'https://randomuser.me/api/portraits/women/62.jpg', 'Brighton', true),
+(gen_random_uuid(), 'Ryan Davies', 'ryandavies', 'attendee', 'Post-rock and ambient.', 'https://randomuser.me/api/portraits/men/68.jpg', 'Glasgow', true),
+(gen_random_uuid(), 'Chloe Anderson', 'chloeanderson', 'attendee', 'Festival addict.', 'https://randomuser.me/api/portraits/women/74.jpg', 'Amsterdam', true),
+(gen_random_uuid(), 'Liam O''Connor', 'liamoc', 'attendee', 'Irish music scene supporter.', 'https://randomuser.me/api/portraits/men/82.jpg', 'Dublin', true),
+(gen_random_uuid(), 'Zoe Baker', 'zoebaker', 'attendee', 'Folk, roots, acoustic.', 'https://randomuser.me/api/portraits/women/12.jpg', 'Bristol', true),
+(gen_random_uuid(), 'Alex Hughes', 'alexhughes', 'attendee', 'Techno. Berlin regular.', 'https://randomuser.me/api/portraits/men/92.jpg', 'Berlin', true),
+(gen_random_uuid(), 'Grace Taylor', 'gracetaylor', 'attendee', 'Vocalist and gig-goer.', 'https://randomuser.me/api/portraits/women/31.jpg', 'London', true),
+(gen_random_uuid(), 'Jordan Ellis', 'jordanellis', 'attendee', 'DJ, promoter, and general music obsessive.', 'https://randomuser.me/api/portraits/men/8.jpg', 'Manchester', true),
+(gen_random_uuid(), 'Maya Patel', 'mayapatel', 'attendee', 'Electronic music producer and fan.', 'https://randomuser.me/api/portraits/women/45.jpg', 'London', true),
+(gen_random_uuid(), 'Tom Wright', 'tomwright', 'attendee', 'Garage and bass.', 'https://randomuser.me/api/portraits/men/71.jpg', 'London', true),
+(gen_random_uuid(), 'Lily Foster', 'lilyfoster', 'attendee', 'Singer, songwriter, listener.', 'https://randomuser.me/api/portraits/women/88.jpg', 'Paris', true),
+(gen_random_uuid(), 'Ben Carter', 'bencarter', 'attendee', 'Live music is my therapy.', 'https://randomuser.me/api/portraits/men/25.jpg', 'Barcelona', true),
+(gen_random_uuid(), 'Ruby Hayes', 'rubyhayes', 'attendee', 'Soul, funk, jazz.', 'https://randomuser.me/api/portraits/women/19.jpg', 'Birmingham', true);

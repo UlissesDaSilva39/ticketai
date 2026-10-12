@@ -1,0 +1,22 @@
+﻿-- Promoters seed
+INSERT INTO promoters (user_id, display_name, bio, instagram, tiktok, youtube, city, commission_rate, verified) VALUES
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Nightshift Presents', 'London''s premiere underground events since 2019.', '@nightshiftpresents', '@nightshiftpres', '@nightshiftpres', 'London', 10.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Warehouse Sessions', 'Berlin warehouse parties and industrial raves.', '@warehousesessions', '@warehousesessions', '@warehousesessions', 'Berlin', 12.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Brighton Beats', 'Seafront parties and summer festivals.', '@brightonbeats', '@brightonbeats', '@brightonbeats', 'Brighton', 8.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Northern Lights Live', 'Manchester live music events.', '@northernlights', '@northernlights', '@northernlights', 'Manchester', 10.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Bristol Underground', 'The best of Bristol''s underground scene.', '@bristolunderground', '@bristolug', '@bristolug', 'Bristol', 10.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Glasgow Sound Collective', 'Scottish independent promoter.', '@glasgowsound', '@glasgowsound', '@glasgowsound', 'Glasgow', 9.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Paris Nocturne', 'French electronic music events.', '@parisnocturne', '@parisnocturne', '@parisnocturne', 'Paris', 11.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Amsterdam Dance Events', 'ADE regulars and year-round parties.', '@amsterdamdance', '@amsterdamdance', '@amsterdamdance', 'Amsterdam', 10.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Barcelona Beats', 'Mediterranean electronic festivals.', '@barcelonabeats', '@barcelonabeats', '@barcelonabeats', 'Barcelona', 12.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Dublin Nightlife', 'Irish club culture and events.', '@dublinnightlife', '@dublinnightlife', '@dublinnightlife', 'Dublin', 10.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Leeds Live', 'Yorkshire music events and gigs.', '@leedslive', '@leedslive', '@leedslive', 'Leeds', 9.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'East End Promotions', 'Shoreditch and Hackney events.', '@eastendpromo', '@eastendpromo', '@eastendpromo', 'London', 10.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Jazz at the Loft', 'Intimate jazz nights.', '@jazzloft', '@jazzloft', '@jazzloft', 'London', 8.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Techno Nation', 'UK-wide techno events.', '@technonation', '@technonation', '@technonation', 'London', 12.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'House Party Collective', 'House music promoters.', '@housepartyco', '@housepartyco', '@housepartyco', 'Manchester', 10.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Folk & Roots UK', 'Folk, roots and acoustic events.', '@folkrootsuk', '@folkrootsuk', '@folkrootsuk', 'Bristol', 9.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Shoegaze Sundays', 'Alternative and shoegaze nights.', '@shoegazesun', '@shoegazesun', '@shoegazesun', 'Birmingham', 8.0, false),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Drum & Bass Nation', 'The UK''s largest DnB promoters.', '@dnnation', '@dnnation', '@dnnation', 'Bristol', 12.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Electronic Europe', 'Pan-European electronic events.', '@electronic eu', '@electroniceu', '@electroniceu', 'Amsterdam', 11.0, true),
+('85ba83c9-10f1-4c65-b7bc-4ffc08d14fc1', 'Fresh Talent UK', 'Breaking new artists into the scene.', '@freshtalentuk', '@freshtalentuk', '@freshtalentuk', 'London', 8.0, false);
