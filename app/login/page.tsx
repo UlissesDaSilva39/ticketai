@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-type Role = "attendee" | "promoter" | "venue" | "artist";
+type Role = "attendee" | "promoter" | "venue" | "artist" | "a_and_r" | "record_company";
 
 function LoginInner() {
   const router = useRouter();
@@ -100,7 +100,7 @@ function LoginInner() {
               <div>
                 <label className="block text-xs tracking-widest text-gray-500 mb-3">I AM A</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {([["attendee","Fan"],["artist","Artist"],["promoter","Promoter"],["venue","Venue"]] as [Role,string][]).map(([val, label]) => (
+                  {([["attendee","Fan"],["artist","Artist"],["promoter","Promoter"],["venue","Venue"],["a_and_r","A&R"],["record_company","Record Label"]] as [Role,string][]).map(([val, label]) => (
                     <button key={val} type="button" onClick={() => setRole(val)} className={"px-4 py-3 rounded-xl border text-sm text-left transition " + (role === val ? "border-black bg-black text-white" : "border-gray-300 hover:border-gray-800 text-gray-700")}>{label}</button>
                   ))}
                 </div>
