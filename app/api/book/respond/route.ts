@@ -1,5 +1,7 @@
 ﻿import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { notifyServer } from "@/lib/notify-server";
+import { sendBookingResponseEmail } from "@/lib/email-booking-response";
 
 export const dynamic = "force-dynamic";
 
@@ -24,31 +26,24 @@ export async function PATCH(req: Request) {
 
     if (!["accepted", "declined"].includes(status)) {
       return NextResponse.json(
-        { error: "status must be 'accepted' or 'declined'" },
+        { error: "status must be accepted or declined" },
         { status: 400 }
       );
     }
 
-    // Fetch the booking to verify ownership
     const { data: booking, error: fetchErr } = await supabase
       .from("booking_requests")
-      .select("id, artist_slug")
+      .select("id, artist_slug, date, name, email, venue, promoter_id")
       .eq("id", booking_id)
       .maybeSingle();
 
-    if (fetchErr) {
-      console.error("Fetch error:", fetchErr);
-      return NextResponse.json({ error: fetchErr.message }, { status: 500 });
-    }
-
-    if (!booking) {
+    if (fetchErr || !booking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     }
 
-    // Verify the user owns this artist
     const { data: artist } = await supabase
       .from("artists")
-      .select("owner_id")
+      .select("owner_id, name")
       .eq("slug", booking.artist_slug)
       .maybeSingle();
 
@@ -56,7 +51,6 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Not your booking" }, { status: 403 });
     }
 
-    // Update status (use update without .single() to avoid coerce errors)
     const { error: updateErr } = await supabase
       .from("booking_requests")
       .update({ status })
@@ -67,7 +61,50 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: updateErr.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, booking_id, status });
+    const artistName = artist.name || booking.artist_slug;
+    const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "http://localhost:3000";
+    const bookingUrl = siteUrl + "/promoter/dashboard/sent-bookings";
+    const eventShort = new Date(booking.date).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+    });
+
+    if (booking.promoter_id) {
+      try {
+        await notifyServer({
+          userId: booking.promoter_id,
+          type: "booking_response",
+          title:
+            status === "accepted"
+              ? "Booking accepted: " + artistName
+              : "Booking declined: " + artistName,
+          body:
+            "Your request for " + eventShort +
+            (booking.venue ? " at " + booking.venue : "") + ".",
+          href: "/promoter/dashboard/sent-bookings",
+        });
+      } catch (e) {
+        console.error("notifyServer failed:", e);
+      }
+    }
+
+    if (booking.email) {
+      try {
+        await sendBookingResponseEmail({
+          toEmail: booking.email,
+          toName: booking.name || "there",
+          artistName: artistName,
+          status: status as "accepted" | "declined",
+          eventDate: booking.date,
+          venue: booking.venue,
+          bookingUrl: bookingUrl,
+        });
+      } catch (e) {
+        console.error("Booking response email failed:", e);
+      }
+    }
+
+    return NextResponse.json({ success: true, booking_id: booking_id, status: status });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed";
     console.error("Respond route error:", err);
