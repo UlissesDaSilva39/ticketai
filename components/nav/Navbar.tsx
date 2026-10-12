@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { PRIMARY_NAV } from '@/config/navigation';
 import { Logo } from './Logo';
@@ -30,7 +30,7 @@ export function Navbar({
       <nav className="mx-auto flex h-16 max-w-[1400px] items-center gap-2 px-6">
         <Logo />
 
-        <ul className="ml-6 hidden md:flex items-center gap-1">
+        {        signedIn && (          <ul className="ml-6 hidden md:flex items-center gap-1">
           {PRIMARY_NAV.map((item) => {
             if (item.auth === 'user' && !signedIn) return null;
             const href =
@@ -49,7 +49,7 @@ export function Navbar({
               </li>
             );
           })}
-        </ul>
+                  </ul>        )}
 
         <div className="ml-auto flex items-center gap-3">
           {signedIn ? (
