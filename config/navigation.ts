@@ -69,6 +69,7 @@ export const NETWORK_DROPDOWN = {
 export const DISCOVER_DROPDOWN = {
   sections: [
     { title: 'DISCOVER', items: [
+      { label: 'Events',          href: '/discover/events' },
       { label: 'Artists',         href: '/discover/artists' },
       { label: 'Venues',          href: '/discover/venues' },
       { label: 'Promoters',       href: '/discover/promoters' },
