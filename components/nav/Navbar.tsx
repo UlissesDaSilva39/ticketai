@@ -33,16 +33,18 @@ export function Navbar({
         <ul className="ml-6 hidden md:flex items-center gap-1">
           {PRIMARY_NAV.map((item) => {
             if (item.auth === 'user' && !signedIn) return null;
+            const href =
+              item.key === 'home' && signedIn ? '/feed' : item.href;
             return (
               <li key={item.key}>
                 {'dropdown' in item && item.dropdown ? (
                   <NavDropdown
                     label={item.label}
                     dropdownKey={item.dropdown as any}
-                    href={item.href}
+                    href={href}
                   />
                 ) : (
-                  <NavLink href={item.href}>{item.label}</NavLink>
+                  <NavLink href={href}>{item.label}</NavLink>
                 )}
               </li>
             );

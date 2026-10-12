@@ -1,158 +1,237 @@
-﻿import { redirect, notFound } from "next/navigation";
-import type { Metadata } from "next";
-import Link from "next/link";
+﻿import Link from "next/link";
+import { notFound } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
-import ShareAnalyticsButton from "@/components/artist/ShareAnalyticsButton";
-import SharedLinksPanel from "@/components/artist/SharedLinksPanel";
+import AnalyticsMetric from "@/components/artist/AnalyticsMetric";
+import AnalyticsSparkline from "@/components/artist/AnalyticsSparkline";
+
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const metadata: Metadata = { title: "Artist analytics" };
-export const dynamic = "force-dynamic";
+type ViewRow = {
+  created_at: string;
+  source: string | null;
+  city: string | null;
+  viewer_id: string | null;
+};
+
+function countBy(rows: ViewRow[], key: "source" | "city"): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const r of rows) {
+    const k = r[key] || "unknown";
+    out[k] = (out[k] || 0) + 1;
+  }
+  return out;
+}
+
+function topN(rec: Record<string, number>, n: number): [string, number][] {
+  return Object.entries(rec)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, n);
+}
+
+function daysBack(n: number): Date {
+  const d = new Date();
+  d.setUTCHours(0, 0, 0, 0);
+  d.setUTCDate(d.getUTCDate() - n);
+  return d;
+}
 
 export default async function AnalyticsPage({ params }: Props) {
   const { slug } = await params;
   const supabase = await createServerSupabase();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) redirect("/login?next=/artist/" + slug + "/analytics");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data: artist } = await supabase
     .from("artists")
-    .select("owner_id, name, slug")
+    .select("id, name, slug, owner_id")
     .eq("slug", slug)
     .maybeSingle();
 
   if (!artist) notFound();
-  if (artist.owner_id !== user.id) notFound();
+  if (!user || user.id !== artist.owner_id) notFound();
 
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const { data: viewsRaw } = await supabase
+    .from("artist_views")
+    .select("created_at, source, city, viewer_id")
+    .eq("artist_slug", slug)
+    .order("created_at", { ascending: false })
+    .limit(5000);
 
-  const [viewsRes, followsRes, bookingsRes, messagesRes, recentViewsRes] = await Promise.all([
-    supabase.from("artist_views").select("*", { count: "exact", head: true }).eq("artist_slug", slug),
-    supabase.from("artist_follows").select("*", { count: "exact", head: true }).eq("artist_slug", slug),
-    supabase.from("booking_requests").select("*", { count: "exact", head: true }).eq("artist_slug", slug),
-    supabase.from("artist_messages").select("*", { count: "exact", head: true }).eq("artist_slug", slug),
-    supabase.from("artist_views").select("created_at").eq("artist_slug", slug).gte("created_at", thirtyDaysAgo.toISOString()).order("created_at", { ascending: true }),
-  ]);
+  const views: ViewRow[] = viewsRaw || [];
 
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const sevenIso = sevenDaysAgo.toISOString();
+  const total = views.length;
+  const since7 = daysBack(7).toISOString();
+  const since14 = daysBack(14).toISOString();
 
-  const [views7dRes, follows7dRes, bookings7dRes, messages7dRes] = await Promise.all([
-    supabase.from("artist_views").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
-    supabase.from("artist_follows").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
-    supabase.from("booking_requests").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
-    supabase.from("artist_messages").select("*", { count: "exact", head: true }).eq("artist_slug", slug).gte("created_at", sevenIso),
-  ]);
+  const last7 = views.filter((v) => v.created_at >= since7).length;
+  const prev7 = views.filter(
+    (v) => v.created_at >= since14 && v.created_at < since7
+  ).length;
 
-  const totalViews = viewsRes.count ?? 0;
-  const totalFollows = followsRes.count ?? 0;
-  const totalBookings = bookingsRes.count ?? 0;
-  const totalMessages = messagesRes.count ?? 0;
+  const uniqueViewers = new Set(
+    views.map((v) => v.viewer_id).filter(Boolean)
+  ).size;
 
-  const views7d = views7dRes.count ?? 0;
-  const follows7d = follows7dRes.count ?? 0;
-  const bookings7d = bookings7dRes.count ?? 0;
-  const messages7d = messages7dRes.count ?? 0;
+  const sourceCounts = countBy(views, "source");
+  const cityCounts = countBy(views, "city");
 
-  const dailyViews = new Map<string, number>();
+  const topSources = topN(sourceCounts, 5);
+  const topCities = topN(cityCounts, 5);
+  const topCity = topCities[0]?.[0] || "—";
+
+  const delta = prev7 === 0 ? null : Math.round(((last7 - prev7) / prev7) * 100);
+  const deltaStr =
+    delta === null
+      ? undefined
+      : (delta >= 0 ? "+" : "") + delta + "% vs prev 7d";
+
+  const buckets: Record<string, number> = {};
   for (let i = 29; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    dailyViews.set(d.toISOString().slice(0, 10), 0);
+    const d = daysBack(i);
+    buckets[d.toISOString().slice(0, 10)] = 0;
   }
-  for (const row of recentViewsRes.data ?? []) {
-    const day = String(row.created_at).slice(0, 10);
-    if (dailyViews.has(day)) dailyViews.set(day, (dailyViews.get(day) || 0) + 1);
+  for (const v of views) {
+    const k = v.created_at.slice(0, 10);
+    if (k in buckets) buckets[k]++;
   }
+  const sparkPoints = Object.values(buckets);
 
-  const chartData = Array.from(dailyViews.entries()).map(([date, count]) => ({
-    date: date.slice(5),
-    views: count,
-  }));
-
-  const maxViews = Math.max(1, ...chartData.map((d) => d.views));
+  const recent = views.slice(0, 10);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="flex items-baseline justify-between mb-8">
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="flex items-center justify-between mb-12">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-3">
-              Artist dashboard
-            </p>
+            <Link
+              href={"/artist/" + slug}
+              className="text-white/40 text-xs tracking-widest hover:text-white"
+            >
+              ← BACK TO PROFILE
+            </Link>
             <h1
-              className="text-4xl font-bold tracking-tight"
+              className="text-4xl md:text-6xl font-bold tracking-tight mt-3"
               style={{ fontFamily: "var(--font-antonio)" }}
             >
-              Analytics
+              ANALYTICS
             </h1>
-            <p className="text-gray-600 mt-2">{artist.name}</p>
+            <p className="text-white/50 text-sm mt-2">
+              {artist.name || slug} · last 30 days
+            </p>
           </div>
-          <div className="flex items-center gap-4">
-            <ShareAnalyticsButton artistSlug={slug} />
-          <Link
-            href={"/artist/" + slug}
-            className="text-sm text-gray-500 hover:text-black whitespace-nowrap"
+          <a
+            href={`/api/artists/${slug}/analytics/export`}
+            className="border border-white/20 hover:border-white/50 rounded-full px-5 py-2 text-sm transition"
           >
-            View profile â†’
-          </Link>
-          </div>
+            Export CSV
+          </a>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white border border-gray-200 rounded-2xl p-5">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Views</p>
-            <p className="text-3xl font-bold mt-1">{totalViews.toLocaleString()}</p>
-            <p className={"text-xs mt-2 " + (views7d > 0 ? "text-green-600" : "text-gray-400")}>
-              {views7d > 0 ? "↑ +" + views7d + " esta semana" : "→ 0 esta semana"}
-            </p>
-          </div>
-          <div className="bg-white border border-gray-200 rounded-2xl p-5">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Followers</p>
-            <p className="text-3xl font-bold mt-1">{totalFollows.toLocaleString()}</p>
-            <p className={"text-xs mt-2 " + (follows7d > 0 ? "text-green-600" : "text-gray-400")}>
-              {follows7d > 0 ? "↑ +" + follows7d + " esta semana" : "→ 0 esta semana"}
-            </p>
-          </div>
-          <div className="bg-white border border-gray-200 rounded-2xl p-5">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Bookings</p>
-            <p className="text-3xl font-bold mt-1">{totalBookings.toLocaleString()}</p>
-            <p className={"text-xs mt-2 " + (bookings7d > 0 ? "text-green-600" : "text-gray-400")}>
-              {bookings7d > 0 ? "↑ +" + bookings7d + " esta semana" : "→ 0 esta semana"}
-            </p>
-          </div>
-          <div className="bg-white border border-gray-200 rounded-2xl p-5">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Messages</p>
-            <p className="text-3xl font-bold mt-1">{totalMessages.toLocaleString()}</p>
-            <p className={"text-xs mt-2 " + (messages7d > 0 ? "text-green-600" : "text-gray-400")}>
-              {messages7d > 0 ? "↑ +" + messages7d + " esta semana" : "→ 0 esta semana"}
-            </p>
-          </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          <AnalyticsMetric label="TOTAL VIEWS" value={total} delta={deltaStr} />
+          <AnalyticsMetric label="LAST 7 DAYS" value={last7} />
+          <AnalyticsMetric label="UNIQUE VIEWERS" value={uniqueViewers} />
+          <AnalyticsMetric label="TOP CITY" value={topCity} />
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-8">
-          <h2 className="text-lg font-semibold mb-4">Views - 30 days</h2>
-          {totalViews === 0 ? (
-            <p className="text-sm text-gray-500">No views yet.</p>
-          ) : (
-            <div className="flex items-end gap-1 h-40">
-              {chartData.map((d, i) => (
-                <div
-                  key={i}
-                  className="flex-1 bg-black rounded-t min-h-[2px]"
-                  style={{ height: Math.max(2, (d.views / maxViews) * 100) + "%" }}
-                  title={d.date + ": " + d.views}
-                />
+        <div className="border border-white/10 rounded-2xl p-6 bg-white/[0.02] mb-10">
+          <p className="text-xs tracking-widest text-white/40 mb-4">
+            VIEWS · LAST 30 DAYS
+          </p>
+          <AnalyticsSparkline points={sparkPoints} />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 mb-10">
+          <div className="border border-white/10 rounded-2xl p-6 bg-white/[0.02]">
+            <p className="text-xs tracking-widest text-white/40 mb-5">
+              TOP CITIES
+            </p>
+            {topCities.length === 0 && (
+              <p className="text-white/30 text-sm">No data yet</p>
+            )}
+            <div className="space-y-3">
+              {topCities.map(([city, count]) => (
+                <div key={city} className="flex items-center gap-4">
+                  <span className="text-sm text-white/80 w-32 truncate">
+                    {city}
+                  </span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-white/80"
+                      style={{
+                        width: `${(count / (topCities[0]?.[1] || 1)) * 100}%`,
+                      }}
+                    />
+                  </div>
+                  <span className="text-xs text-white/50 w-10 text-right">
+                    {count}
+                  </span>
+                </div>
               ))}
             </div>
-          )}
+          </div>
+
+          <div className="border border-white/10 rounded-2xl p-6 bg-white/[0.02]">
+            <p className="text-xs tracking-widest text-white/40 mb-5">
+              TRAFFIC SOURCES
+            </p>
+            {topSources.length === 0 && (
+              <p className="text-white/30 text-sm">No data yet</p>
+            )}
+            <div className="space-y-3">
+              {topSources.map(([source, count]) => (
+                <div key={source} className="flex items-center gap-4">
+                  <span className="text-sm text-white/80 w-32 truncate">
+                    {source}
+                  </span>
+                  <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-white/80"
+                      style={{
+                        width: `${(count / (topSources[0]?.[1] || 1)) * 100}%`,
+                      }}
+                    />
+                  </div>
+                  <span className="text-xs text-white/50 w-10 text-right">
+                    {count}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <SharedLinksPanel artistSlug={slug} />
+        <div className="border border-white/10 rounded-2xl p-6 bg-white/[0.02]">
+          <p className="text-xs tracking-widest text-white/40 mb-5">
+            RECENT ACTIVITY
+          </p>
+          {recent.length === 0 && (
+            <p className="text-white/30 text-sm">No views yet</p>
+          )}
+          <div className="space-y-2">
+            {recent.map((v, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between text-sm py-2 border-b border-white/5 last:border-0"
+              >
+                <span className="text-white/70">
+                  {new Date(v.created_at).toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+                <span className="text-white/50 text-xs">
+                  {(v.source || "direct") + (v.city ? " · " + v.city : "")}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

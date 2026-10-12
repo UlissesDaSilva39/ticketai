@@ -1,5 +1,5 @@
 export const PRIMARY_NAV = [
-  { key: 'home',        label: 'Home',           href: '/',                auth: 'any'  },
+  { key: 'home',        label: 'Home',           href: '/home',                auth: 'any'  },
   { key: 'discover',    label: 'Discover',       href: '/discover/artists', auth: 'any',  dropdown: 'discover' },
   { key: 'search',      label: 'Search',         href: '/search',          auth: 'any'  },
   { key: 'artists',     label: 'Artists',        href: '/artists',         auth: 'any',  dropdown: 'artists' },
@@ -92,7 +92,7 @@ export const DROPDOWN_MAP = {
 export const PROFILE_MENU = {
   header: {
     name: 'Ulisses Da Silva',
-    subtitle: 'Music Entrepreneur · Producer',
+    subtitle: 'Music Entrepreneur Ã‚Â· Producer',
   },
   sections: [
     { title: 'MY GRID', items: [

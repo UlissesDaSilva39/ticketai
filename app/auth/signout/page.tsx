@@ -1,8 +1,24 @@
-﻿export default function Page() {
+﻿
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+
+export default function SignOutPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.signOut().finally(() => {
+      router.push("/");
+      router.refresh();
+    });
+  }, [router]);
+
   return (
-    <main className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-extrabold tracking-tight">Sign out</h1>
-      <p className="text-gray-500 mt-2">Coming soon.</p>
-    </main>
+    <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <p className="text-white/40 text-sm">Signing you out...</p>
+    </div>
   );
 }
