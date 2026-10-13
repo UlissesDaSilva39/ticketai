@@ -48,7 +48,7 @@ export default function ArtistCard({ artist }: Props) {
       const res = await fetch("/api/follows/toggle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetType: "promoter", targetId: artist.id }),
+        body: JSON.stringify({ targetType: artist.role || "user", targetId: artist.id }),
       });
       const data = await res.json();
       if (typeof data.following === "boolean") setFollowing(data.following);

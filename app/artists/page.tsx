@@ -27,7 +27,7 @@ export default async function ArtistsIndexPage() {
         : Promise.resolve({ data: null }),
       supabase
         .from("profiles")
-        .select("id, full_name, username, avatar_url, genre, city")
+        .select("id, full_name, username, avatar_url, genre, city, role")
         .not("username", "is", null)
         .limit(24),
       supabase
