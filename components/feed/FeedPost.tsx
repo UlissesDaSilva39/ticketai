@@ -6,6 +6,7 @@ import type { FeedPost as FeedPostType, FeedEventSummary } from "@/lib/posts";
 import { timeAgo, priceFrom } from "@/lib/posts";
 import { formatEventDate } from "@/lib/format";
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
+import CommentSection from "@/components/feed/CommentSection";
 
 export default function FeedPost({
   post,
@@ -125,7 +126,8 @@ export default function FeedPost({
           <span>{post.share_count}</span>
         </button>
       </footer>
-    </article>
+          <CommentSection postId={post.id} />
+</article>
   );
 }
 

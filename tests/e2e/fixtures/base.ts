@@ -1,9 +1,11 @@
 ﻿import { test as base, expect } from "@playwright/test";
 
-export const test = base.extend<{
+type Fixtures = {
   consoleErrors: string[];
   pageErrors: string[];
-}>({
+};
+
+export const test = base.extend<Fixtures>({
   consoleErrors: async ({ page }, use) => {
     const errors: string[] = [];
     page.on("console", (msg) => {
