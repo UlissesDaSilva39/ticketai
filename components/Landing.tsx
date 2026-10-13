@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const TRUST = ["DJ Poxy","Basement 44","Voice Records","Pomoer Odyssey","Ulisses Booking","Demo Ticket"];
+const TRUST = ["DJ Poxy","Basement 44","Voice Records","Pompeii Odyssey","Ulisses Booking","Demo Ticket"];
 
 const PROBLEMS = [
   { bad: "SCATTERED", badText: "Gigs spread across ten apps and a hundred DMs.", good: "ONE FEED", goodText: "Every show, every artist, every city in one place." },

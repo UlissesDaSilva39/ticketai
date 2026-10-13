@@ -1,7 +1,7 @@
 import { test, expect } from "./fixtures/base";
 
 // Every static route we know about. Dynamic routes ([id]) are skipped here
-// — they're covered in dedicated spec files below.
+// ï¿½ they're covered in dedicated spec files below.
 const STATIC_ROUTES = [
   "/",
   "/home",
@@ -77,7 +77,7 @@ const STATIC_ROUTES = [
 test.describe("smoke: every static route renders", () => {
   for (const route of STATIC_ROUTES) {
     test(`GET ${route} ? 2xx and no 500`, async ({ page, consoleErrors }) => {
-      const res = await page.goto(route, { waitUntil: "domcontentloaded" });
+      const res = await page.goto(route, { waitUntil: "domcontentloaded", timeout: 15000 });
       expect(res, `${route} did not return a response`).not.toBeNull();
       expect(
         res!.status(),

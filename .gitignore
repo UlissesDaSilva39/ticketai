@@ -96,3 +96,8 @@ test-results/
 testautomation/node_modules/
 audit*.ps1
 *.bak
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

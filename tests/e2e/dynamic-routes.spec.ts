@@ -8,14 +8,14 @@ test.describe("dynamic routes with real data", () => {
       .first();
 
     if ((await firstEventLink.count()) === 0) {
-      test.skip(true, "No events in DB — skipping dynamic event test");
+      test.skip(true, "No events in DB ï¿½ skipping dynamic event test");
       return;
     }
 
     const href = await firstEventLink.getAttribute("href");
     expect(href).toBeTruthy();
 
-    const res = await page.goto(href!);
+    const res = await page.goto(href!, { timeout: 20000 });
     expect(res!.status()).toBeLessThan(400);
 
     const body = await page.locator("body").innerText();
@@ -29,12 +29,12 @@ test.describe("dynamic routes with real data", () => {
     const firstArtistLink = page.locator('a[href^="/artists/"]').first();
 
     if ((await firstArtistLink.count()) === 0) {
-      test.skip(true, "No artists in DB — skipping");
+      test.skip(true, "No artists in DB ï¿½ skipping");
       return;
     }
 
     const href = await firstArtistLink.getAttribute("href");
-    const res = await page.goto(href!);
+    const res = await page.goto(href!, { timeout: 20000 });
     expect(res!.status()).toBeLessThan(400);
   });
 });
