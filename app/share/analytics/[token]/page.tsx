@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 type PageProps = { params: Promise<{ token: string }> };

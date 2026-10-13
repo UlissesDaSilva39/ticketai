@@ -1,4 +1,4 @@
-﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";

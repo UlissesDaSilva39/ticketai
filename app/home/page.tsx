@@ -1,37 +1,30 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { Sidebar } from "@/components/sidebar/Sidebar";
+import RightSidebar from "@/components/feed/RightSidebar";
+import PostComposer from "@/components/feed/PostComposer";
 
-import { Sidebar } from '@/components/sidebar/Sidebar';
-import RightSidebar from '@/components/feed/RightSidebar';
 export const dynamic = "force-dynamic";
 
-type FriendActivity = {
+type PostRow = {
   id: string;
-  type: "going" | "interested" | "review" | "new_event" | "follow";
-  user_id: string;
-  user_name: string;
-  user_username: string | null;
+  body: string;
+  author_id: string;
+  like_count: number;
+  comment_count: number;
+  share_count: number;
   created_at: string;
-  event_id: string | null;
-  event_title: string | null;
-  event_date: string | null;
-  event_image: string | null;
-  rating?: number;
-  comment?: string | null;
 };
 
-type SuggestedUser = {
+type CommentRow = {
   id: string;
-  name: string;
-  username: string | null;
-  sharedEvents: number;
+  post_id: string;
+  author_id: string;
+  body: string;
+  created_at: string;
 };
 
-function formatDate(v: string | null) {
-  if (!v) return "TBC";
-  return new Date(v).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
-}
+type Author = { name: string; username: string | null; avatar: string | null };
 
 function groupLabel(iso: string): string {
   const now = new Date();
@@ -50,250 +43,88 @@ export default async function FeedPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: friendships } = await supabase
-    .from("friendships")
-    .select("user_id, friend_id")
-    .eq("status", "accepted")
-    .or("user_id.eq." + user.id + ",friend_id.eq." + user.id);
+  // Posts
+  const { data: postsRaw } = await supabase
+    .from("posts")
+    .select("id, body, author_id, like_count, comment_count, share_count, created_at")
+    .order("created_at", { ascending: false })
+    .limit(30);
+  const posts: PostRow[] = postsRaw || [];
 
-  const friendIds = (friendships || []).map((f) =>
-    f.user_id === user.id ? f.friend_id : f.user_id
-  );
+  // Comments
+  const postIds = posts.map((p) => p.id);
+  const { data: commentsRaw } = postIds.length
+    ? await supabase
+        .from("post_comments")
+        .select("id, post_id, author_id, body, created_at")
+        .in("post_id", postIds)
+        .order("created_at", { ascending: true })
+    : { data: [] as CommentRow[] };
+  const comments: CommentRow[] = commentsRaw || [];
 
-  const activities: FriendActivity[] = [];
+  // Authors
+  const commentAuthorIds = comments.map((c) => c.author_id);
+  const allAuthorIds = [...new Set([...posts.map((p) => p.author_id), ...commentAuthorIds])];
+  const { data: authors } = allAuthorIds.length
+    ? await supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", allAuthorIds)
+    : { data: [] as { id: string; full_name: string | null; username: string | null; avatar_url: string | null }[] };
 
-  if (friendIds.length > 0) {
-    const { data: interestRows } = await supabase
-      .from("event_interest")
-      .select("id, user_id, event_id, status, created_at")
-      .in("user_id", friendIds)
-      .order("created_at", { ascending: false })
-      .limit(50);
-
-    const eventIds = [...new Set((interestRows || []).map((r) => r.event_id))];
-
-    const { data: events } = eventIds.length
-      ? await supabase.from("events").select("id, title, start_date, hero_image").in("id", eventIds)
-      : { data: [] };
-    const { data: profiles } = await supabase
-      .from("profiles")
-      .select("id, full_name, username")
-      .in("id", friendIds);
-
-    const eventById: Record<string, { title: string; start_date: string | null; hero_image: string | null }> = {};
-    for (const ev of events || []) {
-      eventById[ev.id] = { title: ev.title, start_date: ev.start_date, hero_image: ev.hero_image };
-    }
-    const profileById: Record<string, { name: string; username: string | null }> = {};
-    for (const p of profiles || []) {
-      profileById[p.id] = { name: p.full_name || p.username || "Someone", username: p.username };
-    }
-
-    for (const row of interestRows || []) {
-      if (row.status !== "going" && row.status !== "interested") continue;
-      const ev = eventById[row.event_id];
-      const pr = profileById[row.user_id];
-      if (!ev || !pr) continue;
-      activities.push({
-        id: "interest-" + row.id,
-        type: row.status,
-        user_id: row.user_id,
-        user_name: pr.name,
-        user_username: pr.username,
-        created_at: row.created_at,
-        event_id: row.event_id,
-        event_title: ev.title,
-        event_date: ev.start_date,
-        event_image: ev.hero_image,
-      });
-    }
-
-    const { data: reviews } = await supabase
-      .from("event_reviews")
-      .select("id, user_id, event_id, rating, comment, created_at")
-      .in("user_id", friendIds)
-      .order("created_at", { ascending: false })
-      .limit(30);
-
-    for (const r of reviews || []) {
-      const ev = eventById[r.event_id];
-      const pr = profileById[r.user_id];
-      if (!ev || !pr) continue;
-      activities.push({
-        id: "review-" + r.id,
-        type: "review",
-        user_id: r.user_id,
-        user_name: pr.name,
-        user_username: pr.username,
-        created_at: r.created_at,
-        event_id: r.event_id,
-        event_title: ev.title,
-        event_date: ev.start_date,
-        event_image: ev.hero_image,
-        rating: r.rating,
-        comment: r.comment,
-      });
-    }
+  const authorById: Record<string, Author> = {};
+  for (const a of authors || []) {
+    authorById[a.id] = {
+      name: a.full_name || a.username || "Someone",
+      username: a.username,
+      avatar: a.avatar_url,
+    };
   }
 
-  // Events from organizers the user follows
-  const { data: followsRows } = await supabase
-    .from("follows")
-    .select("target_type, target_id")
-    .eq("follower_id", user.id)
-    .eq("target_type", "promoter");
-
-  if (followsRows && followsRows.length > 0) {
-    const promoterRowIds = followsRows.map((r) => r.target_id);
-    const { data: promoterRows } = await supabase
-      .from("promoters")
-      .select("id, user_id, display_name")
-      .in("id", promoterRowIds);
-
-    const organizerIds = (promoterRows || []).map((p) => p.user_id).filter(Boolean) as string[];
-    const promoterNameByUserId: Record<string, string> = {};
-    for (const p of promoterRows || []) {
-      if (p.user_id) promoterNameByUserId[p.user_id] = p.display_name || "Promoter";
-    }
-
-    if (organizerIds.length > 0) {
-      const { data: newEvents } = await supabase
-        .from("events")
-        .select("id, title, start_date, hero_image, organizer_id, created_at")
-        .in("organizer_id", organizerIds)
-        .eq("status", "published")
-        .gte("start_date", new Date().toISOString())
-        .order("created_at", { ascending: false })
-        .limit(20);
-
-      for (const ev of newEvents || []) {
-        activities.push({
-          id: "new-" + ev.id,
-          type: "new_event",
-          user_id: ev.organizer_id,
-          user_name: promoterNameByUserId[ev.organizer_id] || "Promoter",
-          user_username: null,
-          created_at: ev.created_at,
-          event_id: ev.id,
-          event_title: ev.title,
-          event_date: ev.start_date,
-          event_image: ev.hero_image,
-        });
-      }
-    }
+  const commentsByPost: Record<string, CommentRow[]> = {};
+  for (const c of comments) {
+    if (!commentsByPost[c.post_id]) commentsByPost[c.post_id] = [];
+    commentsByPost[c.post_id].push(c);
   }
 
-  // Friend follows ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â who has each friend followed?
-  if (friendIds.length > 0) {
-    const { data: friendFollows } = await supabase
-      .from("follows")
-      .select("id, follower_id, target_type, target_id, created_at")
-      .in("follower_id", friendIds)
-      .order("created_at", { ascending: false })
-      .limit(30);
+  // Right sidebar data
+  const { data: forYouRaw } = await supabase
+    .from("events")
+    .select("id, title, start_date, hero_image")
+    .gte("start_date", new Date().toISOString())
+    .order("start_date", { ascending: true })
+    .limit(3);
+  const forYou = (forYouRaw || []).map((e) => ({
+    id: e.id,
+    title: e.title,
+    start_date: e.start_date,
+    hero_image: e.hero_image,
+  }));
 
-    // Fetch promoter names for these follows
-    const promoterIds = (friendFollows || [])
-      .filter((f) => f.target_type === "promoter")
-      .map((f) => f.target_id);
+  const { data: peopleRaw } = await supabase
+    .from("profiles")
+    .select("id, username, full_name")
+    .neq("id", user.id)
+    .not("username", "is", null)
+    .limit(3);
+  const peopleToFollow = (peopleRaw || []).map((p) => ({
+    id: p.id,
+    username: p.username,
+    full_name: p.full_name,
+  }));
 
-    let promoterById: Record<string, string> = {};
-    if (promoterIds.length > 0) {
-      const { data: promoterRows } = await supabase
-        .from("promoters")
-        .select("id, display_name")
-        .in("id", promoterIds);
-      for (const p of promoterRows || []) {
-        promoterById[p.id] = p.display_name || "a promoter";
-      }
-    }
-
-    const { data: profiles } = await supabase
-      .from("profiles")
-      .select("id, full_name, username")
-      .in("id", friendIds);
-    const profileMap: Record<string, { name: string; username: string | null }> = {};
-    for (const p of profiles || []) {
-      profileMap[p.id] = { name: p.full_name || p.username || "Someone", username: p.username };
-    }
-
-    for (const f of friendFollows || []) {
-      const who = profileMap[f.follower_id];
-      if (!who) continue;
-      const targetName = f.target_type === "promoter" ? promoterById[f.target_id] || "a promoter" : "a venue";
-      activities.push({
-        id: "follow-" + f.id,
-        type: "follow",
-        user_id: f.follower_id,
-        user_name: who.name,
-        user_username: who.username,
-        created_at: f.created_at,
-        event_id: null,
-        event_title: targetName,
-        event_date: null,
-        event_image: null,
-      });
-    }
-  }
-
-  activities.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
-  const shown = activities.slice(0, 40);
-
-  // Group by day label
-  const groups: Record<string, FriendActivity[]> = {};
+  const grouped: Record<string, PostRow[]> = {};
   const groupOrder: string[] = [];
-  for (const a of shown) {
-    const label = groupLabel(a.created_at);
-    if (!groups[label]) {
-      groups[label] = [];
-      groupOrder.push(label);
-    }
-    groups[label].push(a);
+  for (const p of posts) {
+    const label = groupLabel(p.created_at);
+    if (!grouped[label]) { grouped[label] = []; groupOrder.push(label); }
+    grouped[label].push(p);
   }
 
-  // Suggested users (people at events you are going to, not already friends)
-  const suggestedUsers: SuggestedUser[] = [];
-  const { data: myGoing } = await supabase
-    .from("event_interest")
-    .select("event_id")
-    .eq("user_id", user.id)
-    .eq("status", "going");
-
-  const myEventIds = (myGoing || []).map((r) => r.event_id);
-  if (myEventIds.length > 0) {
-    const { data: othersGoing } = await supabase
-      .from("event_interest")
-      .select("user_id, event_id")
-      .in("event_id", myEventIds)
-      .eq("status", "going")
-      .neq("user_id", user.id);
-
-    const sharedCount: Record<string, number> = {};
-    for (const row of othersGoing || []) {
-      if (friendIds.includes(row.user_id)) continue;
-      sharedCount[row.user_id] = (sharedCount[row.user_id] || 0) + 1;
-    }
-
-    const candidateIds = Object.keys(sharedCount)
-      .sort((a, b) => sharedCount[b] - sharedCount[a])
-      .slice(0, 3);
-
-    if (candidateIds.length > 0) {
-      const { data: candidateProfiles } = await supabase
-        .from("profiles")
-        .select("id, full_name, username")
-        .in("id", candidateIds);
-
-      for (const c of candidateProfiles || []) {
-        suggestedUsers.push({
-          id: c.id,
-          name: c.full_name || c.username || "Someone",
-          username: c.username,
-          sharedEvents: sharedCount[c.id],
-        });
-      }
-    }
-  }
+  const fmtTime = (iso: string) =>
+    new Date(iso).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -301,127 +132,126 @@ export default async function FeedPage() {
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />
         </div>
-        <div className="col-span-12 lg:col-span-6">
-      <h1
-        className="text-5xl font-bold uppercase mb-8"
-        style={{ fontFamily: "var(--font-antonio)" }}
-      >
-        Feed
-      </h1>
 
-      {shown.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-12 text-center mb-12">
-          <p className="text-gray-600 mb-4">No activity from your friends yet.</p>
-          <Link href="/search" className="inline-block px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800">
-            Find events
-          </Link>
-        </div>
-      ) : (
-        <div className="mb-12">
-          {groupOrder.map((label) => (
-            <section key={label} className="mb-8">
-              <h2
-                className="text-xl font-bold uppercase mb-3 text-gray-500"
-                style={{ fontFamily: "var(--font-antonio)" }}
-              >
-                {label}
-              </h2>
-              <ul className="space-y-4">
-                {groups[label].map((a) => {
-                  const initials = a.user_name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-                  return (
-                    <li key={a.id} className="rounded-2xl border border-gray-200 overflow-hidden">
-                      <div className="flex items-start gap-4 p-4">
-                        <Link
-                          href={a.user_username ? "/u/" + a.user_username : "#"}
-                          className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold flex-shrink-0"
+        <div className="col-span-12 lg:col-span-6">
+          <h1
+            className="text-5xl font-bold uppercase mb-8"
+            style={{ fontFamily: "var(--font-antonio)" }}
+          >
+            Feed
+          </h1>
+
+          <PostComposer userId={user.id} />
+
+          {posts.length === 0 ? (
+            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
+              <p className="text-gray-600 mb-4">No posts yet.</p>
+            </div>
+          ) : (
+            <div>
+              {groupOrder.map((label) => (
+                <section key={label} className="mb-8">
+                  <h2
+                    className="text-xl font-bold uppercase mb-3 text-gray-500"
+                    style={{ fontFamily: "var(--font-antonio)" }}
+                  >
+                    {label}
+                  </h2>
+                  <div className="space-y-3">
+                    {grouped[label].map((p) => {
+                      const author = authorById[p.author_id];
+                      const name = author?.name || "Someone";
+                      const initials = name
+                        .split(" ")
+                        .map((w) => w[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase();
+                      const postComments = commentsByPost[p.id] || [];
+                      return (
+                        <div
+                          key={p.id}
+                          className="bg-white border border-gray-200 rounded-2xl overflow-hidden"
                         >
-                          {initials}
-                        </Link>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm">
-                            <Link href={a.user_username ? "/u/" + a.user_username : "#"} className="font-medium hover:underline">
-                              {a.user_name}
-                            </Link>
-                            {a.type === "going" && <span className="text-gray-600"> is going to </span>}
-                            {a.type === "interested" && <span className="text-gray-600"> is interested in </span>}
-                            {a.type === "review" && <span className="text-gray-600"> reviewed </span>}
-                            {a.type === "new_event" && <span className="text-gray-600"> announced a new event </span>}
-                            {a.type === "follow" && <span className="text-gray-600"> started following </span>}
-                            {a.event_id && (
-                              <Link href={"/event/" + a.event_id} className="font-medium hover:underline">
-                                {a.event_title}
-                              </Link>
-                            )}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-0.5">{formatDate(a.event_date)}</p>
-                          {a.type === "review" && a.rating !== undefined && (
-                            <div className="mt-2">
-                              <div className="flex items-center gap-1">
-                                {[1, 2, 3, 4, 5].map((n) => (
-                                  <span key={n} className={n <= (a.rating || 0) ? "text-yellow-500" : "text-gray-300"}>
-                                    {"\u2605"}
-                                  </span>
-                                ))}
+                          <div className="p-4">
+                            <div className="flex items-center gap-3 mb-3">
+                              {author?.avatar ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  src={author.avatar}
+                                  alt={name}
+                                  className="w-10 h-10 rounded-full object-cover shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold shrink-0">
+                                  {initials}
+                                </div>
+                              )}
+                              <div className="min-w-0 flex-1">
+                                <p className="text-sm font-medium truncate">{name}</p>
+                                <p className="text-xs text-gray-500">{fmtTime(p.created_at)}</p>
                               </div>
-                              {a.comment && <p className="text-sm text-gray-700 mt-1">{a.comment}</p>}
+                            </div>
+                            <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
+                              {p.body}
+                            </p>
+                            <div className="flex gap-6 mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500">
+                              <span>{p.like_count} likes</span>
+                              <span>{p.comment_count} comments</span>
+                              <span>{p.share_count} shares</span>
+                            </div>
+                          </div>
+
+                          {postComments.length > 0 && (
+                            <div className="bg-gray-50 border-t border-gray-100 px-4 py-3 space-y-2">
+                              {postComments.slice(0, 3).map((c) => {
+                                const cAuthor = authorById[c.author_id];
+                                const cName = cAuthor?.name || "Someone";
+                                const cInitials = cName
+                                  .split(" ")
+                                  .map((w) => w[0])
+                                  .join("")
+                                  .slice(0, 2)
+                                  .toUpperCase();
+                                return (
+                                  <div key={c.id} className="flex items-start gap-2">
+                                    {cAuthor?.avatar ? (
+                                      // eslint-disable-next-line @next/next/no-img-element
+                                      <img
+                                        src={cAuthor.avatar}
+                                        alt={cName}
+                                        className="w-6 h-6 rounded-full object-cover shrink-0 mt-0.5"
+                                      />
+                                    ) : (
+                                      <div className="w-6 h-6 rounded-full bg-gray-400 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
+                                        {cInitials}
+                                      </div>
+                                    )}
+                                    <p className="text-xs text-gray-700">
+                                      <span className="font-medium">{cName}</span> {c.body}
+                                    </p>
+                                  </div>
+                                );
+                              })}
                             </div>
                           )}
                         </div>
-                        {a.event_image && (
-                          <Link href={a.event_id ? "/event/" + a.event_id : "#"} className="flex-shrink-0">
-                            <img src={a.event_image} alt={a.event_title || ""} className="w-20 h-20 rounded-xl object-cover bg-gray-100" />
-                          </Link>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          ))}
-        </div>
-      )}
-
-      {suggestedUsers.length > 0 && (
-        <section className="mb-12">
-          <h2
-            className="text-xl font-bold uppercase mb-4 text-gray-500"
-            style={{ fontFamily: "var(--font-antonio)" }}
-          >
-            People at your events
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {suggestedUsers.map((s) => {
-              const initials = s.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-              return (
-                <div key={s.id} className="rounded-2xl border border-gray-200 p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
-                    {initials}
+                      );
+                    })}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <Link href={s.username ? "/u/" + s.username : "#"} className="font-medium hover:underline truncate block">
-                      {s.name}
-                    </Link>
-                    <p className="text-xs text-gray-500">
-                      {s.sharedEvents} shared {s.sharedEvents === 1 ? "event" : "events"}
-                    </p>
-                  </div>
-                  {s.username && (
-                    <Link href={"/u/" + s.username} className="text-xs font-medium underline underline-offset-4 flex-shrink-0">
-                      View
-                    </Link>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
+                </section>
+              ))}
             </div>
-          <div className="col-span-12 lg:col-span-3">
-            <RightSidebar trending={["#house","#techno","#london","#dnb"]} forYou={[{id:"1",title:"Folk & Whisky Festival",start_date:"2026-12-07",hero_image:null},{id:"2",title:"Basement 44 Warehouse Night",start_date:"2026-11-15",hero_image:null},{id:"3",title:"Voice Records Showcase",start_date:"2026-11-22",hero_image:null}]} peopleToFollow={[{id:"1",username:"bob",full_name:"Bob Smith"},{id:"2",username:"alice",full_name:"Alice Jones"},{id:"3",username:"charlie",full_name:"Charlie Brown"}]} />
-          </div>
+          )}
+        </div>
+
+        <div className="col-span-12 lg:col-span-3">
+          <RightSidebar
+            trending={["#house", "#techno", "#london", "#dnb"]}
+            forYou={forYou}
+            peopleToFollow={peopleToFollow}
+          />
+        </div>
       </div>
     </div>
   );

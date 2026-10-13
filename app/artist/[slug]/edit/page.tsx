@@ -1,4 +1,4 @@
-﻿import { redirect, notFound } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import ArtistEditForm from "@/components/artist/ArtistEditForm";
