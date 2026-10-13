@@ -1,11 +1,14 @@
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { Sidebar } from "@/components/sidebar/Sidebar";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Settings",
+  description: "Manage your account.",
 };
 
 export default async function SettingsPage() {
@@ -13,26 +16,71 @@ export default async function SettingsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const items = [
-    { href: "/settings/notifications", label: "Notifications", desc: "Choose what you want to hear about." },
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id, username, full_name, role, is_public")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const sections = [
+    {
+      href: "/settings/notifications",
+      title: "Notifications",
+      description: "Choose what you get notified about",
+    },
+    {
+      href: "/profile/edit",
+      title: "Profile",
+      description: "Your name, avatar, bio, links",
+    },
+    {
+      href: "/settings/payments",
+      title: "Payments",
+      description: "Connect Stripe to receive payouts",
+    },
+    {
+      href: "/settings/privacy",
+      title: "Privacy",
+      description: "Control who can see your profile",
+    },
+    {
+      href: "/settings/account",
+      title: "Account",
+      description: "Email, password, and account deletion",
+    },
   ];
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
-      <h1 className="text-3xl font-bold">Settings</h1>
-      <p className="text-gray-600 mt-2 mb-8">Manage your account and preferences.</p>
+    <div className="bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
+        <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
+          <Sidebar />
+        </nav>
 
-      <div className="divide-y divide-gray-100 border-t border-b border-gray-100">
-        {items.map((it) => (
-          <Link
-            key={it.href}
-            href={it.href}
-            className="block py-4 hover:bg-gray-50 -mx-4 px-4 transition-colors"
-          >
-            <p className="font-medium">{it.label}</p>
-            <p className="text-sm text-gray-500 mt-0.5">{it.desc}</p>
-          </Link>
-        ))}
+        <main className="col-span-12 lg:col-span-9 space-y-6">
+          <header>
+            <h1 className="text-4xl font-bold uppercase mb-2" style={{ fontFamily: "var(--font-antonio)" }}>
+              Settings
+            </h1>
+            <p className="text-gray-600">
+              Signed in as {profile?.username || user.email}
+            </p>
+          </header>
+
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {sections.map((s) => (
+              <li key={s.href}>
+                <Link
+                  href={s.href}
+                  className="block bg-white border border-gray-200 rounded-2xl p-5 hover:shadow-md hover:border-gray-300 transition"
+                >
+                  <p className="font-bold text-base">{s.title}</p>
+                  <p className="text-sm text-gray-500 mt-1">{s.description}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </main>
       </div>
     </div>
   );
