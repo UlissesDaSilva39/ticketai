@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -38,6 +38,7 @@ export default function PostComposer({ userId }: { userId: string }) {
         value={body}
         onChange={(e) => setBody(e.target.value)}
         placeholder="What is happening?"
+        aria-label="What is happening?"
         rows={3}
         className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:border-black focus:outline-none resize-none text-black placeholder-gray-400"
       />

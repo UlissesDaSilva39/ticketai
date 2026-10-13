@@ -129,11 +129,11 @@ export default async function FeedPage() {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
-        <div className="col-span-12 lg:col-span-3">
+        <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
           <Sidebar />
-        </div>
+        </nav>
 
-        <div className="col-span-12 lg:col-span-6">
+        <main className="col-span-12 lg:col-span-6">
           <h1
             className="text-5xl font-bold uppercase mb-8"
             style={{ fontFamily: "var(--font-antonio)" }}
@@ -243,15 +243,15 @@ export default async function FeedPage() {
               ))}
             </div>
           )}
-        </div>
+        </main>
 
-        <div className="col-span-12 lg:col-span-3">
+        <aside aria-label="Suggestions" className="col-span-12 lg:col-span-3">
           <RightSidebar
             trending={["#house", "#techno", "#london", "#dnb"]}
             forYou={forYou}
             peopleToFollow={peopleToFollow}
           />
-        </div>
+        </aside>
       </div>
     </div>
   );
