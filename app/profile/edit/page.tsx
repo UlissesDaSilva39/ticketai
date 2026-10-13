@@ -1,10 +1,9 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
-import EditProfileForm from "./EditProfileForm";
+import EditProfileForm from "@/components/profile/EditProfileForm";
 
 export const dynamic = "force-dynamic";
-
-export const metadata = { title: "Edit profile" };
 
 export default async function EditProfilePage() {
   const supabase = await createServerSupabase();
@@ -13,39 +12,29 @@ export default async function EditProfilePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, bio, city, website, instagram, twitter, avatar_url, cover_image, genre, label, spotify, youtube, soundcloud, role")
+    .select("id, username, full_name, avatar_url, cover_image, bio, city, genre, role, website, instagram, twitter, spotify, youtube, soundcloud, is_public")
     .eq("id", user.id)
     .maybeSingle();
 
-  const initial = {
-    full_name: profile?.full_name ?? null,
-    bio: profile?.bio ?? null,
-    city: profile?.city ?? null,
-    website: profile?.website ?? null,
-    instagram: profile?.instagram ?? null,
-    twitter: profile?.twitter ?? null,
-    avatar_url: profile?.avatar_url ?? null,
-    cover_image: profile?.cover_image ?? null,
-    genre: profile?.genre ?? null,
-    label: profile?.label ?? null,
-    spotify: profile?.spotify ?? null,
-    youtube: profile?.youtube ?? null,
-    soundcloud: profile?.soundcloud ?? null,
-    role: profile?.role ?? null,
-  };
+  if (!profile) {
+    await supabase.from("profiles").insert({ id: user.id, is_public: true });
+    redirect("/profile/edit");
+  }
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
-      <a href="/" className="text-sm text-gray-500 hover:underline">
-        Back to feed
-      </a>
-      <h1
-        className="text-4xl font-bold uppercase mt-4 mb-8"
-        style={{ fontFamily: "var(--font-antonio)" }}
-      >
-        Edit profile
-      </h1>
-      <EditProfileForm initial={initial} />
+    <div className="bg-gray-50 min-h-screen">
+      <div className="mx-auto max-w-2xl px-6 py-10">
+        <Link href="/profile" className="text-sm text-gray-500 hover:text-black mb-4 inline-block">
+          &larr; Back to profile
+        </Link>
+        <h1
+          className="text-3xl font-bold uppercase mb-6"
+          style={{ fontFamily: "var(--font-antonio)" }}
+        >
+          Edit profile
+        </h1>
+        <EditProfileForm profile={profile} />
+      </div>
     </div>
   );
 }
