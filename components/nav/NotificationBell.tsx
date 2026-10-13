@@ -1,18 +1,24 @@
-﻿import { Bell } from 'lucide-react';
+﻿"use client";
 
-export function NotificationBell({ count }: { count: number }) {
+import Link from "next/link";
+import { Bell } from "lucide-react";
+
+export function NotificationBell({ count = 0 }: { count?: number }) {
   return (
-    <a
+    <Link
       href="/notifications"
-      className="relative inline-flex h-10 w-10 items-center justify-center rounded-full hover:bg-gray-100"
-      aria-label="Notifications"
+      aria-label={count > 0 ? count + " unread notifications" : "Notifications"}
+      className="relative inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition"
     >
-      <Bell className="h-5 w-5 text-gray-700" />
-      {count > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-[20px] place-items-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
-          {count}
+      <Bell size={20} aria-hidden="true" />
+      {count > 0 ? (
+        <span
+          className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center"
+          aria-hidden="true"
+        >
+          {count > 99 ? "99+" : count}
         </span>
-      )}
-    </a>
+      ) : null}
+    </Link>
   );
 }

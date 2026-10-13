@@ -1,71 +1,92 @@
+import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
-import MessageThread from "@/components/MessageThread";
+import MessageThread from "@/components/messages/MessageThread";
 
+type Props = { params: Promise<{ id: string }> };
+
+export const metadata: Metadata = { title: "Conversation" };
 export const dynamic = "force-dynamic";
 
-export default async function ConversationPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ConversationPage({ params }: Props) {
   const { id } = await params;
   const supabase = await createServerSupabase();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
 
-  const { data: conversation } = await supabase
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login?next=/messages/" + id);
+
+  const { data: conv } = await supabase
     .from("conversations")
     .select("id, participant_a, participant_b")
     .eq("id", id)
     .maybeSingle();
 
-  if (!conversation) return notFound();
-  if (conversation.participant_a !== user.id && conversation.participant_b !== user.id) {
-    return notFound();
-  }
+  if (!conv) notFound();
+  if (conv.participant_a !== user.id && conv.participant_b !== user.id) notFound();
 
-  const otherId = conversation.participant_a === user.id ? conversation.participant_b : conversation.participant_a;
+  const otherId =
+    conv.participant_a === user.id ? conv.participant_b : conv.participant_a;
 
   const { data: other } = await supabase
     .from("profiles")
-    .select("id, full_name, username")
+    .select("full_name, username, avatar_url")
     .eq("id", otherId)
     .maybeSingle();
 
+  const otherName = other?.full_name || other?.username || "User";
+
   const { data: messages } = await supabase
     .from("messages")
-    .select("id, sender_id, body, created_at, attachment_url, attachment_type")
+    .select("id, conversation_id, sender_id, body, read_at, created_at")
     .eq("conversation_id", id)
-    .order("created_at", { ascending: true });
-
-  const otherName = other?.full_name || other?.username || "Someone";
+    .order("created_at", { ascending: true })
+    .limit(500);
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-8">
-      <Link href="/messages" className="text-sm text-gray-500 hover:underline">
-        ← Back to messages
-      </Link>
-
-      <div className="mt-4 mb-6 flex items-center gap-3">
-        <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-bold">
-          {otherName.charAt(0).toUpperCase()}
-        </div>
-        <div>
-          <Link href={other?.username ? "/u/" + other.username : "#"} className="font-medium text-lg hover:underline">
-            {otherName}
+    <div className="bg-gray-50 min-h-screen">
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="flex items-center gap-3 mb-6">
+          <Link
+            href="/messages"
+            className="text-sm text-gray-500 hover:text-black"
+            data-testid="back-to-inbox"
+          >
+            ← Inbox
           </Link>
-          {other?.username && <p className="text-sm text-gray-500">@{other.username}</p>}
         </div>
-      </div>
+        <div className="flex items-center gap-3 mb-6">
+          {other?.avatar_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={other.avatar_url}
+              alt={otherName}
+              className="h-12 w-12 rounded-full object-cover"
+            />
+          ) : (
+            <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-lg font-bold text-gray-600">
+              {otherName.slice(0, 1).toUpperCase()}
+            </div>
+          )}
+          <div>
+            <h1
+              className="text-2xl font-bold tracking-tight"
+              style={{ fontFamily: "var(--font-antonio)" }}
+              data-testid="thread-heading"
+            >
+              {otherName}
+            </h1>
+            <p className="text-xs text-gray-500">Direct message</p>
+          </div>
+        </div>
 
-      <MessageThread
-        conversationId={id}
-        currentUserId={user.id}
-        otherUserName={otherName}
-        initialMessages={(messages || []) as Array<{ id: string; sender_id: string; body: string; created_at: string }>}
-      />
+        <MessageThread
+          conversationId={id}
+          currentUserId={user.id}
+          otherName={otherName}
+          initialMessages={messages ?? []}
+        />
+      </div>
     </div>
   );
 }
