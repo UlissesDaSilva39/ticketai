@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import PostActions from "./PostActions";
 
@@ -70,8 +70,8 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
           postId={post.id}
           initialLiked={liked}
           initialLikes={post.like_count}
-          comments={post.comment_count}
-          shares={post.share_count}
+          initialComments={post.comment_count}
+          initialShares={post.share_count}
         />
       </div>
 
