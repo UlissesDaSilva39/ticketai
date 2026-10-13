@@ -1,15 +1,11 @@
-import { CityEventsPage, cityMetadata, type CityMeta } from "@/components/CityPage";
+﻿import type { Metadata } from "next";
+import CityPage from "@/components/city/CityPage";
 
-const city: CityMeta = {
-  slug: "paris",
-  name: "Paris",
-  region: "France",
-  blurb:
-    "From Le Marais to Montmartre — Paris's best nightlife, concerts, and cultural events.",
+export const metadata: Metadata = {
+  title: "Events in Paris",
+  description: "Discover live music events, venues, and artists in Paris.",
 };
 
-export const metadata = cityMetadata(city);
-
 export default function Page() {
-  return <CityEventsPage city={city} />;
+  return <CityPage city="Paris" slug="paris" />;
 }

@@ -1,15 +1,11 @@
-import { CityEventsPage, cityMetadata, type CityMeta } from "@/components/CityPage";
+﻿import type { Metadata } from "next";
+import CityPage from "@/components/city/CityPage";
 
-const city: CityMeta = {
-  slug: "london",
-  name: "London",
-  region: "United Kingdom",
-  blurb:
-    "From warehouse raves in Hackney to jazz nights in Soho — find every London event on TicketAI.",
+export const metadata: Metadata = {
+  title: "Events in London",
+  description: "Discover live music events, venues, and artists in London.",
 };
 
-export const metadata = cityMetadata(city);
-
 export default function Page() {
-  return <CityEventsPage city={city} />;
+  return <CityPage city="London" slug="london" />;
 }

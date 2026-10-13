@@ -1,15 +1,11 @@
-import { CityEventsPage, cityMetadata, type CityMeta } from "@/components/CityPage";
+﻿import type { Metadata } from "next";
+import CityPage from "@/components/city/CityPage";
 
-const city: CityMeta = {
-  slug: "brisbane",
-  name: "Brisbane",
-  region: "Australia",
-  blurb:
-    "River-side venues, live music, and the best of Brisbane's nightlife.",
+export const metadata: Metadata = {
+  title: "Events in Brisbane",
+  description: "Discover live music events, venues, and artists in Brisbane.",
 };
 
-export const metadata = cityMetadata(city);
-
 export default function Page() {
-  return <CityEventsPage city={city} />;
+  return <CityPage city="Brisbane" slug="brisbane" />;
 }

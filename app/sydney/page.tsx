@@ -1,15 +1,11 @@
-import { CityEventsPage, cityMetadata, type CityMeta } from "@/components/CityPage";
+﻿import type { Metadata } from "next";
+import CityPage from "@/components/city/CityPage";
 
-const city: CityMeta = {
-  slug: "sydney",
-  name: "Sydney",
-  region: "Australia",
-  blurb:
-    "Harbour views, beach clubs, and the best of Sydney's music and nightlife scene.",
+export const metadata: Metadata = {
+  title: "Events in Sydney",
+  description: "Discover live music events, venues, and artists in Sydney.",
 };
 
-export const metadata = cityMetadata(city);
-
 export default function Page() {
-  return <CityEventsPage city={city} />;
+  return <CityPage city="Sydney" slug="sydney" />;
 }

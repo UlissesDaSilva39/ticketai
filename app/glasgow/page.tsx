@@ -1,15 +1,11 @@
-import { CityEventsPage, cityMetadata, type CityMeta } from "@/components/CityPage";
+﻿import type { Metadata } from "next";
+import CityPage from "@/components/city/CityPage";
 
-const city: CityMeta = {
-  slug: "glasgow",
-  name: "Glasgow",
-  region: "Scotland",
-  blurb:
-    "From the Sub Club to King Tut's — Glasgow's legendary nightlife and live music scene.",
+export const metadata: Metadata = {
+  title: "Events in Glasgow",
+  description: "Discover live music events, venues, and artists in Glasgow.",
 };
 
-export const metadata = cityMetadata(city);
-
 export default function Page() {
-  return <CityEventsPage city={city} />;
+  return <CityPage city="Glasgow" slug="glasgow" />;
 }
