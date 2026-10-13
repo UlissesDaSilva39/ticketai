@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { createServerSupabase } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -17,7 +17,7 @@ export async function toggleLike(postId: string) {
 
   if (existing) {
     await supabase.from("post_likes").delete().eq("id", existing.id);
-    await supabase.rpc("decrement_like_count", { p_post_id: postId }).catch(() => {});
+    await supabase.from("posts").select("like_count").eq("id", postId).maybeSingle();
     revalidatePath("/home");
     return { liked: false };
   }
