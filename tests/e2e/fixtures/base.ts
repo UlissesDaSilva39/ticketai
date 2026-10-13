@@ -1,10 +1,21 @@
-import { test as base, expect } from "@playwright/test";
-export const test = base.extend<{ consoleErrors: string[] }>({
+﻿import { test as base, expect } from "@playwright/test";
+
+export const test = base.extend<{
+  consoleErrors: string[];
+  pageErrors: string[];
+}>({
   consoleErrors: async ({ page }, use) => {
     const errors: string[] = [];
-    page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
-    page.on("pageerror", (e) => errors.push(e.message));
+    page.on("console", (msg) => {
+      if (msg.type() === "error") errors.push(msg.text());
+    });
+    await use(errors);
+  },
+  pageErrors: async ({ page }, use) => {
+    const errors: string[] = [];
+    page.on("pageerror", (err) => errors.push(err.message));
     await use(errors);
   },
 });
+
 export { expect };
