@@ -1,7 +1,6 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { UserPlus, UserCheck } from "lucide-react";
 
@@ -25,7 +24,7 @@ export default function ArtistFollowButton({
 
   async function toggle() {
     if (!signedIn) {
-      router.push(`/login?next=/artist/${artistSlug}`);
+      router.push("/login?next=/artist/" + artistSlug);
       return;
     }
 
@@ -35,14 +34,13 @@ export default function ArtistFollowButton({
     setCount((n) => Math.max(n + (next ? 1 : -1), 0));
 
     try {
-      const res = await fetch(`/api/artists/${artistSlug}/follow`, {
+      const res = await fetch("/api/artists/" + artistSlug + "/follow", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ following: next }),
       });
 
       if (!res.ok) {
-        // Roll back on failure
         setFollowing(!next);
         setCount((n) => Math.max(n + (next ? -1 : 1), 0));
       }
@@ -56,8 +54,11 @@ export default function ArtistFollowButton({
 
   return (
     <button
+      type="button"
       onClick={toggle}
       disabled={busy}
+      aria-pressed={following}
+      aria-label={following ? "Unfollow, " + count + " followers" : "Follow, " + count + " followers"}
       className={
         "inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full transition disabled:opacity-50 " +
         (following

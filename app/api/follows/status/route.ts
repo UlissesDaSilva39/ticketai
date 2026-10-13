@@ -3,18 +3,12 @@ import { createServerSupabase } from "@/lib/supabase/server";
 
 export async function GET(req: NextRequest) {
   const supabase = await createServerSupabase();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const targetType = req.nextUrl.searchParams.get("targetType");
-  const targetId = req.nextUrl.searchParams.get("targetId");
+  const url = new URL(req.url);
+  const targetType = url.searchParams.get("targetType");
+  const targetId = url.searchParams.get("targetId");
 
   if (!targetType || !targetId) {
-    return NextResponse.json(
-      { error: "targetType and targetId required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "targetType and targetId required" }, { status: 400 });
   }
 
   const { count } = await supabase
@@ -22,6 +16,8 @@ export async function GET(req: NextRequest) {
     .select("*", { count: "exact", head: true })
     .eq("target_type", targetType)
     .eq("target_id", targetId);
+
+  const { data: { user } } = await supabase.auth.getUser();
 
   let following = false;
   if (user) {
