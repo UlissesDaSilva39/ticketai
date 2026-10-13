@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Heart, MessageCircle, Share2 } from "lucide-react";
-import PostActions from "./PostActions";
+﻿import PostActions from "./PostActions";
+import CommentThread from "./CommentThread";
 
 export type PostCardProps = {
   post: {
@@ -25,6 +24,7 @@ export type PostCardProps = {
     body: string;
     authorName: string;
     authorAvatar: string | null;
+    createdAt?: string;
   }>;
   fmtTime: (iso: string) => string;
 };
@@ -32,6 +32,14 @@ export type PostCardProps = {
 export default function PostCard({ post, author, liked, comments, fmtTime }: PostCardProps) {
   const name = author?.name || "Someone";
   const initials = name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+
+  const threadComments = comments.map((c) => ({
+    id: c.id,
+    body: c.body,
+    authorName: c.authorName,
+    authorAvatar: c.authorAvatar,
+    createdAt: c.createdAt || post.created_at,
+  }));
 
   return (
     <article data-testid="post-card" className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
@@ -51,7 +59,7 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
           )}
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium truncate">{name}</p>
-            <p className="text-xs text-gray-500">{fmtTime(post.created_at)}</p>
+            <p className="text-xs text-gray-500" title={post.created_at}>{fmtTime(post.created_at)}</p>
           </div>
         </div>
 
@@ -75,26 +83,8 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
         />
       </div>
 
-      {comments.length > 0 ? (
-        <div className="bg-gray-50 border-t border-gray-100 px-4 py-3 space-y-2">
-          {comments.slice(0, 3).map((c) => (
-            <div key={c.id} className="flex items-start gap-2">
-              {c.authorAvatar ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={c.authorAvatar}
-                  alt={c.authorName}
-                  className="w-6 h-6 rounded-full object-cover shrink-0 mt-0.5"
-                />
-              ) : (
-                <div className="w-6 h-6 rounded-full bg-gray-300 shrink-0 mt-0.5" />
-              )}
-              <p className="text-xs text-gray-700">
-                <span className="font-medium">{c.authorName}</span> {c.body}
-              </p>
-            </div>
-          ))}
-        </div>
+      {threadComments.length > 0 ? (
+        <CommentThread comments={threadComments} />
       ) : null}
     </article>
   );

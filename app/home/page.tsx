@@ -1,10 +1,12 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import RightSidebar from "@/components/feed/RightSidebar";
 import PostComposer from "@/components/feed/PostComposer";
 import PostCard from "@/components/feed/PostCard";
+import FeedTabs from "@/components/feed/FeedTabs";
+import { relativeTime } from "@/lib/format-time";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +49,7 @@ function groupLabel(iso: string): string {
 export default async function FeedPage({
   searchParams,
 }: {
-  searchParams: Promise<{ offset?: string }>;
+  searchParams: Promise<{ offset?: string; tab?: string }>;
 }) {
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
@@ -55,6 +57,7 @@ export default async function FeedPage({
 
   const params = await searchParams;
   const offset = Math.max(0, parseInt(params.offset || "0", 10) || 0);
+  const tab = params.tab === "following" ? "following" : "foryou";
   const fetchLimit = offset + PAGE_SIZE;
 
   const { data: postsRaw } = await supabase
@@ -101,6 +104,20 @@ export default async function FeedPage({
     for (const l of userLikes || []) likedSet.add(l.post_id);
   }
 
+  // Following filter — only applies when tab=following
+  let followIds: Set<string> = new Set();
+  if (tab === "following") {
+    const { data: followRows } = await supabase
+      .from("follows")
+      .select("target_id")
+      .eq("follower_id", user.id);
+    followIds = new Set((followRows || []).map((f) => f.target_id));
+  }
+
+  const visiblePosts = tab === "following"
+    ? posts.filter((p) => followIds.has(p.author_id))
+    : posts;
+
   const commentsByPost: Record<string, CommentRow[]> = {};
   for (const c of comments) {
     if (!commentsByPost[c.post_id]) commentsByPost[c.post_id] = [];
@@ -134,19 +151,13 @@ export default async function FeedPage({
 
   const grouped: Record<string, PostRow[]> = {};
   const groupOrder: string[] = [];
-  for (const p of posts) {
+  for (const p of visiblePosts) {
     const label = groupLabel(p.created_at);
     if (!grouped[label]) { grouped[label] = []; groupOrder.push(label); }
     grouped[label].push(p);
   }
 
-  const fmtTime = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  const fmtTime = (iso: string) => relativeTime(iso);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -163,11 +174,17 @@ export default async function FeedPage({
             Feed
           </h1>
 
+          <FeedTabs />
+
           <PostComposer userId={user.id} />
 
-          {posts.length === 0 ? (
+          {visiblePosts.length === 0 ? (
             <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-600 mb-4">No posts yet.</p>
+              <p className="text-gray-600 mb-4">
+                {tab === "following"
+                  ? "You are not following anyone yet, or they have not posted."
+                  : "No posts yet. Be the first to post!"}
+              </p>
             </div>
           ) : (
             <div>
@@ -187,6 +204,7 @@ export default async function FeedPage({
                         body: c.body,
                         authorName: authorById[c.author_id]?.name || "Someone",
                         authorAvatar: authorById[c.author_id]?.avatar || null,
+                        createdAt: c.created_at,
                       }));
                       return (
                         <PostCard

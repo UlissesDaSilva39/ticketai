@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileTabs from "@/components/profile/ProfileTabs";
 import PostCard from "@/components/feed/PostCard";
+import { relativeTime } from "@/lib/format-time";
 
 export const dynamic = "force-dynamic";
 
@@ -81,13 +82,7 @@ export default async function ProfilePage() {
     });
   }
 
-  const fmtTime = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  const fmtTime = (iso: string) => relativeTime(iso);
 
   const postsTab = (
     <div className="space-y-4">

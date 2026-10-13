@@ -1,37 +1,39 @@
-"use client";
+﻿"use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useSearchParams, usePathname } from "next/navigation";
 
 export default function FeedTabs() {
-  const router = useRouter();
   const params = useSearchParams();
-  const current = params.get("tab") === "following" ? "following" : "for-you";
+  const pathname = usePathname();
+  const tab = params.get("tab") || "foryou";
 
-  const go = (tab: "for-you" | "following") => {
-    if (tab === "for-you") router.push("/");
-    else router.push("/?tab=following");
-  };
+  const tabs = [
+    { key: "foryou", label: "For You", href: pathname },
+    { key: "following", label: "Following", href: pathname + "?tab=following" },
+  ];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-1 flex gap-1">
-      <button
-        onClick={() => go("for-you")}
-        className={
-          "flex-1 py-2 text-sm font-medium rounded-xl transition " +
-          (current === "for-you" ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100")
-        }
-      >
-        For You
-      </button>
-      <button
-        onClick={() => go("following")}
-        className={
-          "flex-1 py-2 text-sm font-medium rounded-xl transition " +
-          (current === "following" ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100")
-        }
-      >
-        Following
-      </button>
+    <div role="tablist" className="flex gap-2 border-b border-gray-200 mb-6">
+      {tabs.map((t) => {
+        const active = t.key === tab;
+        return (
+          <Link
+            key={t.key}
+            href={t.href}
+            role="tab"
+            aria-selected={active}
+            className={
+              "px-4 py-3 text-sm font-medium -mb-px border-b-2 transition-colors " +
+              (active
+                ? "border-black text-black"
+                : "border-transparent text-gray-500 hover:text-black")
+            }
+          >
+            {t.label}
+          </Link>
+        );
+      })}
     </div>
   );
 }
