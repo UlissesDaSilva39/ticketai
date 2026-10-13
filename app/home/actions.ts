@@ -66,3 +66,20 @@ export async function hasLiked(postId: string) {
 
   return !!data;
 }
+
+export async function incrementShare(postId: string) {
+  const supabase = await createServerSupabase();
+  const { data: post } = await supabase
+    .from("posts")
+    .select("share_count")
+    .eq("id", postId)
+    .maybeSingle();
+  if (!post) return { error: "Post not found" };
+  const next = (post.share_count || 0) + 1;
+  const { error } = await supabase
+    .from("posts")
+    .update({ share_count: next })
+    .eq("id", postId);
+  if (error) return { error: error.message };
+  return { ok: true, share_count: next };
+}
