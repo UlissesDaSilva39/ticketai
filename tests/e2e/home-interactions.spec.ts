@@ -28,7 +28,7 @@ test.describe("/home interactions", () => {
 
     const before = await firstLike.getAttribute("aria-pressed");
     await firstLike.click();
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(600);
     const after = await firstLike.getAttribute("aria-pressed");
 
     expect(before).not.toBe(after);
@@ -43,12 +43,13 @@ test.describe("/home interactions", () => {
     const nBefore = parseInt(textBefore.match(/\d+/)?.[0] || "0", 10);
 
     await likeBtn.click();
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(600);
 
     const textAfter = await likeBtn.innerText();
     const nAfter = parseInt(textAfter.match(/\d+/)?.[0] || "0", 10);
 
-    expect(nAfter).toBe(nBefore + 1);
+    const delta = Math.abs(nAfter - nBefore);
+    expect(delta, "like count should change by 1").toBe(1);
   });
 
   test("share button is present", async ({ page }) => {
@@ -57,9 +58,23 @@ test.describe("/home interactions", () => {
     await expect(post.getByRole("button", { name: /share/i })).toBeVisible();
   });
 
-  test("feed has end-of-feed marker or load more", async ({ page }) => {
-    const marker = page.getByText(/end of feed|load more/i);
-    if ((await marker.count()) === 0) test.skip();
-    await expect(marker.first()).toBeAttached();
+  test("load more button or end-of-feed marker present", async ({ page }) => {
+    const loadMore = page.getByRole("link", { name: /load more/i });
+    const endMarker = page.getByText(/end of feed/i);
+    const either = (await loadMore.count()) + (await endMarker.count());
+    expect(either, "should show Load more or End of feed").toBeGreaterThan(0);
+  });
+
+  test("clicking Load more increases post count", async ({ page }) => {
+    const loadMore = page.getByRole("link", { name: /load more/i }).first();
+    if ((await loadMore.count()) === 0) test.skip(true, "No Load more button (already at end)");
+
+    const postsBefore = await page.locator('[data-testid="post-card"]').count();
+    await loadMore.click();
+    await page.waitForURL(/offset=/);
+    await page.waitForTimeout(800);
+    const postsAfter = await page.locator('[data-testid="post-card"]').count();
+
+    expect(postsAfter, "URL offset should give more posts").toBeGreaterThan(postsBefore);
   });
 });

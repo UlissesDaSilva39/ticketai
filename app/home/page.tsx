@@ -1,4 +1,5 @@
 ﻿import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import RightSidebar from "@/components/feed/RightSidebar";
@@ -6,6 +7,8 @@ import PostComposer from "@/components/feed/PostComposer";
 import PostCard from "@/components/feed/PostCard";
 
 export const dynamic = "force-dynamic";
+
+const PAGE_SIZE = 30;
 
 type PostRow = {
   id: string;
@@ -41,17 +44,27 @@ function groupLabel(iso: string): string {
   return "Earlier";
 }
 
-export default async function FeedPage() {
+export default async function FeedPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ offset?: string }>;
+}) {
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
+
+  const params = await searchParams;
+  const offset = Math.max(0, parseInt(params.offset || "0", 10) || 0);
+  const fetchLimit = offset + PAGE_SIZE;
 
   const { data: postsRaw } = await supabase
     .from("posts")
     .select("id, body, author_id, like_count, comment_count, share_count, created_at, image_url, audio_url")
     .order("created_at", { ascending: false })
-    .limit(30);
+    .limit(fetchLimit);
   const posts: PostRow[] = postsRaw || [];
+  const hasMore = posts.length >= fetchLimit;
+  const nextOffset = offset + PAGE_SIZE;
 
   const postIds = posts.map((p) => p.id);
   const { data: commentsRaw } = postIds.length
@@ -78,7 +91,6 @@ export default async function FeedPage() {
     };
   }
 
-  // Liked state for current user
   const likedSet = new Set<string>();
   if (user && postIds.length > 0) {
     const { data: userLikes } = await supabase
@@ -190,6 +202,20 @@ export default async function FeedPage() {
                   </div>
                 </section>
               ))}
+
+              <div id="feed-bottom" className="pt-4 pb-8 flex justify-center">
+                {hasMore ? (
+                  <Link
+                    href={"/home?offset=" + nextOffset + "#feed-bottom"}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition"
+                    aria-label="Load more posts"
+                  >
+                    Load more
+                  </Link>
+                ) : (
+                  <p className="text-xs text-gray-400">— End of feed —</p>
+                )}
+              </div>
             </div>
           )}
         </main>
