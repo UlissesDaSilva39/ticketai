@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+﻿# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 /node_modules
@@ -101,3 +101,40 @@ audit*.ps1
 test-results/
 playwright-report/
 playwright/.cache/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+tests/e2e/.auth/
+
+# Backups
+*.bak
+*.before-*
+_backups/
+
+# One-off scripts (diagnostics)
+scripts/*-probe.mjs
+scripts/inspect-*.mjs
+scripts/check-*.mjs
+scripts/survey-*.mjs
+scripts/test-*.mjs
+
+# Env
+.env*.local
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+.next/
+out/
+dist/
+
+# Reports
+pw-*.txt
+pw-*.json
+seed-report.json
+diagnose-output.*

@@ -1,6 +1,42 @@
+﻿# Force LF line endings everywhere
 * text=auto eol=lf
-*.tsx text eol=lf
-*.ts  text eol=lf
+
+# Explicit for code files
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.js   text eol=lf
+*.jsx  text eol=lf
+*.mjs  text eol=lf
+*.cjs  text eol=lf
 *.json text eol=lf
-*.css text eol=lf
-*.md  text eol=lf
+*.css  text eol=lf
+*.scss text eol=lf
+*.md   text eol=lf
+*.sql  text eol=lf
+
+# Windows scripts should keep CRLF
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary files
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
+*.pdf  binary
+*.zip  binary
+
+# Lockfiles — keep as committed
+package-lock.json -diff
+yarn.lock -diff
+pnpm-lock.yaml -diff
+
+# Linguist
+public/** linguist-generated=true
