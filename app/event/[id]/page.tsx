@@ -646,7 +646,7 @@ export default async function EventPage({
                 <WaitlistButton eventId={e.id} />
               ) : (
                 <div className="bg-gray-50 rounded-lg p-8">
-                  <p className="text-sm text-gray-500 mb-2">From</p>
+                  {ticketTypes.length > 1 ? "From" : ""}
 
                   <p
                     className="text-5xl font-bold mb-6"
