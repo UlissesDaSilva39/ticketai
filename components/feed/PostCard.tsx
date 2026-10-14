@@ -12,6 +12,7 @@ export type PostCardProps = {
     share_count: number;
     author_id: string;
     image_url?: string | null;
+    video_url?: string | null;
     audio_url?: string | null;
     audio_title?: string | null;
     audio_artist?: string | null;
@@ -66,7 +67,9 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
           </div>
         </div>
 
-        <p className="text-sm text-gray-900 whitespace-pre-wrap">{post.body}</p>
+        {post.body ? (
+          <p className="text-sm text-gray-900 whitespace-pre-wrap">{post.body}</p>
+        ) : null}
 
         {post.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -74,6 +77,16 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
             src={post.image_url}
             alt=""
             className="mt-3 rounded-xl w-full max-h-96 object-cover"
+          />
+        ) : null}
+
+        {post.video_url ? (
+          <video
+            src={post.video_url}
+            controls
+            playsInline
+            preload="metadata"
+            className="mt-3 rounded-xl w-full max-h-96 bg-black"
           />
         ) : null}
 
