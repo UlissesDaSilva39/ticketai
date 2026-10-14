@@ -1,127 +1,261 @@
-'use client';
+﻿import type { Metadata } from "next";
+import { createServerSupabase } from "@/lib/supabase/server";
+import { Sidebar } from "@/components/sidebar/Sidebar";
+import PersonCard from "@/components/network/PersonCard";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Sidebar } from '@/components/sidebar/Sidebar';
-import { Users, Sparkles } from 'lucide-react';
+export const dynamic = "force-dynamic";
 
-type Profile = {
-  id: string;
-  username: string;
-  display_name: string;
-  role: string;
-  city: string;
-  avatar_url?: string;
+export const metadata: Metadata = {
+  title: "Network",
+  description: "Connect with the people building music on GRID.",
 };
 
-export default function NetworkPage() {
-  const [suggested, setSuggested] = useState<Profile[]>([]);
-  const [reasons, setReasons] = useState<Record<string, string[]>>({});
-  const [loading, setLoading] = useState(true);
+type SearchParams = Promise<{ q?: string; role?: string }>;
 
-  useEffect(() => {
-    fetch('/api/network/suggested')
-      .then((r) => r.json())
-      .then((d) => {
-        setSuggested(d.suggested ?? []);
-        setReasons(d.reasons ?? {});
-      })
-      .finally(() => setLoading(false));
-  }, []);
+type PersonRow = {
+  id: string;
+  username: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  genre: string | null;
+  city: string | null;
+  role: string | null;
+};
+
+const ROLES = [
+  { value: "", label: "Everyone" },
+  { value: "artist", label: "Artists" },
+  { value: "dj", label: "DJs" },
+  { value: "producer", label: "Producers" },
+  { value: "band", label: "Bands" },
+  { value: "manager", label: "Managers" },
+  { value: "promoter", label: "Promoters" },
+  { value: "venue", label: "Venues" },
+  { value: "a_and_r", label: "A&R" },
+];
+
+export default async function NetworkPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  let q = "";
+  let role = "";
+  try {
+    const params = await searchParams;
+    q = (params.q || "").trim();
+    role = (params.role || "").trim();
+  } catch (e) {
+    console.error("[network] searchParams parse error:", e);
+  }
+
+  const supabase = await createServerSupabase();
+
+  let userId: string | null = null;
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    userId = user?.id ?? null;
+  } catch (e) {
+    console.error("[network] auth.getUser error:", e);
+  }
+
+  if (!userId) {
+    return (
+      <div className="bg-gray-50 min-h-screen pb-32">
+        <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
+          <div className="col-span-12 lg:col-span-3">
+            <Sidebar />
+          </div>
+          <main className="col-span-12 lg:col-span-9 min-w-0">
+            <h1
+              className="text-4xl md:text-5xl font-bold uppercase mb-6"
+              style={{ fontFamily: "var(--font-antonio)" }}
+            >
+              Network
+            </h1>
+            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
+              <p className="text-gray-900 font-medium mb-3">
+                Log in to see the network
+              </p>
+              <a
+                href="/login?next=/network"
+                className="inline-block rounded-full bg-black text-white text-sm font-semibold px-6 py-2 hover:bg-gray-800"
+              >
+                Log in
+              </a>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  let people: PersonRow[] = [];
+  let queryError: string | null = null;
+
+  try {
+    const selectCols =
+      "id, username, full_name, avatar_url, bio, genre, city, role";
+
+    let base = supabase
+      .from("profiles")
+      .select(selectCols)
+      .not("username", "is", null)
+      .neq("id", userId);
+
+    if (role) {
+      base = base.eq("role", role);
+    }
+
+    if (q) {
+      const term = "%" + q + "%";
+      base = base.or(
+        "full_name.ilike." +
+          term +
+          ",username.ilike." +
+          term +
+          ",genre.ilike." +
+          term
+      );
+    }
+
+    const { data, error } = await base.limit(60);
+
+    if (error) {
+      queryError = error.message;
+      console.error("[network] profiles query error:", error);
+    } else {
+      people = (data as PersonRow[]) || [];
+    }
+  } catch (e) {
+    queryError = e instanceof Error ? e.message : "Unknown error";
+    console.error("[network] unexpected query error:", e);
+  }
+
+  const ids = people.map((p) => p.id);
+  let followingSet = new Set<string>();
+  if (ids.length > 0) {
+    try {
+      const { data: followRows } = await supabase
+        .from("follows")
+        .select("target_id")
+        .eq("follower_id", userId)
+        .in("target_id", ids);
+      followingSet = new Set(
+        (followRows || []).map((r) => (r as { target_id: string }).target_id)
+      );
+    } catch (e) {
+      console.error("[network] follows lookup error:", e);
+    }
+  }
 
   return (
-    <main className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen pb-32">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />
         </div>
 
-        <div className="col-span-12 lg:col-span-9 flex flex-col gap-4">
-          <div className="rounded-2xl border border-gray-200 bg-white p-6">
-            <h1 className="text-2xl font-bold text-gray-900">Network</h1>
-            <p className="mt-1 text-sm text-gray-500">
+        <main className="col-span-12 lg:col-span-9 min-w-0">
+          <header className="mb-6">
+            <h1
+              className="text-4xl md:text-5xl font-bold uppercase"
+              style={{ fontFamily: "var(--font-antonio)" }}
+            >
+              Network
+            </h1>
+            <p className="text-gray-600 mt-2">
               Connect with the people building music.
             </p>
-            <div className="mt-4 flex items-center rounded-full border border-gray-300 bg-white px-4 py-2">
-              <input
-                type="text"
-                placeholder="Search artists, DJs, producers, managers, promoters..."
-                className="flex-1 bg-transparent outline-none text-sm"
-              />
-              <Link
-                href="/search"
-                className="rounded-full bg-black px-4 py-1.5 text-xs font-medium text-white"
-              >
-                Search
-              </Link>
-            </div>
-          </div>
+          </header>
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="h-4 w-4 text-fuchsia-500" />
-              <div className="text-xs font-semibold tracking-wider text-gray-500">
-                PEOPLE YOU MAY KNOW
-              </div>
-            </div>
+          <form
+            action="/network"
+            method="get"
+            className="mb-6 bg-white border border-gray-200 rounded-2xl p-3 flex items-center gap-2"
+          >
+            <input
+              type="search"
+              name="q"
+              defaultValue={q}
+              placeholder="Search artists, DJs, producers, managers, promoters..."
+              className="flex-1 bg-transparent outline-none px-3 py-2 text-sm"
+            />
+            {role ? <input type="hidden" name="role" value={role} /> : null}
+            <button
+              type="submit"
+              className="rounded-full bg-black text-white text-sm font-medium px-5 py-2 hover:bg-gray-800"
+            >
+              Search
+            </button>
+          </form>
 
-            {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-20 rounded-xl bg-gray-100 animate-pulse" />
-                ))}
-              </div>
-            ) : suggested.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
-                <Users className="mx-auto h-8 w-8 text-gray-400" />
-                <div className="mt-3 text-sm font-medium text-gray-900">
-                  No suggestions yet
-                </div>
-                <p className="mt-1 text-xs text-gray-500">
-                  Invite people to GRID to see them here.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {suggested.map((p) => (
-                  <div
-                    key={p.id}
-                    className="flex items-center gap-3 rounded-xl border border-gray-100 p-3"
-                  >
-                    <div className="grid h-10 w-10 place-items-center rounded-full bg-black text-xs font-bold text-white shrink-0">
-                      {(p.display_name || p.username || 'U')[0].toUpperCase()}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-sm font-semibold text-gray-900 truncate">
-                        {p.display_name || p.username}
-                      </div>
-                      <div className="text-xs text-gray-500 truncate">
-                        {p.role}
-                        {p.city ? ` · ${p.city}` : ''}
-                      </div>
-                      {reasons[p.id]?.length > 0 && (
-                        <div className="mt-0.5 flex flex-wrap gap-1">
-                          {reasons[p.id].map((r) => (
-                            <span
-                              key={r}
-                              className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600"
-                            >
-                              {r}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <button className="rounded-full border border-gray-300 px-3 py-1 text-xs font-medium hover:bg-gray-50 shrink-0">
-                      Follow
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+          <nav className="mb-6 flex flex-wrap gap-2">
+            {ROLES.map((r) => {
+              const isActive = r.value === role;
+              const sp = new URLSearchParams();
+              if (r.value) sp.set("role", r.value);
+              if (q) sp.set("q", q);
+              const href =
+                "/network" + (sp.toString() ? "?" + sp.toString() : "");
+              return (
+                <a
+                  key={r.value}
+                  href={href}
+                  className={
+                    "text-xs font-medium rounded-full px-3 py-1.5 border transition-colors " +
+                    (isActive
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-400")
+                  }
+                >
+                  {r.label}
+                </a>
+              );
+            })}
+          </nav>
+
+          {queryError ? (
+            <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+              <p className="font-semibold mb-1">Query error</p>
+              <p className="text-xs break-all">{queryError}</p>
+            </div>
+          ) : null}
+
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3">
+            {(q || role ? "Results" : "People you may know") +
+              " (" +
+              people.length +
+              ")"}
+          </h2>
+
+          {people.length === 0 ? (
+            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
+              <p className="text-gray-900 font-medium mb-1">
+                No one to show yet
+              </p>
+              <p className="text-gray-600 text-sm">
+                {q || role
+                  ? "Try a different search or filter."
+                  : "Once more people join, they will appear here."}
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              {people.map((p) => (
+                <PersonCard
+                  key={p.id}
+                  person={p}
+                  initiallyFollowing={followingSet.has(p.id)}
+                />
+              ))}
+            </div>
+          )}
+        </main>
       </div>
-    </main>
+    </div>
   );
 }
