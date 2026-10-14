@@ -1,22 +1,54 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import ArtistCard from "@/components/artist/ArtistCard";
 import CardRow from "@/components/artist/CardRow";
 import { priceFrom } from "@/lib/posts";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import { PlayChip } from "@/components/player/PlayChip";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Discover",
-  description: "Discover events, promoters, venues, and artists on TicketAI.",
+  description: "Discover events, promoters, venues, and artists on GRID.",
+};
+
+type TrackRow = {
+  id: string;
+  title: string;
+  artist_name: string | null;
+  cover_url: string | null;
+  audio_url: string | null;
+  duration_seconds?: number | null;
+  play_count?: number | null;
+};
+
+type ProfileRow = {
+  id: string;
+  full_name: string | null;
+  username: string | null;
+  avatar_url: string | null;
+  genre: string | null;
+  city: string | null;
+  role: string | null;
+};
+
+type EventRow = {
+  id: string;
+  title: string;
+  start_date: string;
+  hero_image: string | null;
+  ticket_types: { price: number }[] | null;
+  venue_id: string | null;
+  views?: number;
 };
 
 export default async function ArtistsIndexPage() {
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const [profileRes, artistsRes, eventsRes, trendingRes, followingRes] =
+  const [profileRes, artistsRes, eventsRes, trendingRes, followingRes,
+         tracksRes, albumsRes, playlistsRes, radioRes] =
     await Promise.all([
       user
         ? supabase
@@ -46,15 +78,42 @@ export default async function ArtistsIndexPage() {
       user
         ? supabase.from("follows").select("target_id").eq("follower_id", user.id)
         : Promise.resolve({ data: [] }),
+      supabase
+        .from("tracks")
+        .select("id,title,artist_name,cover_url,audio_url,duration_seconds,play_count")
+        .eq("kind", "song")
+        .order("play_count", { ascending: false })
+        .limit(12),
+      supabase
+        .from("tracks")
+        .select("id,title,artist_name,cover_url,audio_url")
+        .eq("kind", "album")
+        .limit(12),
+      supabase
+        .from("tracks")
+        .select("id,title,cover_url,audio_url")
+        .eq("kind", "playlist")
+        .limit(12),
+      supabase
+        .from("tracks")
+        .select("id,title,cover_url,audio_url")
+        .eq("kind", "radio")
+        .limit(12),
     ]);
 
-  const profile = profileRes.data;
-  const artists = artistsRes.data || [];
-  const events = eventsRes.data || [];
-  const trending = trendingRes.data || [];
-  const following = (followingRes.data || []).map((f: { target_id: string }) => f.target_id);
+  const artists: ProfileRow[] = (artistsRes.data as ProfileRow[]) || [];
+  const events: EventRow[] = (eventsRes.data as EventRow[]) || [];
+  const trending: EventRow[] = (trendingRes.data as EventRow[]) || [];
+  const following = ((followingRes.data || []) as { target_id: string }[]).map(
+    (f) => f.target_id,
+  );
 
-  const promoters = artists.filter((a: { id: string }) => !following.includes(a.id)).slice(0, 8);
+  const songs: TrackRow[] = (tracksRes.data as TrackRow[]) || [];
+  const albums: TrackRow[] = (albumsRes.data as TrackRow[]) || [];
+  const playlists: TrackRow[] = (playlistsRes.data as TrackRow[]) || [];
+  const radio: TrackRow[] = (radioRes.data as TrackRow[]) || [];
+
+  const promoters = artists.filter((a) => !following.includes(a.id)).slice(0, 8);
   const venues = artists.slice(8, 16);
   const creators = artists.slice(16, 24);
 
@@ -91,33 +150,8 @@ export default async function ArtistsIndexPage() {
     Australia: "AU", AU: "AU",
   };
 
-  const SONGS = [
-    { id: "s1", title: "Midnight Drive", artist: "Neon Hours" },
-    { id: "s2", title: "Static Love", artist: "Aurora Kid" },
-    { id: "s3", title: "Neon Hours", artist: "Neon Hours" },
-    { id: "s4", title: "Afterglow", artist: "Violet Static" },
-    { id: "s5", title: "Night Cartel", artist: "Night Cartel" },
-    { id: "s6", title: "Leather Sky", artist: "Leather Sky" },
-  ];
-
-  const ALBUMS = [
-    { id: "a1", title: "Neon Hours", artist: "Neon Hours" },
-    { id: "a2", title: "Afterglow", artist: "Violet Static" },
-    { id: "a3", title: "Static Love", artist: "Aurora Kid" },
-    { id: "a4", title: "Midnight Drive", artist: "Night Cartel" },
-    { id: "a5", title: "Leather Sky", artist: "Leather Sky" },
-  ];
-
-  const PLAYLISTS = [
-    { id: "p1", title: "This Week", tag: "Fresh events" },
-    { id: "p2", title: "Weekend Vibes", tag: "Fri-Sun" },
-    { id: "p3", title: "Friday Night", tag: "House - Techno" },
-    { id: "p4", title: "All Time", tag: "Most viewed" },
-    { id: "p5", title: "Late Night", tag: "Clubs" },
-  ];
-
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen pb-24">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -138,7 +172,7 @@ export default async function ArtistsIndexPage() {
 
             {trending.length > 0 ? (
               <CardRow title="Trending events" seeAllHref="/search?sort=popular">
-                {trending.map((e: { id: string; title: string; start_date: string; hero_image: string | null; ticket_types: unknown; venue_id: string | null }) => (
+                {trending.map((e) => (
                   <EventCardSmall key={e.id} event={e} />
                 ))}
               </CardRow>
@@ -146,7 +180,7 @@ export default async function ArtistsIndexPage() {
 
             {promoters.length > 0 ? (
               <CardRow title="Popular promoters" seeAllHref="/artists?role=promoter">
-                {promoters.map((a: { id: string; full_name: string | null; username: string | null; avatar_url: string | null; genre: string | null; city: string | null }) => (
+                {promoters.map((a) => (
                   <ArtistCard key={a.id} artist={a} />
                 ))}
               </CardRow>
@@ -154,7 +188,7 @@ export default async function ArtistsIndexPage() {
 
             {venues.length > 0 ? (
               <CardRow title="Popular venues" seeAllHref="/artists?role=venue">
-                {venues.map((a: { id: string; full_name: string | null; username: string | null; avatar_url: string | null; genre: string | null; city: string | null }) => (
+                {venues.map((a) => (
                   <ArtistCard key={a.id} artist={a} />
                 ))}
               </CardRow>
@@ -162,7 +196,7 @@ export default async function ArtistsIndexPage() {
 
             {events.length > 0 ? (
               <CardRow title="Upcoming events" seeAllHref="/search">
-                {events.slice(0, 12).map((e: { id: string; title: string; start_date: string; hero_image: string | null; ticket_types: unknown; venue_id: string | null }) => (
+                {events.slice(0, 12).map((e) => (
                   <EventCardSmall key={e.id} event={e} />
                 ))}
               </CardRow>
@@ -170,7 +204,7 @@ export default async function ArtistsIndexPage() {
 
             {creators.length > 0 ? (
               <CardRow title="Popular artists" seeAllHref="/artists?role=artist">
-                {creators.map((a: { id: string; full_name: string | null; username: string | null; avatar_url: string | null; genre: string | null; city: string | null }) => (
+                {creators.map((a) => (
                   <ArtistCard key={a.id} artist={a} />
                 ))}
               </CardRow>
@@ -198,11 +232,8 @@ export default async function ArtistsIndexPage() {
             ) : null}
 
             {trending.length >= 5 ? (
-              <CardRow
-                title="Featured charts - Top events"
-                seeAllHref="/search?sort=popular"
-              >
-                {trending.slice(0, 5).map((e: { id: string; title: string; views?: number }, i: number) => (
+              <CardRow title="Featured charts - Top events" seeAllHref="/search?sort=popular">
+                {trending.slice(0, 5).map((e, i) => (
                   <li key={e.id} className="w-56 shrink-0">
                     <Link
                       href={"/event/" + e.id}
@@ -228,90 +259,84 @@ export default async function ArtistsIndexPage() {
               </CardRow>
             ) : null}
 
-            <CardRow title="Popular radio">
-              {promoters.slice(0, 6).map((a: { id: string; full_name: string | null; username: string | null }) => {
-                const name = a.full_name || a.username || "Artist";
-                return (
-                  <li key={"radio-" + a.id} className="w-56 shrink-0">
-                    <Link
-                      href={a.username ? "/artists/" + a.username : "#"}
-                      className="group block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
-                    >
-                      <div className="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-4xl font-bold text-gray-500 relative">
-                        {name.charAt(0).toUpperCase()}
-                        <span className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-black text-white shadow-lg flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                          &#9654;
+            {radio.length > 0 ? (
+              <CardRow title="Popular radio">
+                {radio.map((r) => {
+                  const name = r.artist_name || r.title || "Radio";
+                  return (
+                    <li key={"radio-" + r.id} className="w-56 shrink-0">
+                      <div className="group block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
+                        <div className="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-4xl font-bold text-gray-500 relative">
+                          {name.charAt(0).toUpperCase()}
+                          <PlayChip track={r} />
+                        </div>
+                        <div className="p-4">
+                          <p className="font-bold text-sm truncate">{name} Radio</p>
+                          <p className="text-xs text-gray-500 mt-1 truncate">
+                            With similar promoters
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </CardRow>
+            ) : null}
+
+            {albums.length > 0 ? (
+              <CardRow title="Popular albums and singles">
+                {albums.map((a) => (
+                  <li key={a.id} className="w-44 shrink-0">
+                    <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
+                      <div className="aspect-square rounded-xl bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 mb-3 flex items-center justify-center text-white shadow-md relative">
+                        <span className="text-4xl font-bold opacity-40">
+                          {a.title.charAt(0)}
                         </span>
+                        <PlayChip track={a} />
                       </div>
-                      <div className="p-4">
-                        <p className="font-bold text-sm truncate">{name} Radio</p>
-                        <p className="text-xs text-gray-500 mt-1 truncate">
-                          With similar promoters
-                        </p>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </CardRow>
-
-            <CardRow title="Popular albums and singles">
-              {ALBUMS.map((a) => (
-                <li key={a.id} className="w-44 shrink-0">
-                  <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-                    <div className="aspect-square rounded-xl bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 mb-3 flex items-center justify-center text-white shadow-md relative">
-                      <span className="text-4xl font-bold opacity-40">
-                        {a.title.charAt(0)}
-                      </span>
-                      <span className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-black text-white shadow-lg flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                        &#9654;
-                      </span>
-                    </div>
-                    <p className="font-bold text-sm truncate">{a.title}</p>
-                    <p className="text-xs text-gray-500 truncate mt-0.5">
-                      {a.artist}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </CardRow>
-
-            <CardRow title="Trending songs">
-              {SONGS.map((s) => (
-                <li key={s.id} className="w-40 shrink-0">
-                  <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-                    <div className="aspect-square rounded-xl bg-gradient-to-br from-gray-300 to-gray-400 mb-3 flex items-center justify-center text-3xl font-bold text-white shadow-md relative">
-                      &#9834;
-                      <span className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-black text-white shadow-lg flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                        &#9654;
-                      </span>
-                    </div>
-                    <p className="font-bold text-sm truncate">{s.title}</p>
-                    <p className="text-xs text-gray-500 truncate mt-0.5">
-                      {s.artist}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </CardRow>
-
-            <CardRow title="Featured playlists">
-              {PLAYLISTS.map((p) => (
-                <li key={p.id} className="w-44 shrink-0">
-                  <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-                    <div className="aspect-square rounded-xl bg-gradient-to-br from-black via-gray-800 to-gray-900 mb-3 flex flex-col justify-end p-4 text-white shadow-md relative">
-                      <p className="text-lg font-bold leading-tight">{p.title}</p>
-                      <p className="text-[10px] uppercase tracking-wider opacity-70 mt-1">
-                        {p.tag}
+                      <p className="font-bold text-sm truncate">{a.title}</p>
+                      <p className="text-xs text-gray-500 truncate mt-0.5">
+                        {a.artist_name}
                       </p>
-                      <span className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-white text-black shadow-lg flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                        &#9654;
-                      </span>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </CardRow>
+                  </li>
+                ))}
+              </CardRow>
+            ) : null}
+
+            {songs.length > 0 ? (
+              <CardRow title="Trending songs">
+                {songs.map((s) => (
+                  <li key={s.id} className="w-40 shrink-0">
+                    <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
+                      <div className="aspect-square rounded-xl bg-gradient-to-br from-gray-300 to-gray-400 mb-3 flex items-center justify-center text-3xl font-bold text-white shadow-md relative">
+                        &#9834;
+                        <PlayChip track={s} />
+                      </div>
+                      <p className="font-bold text-sm truncate">{s.title}</p>
+                      <p className="text-xs text-gray-500 truncate mt-0.5">
+                        {s.artist_name}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </CardRow>
+            ) : null}
+
+            {playlists.length > 0 ? (
+              <CardRow title="Featured playlists">
+                {playlists.map((p) => (
+                  <li key={p.id} className="w-44 shrink-0">
+                    <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
+                      <div className="aspect-square rounded-xl bg-gradient-to-br from-black via-gray-800 to-gray-900 mb-3 flex flex-col justify-end p-4 text-white shadow-md relative">
+                        <p className="text-lg font-bold leading-tight">{p.title}</p>
+                        <PlayChip track={p} />
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </CardRow>
+            ) : null}
 
             {popularCountries.length > 0 ? (
               <CardRow title="Popular by country">
@@ -346,7 +371,7 @@ export default async function ArtistsIndexPage() {
   );
 }
 
-function EventCardSmall({ event }: { event: any }) {
+function EventCardSmall({ event }: { event: EventRow }) {
   const from = priceFrom(event.ticket_types);
   const date = event.start_date
     ? new Date(event.start_date).toLocaleDateString("en-GB", {
@@ -384,3 +409,4 @@ function EventCardSmall({ event }: { event: any }) {
     </li>
   );
 }
+

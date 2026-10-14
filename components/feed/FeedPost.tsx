@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -6,7 +6,6 @@ import type { FeedPost as FeedPostType, FeedEventSummary } from "@/lib/posts";
 import { timeAgo, priceFrom } from "@/lib/posts";
 import { formatEventDate } from "@/lib/format";
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
-import CommentSection from "@/components/feed/CommentSection";
 
 export default function FeedPost({
   post,
@@ -71,7 +70,7 @@ export default function FeedPost({
             {name}
           </Link>
           <p className="text-xs text-gray-500">
-            {post.author_type !== "user" ? "@" + (author?.username || "user") + " · " : ""}
+            {post.author_type !== "user" ? "@" + (author?.username || "user") + " Â· " : ""}
             {timeAgo(post.created_at)}
           </p>
         </div>
@@ -102,7 +101,7 @@ export default function FeedPost({
             <p className="font-semibold text-sm">{event.title}</p>
             <p className="text-xs text-gray-500 mt-0.5">
               {event.start_date ? formatEventDate(event.start_date) : "Date TBC"}
-              {fromPrice !== null ? " · From £" + fromPrice.toFixed(2) : ""}
+              {fromPrice !== null ? " Â· From Â£" + fromPrice.toFixed(2) : ""}
             </p>
           </div>
         </Link>
@@ -122,12 +121,13 @@ export default function FeedPost({
           <span>{post.comment_count}</span>
         </button>
         <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100">
-          <span>Ã¢— —</span>
+          <span>ÃƒÂ¢â€”Â â€”</span>
           <span>{post.share_count}</span>
         </button>
       </footer>
-          <CommentSection postId={post.id} />
 </article>
   );
 }
+
+
 

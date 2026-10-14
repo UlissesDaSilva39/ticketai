@@ -12,6 +12,7 @@ import MobileNav from "@/components/MobileNav";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { Navbar } from '@/components/nav/Navbar';
+import { PlayerProvider } from '@/components/player/GlobalPlayer';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -140,7 +141,7 @@ export default async function RootLayout({
           notificationCount={notificationCount}
         />
         {/* OLD HEADER DISABLED FOR GRID REBRAND */}
-        <main>{children}</main>
+        <main><PlayerProvider>{children}</PlayerProvider></main>
         <InstallPrompt />
         <footer className="border-t border-gray-200 mt-24 py-12">
           <div className="max-w-7xl mx-auto px-4">
@@ -178,6 +179,7 @@ export default async function RootLayout({
     </html>
   );
 }
+
 
 
 

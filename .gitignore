@@ -138,3 +138,7 @@ pw-*.txt
 pw-*.json
 seed-report.json
 diagnose-output.*
+
+# Playwright auth state
+tests/e2e/.auth/
+playwright/.auth/

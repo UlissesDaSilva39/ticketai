@@ -1,80 +1,40 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+﻿import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-const PROTECTED_PREFIXES = [
-  "/my-tickets",
-  "/venue/dashboard",
-  "/organizer",
-  "/promoter",
-  "/promoter/dashboard",
-  "/admin",
-];
+const PROTECTED = ["/home", "/messages", "/notifications", "/profile"];
 
-export async function proxy(request: NextRequest)  {
-  const path = request.nextUrl.pathname;
-  const ref = request.nextUrl.searchParams.get("ref");
-  const origin = request.nextUrl.origin;
-
-  const needsAuth = PROTECTED_PREFIXES.some(
-    (p) => path === p || path.startsWith(p + "/")
+function isProtected(pathname: string) {
+  return PROTECTED.some(
+    (p) => pathname === p || pathname.startsWith(p + "/")
   );
-
-  const response = NextResponse.next();
-
-  if (ref) {
-    response.cookies.set("referral_code", ref, {
-      maxAge: 60 * 60 * 24 * 30,
-      path: "/",
-      sameSite: "lax",
-    });
-
-    fetch(origin + "/api/promoter/track-click", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ referralCode: ref }),
-    }).catch(() => {});
-  }
-
-  if (!needsAuth) {
-    return response;
-  }
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    {
-      cookies: {
-        getAll: () => request.cookies.getAll(),
-        setAll: (list) => {
-          list.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  console.log(
-    "[middleware]",
-    path,
-    "needsAuth=" + needsAuth,
-    "user=" + (user?.email || "none")
-  );
-
-  if (!user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("next", path);
-    return NextResponse.redirect(url);
-  }
-
-  return response;
 }
 
+function hasSession(req: NextRequest) {
+  const cookies = req.cookies.getAll();
+  return cookies.some((c) => {
+    const n = c.name;
+    return (
+      n === "sb-access-token" ||
+      n === "sb-refresh-token" ||
+      (n.startsWith("sb-") && n.endsWith("-auth-token"))
+    );
+  });
+}
+
+export function proxy(req: NextRequest) {
+  const { pathname, search } = req.nextUrl;
+  if (!isProtected(pathname)) return NextResponse.next();
+  if (hasSession(req)) return NextResponse.next();
+
+  const url = req.nextUrl.clone();
+  url.pathname = "/login";
+  url.search = "";
+  url.searchParams.set("next", pathname + search);
+  return NextResponse.redirect(url);
+}
+
+// Match the exact paths AND their subpaths. Bare "/home" must match.
+// Using a broad matcher and filtering inside is the reliable pattern.
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api).*)"],
+  matcher: ["/home", "/home/:path*", "/messages", "/messages/:path*", "/notifications", "/notifications/:path*", "/profile", "/profile/:path*"],
 };

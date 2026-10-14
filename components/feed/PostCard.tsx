@@ -1,5 +1,6 @@
 ﻿import PostActions from "./PostActions";
 import CommentThread from "./CommentThread";
+import PostAudioBar from "./PostAudioBar";
 
 export type PostCardProps = {
   post: {
@@ -12,6 +13,8 @@ export type PostCardProps = {
     author_id: string;
     image_url?: string | null;
     audio_url?: string | null;
+    audio_title?: string | null;
+    audio_artist?: string | null;
   };
   author: {
     name: string;
@@ -71,6 +74,15 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
             src={post.image_url}
             alt=""
             className="mt-3 rounded-xl w-full max-h-96 object-cover"
+          />
+        ) : null}
+
+        {post.audio_url ? (
+          <PostAudioBar
+            postId={post.id}
+            audioUrl={post.audio_url}
+            title={post.audio_title ?? undefined}
+            artist={post.audio_artist ?? undefined}
           />
         ) : null}
 

@@ -21,3 +21,16 @@ Confirmed on 2026-10-12 with a real booking request.
 ---
 
 ## No open bugs.
+
+## 2026-10-13 — Broken artist cover banner
+
+**Where:** /artist/basement-collective (and likely all artist pages)
+**Symptom:** Cover image at top of artist profile renders broken / empty
+**Root cause (likely):** artists.cover_image is null OR the <img> has no fallback
+**Fix plan:**
+- Option A: Add CSS gradient fallback (components/artist/ArtistCoverBanner.tsx)
+- Option B: Seed cover_image with Unsplash URLs for all 22 artists
+- Option C: Patch existing <img>/<Image> with onError handler
+**Priority:** Low (cosmetic — doesn't block anything)
+**Logged:** 2026-10-13
+

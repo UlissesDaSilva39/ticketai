@@ -1,32 +1,28 @@
+﻿import 'dotenv/config';
 import { defineConfig, devices } from "@playwright/test";
+import fs from "fs";
+import path from "path";
+
+const authFile = path.join(__dirname, "tests/e2e", ".auth", "user.json");
+const storageState = fs.existsSync(authFile) ? authFile : undefined;
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: [["html", { open: "never" }], ["list"]],
-
+  globalSetup: "./tests/e2e/global-setup.ts",
+  timeout: 60000,
+  retries: 0,
+  workers: 1,
+  reporter: [["list"]],
   use: {
     baseURL: "http://localhost:3000",
-    trace: "on-first-retry",
+    storageState,
+    trace: "retain-on-failure",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
+    navigationTimeout: 60000,
+    actionTimeout: 20000,
   },
-
   projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
   ],
-
-  // If dev server isn't already running, uncomment this:
-  // webServer: {
-  //   command: "npm run dev",
-  //   url: "http://localhost:3000",
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 120_000,
-  // },
 });
