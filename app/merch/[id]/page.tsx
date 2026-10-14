@@ -186,6 +186,8 @@ export default async function MerchDetailPage({ params }: Props) {
                   externalUrl={merch.external_url}
                   checkoutUrl={merch.checkout_url}
                   inStock={inStock}
+                  pricePence={merch.price_pence}
+                  currency={merch.currency}
                 />
               </div>
             </div>

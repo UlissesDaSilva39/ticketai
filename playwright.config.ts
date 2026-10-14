@@ -1,28 +1,23 @@
-﻿import 'dotenv/config';
-import { defineConfig, devices } from "@playwright/test";
-import fs from "fs";
-import path from "path";
-
-const authFile = path.join(__dirname, "tests/e2e", ".auth", "user.json");
-const storageState = fs.existsSync(authFile) ? authFile : undefined;
+﻿import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./tests/e2e",
-  globalSetup: "./tests/e2e/global-setup.ts",
-  timeout: 60000,
+  testDir: "./tests",
+  timeout: 60_000,
+  expect: { timeout: 15_000 },
+  fullyParallel: false,
   retries: 0,
-  workers: 1,
-  reporter: [["list"]],
-  use: {
-    baseURL: "http://localhost:3000",
-    storageState,
-    trace: "retain-on-failure",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
-    navigationTimeout: 60000,
-    actionTimeout: 20000,
-  },
-  projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+  reporter: [
+    ["line"],
+    ["json", { outputFile: "test-results/results.json" }],
   ],
+  use: {
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000",
+    trace: "retain-on-failure",
+    headless: true,
+    viewport: { width: 1280, height: 900 },
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
+  },
+  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });
+

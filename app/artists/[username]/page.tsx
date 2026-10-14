@@ -90,13 +90,24 @@ export default async function ArtistProfilePage({ params }: Props) {
             <div className="flex flex-wrap gap-3 mt-6">
               <PlayAllButton tracks={songs.length > 0 ? songs : tracks} />
               {isOwner ? (
-                <Link href={"/artist/" + slug + "/edit"} className="inline-flex items-center gap-2 rounded-full bg-white text-black hover:bg-gray-100 text-sm font-medium px-5 py-2">Edit profile</Link>
+                <>
+                  <Link href={"/artist/" + slug + "/edit"} className="inline-flex items-center gap-2 rounded-full bg-white text-black hover:bg-gray-100 text-sm font-medium px-5 py-2">
+                    Edit profile
+                  </Link>
+                  <Link href={"/artist/" + slug + "/merch"} className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium px-5 py-2">
+                    Manage merch
+                  </Link>
+                </>
               ) : (
-                <Link href={"/network?follow=" + slug} className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium px-5 py-2">+ Follow</Link>
+                <>
+                  <Link href={"/network?follow=" + slug} className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium px-5 py-2">
+                    + Follow
+                  </Link>
+                  <Link href={"/messages?to=" + slug} className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium px-5 py-2">
+                    Message
+                  </Link>
+                </>
               )}
-              {!isOwner ? (
-                <Link href={"/messages?to=" + slug} className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium px-5 py-2">Message</Link>
-              ) : null}
             </div>
           </section>
           {tracks.length === 0 ? (

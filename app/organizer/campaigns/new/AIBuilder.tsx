@@ -80,7 +80,7 @@ export default function AIBuilder({
     console.log("APPLY CLICKED");
     console.log("result =", result);
     if (!result) {
-      console.log("No result — bailing out");
+      console.log("No result Ã¢â‚¬â€ bailing out");
       return;
     }
     const now = new Date();
@@ -107,7 +107,7 @@ export default function AIBuilder({
   return (
     <section className="rounded-xl border-2 border-black bg-white p-6">
       <div className="mb-4 flex items-center gap-3">
-        <span className="text-2xl">🤖</span>
+        <span className="text-2xl">Ã°Å¸Â¤â€“</span>
         <div>
           <h2 className="text-lg font-semibold">AI Campaign Builder</h2>
           <p className="text-sm text-gray-500">
@@ -120,7 +120,7 @@ export default function AIBuilder({
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder={`Examples:\n• I need to sell 150 more tickets for my London house night in the next 2 weeks\n• Help me fill my venue on a Friday night\n• Boost sales for the final weekend`}
+          placeholder={`Examples:\nÃ¢â‚¬Â¢ I need to sell 150 more tickets for my London house night in the next 2 weeks\nÃ¢â‚¬Â¢ Help me fill my venue on a Friday night\nÃ¢â‚¬Â¢ Boost sales for the final weekend`}
           rows={4}
           className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-black resize-none"
         />
@@ -154,7 +154,7 @@ export default function AIBuilder({
                 onClick={apply}
                 className="rounded-full bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-800"
               >
-                Apply to form →
+                Apply to form Ã¢â€ â€™
               </button>
             </div>
 
@@ -162,17 +162,17 @@ export default function AIBuilder({
               <div className="rounded-lg border bg-white p-4">
                 <p className="text-xs uppercase tracking-wider text-gray-500">Audience</p>
                 <p className="mt-1 font-medium">
-                  {result.audience.location || "—"} · {result.audience.ageMin}–{result.audience.ageMax}
+                  {result.audience.location || "Ã¢â‚¬â€"} Ã‚· {result.audience.ageMin}Ã¢â‚¬â€œ{result.audience.ageMax}
                 </p>
                 <p className="mt-2 text-sm text-gray-600">
-                  {result.audience.interests.join(" · ")}
+                  {result.audience.interests.join(" Ã‚· ")}
                 </p>
               </div>
 
               <div className="rounded-lg border bg-white p-4">
                 <p className="text-xs uppercase tracking-wider text-gray-500">Budget</p>
                 <p className="mt-1 font-medium">
-                  £{result.budget.total} total · £{result.budget.daily}/day
+                  £{result.budget.total} total Ã‚· £{result.budget.daily}/day
                 </p>
                 <p className="mt-2 text-sm text-gray-600">{result.budget.reasoning}</p>
               </div>
@@ -191,7 +191,7 @@ export default function AIBuilder({
               <div className="rounded-lg border bg-white p-4">
                 <p className="text-xs uppercase tracking-wider text-gray-500">Forecast</p>
                 <p className="mt-1 font-medium">
-                  {result.duration_days} days · {result.expected_conversion_rate}% conv rate
+                  {result.duration_days} days Ã‚· {result.expected_conversion_rate}% conv rate
                 </p>
               </div>
             </div>

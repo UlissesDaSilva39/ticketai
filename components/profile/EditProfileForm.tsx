@@ -1,5 +1,7 @@
 ﻿"use client";
 
+import Link from "next/link";
+
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "@/app/profile/actions";
@@ -216,3 +218,4 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
     </form>
   );
 }
+

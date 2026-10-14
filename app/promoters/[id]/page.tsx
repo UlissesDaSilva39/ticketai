@@ -76,7 +76,7 @@ export async function generateMetadata({
     description:
       promoter.bio ||
       (promoter.city
-        ? "Promoter · " + promoter.city
+        ? "Promoter Ã‚· " + promoter.city
         : "Promoter on GRID"),
   };
 }
@@ -232,7 +232,7 @@ export default async function PromoterProfilePage({
               </p>
             </section>
 
-            {/* STATS — owner/admin only */}
+            {/* STATS Ã¢â‚¬â€ owner/admin only */}
             {(isOwner || isAdmin) && (
               <section className="bg-white border border-gray-200 rounded-2xl p-6">
                 <h2 className="text-lg font-semibold mb-4">Your stats</h2>

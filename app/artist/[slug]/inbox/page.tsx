@@ -71,7 +71,7 @@ export default async function InboxPage({ params }: Props) {
             href={`/artist/${slug}/edit`}
             className="text-sm text-gray-500 hover:text-black whitespace-nowrap"
           >
-            Edit profile ↗
+            Edit profile â†—
           </Link>
         </div>
 

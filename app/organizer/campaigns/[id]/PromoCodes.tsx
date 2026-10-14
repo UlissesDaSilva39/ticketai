@@ -206,9 +206,9 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
               <div>
                 <p className="font-mono font-semibold">{p.code}</p>
                 <p className="text-sm text-gray-600 mt-1">
-                  {formatDiscount(p)} · Used {p.times_used}
+                  {formatDiscount(p)} Ã‚· Used {p.times_used}
                   {p.max_uses ? "/" + p.max_uses : ""}
-                  {p.expires_at ? " · Expires " + new Date(p.expires_at).toLocaleDateString("en-GB") : ""}
+                  {p.expires_at ? " Ã‚· Expires " + new Date(p.expires_at).toLocaleDateString("en-GB") : ""}
                 </p>
               </div>
               {p.active ? (

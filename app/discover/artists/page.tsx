@@ -293,7 +293,7 @@ export default async function DiscoverArtistsPage({
                       </Link>
                       {a.verified && (
                         <span className="rounded-full bg-black text-white px-1.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold">
-                          ✓
+                          âœ“
                         </span>
                       )}
                     </div>

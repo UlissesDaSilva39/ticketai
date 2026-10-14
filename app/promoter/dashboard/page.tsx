@@ -115,7 +115,7 @@ export default function PromoterDashboard() {
 
   const shareOnSocial = (platform: string, eventId: string, code: string, title: string) => {
     const url = buildReferralUrl(eventId, code);
-    const text = "Check out " + title + " — tickets available now";
+    const text = "Check out " + title + " Ã¢â‚¬â€ tickets available now";
     let shareUrl = "";
     if (platform === "x") {
       shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url);
@@ -136,7 +136,7 @@ export default function PromoterDashboard() {
       <div className="max-w-2xl mx-auto px-4 py-12">
         <div className="mb-8">
           <Link href="/promoters" className="text-sm text-gray-500 hover:text-black">
-            ← Back to Promoters
+            Ã¢â€ Â Back to Promoters
           </Link>
         </div>
         <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>
@@ -242,7 +242,7 @@ export default function PromoterDashboard() {
                 <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                   <div className="flex-1 min-w-[200px]">
                     <h3 className="font-bold text-lg mb-1">{title}</h3>
-                    <p className="text-xs text-gray-500">{pe.conversions} sales · £{Number(pe.revenue).toFixed(2)} earned · {Number(pe.commission_rate || 0)}% commission</p>
+                    <p className="text-xs text-gray-500">{pe.conversions} sales Ã‚· £{Number(pe.revenue).toFixed(2)} earned Ã‚· {Number(pe.commission_rate || 0)}% commission</p>
                   </div>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-3 mb-4">

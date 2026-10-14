@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -70,7 +70,7 @@ export default function FeedPost({
             {name}
           </Link>
           <p className="text-xs text-gray-500">
-            {post.author_type !== "user" ? "@" + (author?.username || "user") + " Â· " : ""}
+            {post.author_type !== "user" ? "@" + (author?.username || "user") + " Ã‚· " : ""}
             {timeAgo(post.created_at)}
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function FeedPost({
             <p className="font-semibold text-sm">{event.title}</p>
             <p className="text-xs text-gray-500 mt-0.5">
               {event.start_date ? formatEventDate(event.start_date) : "Date TBC"}
-              {fromPrice !== null ? " Â· From Â£" + fromPrice.toFixed(2) : ""}
+              {fromPrice !== null ? " Ã‚· From £" + fromPrice.toFixed(2) : ""}
             </p>
           </div>
         </Link>
@@ -121,7 +121,7 @@ export default function FeedPost({
           <span>{post.comment_count}</span>
         </button>
         <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100">
-          <span>ÃƒÂ¢â€”Â â€”</span>
+          <span>ÃƒÆ’Ã‚Â¢Ã¢â‚¬â€Ã‚Â Ã¢â‚¬â€</span>
           <span>{post.share_count}</span>
         </button>
       </footer>

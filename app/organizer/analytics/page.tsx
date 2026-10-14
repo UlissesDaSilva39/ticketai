@@ -88,7 +88,7 @@ export default async function OrganizerAnalytics() {
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, 8)
     .map((s) => ({
-      name: s.event.title.length > 30 ? s.event.title.slice(0, 30) + "…" : s.event.title,
+      name: s.event.title.length > 30 ? s.event.title.slice(0, 30) + "Ã¢â‚¬Â¦" : s.event.title,
       revenue: Number(s.revenue.toFixed(2)),
     }));
 
@@ -96,7 +96,7 @@ export default async function OrganizerAnalytics() {
     <div className="max-w-7xl mx-auto px-4 py-12">
       <div className="mb-8">
         <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">
-          ← Back to Dashboard
+          Ã¢â€ Â Back to Dashboard
         </Link>
       </div>
 

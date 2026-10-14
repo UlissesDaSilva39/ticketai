@@ -57,7 +57,7 @@ export default async function PromoterAnalytics() {
     <div className="max-w-6xl mx-auto px-4 py-12">
       <div className="mb-8">
         <Link href="/promoter/dashboard" className="text-sm text-gray-500 hover:text-black">
-          ← Back to Dashboard
+          Ã¢â€ Â Back to Dashboard
         </Link>
       </div>
 

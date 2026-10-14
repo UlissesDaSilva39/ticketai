@@ -91,7 +91,7 @@ export default function TopTracks({ artistId }: { artistId: string }) {
             className="group flex items-center gap-4 px-6 py-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors"
           >
             <span className="w-5 text-sm text-gray-400 text-right tabular-nums">
-              {playingId === t.id ? <span className="text-black">▶</span> : i + 1}
+              {playingId === t.id ? <span className="text-black">â–¶</span> : i + 1}
             </span>
             <button
               type="button"
@@ -100,7 +100,7 @@ export default function TopTracks({ artistId }: { artistId: string }) {
               className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-20 shrink-0"
               aria-label={"Play " + t.title}
             >
-              {playingId === t.id ? "❚❚" : "▶"}
+              {playingId === t.id ? "âšâš" : "â–¶"}
             </button>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{t.title}</p>

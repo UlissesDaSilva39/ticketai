@@ -114,7 +114,7 @@ export async function GET(req: NextRequest) {
               marginBottom: 24,
             }}
           >
-            {event.title.length > 50 ? event.title.slice(0, 50) + "…" : event.title}
+            {event.title.length > 50 ? event.title.slice(0, 50) + "Ã¢â‚¬Â¦" : event.title}
           </div>
           <div
             style={{
@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
             <span>{dateLabel}</span>
             {priceLabel && (
               <>
-                <span style={{ color: "#00FF87" }}>·</span>
+                <span style={{ color: "#00FF87" }}>Ã‚·</span>
                 <span style={{ color: "#00FF87", fontWeight: 700 }}>{priceLabel}</span>
               </>
             )}

@@ -114,7 +114,7 @@ export default function AskTicketAI() {
                     day: "numeric",
                     month: "short",
                   })}
-                  {e.venue ? " · " + e.venue : ""}
+                  {e.venue ? " Ã‚· " + e.venue : ""}
                 </p>
                 <p className="text-sm font-medium">
                   {e.lowest_price === null

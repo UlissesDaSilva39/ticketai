@@ -103,7 +103,7 @@ export function EventCard({
           </div>
           <p className={"text-xs mt-1.5 " + (dark ? "text-gray-400" : "text-gray-500")}>
             {isSoldOut
-              ? "Sold out · " + soldCount + " tickets sold"
+              ? "Sold out Ã‚· " + soldCount + " tickets sold"
               : remaining <= 10
                 ? "Only " + remaining + " left"
                 : remaining + " of " + capacity + " left"}

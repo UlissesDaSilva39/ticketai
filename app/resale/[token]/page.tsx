@@ -79,7 +79,7 @@ export default async function ResalePage({
         Prices are capped at face value. No markups. No scalping.
       </p>
       <div className="text-center mt-8">
-        <Link href="/" className="text-sm text-gray-500 hover:text-black">← Back to events</Link>
+        <Link href="/" className="text-sm text-gray-500 hover:text-black">Ã¢â€ Â Back to events</Link>
       </div>
     </div>
   );

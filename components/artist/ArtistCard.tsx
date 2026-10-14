@@ -115,7 +115,7 @@ export default function ArtistCard({ artist }: Props) {
             aria-label={"Open " + name}
             className="absolute bottom-2 right-2 w-11 h-11 rounded-full bg-black text-white shadow-lg flex items-center justify-center text-base opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all"
           >
-            ▶
+            â–¶
           </button>
         </div>
 
@@ -151,7 +151,7 @@ export default function ArtistCard({ artist }: Props) {
             aria-label="Share"
             className="w-7 h-7 rounded-full bg-white border border-gray-300 hover:bg-gray-50 flex items-center justify-center text-xs"
           >
-            ↗
+            â†—
           </button>
         </div>
       </Link>

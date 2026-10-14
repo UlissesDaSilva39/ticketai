@@ -1,4 +1,4 @@
-﻿{
+{
     "name":  "ticketai",
     "version":  "0.1.0",
     "private":  true,
@@ -18,7 +18,10 @@
                     "test:feed:headed":  "node tests/run-feed.js --headed",
                     "test:feed:debug":  "node tests/run-feed.js --debug",
                     "test:feed:ui":  "node tests/run-feed.js --ui",
-                    "test:report":  "playwright show-report"
+                    "test:report":  "playwright show-report",
+                    "test:artist":  "node tests/run-feed.js",
+                    "test:artist:headed":  "node tests/run-feed.js -- --headed",
+                    "test:artist:debug":  "node tests/run-feed.js -- --debug"
                 },
     "dependencies":  {
                          "@google/generative-ai":  "^0.24.1",
@@ -50,6 +53,7 @@
                             "dotenv":  "^18.0.6",
                             "eslint":  "^9",
                             "eslint-config-next":  "16.3.5",
+                            "start-server-and-test":  "^3.0.13",
                             "tailwindcss":  "^4",
                             "tsx":  "^4.23.15",
                             "typescript":  "^5"

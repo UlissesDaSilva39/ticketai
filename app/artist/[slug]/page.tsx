@@ -339,7 +339,7 @@ export default async function ArtistPage({ params }: Props) {
               )}
             </section>
 
-            {/* AVAILABLE FOR — NEW */}
+            {/* AVAILABLE FOR â€” NEW */}
             {availableFor.length > 0 && (
               <section className="bg-white border border-gray-200 rounded-2xl p-6">
                 <h2 className="text-lg font-semibold mb-4 inline-flex items-center gap-2">
@@ -365,7 +365,7 @@ export default async function ArtistPage({ params }: Props) {
               artistName={artist.name}
             />
 
-            {/* EPK & RIDERS — NEW */}
+            {/* EPK & RIDERS â€” NEW */}
             <section className="bg-white border border-gray-200 rounded-2xl p-6">
               <h2 className="text-lg font-semibold mb-4">EPK & Riders</h2>
               <div className="flex flex-wrap gap-3">
@@ -393,7 +393,7 @@ export default async function ArtistPage({ params }: Props) {
               </div>
             </section>
 
-            {/* CREDITS — NEW */}
+            {/* CREDITS â€” NEW */}
             <section className="bg-white border border-gray-200 rounded-2xl p-6">
               <h2 className="text-lg font-semibold mb-4 inline-flex items-center gap-2">
                 <Music className="h-4 w-4" />

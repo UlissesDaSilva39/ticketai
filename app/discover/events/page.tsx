@@ -364,13 +364,13 @@ export default async function DiscoverEventsPage({
 
                     <div className="mt-1 inline-flex items-center gap-1 text-xs text-gray-500">
                       <Calendar className="h-3 w-3" />
-                      {formatDate(e.start_date)} · {formatTime(e.start_date)}
+                      {formatDate(e.start_date)} Ã‚· {formatTime(e.start_date)}
                     </div>
 
                     {(e.venues?.city || e.venues?.name) && (
                       <div className="mt-1 inline-flex items-center gap-1 text-xs text-gray-500">
                         <MapPin className="h-3 w-3" />
-                        {[e.venues?.city, e.venues?.name].filter(Boolean).join(" · ")}
+                        {[e.venues?.city, e.venues?.name].filter(Boolean).join(" Ã‚· ")}
                       </div>
                     )}
 
