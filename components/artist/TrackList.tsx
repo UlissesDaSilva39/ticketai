@@ -76,3 +76,4 @@ export default function TrackList({ tracks }: { tracks: Row[] }) {
     </div>
   );
 }
+

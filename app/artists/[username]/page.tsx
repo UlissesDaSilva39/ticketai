@@ -1,250 +1,318 @@
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
-import FollowButton from "@/components/artist/FollowButton";
-import PostCard from "@/components/feed/PostCard";
-import { relativeTime } from "@/lib/format-time";
+import { PlayChip } from "@/components/player/PlayChip";
+import PlayAllButton from "@/components/player/PlayAllButton";
+import TrackUploadForm from "@/components/artist/TrackUploadForm";
 
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ username: string }> };
 
+type TrackRow = {
+  id: string;
+  title: string;
+  artist_name: string | null;
+  artist_id: string | null;
+  cover_url: string | null;
+  audio_url: string | null;
+  duration_seconds: number | null;
+  play_count: number | null;
+  kind: string | null;
+  created_at: string;
+};
+
+type ProfileRow = {
+  id: string;
+  username: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  genre: string | null;
+  city: string | null;
+  role: string | null;
+};
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+async function lookupProfile(raw: string): Promise<ProfileRow | null> {
+  const supabase = await createServerSupabase();
+  const value = decodeURIComponent(raw);
+
+  const byUsername = await supabase
+    .from("profiles")
+    .select("id, username, full_name, avatar_url, bio, genre, city, role")
+    .eq("username", value)
+    .maybeSingle();
+  if (byUsername.data) return byUsername.data as ProfileRow;
+
+  if (UUID_RE.test(value)) {
+    const byId = await supabase
+      .from("profiles")
+      .select("id, username, full_name, avatar_url, bio, genre, city, role")
+      .eq("id", value)
+      .maybeSingle();
+    if (byId.data) return byId.data as ProfileRow;
+  }
+
+  return null;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { username } = await params;
-  const supabase = await createServerSupabase();
-  const { data } = await supabase
-    .from("profiles")
-    .select("full_name, username, bio")
-    .or("username.eq." + username + ",id.eq." + username)
-    .maybeSingle();
-  if (!data) return { title: "Artist not found" };
-  const name = data.full_name || data.username || "Artist";
+  const me = await lookupProfile(username);
+  if (!me) return { title: "Artist not found" };
+  const name = me.full_name || me.username || "Artist";
   return {
     title: name,
-    description: data.bio ? data.bio.slice(0, 160) : name + " on GRID",
+    description: "Listen to " + name + " on GRID.",
   };
 }
 
-export default async function ArtistPublicPage({ params }: Props) {
+export default async function ArtistProfilePage({ params }: Props) {
   const { username } = await params;
   const supabase = await createServerSupabase();
-  const { data: { user } } = await supabase.auth.getUser();
 
-  let { data: profile } = await supabase
-    .from("profiles")
-    .select("id, username, full_name, avatar_url, cover_image, bio, city, genre, role, website, instagram, twitter, spotify, youtube, soundcloud, is_public")
-    .eq("username", username)
-    .maybeSingle();
+  const me = await lookupProfile(username);
+  if (!me) notFound();
 
-  if (!profile) {
-    const { data: byId } = await supabase
-      .from("profiles")
-      .select("id, username, full_name, avatar_url, cover_image, bio, city, genre, role, website, instagram, twitter, spotify, youtube, soundcloud, is_public")
-      .eq("id", username)
-      .maybeSingle();
-    profile = byId;
-  }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isOwner = !!user && user.id === me.id;
 
-  if (!profile) notFound();
+  const { data: tracksRaw } = await supabase
+    .from("tracks")
+    .select("id,title,artist_name,artist_id,cover_url,audio_url,duration_seconds,play_count,kind,created_at")
+    .eq("artist_id", me.id)
+    .order("play_count", { ascending: false, nullsFirst: false })
+    .limit(60);
 
-  const isOwn = user?.id === profile.id;
+  const tracks: TrackRow[] = (tracksRaw as TrackRow[]) || [];
+  const songs = tracks.filter((t) => t.kind === "song" || !t.kind);
+  const albums = tracks.filter((t) => t.kind === "album");
+  const playlists = tracks.filter((t) => t.kind === "playlist");
+  const sets = tracks.filter((t) => t.kind === "set");
 
-  const [followersRes, followingRes, postsRes] = await Promise.all([
-    supabase.from("follows").select("id", { count: "exact", head: true }).eq("target_id", profile.id),
-    supabase.from("follows").select("id", { count: "exact", head: true }).eq("follower_id", profile.id),
-    supabase.from("posts").select("id", { count: "exact", head: true }).eq("author_id", profile.id),
-  ]);
+  const totalPlays = tracks.reduce((sum, t) => sum + (t.play_count ?? 0), 0);
 
-  const stats = {
-    followers: followersRes.count || 0,
-    following: followingRes.count || 0,
-    posts: postsRes.count || 0,
-  };
+  const { count: followerCount } = await supabase
+    .from("follows")
+    .select("*", { count: "exact", head: true })
+    .eq("target_id", me.id);
 
-  let isFollowing = false;
-  if (user && user.id !== profile.id) {
-    const { data: f } = await supabase
-      .from("follows")
-      .select("id")
-      .eq("follower_id", user.id)
-      .eq("target_id", profile.id)
-      .maybeSingle();
-    isFollowing = !!f;
-  }
-
-  const { data: postsRaw } = await supabase
-    .from("posts")
-    .select("id, body, author_id, like_count, comment_count, share_count, created_at, image_url, audio_url")
-    .eq("author_id", profile.id)
-    .order("created_at", { ascending: false })
-    .limit(12);
-
-  const posts = postsRaw || [];
-  const postIds = posts.map((p) => p.id);
-
-  const { data: commentsRaw } = postIds.length
-    ? await supabase
-        .from("post_comments")
-        .select("id, post_id, author_id, body, created_at")
-        .in("post_id", postIds)
-        .order("created_at", { ascending: true })
-    : { data: [] };
-
-  const { data: likedRaw } = user && postIds.length
-    ? await supabase.from("post_likes").select("post_id").eq("user_id", user.id).in("post_id", postIds)
-    : { data: [] };
-  const likedSet = new Set((likedRaw || []).map((l) => l.post_id));
-
-  const author = {
-    name: profile.full_name || profile.username || "Artist",
-    username: profile.username,
-    avatar: profile.avatar_url,
-  };
-
-  const commentsByPost: Record<string, any[]> = {};
-  for (const c of commentsRaw || []) {
-    if (!commentsByPost[c.post_id]) commentsByPost[c.post_id] = [];
-    commentsByPost[c.post_id].push({
-      id: c.id,
-      body: c.body,
-      authorName: "Someone",
-      authorAvatar: null,
-      createdAt: c.created_at,
-    });
-  }
-
-  const name = author.name;
-  const initials = name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase();
-
-  const roleLabel = profile.role === "promoter" ? "Promoter"
-    : profile.role === "venue" ? "Venue"
-    : profile.role === "artist" ? "Artist"
-    : profile.role === "a_and_r" ? "A&R"
-    : profile.role === "record_company" ? "Record Company"
-    : profile.role === "attendee" ? "Fan"
-    : "Profile";
-
-  const socialLinks: Array<{ label: string; href: string }> = [];
-  if (profile.website) socialLinks.push({ label: "Website", href: profile.website });
-  if (profile.instagram) socialLinks.push({ label: "Instagram", href: "https://instagram.com/" + profile.instagram.replace(/^@/, "") });
-  if (profile.twitter) socialLinks.push({ label: "Twitter", href: "https://twitter.com/" + profile.twitter.replace(/^@/, "") });
-  if (profile.spotify) socialLinks.push({ label: "Spotify", href: profile.spotify });
-  if (profile.youtube) socialLinks.push({ label: "YouTube", href: profile.youtube });
-  if (profile.soundcloud) socialLinks.push({ label: "SoundCloud", href: profile.soundcloud });
+  const name = me.full_name || me.username || "Artist";
+  const initials = name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen pb-32">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
-        <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
+        <div className="col-span-12 lg:col-span-3">
           <Sidebar />
-        </nav>
+        </div>
 
-        <main className="col-span-12 lg:col-span-9 space-y-6">
-          <header className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-            <div className="relative h-40 bg-gradient-to-br from-gray-800 via-gray-900 to-black">
-              {profile.cover_image ? (
+        <main className="col-span-12 lg:col-span-9 min-w-0">
+          <section className="bg-gradient-to-br from-gray-900 via-gray-900 to-black text-white rounded-2xl p-6 md:p-8">
+            <div className="flex flex-col md:flex-row gap-6 md:items-center">
+              {me.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={profile.cover_image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-70" />
-              ) : null}
-            </div>
-            <div className="px-6 pb-6 -mt-12 relative">
-              <div className="flex items-end gap-4">
-                {profile.avatar_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={profile.avatar_url} alt={name} className="w-24 h-24 rounded-full object-cover border-4 border-white bg-white shrink-0" />
-                ) : (
-                  <div className="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center text-2xl font-bold border-4 border-white shrink-0">
-                    {initials}
-                  </div>
-                )}
-                <div className="flex-1 min-w-0 pb-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h1 className="text-2xl font-bold truncate">{name}</h1>
-                    <span className="text-[10px] uppercase tracking-wider bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">{roleLabel}</span>
-                  </div>
-                  {profile.username ? (
-                    <p className="text-sm text-gray-500">@{profile.username}</p>
+                <img
+                  src={me.avatar_url}
+                  alt={name}
+                  className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-2 border-white/20 shrink-0"
+                />
+              ) : (
+                <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center text-3xl font-bold shrink-0">
+                  {initials}
+                </div>
+              )}
+
+              <div className="flex-1 min-w-0">
+                <h1
+                  className="text-3xl md:text-4xl font-bold uppercase leading-none truncate"
+                  style={{ fontFamily: "var(--font-antonio)" }}
+                >
+                  {name}
+                </h1>
+                {me.username ? (
+                  <p className="text-white/60 text-sm mt-1">@{me.username}</p>
+                ) : null}
+
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {me.genre ? (
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15">
+                      {me.genre}
+                    </span>
+                  ) : null}
+                  {me.city ? (
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15">
+                      {me.city}
+                    </span>
+                  ) : null}
+                  {me.role ? (
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15 uppercase">
+                      {me.role}
+                    </span>
+                  ) : null}
+                  {isOwner ? (
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-green-500/20 border border-green-400/40 text-green-200">
+                      You
+                    </span>
                   ) : null}
                 </div>
-                {!isOwn ? (
-                  <FollowButton
-                    targetId={profile.id}
-                    targetType={profile.role || "user"}
-                    initialFollowing={isFollowing}
-                  />
-                ) : (
-                  <Link
-                    href="/profile/edit"
-                    className="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium hover:border-gray-800 transition shrink-0"
-                  >
-                    Edit profile
-                  </Link>
-                )}
+
+                {me.bio ? (
+                  <p className="text-white/70 text-sm mt-4 max-w-2xl">{me.bio}</p>
+                ) : null}
+
+                <div className="flex gap-6 mt-5 text-sm">
+                  <div>
+                    <span className="block text-2xl font-bold">{tracks.length}</span>
+                    <span className="text-white/50">Tracks</span>
+                  </div>
+                  <div>
+                    <span className="block text-2xl font-bold">
+                      {totalPlays.toLocaleString()}
+                    </span>
+                    <span className="text-white/50">Plays</span>
+                  </div>
+                  <div>
+                    <span className="block text-2xl font-bold">
+                      {(followerCount ?? 0).toLocaleString()}
+                    </span>
+                    <span className="text-white/50">Followers</span>
+                  </div>
+                </div>
               </div>
-
-              {profile.bio ? (
-                <p className="text-sm text-gray-700 mt-4 whitespace-pre-wrap">{profile.bio}</p>
-              ) : null}
-
-              <div className="flex flex-wrap gap-3 text-xs text-gray-500 mt-4">
-                {profile.city ? <span>{profile.city}</span> : null}
-                {profile.genre ? <span>· {profile.genre}</span> : null}
-              </div>
-
-              {socialLinks.length > 0 ? (
-                <div className="flex flex-wrap gap-3 text-xs mt-3">
-                  {socialLinks.map((l) => (
-                    <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black underline">
-                      {l.label}
-                    </a>
-                  ))}
-                </div>
-              ) : null}
-
-              <dl className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-100 text-center">
-                <div>
-                  <dd className="text-xl font-bold">{stats.posts}</dd>
-                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Posts</dt>
-                </div>
-                <div>
-                  <dd className="text-xl font-bold">{stats.followers}</dd>
-                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Followers</dt>
-                </div>
-                <div>
-                  <dd className="text-xl font-bold">{stats.following}</dd>
-                  <dt className="text-xs text-gray-500 uppercase tracking-wide">Following</dt>
-                </div>
-              </dl>
             </div>
-          </header>
 
-          <section>
-            <h2 className="text-2xl font-bold uppercase mb-4" style={{ fontFamily: "var(--font-antonio)" }}>
-              Posts
-            </h2>
-            {posts.length === 0 ? (
-              <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-                <p className="text-gray-600">No posts yet.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {posts.map((p) => (
-                  <PostCard
-                    key={p.id}
-                    post={p}
-                    author={author}
-                    liked={likedSet.has(p.id)}
-                    comments={commentsByPost[p.id] || []}
-                    fmtTime={relativeTime}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="flex flex-wrap gap-3 mt-6">
+              <PlayAllButton tracks={songs.length > 0 ? songs : tracks} />
+              {isOwner ? (
+                <Link
+                  href={"/artist/" + (me.username || me.id) + "/edit"}
+                  className="inline-flex items-center gap-2 rounded-full bg-white text-black hover:bg-gray-100 text-sm font-medium px-5 py-2"
+                >
+                  ⚙ Edit profile
+                </Link>
+              ) : (
+                <Link
+                  href={"/network?follow=" + (me.username || me.id)}
+                  className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium px-5 py-2"
+                >
+                  + Follow
+                </Link>
+              )}
+              {!isOwner ? (
+                <Link
+                  href={"/messages?to=" + (me.username || me.id)}
+                  className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white text-sm font-medium px-5 py-2"
+                >
+                  ✉ Message
+                </Link>
+              ) : null}
+            </div>
           </section>
+
+          {isOwner ? (
+            <section className="mt-8">
+              <h2
+                className="text-xl font-bold uppercase mb-3"
+                style={{ fontFamily: "var(--font-antonio)" }}
+              >
+                Add a new track
+              </h2>
+              <TrackUploadForm
+                profileId={me.id}
+                defaultArtistName={me.full_name || me.username || ""}
+              />
+            </section>
+          ) : null}
+
+          {tracks.length === 0 ? (
+            <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-12 text-center">
+              <p className="text-gray-900 font-medium mb-1">
+                {isOwner ? "No tracks yet" : "No tracks yet"}
+              </p>
+              <p className="text-gray-600 text-sm">
+                {isOwner
+                  ? "Use the form above to publish your first track."
+                  : "This artist hasn\u0027t published any music."}
+              </p>
+            </div>
+          ) : (
+            <>
+              {songs.length > 0 ? <TrackSection title="Songs" tracks={songs} /> : null}
+              {albums.length > 0 ? <TrackSection title="Albums" tracks={albums} /> : null}
+              {playlists.length > 0 ? (
+                <TrackSection title="Playlists" tracks={playlists} />
+              ) : null}
+              {sets.length > 0 ? (
+                <TrackSection title="Sets & Mixes" tracks={sets} />
+              ) : null}
+            </>
+          )}
         </main>
       </div>
     </div>
+  );
+}
+
+function TrackSection({ title, tracks }: { title: string; tracks: TrackRow[] }) {
+  return (
+    <section className="mt-8">
+      <h2
+        className="text-xl font-bold uppercase mb-3"
+        style={{ fontFamily: "var(--font-antonio)" }}
+      >
+        {title}
+      </h2>
+      <ul className="bg-white border border-gray-200 rounded-2xl overflow-hidden divide-y divide-gray-100">
+        {tracks.map((t) => (
+          <li
+            key={t.id}
+            className="flex items-center gap-4 p-3 hover:bg-gray-50 transition-colors"
+          >
+            <div className="relative w-12 h-12 rounded-lg bg-gradient-to-br from-gray-700 to-gray-900 shrink-0 flex items-center justify-center text-white">
+              {t.cover_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={t.cover_url}
+                  alt=""
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <span className="text-lg font-bold opacity-60">
+                  {t.title.charAt(0).toUpperCase()}
+                </span>
+              )}
+              <PlayChip track={t} />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold truncate">{t.title}</p>
+              <p className="text-xs text-gray-500 truncate">
+                {t.artist_name || "Artist"}
+                {t.kind && t.kind !== "song" ? " · " + t.kind : ""}
+              </p>
+            </div>
+
+            <div className="text-xs text-gray-500 shrink-0 tabular-nums text-right">
+              {typeof t.play_count === "number" && t.play_count > 0 ? (
+                <span className="block">{t.play_count.toLocaleString()} plays</span>
+              ) : null}
+              {typeof t.duration_seconds === "number" && t.duration_seconds > 0 ? (
+                <span className="block">
+                  {Math.floor(t.duration_seconds / 60)}:
+                  {String(t.duration_seconds % 60).padStart(2, "0")}
+                </span>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

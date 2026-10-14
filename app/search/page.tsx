@@ -32,7 +32,7 @@ export default async function SearchPage({
     query = query.eq("event_type", type);
   }
 
-  // City filter — via venue lookup
+  // City filter â€” via venue lookup
   if (city) {
     const { data: venueRows } = await supabase
       .from("venues")
@@ -42,7 +42,7 @@ export default async function SearchPage({
     if (venueIds.length > 0) {
       query = query.in("venue_id", venueIds);
     } else {
-      // No venues match — force no results
+      // No venues match â€” force no results
       query = query.eq("id", "00000000-0000-0000-0000-000000000000");
     }
   }
@@ -86,7 +86,7 @@ export default async function SearchPage({
   const { data: artists } = await artistQuery;
   let eventList = (events as Event[]) || [];
 
-  // Price filter — post-fetch because ticket_types is JSON
+  // Price filter â€” post-fetch because ticket_types is JSON
   if (price) {
     const priceOf = (e: Event): number => {
       const types = Array.isArray(e.ticket_types) ? e.ticket_types : [];
@@ -125,7 +125,7 @@ export default async function SearchPage({
         <div className="col-span-12 lg:col-span-9">
 
       <div className="mb-8">
-        <Link href="/" className="text-sm text-gray-500 hover:text-black">←Back to Home</Link>
+        <Link href="/" className="text-sm text-gray-500 hover:text-black">â†Back to Home</Link>
       </div>
       <h1 className="text-5xl md:text-6xl font-bold mb-8 uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
         SEARCH EVENTS

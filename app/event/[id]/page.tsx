@@ -14,6 +14,8 @@ import ReviewsSection from "@/components/ReviewsSection";
 import EventTabs from "@/components/EventTabs";
 import ShareSheet from "@/components/ShareSheet";
 
+import EventArtists from "@/components/event/EventArtists";
+import EventArtistMerch from "@/components/event/EventArtistMerch";
 export const dynamic = "force-dynamic";
 
 const SITE_URL =
@@ -257,6 +259,118 @@ export default async function EventPage({
   const myReview = user ? reviews.find((r) => r.user_id === user.id) : null;
   const canReview = !!user && !!myInterest;
 
+
+  // ---- Event artists (for "Listen before you buy") ----
+  let eventArtists: Array<{
+    id: string;
+    username: string | null;
+    full_name: string | null;
+    avatar_url: string | null;
+    genre: string | null;
+    city: string | null;
+    role: string | null;
+  }> = [];
+  let tracksByArtist: Record<
+    string,
+    Array<{
+      id: string;
+      title: string;
+      artist_name: string | null;
+      audio_url: string | null;
+      cover_url: string | null;
+      duration_seconds: number | null;
+    }>
+  > = {};
+
+  try {
+    const { data: eaRows } = await supabase
+      .from("event_artists")
+      .select("artist_id, role")
+      .eq("event_id", event.id);
+
+    const artistIds = (eaRows || []).map(
+      (r) => (r as { artist_id: string }).artist_id
+    );
+
+    if (artistIds.length > 0) {
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, username, full_name, avatar_url, genre, city, role")
+        .in("id", artistIds);
+      eventArtists = (profs || []) as typeof eventArtists;
+
+      const { data: tracks } = await supabase
+        .from("tracks")
+        .select(
+          "id,title,artist_name,audio_url,cover_url,duration_seconds,artist_id"
+        )
+        .in("artist_id", artistIds)
+        .order("play_count", { ascending: false, nullsFirst: false })
+        .limit(30);
+
+      for (const t of (tracks || []) as Array<{
+        id: string;
+        title: string;
+        artist_name: string | null;
+        audio_url: string | null;
+        cover_url: string | null;
+        duration_seconds: number | null;
+        artist_id: string;
+      }>) {
+        if (!tracksByArtist[t.artist_id]) tracksByArtist[t.artist_id] = [];
+        tracksByArtist[t.artist_id].push({
+          id: t.id,
+          title: t.title,
+          artist_name: t.artist_name,
+          audio_url: t.audio_url,
+          cover_url: t.cover_url,
+          duration_seconds: t.duration_seconds,
+        });
+      }
+    }
+  } catch (e) {
+    console.error("[event-page] artists fetch failed:", e);
+  }
+
+    // ---- Artist merch for this event ----
+  let merchItems: Array<{
+    id: string;
+    artist_id: string;
+    title: string;
+    description: string | null;
+    price_pence: number;
+    currency: string;
+    image_url: string | null;
+    external_url: string | null;
+    stock: number | null;
+  }> = [];
+
+  try {
+    const { data: merchArtistRows } = await supabase
+      .from("event_artists")
+      .select("artist_id")
+      .eq("event_id", event.id);
+
+    const merchArtistIds = (merchArtistRows || []).map(
+      (r) => (r as { artist_id: string }).artist_id
+    );
+
+    if (merchArtistIds.length > 0) {
+      const { data: merch } = await supabase
+        .from("merch")
+        .select(
+          "id,artist_id,title,description,price_pence,currency,image_url,external_url,stock"
+        )
+        .in("artist_id", merchArtistIds)
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(24);
+      merchItems = (merch || []) as typeof merchItems;
+    }
+  } catch (e) {
+    console.error("[event-page] merch fetch failed:", e);
+  }
+
   return (
     <div>
       <EventStructuredData event={e} />
@@ -328,12 +442,12 @@ export default async function EventPage({
                   href={`/event/${e.id}/attendees`}
                   className="inline-block mt-3 text-sm text-white/70 underline hover:text-white"
                 >
-                  See all {goingCount} attendees →
+                  See all {goingCount} attendees · {attendingCount} going
                 </a>
               </div>
             )}
             <p className="text-sm text-white/70 mt-3">
-              {interestedCount} interested · {goingCount} going
+                  {interestedCount} interested · {goingCount} going
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 mt-6">
@@ -402,7 +516,7 @@ export default async function EventPage({
                   >
                     {e.venues.name}
                   </Link>
-                  {e.venues.city ? " · " + e.venues.city : ""}
+                  {e.venues.city ? " · " : ""}{e.venues.city}
                 </span>
               )}
             </div>
@@ -561,6 +675,8 @@ export default async function EventPage({
           </div>
         </div>
       </div>
+        <EventArtists artists={eventArtists} tracksByArtist={tracksByArtist} />
+        <EventArtistMerch items={merchItems} />
     </div>
   );
 }
