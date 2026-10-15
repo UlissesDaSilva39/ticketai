@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import FollowButton from "@/components/FollowButton";
+import PromoterMessageButton from "@/components/promoter/PromoterMessageButton";
+import PromoterBookingSection from "@/components/promoter/PromoterBookingSection";
 import PromoterLookingFor from "@/components/promoter/PromoterLookingFor";
 import {
   MapPin,
@@ -23,9 +25,9 @@ type Promoter = {
   user_id: string;
   display_name: string;
   bio: string | null;
-  Camera: string | null;
+  instagram: string | null;
   tiktok: string | null;
-  Share2: string | null;
+  youtube: string | null;
   city: string | null;
   commission_rate: number | null;
   verified: boolean;
@@ -403,7 +405,7 @@ export default async function PromoterProfilePage({
             )}
 
             {/* Socials */}
-            {(p.Camera || p.tiktok || p.Share2 || p.website) && (
+            {(p.instagram || p.tiktok || p.youtube || p.website) && (
               <section className="bg-white border border-gray-200 rounded-2xl p-6">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
                   Links
@@ -422,16 +424,16 @@ export default async function PromoterProfilePage({
                       </a>
                     </li>
                   )}
-                  {p.Camera && (
+                  {p.instagram && (
                     <li>
                       <a
-                        href={"https://Camera.com/" + p.Camera}
+                        href={"https://instagram.com/" + p.instagram}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 hover:underline"
                       >
                         <Camera className="h-3.5 w-3.5 text-gray-400" />
-                        Camera
+                        Instagram
                       </a>
                     </li>
                   )}
@@ -447,16 +449,16 @@ export default async function PromoterProfilePage({
                       </a>
                     </li>
                   )}
-                  {p.Share2 && (
+                  {p.youtube && (
                     <li>
                       <a
-                        href={"https://Share2.com/@" + p.Share2}
+                        href={"https://youtube.com/@" + p.youtube}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 hover:underline"
                       >
                         <Share2 className="h-3.5 w-3.5 text-gray-400" />
-                        Share2
+                        YouTube
                       </a>
                     </li>
                   )}
