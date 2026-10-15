@@ -1,141 +1,204 @@
-import Link from "next/link";
+import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
-import FriendButton from "@/components/FriendButton";
+import PersonCard, { type PersonCardData } from "@/components/people/PersonCard";
+import RoleTabs from "@/components/people/RoleTabs";
+import PeopleSearch from "@/components/people/PeopleSearch";
+
+export const metadata: Metadata = {
+  title: "People",
+  description: "Find artists, promoters, venues, labels, and A&R scouts on GRID.",
+};
 
 export const dynamic = "force-dynamic";
 
-type Person = {
-  id: string;
-  full_name: string | null;
-  username: string | null;
-  city: string | null;
-  bio: string | null;
+type Params = {
+  role?: string;
+  q?: string;
+  sort?: string;
 };
 
 export default async function PeoplePage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<Params>;
 }) {
-  const { q } = await searchParams;
-  const query = (q || "").trim();
+  const params = await searchParams;
+  const roleFilter = params.role || "all";
+  const q = params.q || "";
+  const sort = params.sort || "active";
 
   const supabase = await createServerSupabase();
+
   const { data: { user } } = await supabase.auth.getUser();
 
-  let profilesQuery = supabase
+  // Distinct roles with counts
+  const { data: roleRows } = await supabase
     .from("profiles")
-    .select("id, full_name, username, city, bio")
+    .select("role");
+
+  const roleCounts = new Map<string, number>();
+  let total = 0;
+  for (const r of roleRows ?? []) {
+    const role = (r as { role?: string }).role || "user";
+    roleCounts.set(role, (roleCounts.get(role) ?? 0) + 1);
+    total += 1;
+  }
+
+  const roleOrder = ["attendee", "a_and_r", "record_company", "artist", "promoter", "venue"];
+  const tabs = [
+    { slug: "all", label: "All", count: total },
+    ...roleOrder
+      .filter((r) => roleCounts.has(r))
+      .map((r) => ({ slug: r, label: r, count: roleCounts.get(r) ?? 0 })),
+  ];
+
+  // Build people query
+  let query = supabase
+    .from("profiles")
+    .select("id, full_name, username, avatar_url, city, genre, bio, role, label, is_public, created_at")
     .eq("is_public", true)
-    .not("username", "is", null)
-    .order("created_at", { ascending: false })
-    .limit(50);
+    .not("username", "is", null);
 
-  if (query.length > 0) {
-    profilesQuery = profilesQuery.or(
-      "full_name.ilike.%" + query + "%,username.ilike.%" + query + "%"
+  if (roleFilter !== "all") query = query.eq("role", roleFilter);
+
+  if (q) {
+    const like = "%" + q.replace(/[%_]/g, "") + "%";
+    query = query.or(
+      "full_name.ilike." + like + ",username.ilike." + like + ",city.ilike." + like + ",genre.ilike." + like
     );
   }
 
-  const { data: profiles } = await profilesQuery;
-  let people = (profiles || []) as Person[];
-
-  // Exclude self
-  if (user) {
-    people = people.filter((p) => p.id !== user.id);
+  if (sort === "new") {
+    query = query.order("created_at", { ascending: false });
+  } else {
+    query = query.order("created_at", { ascending: false });
   }
 
-  // Which of these are already my friends?
-  let friendIds: string[] = [];
-  if (user) {
-    const { data: friendships } = await supabase
-      .from("friendships")
-      .select("user_id, friend_id")
-      .eq("status", "accepted")
-      .or("user_id.eq." + user.id + ",friend_id.eq." + user.id);
-    friendIds = (friendships || []).map((f) =>
-      f.user_id === user.id ? f.friend_id : f.user_id
-    );
+  query = query.limit(200);
+
+  const { data: people } = await query;
+
+  const ids = (people ?? []).map((p) => p.id);
+
+  // Follower counts for all listed users in one query
+  const followerCounts = new Map<string, number>();
+  if (ids.length > 0) {
+    const { data: followRows } = await supabase
+      .from("follows")
+      .select("target_id")
+      .eq("target_type", "user")
+      .in("target_id", ids);
+    for (const r of followRows ?? []) {
+      const tid = (r as { target_id: string }).target_id;
+      followerCounts.set(tid, (followerCounts.get(tid) ?? 0) + 1);
+    }
+  }
+
+  // Which of these does the current user follow?
+  const followingSet = new Set<string>();
+  if (user && ids.length > 0) {
+    const { data: myFollows } = await supabase
+      .from("follows")
+      .select("target_id")
+      .eq("follower_id", user.id)
+      .eq("target_type", "user")
+      .in("target_id", ids);
+    for (const r of myFollows ?? []) {
+      followingSet.add((r as { target_id: string }).target_id);
+    }
+  }
+
+  const cards: PersonCardData[] = (people ?? []).map((p) => ({
+    id: p.id,
+    full_name: p.full_name,
+    username: p.username,
+    avatar_url: p.avatar_url,
+    city: p.city,
+    genre: p.genre,
+    bio: p.bio,
+    role: p.role || "user",
+    label: p.label,
+    followerCount: followerCounts.get(p.id) ?? 0,
+    initialFollowing: followingSet.has(p.id),
+    signedIn: Boolean(user),
+  }));
+
+  // Sort by follower count when requested (client-side, small list)
+  if (sort === "followers") {
+    cards.sort((a, b) => b.followerCount - a.followerCount);
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1
-        className="text-5xl font-bold uppercase mb-6"
-        style={{ fontFamily: "var(--font-antonio)" }}
-      >
-        People
-      </h1>
-
-      <form method="get" className="mb-8">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            name="q"
-            defaultValue={query}
-            placeholder="Search by name or @username..."
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-xl outline-none focus:border-black"
-          />
-          <button
-            type="submit"
-            className="px-6 py-3 bg-black text-white font-semibold rounded-xl hover:bg-gray-800"
-          >
-            Search
-          </button>
-        </div>
-        {query.length > 0 && (
-          <p className="mt-2 text-sm text-gray-500">
-            {people.length} {people.length === 1 ? "result" : "results"} for &ldquo;{query}&rdquo;
-            <Link href="/people" className="ml-3 underline underline-offset-4">
-              Clear
-            </Link>
-          </p>
-        )}
-      </form>
-
-      {people.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-12 text-center">
-          <p className="text-gray-600">
-            {query.length > 0 ? "No one matched your search." : "No public profiles yet."}
+    <div className="bg-gray-50 min-h-screen">
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold tracking-tight">People</h1>
+          <p className="mt-1 text-gray-500">
+            Find artists, promoters, venues, labels, and A&amp;R scouts on GRID.
           </p>
         </div>
-      ) : (
-        <ul className="divide-y divide-gray-200 border border-gray-200 rounded-2xl">
-          {people.map((p) => {
-            const name = p.full_name || p.username || "Someone";
-            const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-            const isFriend = friendIds.includes(p.id);
+
+        {/* Search */}
+        <div className="mb-5">
+          <PeopleSearch initial={q} />
+        </div>
+
+        {/* Role tabs */}
+        <div className="mb-6">
+          <RoleTabs tabs={tabs} activeRole={roleFilter} query={{ q, sort }} />
+        </div>
+
+        {/* Sort bar */}
+        <div className="mb-6 flex flex-wrap gap-2 text-xs">
+          {[
+            { key: "active", label: "Newest" },
+            { key: "followers", label: "Most followers" },
+            { key: "new", label: "Recently joined" },
+          ].map((s) => {
+            const isActive = sort === s.key;
+            const params2 = new URLSearchParams();
+            if (roleFilter !== "all") params2.set("role", roleFilter);
+            if (q) params2.set("q", q);
+            if (s.key !== "active") params2.set("sort", s.key);
+            const href = "/people" + (params2.toString() ? "?" + params2.toString() : "");
             return (
-              <li key={p.id} className="p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-bold flex-shrink-0">
-                  {initials}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <Link
-                    href={p.username ? "/u/" + p.username : "#"}
-                    className="font-medium hover:underline"
-                  >
-                    {name}
-                  </Link>
-                  <p className="text-sm text-gray-500">
-                    {p.username && "@" + p.username}
-                    {p.city && (p.username ? " · " + p.city : p.city)}
-                  </p>
-                  {p.bio && (
-                    <p className="text-sm text-gray-600 mt-1 line-clamp-1">{p.bio}</p>
-                  )}
-                </div>
-                {user && (
-                  <FriendButton
-                    friendId={p.id}
-                    initialStatus={isFriend ? "accepted" : null}
-                  />
-                )}
-              </li>
+              <a
+                key={s.key}
+                href={href}
+                className={
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 font-medium transition " +
+                  (isActive
+                    ? "bg-black text-white"
+                    : "bg-white border border-gray-200 text-gray-600 hover:border-black")
+                }
+              >
+                {s.label}
+              </a>
             );
           })}
-        </ul>
-      )}
+        </div>
+
+        {/* Results */}
+        <div className="mb-3 text-xs text-gray-500">
+          {cards.length} {cards.length === 1 ? "person" : "people"} found
+        </div>
+
+        {cards.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center">
+            <p className="text-sm font-medium text-gray-900">No one matches</p>
+            <p className="mt-1 text-xs text-gray-500">
+              Try a different search, role tab, or clear the filters.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {cards.map((c) => (
+              <PersonCard key={c.id} person={c} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
