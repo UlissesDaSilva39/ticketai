@@ -19,7 +19,7 @@ import EventArtistMerch from "@/components/event/EventArtistMerch";
 export const dynamic = "force-dynamic";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+  process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
 
 type EventWithVenue = Event & {
   venues: { name: string; slug: string; city: string } | null;
@@ -75,7 +75,7 @@ function EventStructuredData({ event }: { event: EventWithVenue }) {
     },
     organizer: {
       "@type": "Organization",
-      name: "TicketAI",
+      name: "GRID",
       url: SITE_URL,
     },
   };
@@ -112,7 +112,7 @@ export async function generateMetadata({
     };
   }
 
-  const desc = event.description || "Get tickets on TicketAI.";
+  const desc = event.description || "Get tickets on GRID.";
 
   return {
     title: event.title,

@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!label) return { title: "Genre not found" };
   return {
     title: label + " artists",
-    description: "Discover " + label + " artists on TicketAI.",
+    description: "Discover " + label + " artists on GRID.",
   };
 }
 
