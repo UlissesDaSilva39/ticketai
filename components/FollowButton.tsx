@@ -1,88 +1,123 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { UserPlus, UserCheck } from "lucide-react";
+
+type TargetType = "artist" | "promoter" | "venue" | "user";
+
+type Props = {
+  targetType: TargetType;
+  targetId: string;
+  initialFollowing: boolean;
+  initialCount: number;
+  signedIn: boolean;
+  label?: string;
+  variant?: "pill" | "compact";
+};
 
 export default function FollowButton({
   targetType,
   targetId,
+  initialFollowing,
   initialCount,
-  label = "Follow",
-  variant = "dark",
-}: {
-  targetType: "promoter" | "venue";
-  targetId: string;
-  initialCount: number;
-  label?: string;
-  variant?: "dark" | "light";
-}) {
+  signedIn,
+  label,
+  variant = "pill",
+}: Props) {
   const router = useRouter();
-  const [following, setFollowing] = useState(false);
+  const [following, setFollowing] = useState(initialFollowing);
   const [count, setCount] = useState(initialCount);
-  const [loading, setLoading] = useState(true);
-  const [signedIn, setSignedIn] = useState(true);
+  const [busy, setBusy] = useState(false);
 
-  useEffect(() => {
-    fetch(
-      "/api/follows/status?targetType=" +
-        targetType +
-        "&targetId=" +
-        targetId,
-      { cache: "no-store" }
-    )
-      .then((r) => r.json())
-      .then((d) => {
-        setFollowing(Boolean(d.following));
-        setCount(Number(d.count ?? initialCount));
-        setSignedIn(Boolean(d.signedIn));
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [targetType, targetId, initialCount]);
+  const showLabel = label ?? (variant === "compact" ? "" : "Follow");
 
   async function toggle() {
     if (!signedIn) {
-      router.push(
-        "/login?next=" + encodeURIComponent(window.location.pathname)
-      );
+      const next = typeof window !== "undefined" ? window.location.pathname : "/";
+      router.push("/login?next=" + encodeURIComponent(next));
       return;
     }
-    setLoading(true);
+
+    setBusy(true);
+    const next = !following;
+    setFollowing(next);
+    setCount((n) => Math.max(n + (next ? 1 : -1), 0));
+
     try {
       const res = await fetch("/api/follows/toggle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetType, targetId }),
+        body: JSON.stringify({ targetType, targetId, following: next }),
       });
+
+      if (!res.ok) {
+        setFollowing(!next);
+        setCount((n) => Math.max(n + (next ? -1 : 1), 0));
+        return;
+      }
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-      setFollowing(Boolean(data.following));
-      setCount(Number(data.count ?? count));
-      router.refresh();
+      setFollowing(!!data.following);
+      setCount(Number(data.count ?? 0));
     } catch {
-      /* silent */
+      setFollowing(!next);
+      setCount((n) => Math.max(n + (next ? -1 : 1), 0));
     } finally {
-      setLoading(false);
+      setBusy(false);
     }
   }
 
-  const base =
-    "rounded-full px-5 py-2 text-sm font-medium transition disabled:opacity-50 ";
-
-  const style =
-    variant === "light"
-      ? following
-        ? base + "bg-white text-black hover:bg-gray-100"
-        : base +
-          "border-2 border-white text-white hover:bg-white hover:text-black"
-      : following
-      ? base + "bg-black text-white hover:bg-gray-800"
-      : base +
-        "border-2 border-black text-black hover:bg-black hover:text-white";
+  if (variant === "compact") {
+    return (
+      <button
+        type="button"
+        onClick={toggle}
+        disabled={busy}
+        aria-pressed={following}
+        aria-label={following ? "Unfollow" : "Follow"}
+        className={
+          "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full transition disabled:opacity-50 " +
+          (following
+            ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+            : "bg-black text-white hover:bg-gray-800")
+        }
+      >
+        {following ? <UserCheck className="h-3.5 w-3.5" /> : <UserPlus className="h-3.5 w-3.5" />}
+        {following ? "Following" : "Follow"}
+      </button>
+    );
+  }
 
   return (
-    <button type="button" onClick={toggle} disabled={loading} className={style}>
-      {following ? "Following" : label} · {count}
+    <button
+      type="button"
+      onClick={toggle}
+      disabled={busy}
+      aria-pressed={following}
+      aria-label={
+        following
+          ? "Unfollow, " + count + " followers"
+          : "Follow, " + count + " followers"
+      }
+      className={
+        "inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full transition disabled:opacity-50 " +
+        (following
+          ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+          : "bg-black text-white hover:bg-gray-800")
+      }
+    >
+      {following ? (
+        <>
+          <UserCheck className="h-4 w-4" />
+          Following · {count}
+        </>
+      ) : (
+        <>
+          <UserPlus className="h-4 w-4" />
+          {showLabel} · {count}
+        </>
+      )}
     </button>
   );
 }

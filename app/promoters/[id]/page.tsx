@@ -10,8 +10,8 @@ import {
   Mail,
   Phone,
   Globe,
-  Instagram,
-  Youtube,
+  Camera,
+  Share2,
   Music,
   Users,
 } from "lucide-react";
@@ -23,9 +23,9 @@ type Promoter = {
   user_id: string;
   display_name: string;
   bio: string | null;
-  instagram: string | null;
+  Camera: string | null;
   tiktok: string | null;
-  youtube: string | null;
+  Share2: string | null;
   city: string | null;
   commission_rate: number | null;
   verified: boolean;
@@ -403,7 +403,7 @@ export default async function PromoterProfilePage({
             )}
 
             {/* Socials */}
-            {(p.instagram || p.tiktok || p.youtube || p.website) && (
+            {(p.Camera || p.tiktok || p.Share2 || p.website) && (
               <section className="bg-white border border-gray-200 rounded-2xl p-6">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
                   Links
@@ -422,16 +422,16 @@ export default async function PromoterProfilePage({
                       </a>
                     </li>
                   )}
-                  {p.instagram && (
+                  {p.Camera && (
                     <li>
                       <a
-                        href={"https://instagram.com/" + p.instagram}
+                        href={"https://Camera.com/" + p.Camera}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 hover:underline"
                       >
-                        <Instagram className="h-3.5 w-3.5 text-gray-400" />
-                        Instagram
+                        <Camera className="h-3.5 w-3.5 text-gray-400" />
+                        Camera
                       </a>
                     </li>
                   )}
@@ -447,16 +447,16 @@ export default async function PromoterProfilePage({
                       </a>
                     </li>
                   )}
-                  {p.youtube && (
+                  {p.Share2 && (
                     <li>
                       <a
-                        href={"https://youtube.com/@" + p.youtube}
+                        href={"https://Share2.com/@" + p.Share2}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 hover:underline"
                       >
-                        <Youtube className="h-3.5 w-3.5 text-gray-400" />
-                        YouTube
+                        <Share2 className="h-3.5 w-3.5 text-gray-400" />
+                        Share2
                       </a>
                     </li>
                   )}

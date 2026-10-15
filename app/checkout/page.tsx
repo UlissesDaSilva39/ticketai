@@ -1,4 +1,4 @@
- "use client";
+﻿ "use client";
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -227,3 +227,4 @@ export default function CheckoutPage() {
     </Suspense>
   );
 }
+
