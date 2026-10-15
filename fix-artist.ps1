@@ -1,1 +1,0 @@
-powershell -ExecutionPolicy Bypass -File .\fix-artist.ps1

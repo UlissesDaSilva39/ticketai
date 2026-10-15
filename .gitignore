@@ -142,3 +142,12 @@ diagnose-output.*
 # Playwright auth state
 tests/e2e/.auth/
 playwright/.auth/
+
+# Local dev artifacts
+grid/
+page-*.tsx
+diagnose-*.ps1
+fix-*.ps1
+*.mojibake-bak
+*.broken-*
+*.bak-*
