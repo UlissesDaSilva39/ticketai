@@ -70,7 +70,7 @@ export default function FeedPost({
             {name}
           </Link>
           <p className="text-xs text-gray-500">
-            {post.author_type !== "user" ? "@" + (author?.username || "user") + " Ã‚· " : ""}
+            {post.author_type !== "user" ? "@" + (author?.username || "user") + " Ãƒâ€šÂ· " : ""}
             {timeAgo(post.created_at)}
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function FeedPost({
             <p className="font-semibold text-sm">{event.title}</p>
             <p className="text-xs text-gray-500 mt-0.5">
               {event.start_date ? formatEventDate(event.start_date) : "Date TBC"}
-              {fromPrice !== null ? " Ã‚· From £" + fromPrice.toFixed(2) : ""}
+              {fromPrice !== null ? " Ãƒâ€šÂ· From Â£" + fromPrice.toFixed(2) : ""}
             </p>
           </div>
         </Link>
@@ -121,7 +121,7 @@ export default function FeedPost({
           <span>{post.comment_count}</span>
         </button>
         <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100">
-          <span>ÃƒÆ’Ã‚Â¢Ã¢â‚¬â€Ã‚Â Ã¢â‚¬â€</span>
+          <span>ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬ÂÃƒâ€šÃ‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</span>
           <span>{post.share_count}</span>
         </button>
       </footer>
