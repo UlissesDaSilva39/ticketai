@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendFriendAcceptedEmail } from "@/lib/email";
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
       // Email
       if (senderAuth?.user?.email) {
-        const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+        const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
         await sendFriendAcceptedEmail({
           toEmail: senderAuth.user.email,
           toName: senderAuth.user.email.split("@")[0],

@@ -3,7 +3,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { CITIES } from "@/lib/cities";
 import { GENRES } from "@/lib/genres";
 
-const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createServerSupabase();

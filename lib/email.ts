@@ -20,7 +20,7 @@ type TicketEmailData = {
 };
 
 export async function sendTicketEmail(data: TicketEmailData) {
-  console.log("Sending TicketAI email to:", data.toEmail);
+  console.log("Sending GRID email to:", data.toEmail);
   console.log("Resend API key configured:", !!process.env.RESEND_API_KEY);
 
   const ticketsHtml = data.tickets
@@ -30,7 +30,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
         '<p style="margin: 0; font-weight: 600; font-size: 16px;">' +
         t.ticket_type +
         "</p>" +
-        '<p style="margin: 4px 0 8px 0; font-size: 13px; color: #666;">£' +
+        '<p style="margin: 4px 0 8px 0; font-size: 13px; color: #666;">Â£' +
         Number(t.price).toFixed(2) +
         "</p>" +
         '<img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=' +
@@ -62,16 +62,16 @@ export async function sendTicketEmail(data: TicketEmailData) {
     "</table></td></tr>" +
     '<tr><td style="padding: 32px;"><table width="100%" style="background: #f5f5f5; border-radius: 8px; padding: 20px;">' +
     '<tr><td style="font-size: 14px; color: #666;">Total paid</td>' +
-    '<td style="text-align: right; font-size: 20px; font-weight: 700;">£' +
+    '<td style="text-align: right; font-size: 20px; font-weight: 700;">Â£' +
     data.totalAmount.toFixed(2) +
     "</td></tr>" +
     "</table></td></tr>" +
     '<tr><td style="padding: 0 32px 32px 32px;">' +
-    '<a href="https://ticketai.org.uk/my-tickets/print" style="display: inline-block; background: #000; color: #fff; padding: 16px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 15px; margin-right: 12px;">Print Tickets</a>' +
-    '<a href="https://ticketai.org.uk/my-tickets" style="display: inline-block; background: #fff; color: #000; padding: 16px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 15px; border: 2px solid #000;">View My Tickets</a>' +
+    '<a href="https://GRID.org.uk/my-tickets/print" style="display: inline-block; background: #000; color: #fff; padding: 16px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 15px; margin-right: 12px;">Print Tickets</a>' +
+    '<a href="https://GRID.org.uk/my-tickets" style="display: inline-block; background: #fff; color: #000; padding: 16px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 15px; border: 2px solid #000;">View My Tickets</a>' +
     "</td></tr>" +
     '<tr><td style="background: #f9f9f9; padding: 24px 32px; text-align: center; font-size: 12px; color: #999;">' +
-    '<p style="margin: 0;">TicketAI · AI-powered ticketing</p>' +
+    '<p style="margin: 0;">GRID Â· AI-powered ticketing</p>' +
     '<p style="margin: 8px 0 0 0;">Order ' +
     data.orderId.slice(0, 8).toUpperCase() +
     "</p></td></tr>" +
@@ -103,7 +103,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
 
   try {
     const { data: result, error } = await resend.emails.send({
-      from: "TicketAI <onboarding@resend.dev>",
+      from: "GRID <onboarding@resend.dev>",
       to: data.toEmail,
       subject: "Your tickets for " + data.eventTitle,
       html,
@@ -118,7 +118,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
       throw new Error("Resend email failed: " + error.message);
     }
 
-    console.log("TicketAI email sent successfully:", result);
+    console.log("GRID email sent successfully:", result);
     return result;
   } catch (err) {
     console.error("=================================");
@@ -162,7 +162,7 @@ export async function sendResaleNotification(data: ResaleEmailData) {
     '</strong> has just been returned by its original owner.</p>' +
     '<p style="font-size:15px;line-height:1.6;">Ticket type: <strong>' +
     data.ticketType +
-    '</strong><br>Price: <strong>£' +
+    '</strong><br>Price: <strong>Â£' +
     data.price.toFixed(2) +
     '</strong> (original face value)</p>' +
     '<p style="font-size:14px;color:#999;">This link expires on ' +
@@ -173,13 +173,13 @@ export async function sendResaleNotification(data: ResaleEmailData) {
     '" style="display:inline-block;margin-top:16px;background:#000;color:#fff;padding:16px 32px;border-radius:999px;text-decoration:none;font-weight:600;font-size:15px;">Claim Ticket</a>' +
     '</td></tr>' +
     '<tr><td style="background:#f9f9f9;padding:24px 32px;text-align:center;font-size:12px;color:#999;">' +
-    '<p style="margin:0;">TicketAI · Face value resale</p>' +
+    '<p style="margin:0;">GRID Â· Face value resale</p>' +
     '</td></tr>' +
     '</table></td></tr></table></body></html>';
 
   try {
     const { error } = await resend.emails.send({
-      from: "TicketAI <onboarding@resend.dev>",
+      from: "GRID <onboarding@resend.dev>",
       to: data.toEmail,
       subject: "A ticket just became available - " + data.eventTitle,
       html,
@@ -220,7 +220,7 @@ export async function sendFriendRequestEmail(data: FriendRequestEmailData) {
     <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #111;">
       <h1 style="font-size: 22px; margin: 0 0 16px 0;">New friend request</h1>
       <p style="font-size: 15px; line-height: 1.6; color: #333; margin: 0 0 20px 0;">
-        <strong>${data.fromName}</strong> wants to be your friend on TicketAI.
+        <strong>${data.fromName}</strong> wants to be your friend on GRID.
       </p>
       <a href="${data.siteUrl}/notifications" style="display: inline-block; background: #000; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 600;">Review request</a>
       <p style="font-size: 13px; color: #888; margin: 24px 0 0 0;">
@@ -231,9 +231,9 @@ export async function sendFriendRequestEmail(data: FriendRequestEmailData) {
 
   try {
     await resend.emails.send({
-      from: "TicketAI <onboarding@resend.dev>",
+      from: "GRID <onboarding@resend.dev>",
       to: data.toEmail,
-      subject: `${data.fromName} wants to be your friend on TicketAI`,
+      subject: `${data.fromName} wants to be your friend on GRID`,
       html,
     });
     console.log("Friend request email sent to", data.toEmail);
@@ -263,7 +263,7 @@ export async function sendFriendAcceptedEmail(data: FriendAcceptedEmailData) {
     <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #111;">
       <h1 style="font-size: 22px; margin: 0 0 16px 0;">You have a new friend</h1>
       <p style="font-size: 15px; line-height: 1.6; color: #333; margin: 0 0 20px 0;">
-        <strong>${data.accepterName}</strong> accepted your friend request on TicketAI.
+        <strong>${data.accepterName}</strong> accepted your friend request on GRID.
       </p>
       <a href="${profileUrl}" style="display: inline-block; background: #000; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 600;">View their profile</a>
     </div>
@@ -271,9 +271,9 @@ export async function sendFriendAcceptedEmail(data: FriendAcceptedEmailData) {
 
   try {
     await resend.emails.send({
-      from: "TicketAI <onboarding@resend.dev>",
+      from: "GRID <onboarding@resend.dev>",
       to: data.toEmail,
-      subject: `${data.accepterName} is now your friend on TicketAI`,
+      subject: `${data.accepterName} is now your friend on GRID`,
       html,
     });
     console.log("Friend accepted email sent to", data.toEmail);
@@ -315,7 +315,7 @@ export async function sendEventReminderEmail(data: EventReminderEmailData) {
 
   try {
     await resend.emails.send({
-      from: "TicketAI <onboarding@resend.dev>",
+      from: "GRID <onboarding@resend.dev>",
       to: data.toEmail,
       subject: `Tomorrow: ${data.eventTitle}`,
       html,
@@ -353,7 +353,7 @@ export async function sendNewMessageEmail(data: NewMessageEmailData) {
 
   try {
     await resend.emails.send({
-      from: "TicketAI <onboarding@resend.dev>",
+      from: "GRID <onboarding@resend.dev>",
       to: data.toEmail,
       subject: "New message from " + data.fromName,
       html,

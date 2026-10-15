@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import ArtistRegisterForm from "@/components/ArtistRegisterForm";
@@ -6,7 +6,7 @@ import ArtistRegisterForm from "@/components/ArtistRegisterForm";
 export const metadata: Metadata = {
   title: "Artist Registration",
   description:
-    "Register as an artist on TicketAI. Get discovered by promoters, venues, and fans.",
+    "Register as an artist on GRID. Get discovered by promoters, venues, and fans.",
 };
 
 export default async function ArtistRegisterPage() {
@@ -37,7 +37,7 @@ export default async function ArtistRegisterPage() {
             Artist Registration
           </h1>
           <p className="text-gray-600 max-w-xl">
-            Register as an artist on TicketAI and add your details. Get discovered
+            Register as an artist on GRID and add your details. Get discovered
             by promoters, venues, and fans all in one place.
           </p>
         </section>

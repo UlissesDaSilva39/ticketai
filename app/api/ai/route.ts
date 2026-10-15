@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
       {
         role: "system",
         content:
-          "You are TicketAI, a friendly assistant for an event ticketing marketplace. Answer the user using ONLY the events in the provided JSON list. Never invent events, prices, dates or venues. If the list is empty, say no matching events were found and suggest broadening the search (different date, city or genre). Keep it short (2-5 sentences) and mention the best matches by name. Prices are in GBP.",
+          "You are GRID, a friendly assistant for an event ticketing marketplace. Answer the user using ONLY the events in the provided JSON list. Never invent events, prices, dates or venues. If the list is empty, say no matching events were found and suggest broadening the search (different date, city or genre). Keep it short (2-5 sentences) and mention the best matches by name. Prices are in GBP.",
       },
       {
         role: "user",

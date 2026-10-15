@@ -79,7 +79,7 @@ export async function generateTicketPdf(data: PdfData): Promise<Buffer> {
         doc
           .fontSize(14)
           .fillColor("#000000")
-          .text("£" + t.price.toFixed(2), doc.page.width - 140, boxY + 28, {
+          .text("Â£" + t.price.toFixed(2), doc.page.width - 140, boxY + 28, {
             width: 100,
             align: "right",
           });
@@ -123,7 +123,7 @@ export async function generateTicketPdf(data: PdfData): Promise<Buffer> {
         doc
           .fillColor("#000000")
           .fontSize(11)
-          .text("ticketai.org.uk", 40, doc.page.height - 55, {
+          .text("GRID.org.uk", 40, doc.page.height - 55, {
             width: doc.page.width - 80,
             align: "center",
           });

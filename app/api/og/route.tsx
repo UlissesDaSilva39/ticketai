@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
   }
 
   const price = priceFrom(event.ticket_types);
-  const priceLabel = price !== null ? "From £" + price.toFixed(2) : "";
+  const priceLabel = price !== null ? "From Â£" + price.toFixed(2) : "";
   const dateLabel = formatDate(event.start_date);
 
   return new ImageResponse(
@@ -91,7 +91,7 @@ export async function GET(req: NextRequest) {
             letterSpacing: 2,
           }}
         >
-          TICKETAI
+          GRID
         </div>
         <div
           style={{
@@ -114,7 +114,7 @@ export async function GET(req: NextRequest) {
               marginBottom: 24,
             }}
           >
-            {event.title.length > 50 ? event.title.slice(0, 50) + "Ã¢â‚¬Â¦" : event.title}
+            {event.title.length > 50 ? event.title.slice(0, 50) + "ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦" : event.title}
           </div>
           <div
             style={{
@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
             <span>{dateLabel}</span>
             {priceLabel && (
               <>
-                <span style={{ color: "#00FF87" }}>Ã‚·</span>
+                <span style={{ color: "#00FF87" }}>Ãƒâ€šÂ·</span>
                 <span style={{ color: "#00FF87", fontWeight: 700 }}>{priceLabel}</span>
               </>
             )}

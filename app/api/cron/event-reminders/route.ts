@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
   const ago24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   const ago48h = new Date(now.getTime() - 48 * 60 * 60 * 1000);
 
-  const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+  const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
   let reminders24 = 0;
   let reminders2 = 0;
   let reviews = 0;

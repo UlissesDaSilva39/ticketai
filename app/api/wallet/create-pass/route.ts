@@ -34,8 +34,8 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         barcodeValue: ticket.qr_code,
         barcodeFormat: "QR",
-        logoText: "TicketAI",
-        organizationName: ticket.events?.title || "TicketAI Event",
+        logoText: "GRID",
+        organizationName: ticket.events?.title || "GRID Event",
         primaryFields: [
           { label: "EVENT", value: ticket.events?.title || "Event" },
         ],

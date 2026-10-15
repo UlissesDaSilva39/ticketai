@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ---------- Feed layout + sticky sidebars ---------- */
+.feed-page {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 300px;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px;
+  align-items: start;              /* required for sticky */
+}
+
+.feed-sidebar {
+  position: sticky;
+  top: 72px;
+  max-height: calc(100vh - 72px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.feed-sidebar--left  { grid-column: 1; }
+.feed-sidebar--right { grid-column: 3; }
+.feed-stream         { grid-column: 2; min-width: 0; }
+
+@media (max-width: 1023px) {
+  .feed-page { grid-template-columns: 1fr; }
+  .feed-sidebar {
+    position: fixed;
+    top: 0; bottom: 0;
+    width: 300px;
+    max-height: 100vh;
+    background: #0a0a0a;
+    z-index: 40;
+    transition: transform 0.25s ease;
+  }
+  .feed-sidebar--left  { left: 0;  transform: translateX(-100%); }
+  .feed-sidebar--right { right: 0; transform: translateX(100%); }
+  .feed-sidebar.is-open { transform: translateX(0); }
+}

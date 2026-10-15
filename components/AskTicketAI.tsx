@@ -13,7 +13,7 @@ type AIEvent = {
   image: string | null;
 };
 
-export default function AskTicketAI() {
+export default function AskGRID() {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
   const [events, setEvents] = useState<AIEvent[]>([]);
@@ -57,7 +57,7 @@ export default function AskTicketAI() {
         className="text-3xl font-bold uppercase mb-2"
         style={{ fontFamily: "var(--font-antonio)" }}
       >
-        Ask TicketAI
+        Ask GRID
       </h2>
       <p className="text-gray-500 mb-4">
         Tell me what kind of event you&apos;re looking for.
@@ -67,7 +67,7 @@ export default function AskTicketAI() {
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Example: House music events in London this weekend under £30"
+          placeholder="Example: House music events in London this weekend under Â£30"
           rows={3}
           disabled={loading}
           className="w-full p-4 border border-gray-200 rounded-lg text-base resize-y"
@@ -77,7 +77,7 @@ export default function AskTicketAI() {
           disabled={loading || !message.trim()}
           className="mt-3 px-6 py-3 bg-black text-white font-medium rounded-full hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
-          {loading ? "TicketAI is thinking..." : "Ask TicketAI"}
+          {loading ? "GRID is thinking..." : "Ask GRID"}
         </button>
       </form>
 
@@ -114,14 +114,14 @@ export default function AskTicketAI() {
                     day: "numeric",
                     month: "short",
                   })}
-                  {e.venue ? " Ã‚· " + e.venue : ""}
+                  {e.venue ? " Ãƒâ€šÂ· " + e.venue : ""}
                 </p>
                 <p className="text-sm font-medium">
                   {e.lowest_price === null
                     ? "Tickets available"
                     : e.lowest_price === 0
                     ? "Free"
-                    : "From £" + e.lowest_price.toFixed(2)}
+                    : "From Â£" + e.lowest_price.toFixed(2)}
                 </p>
               </div>
             </Link>

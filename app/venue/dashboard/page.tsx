@@ -26,7 +26,7 @@ export default async function VenueDashboardPage() {
               My Venues
             </h1>
             <p className="mt-2 text-gray-600">
-              Manage the venues you have listed on TicketAI.
+              Manage the venues you have listed on GRID.
             </p>
           </div>
           <Link

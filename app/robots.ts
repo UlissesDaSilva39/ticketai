@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
 
 export default function robots(): MetadataRoute.Robots {
   return {

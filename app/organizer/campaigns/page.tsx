@@ -205,7 +205,7 @@ export default function CampaignsPage() {
 
             <p className="mt-2 text-gray-500">
               Create your first campaign to start building
-              your TicketAI growth engine.
+              your GRID growth engine.
             </p>
 
             <Link

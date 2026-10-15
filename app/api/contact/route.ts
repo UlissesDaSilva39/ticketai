@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
     }
 
     await resend.emails.send({
-      from: "TicketAI Contact <onboarding@resend.dev>",
-      to: "hello@ticketai.app",
+      from: "GRID Contact <onboarding@resend.dev>",
+      to: "hello@GRID.app",
       replyTo: email,
       subject: "[Contact] " + subject,
       text:

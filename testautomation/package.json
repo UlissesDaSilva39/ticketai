@@ -1,5 +1,5 @@
-﻿{
-  "name": "ticketai-playwright",
+{
+  "name": "GRID-playwright",
   "private": true,
   "scripts": {
     "test": "playwright test",

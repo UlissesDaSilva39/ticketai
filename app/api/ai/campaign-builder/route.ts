@@ -98,11 +98,11 @@ export async function POST(req: NextRequest) {
     const ticketInfo =
       Array.isArray(event.ticket_types) && event.ticket_types.length > 0
         ? (event.ticket_types as Array<{ name: string; price: number; quantity?: number }>)
-            .map((t) => `${t.name} at £${t.price}`)
+            .map((t) => `${t.name} at Â£${t.price}`)
             .join(", ")
         : "no ticket types defined";
 
-    const systemPrompt = `You are a marketing strategist for a UK event ticketing platform called TicketAI.
+    const systemPrompt = `You are a marketing strategist for a UK event ticketing platform called GRID.
 You help promoters design campaigns that sell more tickets.
 
 Always respond with a single JSON object. No preamble, no markdown, no explanation outside the JSON.

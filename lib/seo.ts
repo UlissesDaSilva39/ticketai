@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
 
 export function buildMetadata(opts: {
   title: string;
@@ -17,7 +17,7 @@ export function buildMetadata(opts: {
       title: opts.title,
       description: opts.description,
       url,
-      siteName: "TicketAI",
+      siteName: "GRID",
       type: "website",
       images: opts.image ? [{ url: opts.image }] : undefined,
     },

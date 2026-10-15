@@ -1,4 +1,4 @@
-﻿import { test, expect } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 test.describe("10 - Footer", () => {
   const cases = [
@@ -21,6 +21,6 @@ test.describe("10 - Footer", () => {
   });
   test("copyright", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText(/2026 TicketAI/).first()).toBeVisible();
+    await expect(page.getByText(/2026 GRID/).first()).toBeVisible();
   });
 });

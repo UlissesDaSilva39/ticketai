@@ -253,7 +253,7 @@ export default function NewCampaignPage() {
           </h1>
 
           <p className="mt-2 text-gray-600">
-            Build a campaign around one of your TicketAI
+            Build a campaign around one of your GRID
             events.
           </p>
         </div>
@@ -266,7 +266,7 @@ export default function NewCampaignPage() {
 
         {aiApplied && (
           <div className="mb-6 rounded-lg border-2 border-green-500 bg-green-50 p-4 text-green-800">
-            <p className="font-semibold">✓ AI campaign applied</p>
+            <p className="font-semibold">âœ“ AI campaign applied</p>
             <p className="mt-1 text-sm">
               Your form has been filled in. Review the details below and edit anything you like before creating the campaign.
             </p>

@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
       const { data: recipientAuth } = await admin.auth.admin.getUserById(recipientId);
 
       if (recipientAuth?.user?.email) {
-        const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "https://ticketai.org.uk";
+        const siteUrl = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
         await sendNewMessageEmail({
           toEmail: recipientAuth.user.email,
           toName: recipientAuth.user.email.split("@")[0],

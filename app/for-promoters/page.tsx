@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sell tickets free ÃƒÂ¢Ã‚â‚¬Ã‚â€ no commission | TicketAI",
+  title: "Sell tickets free ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â no commission | GRID",
   description:
     "Free to use. No monthly fee. No per-ticket commission. Keep 100% of what your fans pay. Built-in campaign tracking and 3-day payouts.",
 };
@@ -32,7 +32,7 @@ export default function ForPromotersPage() {
               href="/promoters/join"
               className="rounded-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800"
             >
-              Start selling ÃƒÂ¢Ã‚â‚¬Ã‚â€ it&apos;s free
+              Start selling ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â it&apos;s free
             </Link>
             <a
               href="#compare"
@@ -54,10 +54,10 @@ export default function ForPromotersPage() {
               className="text-3xl font-bold uppercase"
               style={{ fontFamily: "var(--font-antonio)" }}
             >
-              £0 commission
+              Â£0 commission
             </p>
             <p className="mt-3 text-gray-700">
-              Other platforms take 3.5% + 49p per ticket. We take £0. You pay
+              Other platforms take 3.5% + 49p per ticket. We take Â£0. You pay
               only the Stripe processing fee that any payment processor charges.
             </p>
           </div>
@@ -104,15 +104,15 @@ export default function ForPromotersPage() {
                 <th className="py-3 px-4 font-medium">Eventbrite</th>
                 <th className="py-3 px-4 font-medium">Dice</th>
                 <th className="py-3 px-4 font-medium bg-black text-white">
-                  TicketAI
+                  GRID
                 </th>
               </tr>
             </thead>
             <tbody>
               {[
-                ["Listing fee", "£0", "£0", "£0"],
-                ["Per-ticket commission", "3.5% + 49p", "~5%", "£0"],
-                ["Payout delay", "5ÃƒÂ¢Ã‚â‚¬Ã‚â€œ30 days", "5 days", "3 days"],
+                ["Listing fee", "Â£0", "Â£0", "Â£0"],
+                ["Per-ticket commission", "3.5% + 49p", "~5%", "Â£0"],
+                ["Payout delay", "5ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Å“30 days", "5 days", "3 days"],
                 ["Built-in campaign tracking", "No", "No", "Yes"],
                 ["Click & conversion attribution", "No", "No", "Yes"],
                 ["AI campaign builder", "No", "No", "Coming"],
@@ -150,7 +150,7 @@ export default function ForPromotersPage() {
               {
                 n: "2",
                 t: "Share your link",
-                d: "One unique URL. Post it anywhere ÃƒÂ¢Ã‚â‚¬Ã‚â€ Instagram, email, WhatsApp.",
+                d: "One unique URL. Post it anywhere ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â Instagram, email, WhatsApp.",
               },
               {
                 n: "3",
@@ -192,13 +192,13 @@ export default function ForPromotersPage() {
           {[
             {
               t: "Featured placement",
-              p: "from £19/day",
+              p: "from Â£19/day",
               d: "Pin your event to the top of search results in your city.",
             },
             {
               t: "Push to your followers",
-              p: "from £9 per blast",
-              d: "Notify everyone who follows you on TicketAI.",
+              p: "from Â£9 per blast",
+              d: "Notify everyone who follows you on GRID.",
             },
             {
               t: "AI Campaign Builder",
@@ -236,11 +236,11 @@ export default function ForPromotersPage() {
               href="/promoters/join"
               className="rounded-full bg-white text-black px-8 py-4 font-medium hover:bg-gray-100"
             >
-              Create your first event ÃƒÂ¢Ã‚â‚¬Ã‚â€ free
+              Create your first event ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â free
             </Link>
           </div>
           <p className="mt-8 text-sm text-white/60">
-            Questions? <span className="underline">hello@ticketai.app</span>
+            Questions? <span className="underline">hello@GRID.app</span>
           </p>
         </div>
       </section>

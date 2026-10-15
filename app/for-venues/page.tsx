@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "List your venue free ÃƒÂ¢Ã‚â‚¬Ã‚â€ get discovered | TicketAI",
+  title: "List your venue free ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â get discovered | GRID",
   description:
     "Free to list. Get booked by promoters. Earn a share of every ticket sold at your venue. No monthly fee. No 12-month contract.",
 };
@@ -32,7 +32,7 @@ export default function ForVenuesPage() {
               href="/venues/join"
               className="rounded-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800"
             >
-              List your venue ÃƒÂ¢Ã‚â‚¬Ã‚â€ free
+              List your venue ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â free
             </Link>
             <a
               href="#compare"
@@ -82,7 +82,7 @@ export default function ForVenuesPage() {
             </p>
             <p className="mt-3 text-gray-700">
               Occupancy, average ticket price, repeat bookings. Analytics
-              venues have never had ÃƒÂ¢Ã‚â‚¬Ã‚â€ in real time.
+              venues have never had ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â in real time.
             </p>
           </div>
         </div>
@@ -102,13 +102,13 @@ export default function ForVenuesPage() {
                 <th className="py-3 pr-4 font-medium"></th>
                 <th className="py-3 px-4 font-medium">Most venue platforms</th>
                 <th className="py-3 px-4 font-medium bg-black text-white">
-                  TicketAI
+                  GRID
                 </th>
               </tr>
             </thead>
             <tbody>
               {[
-                ["Listing fee", "£100+ / month", "£0"],
+                ["Listing fee", "Â£100+ / month", "Â£0"],
                 ["Contract", "12 months", "None"],
                 ["Revenue share", "Platform keeps it", "You earn it"],
                 ["Direct promoter contact", "No", "Yes"],
@@ -191,11 +191,11 @@ export default function ForVenuesPage() {
               href="/venues/join"
               className="rounded-full bg-white text-black px-8 py-4 font-medium hover:bg-gray-100"
             >
-              List your venue ÃƒÂ¢Ã‚â‚¬Ã‚â€ free
+              List your venue ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â free
             </Link>
           </div>
           <p className="mt-8 text-sm text-white/60">
-            Questions? <span className="underline">hello@ticketai.app</span>
+            Questions? <span className="underline">hello@GRID.app</span>
           </p>
         </div>
       </section>

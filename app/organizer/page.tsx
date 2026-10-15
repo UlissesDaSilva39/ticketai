@@ -43,7 +43,7 @@ function money(value: number) {
 }
 
 function date(value: string) {
-  if (!value) return "—";
+  if (!value) return "â€”";
 
   return new Date(value).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -159,7 +159,7 @@ export default function OrganizerDashboard() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm font-medium text-gray-500">
-              TicketAI
+              GRID
             </p>
 
             <h1 className="mt-1 text-3xl font-bold tracking-tight text-black">
@@ -412,7 +412,7 @@ export default function OrganizerDashboard() {
                           ? order.order_id
                               .slice(0, 8)
                               .toUpperCase()
-                          : "—"}
+                          : "â€”"}
                       </td>
 
                       <td className="px-6 py-4 text-sm">
@@ -437,7 +437,7 @@ export default function OrganizerDashboard() {
 
         <section className="mt-8 rounded-2xl bg-black p-8 text-white">
           <p className="text-sm font-medium text-gray-400">
-            TICKETAI AI
+            GRID AI
           </p>
 
           <h2 className="mt-2 text-2xl font-bold">

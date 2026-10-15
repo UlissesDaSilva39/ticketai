@@ -86,13 +86,13 @@ export async function POST(req: NextRequest) {
       "<h1 style=\"font-size: 24px; margin: 0 0 16px 0;\">" + subject + "</h1>" +
       "<div style=\"font-size: 15px; line-height: 1.7; color: #333; white-space: pre-wrap;\">" + body + "</div>" +
       "<hr style=\"margin: 32px 0; border: none; border-top: 1px solid #eee;\">" +
-      "<p style=\"font-size: 12px; color: #999; text-align: center;\">Sent via TicketAI</p>" +
+      "<p style=\"font-size: 12px; color: #999; text-align: center;\">Sent via GRID</p>" +
       "</div>";
 
     for (const email of emails) {
       try {
         const { error } = await resend.emails.send({
-          from: "TicketAI <onboarding@resend.dev>",
+          from: "GRID <onboarding@resend.dev>",
           to: email,
           subject,
           html,
