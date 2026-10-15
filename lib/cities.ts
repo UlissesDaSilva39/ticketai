@@ -42,3 +42,5 @@ export function getCity(slug: string): City | undefined {
 export function slugToCityName(slug: string): string {
   return getCity(slug)?.name ?? slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
+
+export const findCity = getCity;
