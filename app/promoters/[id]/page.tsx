@@ -15,7 +15,6 @@ import {
   Camera,
   Share2,
   Music,
-  Users,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -78,7 +77,7 @@ export async function generateMetadata({
     description:
       promoter.bio ||
       (promoter.city
-        ? "Promoter Ã‚· " + promoter.city
+        ? "Promoter - " + promoter.city
         : "Promoter on GRID"),
   };
 }
@@ -209,15 +208,12 @@ export default async function PromoterProfilePage({
                   label="Follow"
                   variant="dark"
                 />
-                {p.contact_email && (
-                  <a
-                    href={"mailto:" + p.contact_email}
-                    className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition inline-flex items-center gap-2"
-                  >
-                    <Mail className="h-4 w-4" />
-                    Message
-                  </a>
-                )}
+
+                {/* EDIT 1 - Message button (mirrors artist page) */}
+                <PromoterMessageButton
+                  promoterId={p.id}
+                  promoterName={p.display_name}
+                />
               </div>
             </div>
           </div>
@@ -234,7 +230,13 @@ export default async function PromoterProfilePage({
               </p>
             </section>
 
-            {/* STATS Ã¢â‚¬â€ owner/admin only */}
+            {/* EDIT 2 - Booking section (mirrors artist page) */}
+            <PromoterBookingSection
+              promoterId={p.id}
+              promoterName={p.display_name}
+            />
+
+            {/* STATS - owner/admin only */}
             {(isOwner || isAdmin) && (
               <section className="bg-white border border-gray-200 rounded-2xl p-6">
                 <h2 className="text-lg font-semibold mb-4">Your stats</h2>
