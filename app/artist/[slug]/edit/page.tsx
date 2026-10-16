@@ -37,9 +37,7 @@ export default async function ArtistEditPage({ params }: Props) {
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-2">
             Artist dashboard
           </p>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Edit profile
-          </h1>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Edit profile</h1>
           <p className="mt-1 text-sm text-gray-500">
             Changes appear immediately on your public page.
           </p>
