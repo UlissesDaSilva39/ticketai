@@ -12,7 +12,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const { merchId, quantity } = await req.json();
+    let body: { merchId?: string; quantity?: number } = {};
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+    const { merchId, quantity } = body;
     if (!merchId) {
       return NextResponse.json({ error: "Missing merchId" }, { status: 400 });
     }
