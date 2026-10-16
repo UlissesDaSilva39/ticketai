@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArtistProfileHeader } from '@/components/artists/ArtistProfileHeader';
 import { ArtistTracksList }    from '@/components/artists/ArtistTracksList';
+import { ArtistCredits }       from '@/components/artists/ArtistCredits';
 import { ArtistServicesPanel } from '@/components/artists/ArtistServicesPanel';
 import { WhyGridBlock }        from '@/components/artists/WhyGridBlock';
 import { ArtistReviews }       from '@/components/artists/ArtistReviews';
@@ -19,6 +20,13 @@ export default async function ArtistProfilePage({ params }: Params) {
 
   const related = await getRelatedArtists(slug);
 
+  const stats: { label: string; value: string | number }[] = [
+    { label: 'Tracks', value: artist.trackCount ?? 0 },
+    { label: 'Plays', value: artist.playCount ?? 0 },
+    { label: 'Bookings', value: artist.bookingCount ?? 0 },
+    { label: 'Earned', value: artist.earnedTotal ?? '—' },
+  ];
+
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
       <Link
@@ -33,6 +41,7 @@ export default async function ArtistProfilePage({ params }: Params) {
           name={artist.name}
           handle={artist.slug}
           city={artist.city}
+          timezone={artist.timezone}
           role={artist.role}
           bio={artist.bio}
           genres={artist.genres ?? [artist.role]}
@@ -40,15 +49,19 @@ export default async function ArtistProfilePage({ params }: Params) {
           available={artist.available ?? true}
           followers={artist.followers ?? 0}
           responseTime={artist.responseTime}
+          memberSince={artist.memberSince}
           photo={artist.photos?.[0]}
+          social={artist.social}
         />
       </div>
 
       <div className="mt-8 grid grid-cols-2 gap-4 border-y border-neutral-200 py-5 md:grid-cols-4">
-        <Stat label="Tracks" value={artist.trackCount ?? 0} />
-        <Stat label="Plays" value={artist.playCount ?? 0} />
-        <Stat label="Followers" value={(artist.followers ?? 0).toLocaleString()} />
-        <Stat label="New on GRID" value="Just joined" />
+        {stats.map((s) => (
+          <div key={s.label}>
+            <p className="text-xl font-black tracking-tight">{s.value}</p>
+            <p className="mt-1 text-xs uppercase tracking-wider text-neutral-500">{s.label}</p>
+          </div>
+        ))}
       </div>
 
       <div className="mt-10">
@@ -60,11 +73,17 @@ export default async function ArtistProfilePage({ params }: Params) {
           <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
             About
           </h2>
-          <p className="mt-3 max-w-3xl whitespace-pre-line text-base leading-relaxed text-neutral-700">
-            {artist.longBio}
-          </p>
+          <div className="mt-3 max-w-3xl space-y-3 text-base leading-relaxed text-neutral-700">
+            {artist.longBio.split('\n\n').map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+          </div>
         </section>
       )}
+
+      <div className="mt-10">
+        <ArtistCredits credits={artist.credits} />
+      </div>
 
       <div className="mt-10">
         <ArtistServicesPanel services={artist.services} slug={artist.slug} />
@@ -99,15 +118,6 @@ export default async function ArtistProfilePage({ params }: Params) {
       <div className="mt-10">
         <ArtistBottomCTA handle={artist.slug} name={artist.name} />
       </div>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div>
-      <p className="text-xl font-black tracking-tight">{value}</p>
-      <p className="mt-1 text-xs uppercase tracking-wider text-neutral-500">{label}</p>
     </div>
   );
 }

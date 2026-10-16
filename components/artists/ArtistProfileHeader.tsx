@@ -8,6 +8,7 @@ type Props = {
   name: string;
   handle: string;
   city: string;
+  timezone?: string;
   role: string;
   bio: string;
   genres: string[];
@@ -15,14 +16,34 @@ type Props = {
   available?: boolean;
   followers: number;
   responseTime?: string;
+  memberSince?: string;
   photo?: string;
+  social?: {
+    instagram?: string;
+    tiktok?: string;
+    soundcloud?: string;
+    spotify?: string;
+    appleMusic?: string;
+    website?: string;
+  };
 };
 
 export function ArtistProfileHeader({
-  name, handle, city, role, bio, genres,
-  verified, available = true, followers, responseTime, photo,
+  name, handle, city, timezone, role, bio, genres,
+  verified, available = true, followers, responseTime,
+  memberSince, photo, social,
 }: Props) {
   const [following, setFollowing] = useState(false);
+
+  const socials: { label: string; href: string }[] = [];
+  if (social?.instagram) socials.push({ label: `IG @${social.instagram}`, href: `https://instagram.com/${social.instagram}` });
+  if (social?.tiktok)    socials.push({ label: `TikTok @${social.tiktok}`, href: `https://tiktok.com/@${social.tiktok}` });
+  if (social?.soundcloud)socials.push({ label: `SoundCloud @${social.soundcloud}`, href: `https://soundcloud.com/${social.soundcloud}` });
+  if (social?.spotify)   socials.push({ label: 'Spotify', href: `https://open.spotify.com/artist/${social.spotify}` });
+  if (social?.appleMusic)socials.push({ label: 'Apple Music', href: `https://music.apple.com/artist/${social.appleMusic}` });
+  if (social?.website)   socials.push({ label: 'Website', href: `https://${social.website}` });
+
+  const showFollowCount = followers > 0;
 
   return (
     <header className="grid gap-6 md:grid-cols-[240px_1fr] md:gap-8">
@@ -49,7 +70,9 @@ export function ArtistProfileHeader({
         <p className="mt-1 text-sm text-neutral-500">@{handle}</p>
 
         <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-          {city} · {role}
+          {city}
+          {timezone ? ` · ${timezone}` : ''}
+          {' · '}{role}
         </p>
 
         <p className="mt-3 max-w-2xl text-base text-neutral-700">{bio}</p>
@@ -64,11 +87,13 @@ export function ArtistProfileHeader({
           </div>
         )}
 
-        <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+        <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
           {available ? (
             <>
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-emerald-700">Available for new projects</span>
+              <span className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="text-emerald-700">Available for new projects</span>
+              </span>
               {responseTime && (
                 <span className="text-neutral-400">· Responds in {responseTime}</span>
               )}
@@ -79,7 +104,26 @@ export function ArtistProfileHeader({
               <span className="text-amber-700">Currently booked</span>
             </>
           )}
+          {memberSince && (
+            <span className="text-neutral-400">· Member since {memberSince}</span>
+          )}
         </div>
+
+        {socials.length > 0 && (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full border border-neutral-200 px-3 py-1 text-xs font-medium text-neutral-700 transition hover:border-neutral-900"
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
+        )}
 
         <div className="mt-5 flex flex-wrap items-center gap-2">
           <MessageButton
@@ -98,10 +142,12 @@ export function ArtistProfileHeader({
                 : 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200')
             }
           >
-            {following ? 'Following' : '+ Follow'}{' '}
-            <span className="text-neutral-500">
-              ({(followers + (following ? 1 : 0)).toLocaleString()})
-            </span>
+            {following ? 'Following' : '+ Follow'}
+            {showFollowCount && (
+              <span className="ml-1 text-neutral-500">
+                ({(followers + (following ? 1 : 0)).toLocaleString()})
+              </span>
+            )}
           </button>
           <Link
             href={`/artists/${handle}/book`}
