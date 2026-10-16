@@ -151,3 +151,9 @@ fix-*.ps1
 *.mojibake-bak
 *.broken-*
 *.bak-*
+/playwright-report/
+/playwright/.cache/
+/blob-report/
+
+# Playwright
+/test-results/
