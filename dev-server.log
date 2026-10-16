@@ -6,19 +6,81 @@
 - Local:         http://localhost:3000
 - Network:       http://192.168.56.1:3000
 - Environments: .env.local
-✓ Ready in 7.9s
-✓ Running next.config.ts took 906ms
+✓ Ready in 2.6s
+✓ Running next.config.ts took 243ms
 - Experiments (use with caution):
   · serverActions
 
-○ Compiling / ...
- GET / 200 in 4.0s (next.js: 2.3s, application-code: 1676ms)
- GET / 200 in 929ms (next.js: 23ms, application-code: 906ms)
- GET / 200 in 1453ms (next.js: 20ms, application-code: 1432ms)
- GET / 200 in 860ms (next.js: 6ms, application-code: 854ms)
- GET / 200 in 1757ms (next.js: 969ms, application-code: 788ms)
- GET / 200 in 1622ms (next.js: 894ms, application-code: 728ms)
-○ Compiling /home ...
- GET / 200 in 1165ms (next.js: 6ms, application-code: 1158ms)
- GET / 200 in 364ms (next.js: 8ms, application-code: 355ms)
- GET / 200 in 432ms (next.js: 18ms, application-code: 413ms)
+○ Compiling /people ...
+ GET / 200 in 4.5s (next.js: 3.2s, application-code: 1297ms)
+ GET /cities 200 in 14.2s (next.js: 12.0s, application-code: 2.1s)
+ GET /login 200 in 37.6s (next.js: 35.5s, application-code: 2.2s)
+ GET / 200 in 409ms (next.js: 8ms, application-code: 400ms)
+○ Compiling /artists/[username] ...
+ GET /network 200 in 7.4s (next.js: 5.9s, application-code: 1476ms)
+ GET / 200 in 6.5s (next.js: 5.1s, application-code: 1364ms)
+○ Compiling proxy ...
+ GET /artists/samokafor 200 in 14.5s (next.js: 11.2s, application-code: 3.3s)
+ GET /login?next=%2Fhome 200 in 736ms (next.js: 23ms, application-code: 713ms)
+ GET /login 200 in 1683ms (next.js: 8ms, application-code: 1674ms)
+ GET /people 200 in 11.5s (next.js: 7.3s, application-code: 4.1s)
+ GET /network 200 in 657ms (next.js: 18ms, application-code: 639ms)
+ GET /cities 200 in 369ms (next.js: 25ms, application-code: 344ms)
+○ Compiling /london ...
+ GET / 200 in 334ms (next.js: 17ms, application-code: 316ms)
+ GET /london 200 in 8.1s (next.js: 5.2s, application-code: 2.9s)
+ GET /people 200 in 8.0s (next.js: 5.0s, application-code: 2.9s)
+ GET /cities 200 in 1103ms (next.js: 13ms, application-code: 1090ms)
+ GET /london 200 in 1706ms (next.js: 10ms, application-code: 1695ms)
+○ Compiling /artists ...
+ GET /artists 200 in 8.7s (next.js: 6.1s, application-code: 2.6s)
+ GET /manchester 200 in 9.0s (next.js: 6.2s, application-code: 2.9s)
+ GET /manchester 200 in 7.4s (next.js: 4.5s, application-code: 2.9s)
+ GET /berlin 200 in 5.3s (next.js: 3.1s, application-code: 2.2s)
+ GET /berlin 200 in 5.3s (next.js: 3.1s, application-code: 2.2s)
+ GET /artists/samokafor 200 in 5.8s (next.js: 3.1s, application-code: 2.8s)
+ GET /artists 200 in 2.7s (next.js: 6ms, application-code: 2.7s)
+ GET /artists 200 in 2.9s (next.js: 16ms, application-code: 2.9s)
+○ Compiling /about ...
+ GET /about 200 in 11.7s (next.js: 10.5s, application-code: 1140ms)
+ GET /artists/samokafor 200 in 12.6s (next.js: 10.2s, application-code: 2.4s)
+○ Compiling /artists/[username]/merch ...
+ GET /artist/dj-poxy 200 in 19.8s (next.js: 16.1s, application-code: 3.8s)
+ GET /contact 200 in 8.2s (next.js: 7.2s, application-code: 959ms)
+○ Compiling /terms ...
+ GET /artists/samokafor/merch 200 in 10.9s (next.js: 9.6s, application-code: 1292ms)
+ GET /terms 200 in 16.2s (next.js: 13.6s, application-code: 2.5s)
+ GET /venues 200 in 13.8s (next.js: 8.6s, application-code: 5.3s)
+○ Compiling /privacy ...
+ GET /artist/dj-poxy/edit 307 in 20.1s (next.js: 19.8s, application-code: 320ms)
+ GET /login?next=/artist/dj-poxy/edit 200 in 9.2s (next.js: 8.0s, application-code: 1215ms)
+ GET /privacy 200 in 13.1s (next.js: 11.8s, application-code: 1330ms)
+ GET /promoters 200 in 10.5s (next.js: 8.3s, application-code: 2.2s)
+○ Compiling /refund-policy ...
+ GET /about 200 in 6.5s (next.js: 5.4s, application-code: 1065ms)
+ GET /refund-policy 200 in 8.2s (next.js: 7.2s, application-code: 1077ms)
+ GET /contact 200 in 345ms (next.js: 17ms, application-code: 328ms)
+ GET /terms 200 in 204ms (next.js: 12ms, application-code: 191ms)
+ GET /privacy 200 in 249ms (next.js: 13ms, application-code: 236ms)
+○ Compiling /people ...
+ GET /refund-policy 200 in 12.0s (next.js: 8.5s, application-code: 3.5s)
+ GET / 200 in 12.4s (next.js: 8.7s, application-code: 3.7s)
+ GET /people 200 in 12.3s (next.js: 7.0s, application-code: 5.2s)
+○ Compiling /venue/[slug] ...
+ GET /cities 200 in 10.9s (next.js: 9.6s, application-code: 1358ms)
+ GET /venues 200 in 9.9s (next.js: 8.0s, application-code: 1905ms)
+○ Compiling /london ...
+ GET /venue/test-first-veneu 200 in 14.8s (next.js: 13.0s, application-code: 1871ms)
+ GET /promoters 200 in 9.7s (next.js: 8.7s, application-code: 1081ms)
+ GET /london 200 in 11.4s (next.js: 9.8s, application-code: 1668ms)
+○ Compiling /manchester ...
+ GET /event/3eb54bca-8851-46ba-86b5-480fc7ef9ed1 200 in 10.0s (next.js: 7.7s, application-code: 2.3s)
+ GET /sitemap.xml 200 in 7.5s (next.js: 5.2s, application-code: 2.3s)
+ GET /login?next=%2Fhome 200 in 1799ms (next.js: 61ms, application-code: 1738ms)
+ GET /manchester 200 in 12.4s (next.js: 9.5s, application-code: 2.9s)
+○ Compiling /berlin ...
+ GET /robots.txt 200 in 9.3s (next.js: 9.3s, application-code: 69ms)
+ GET /berlin 200 in 10.0s (next.js: 9.0s, application-code: 965ms)
+ GET /artists 200 in 5.3s (next.js: 2.9s, application-code: 2.4s)
+ GET / 200 in 335ms (next.js: 19ms, application-code: 316ms)
+○ Compiling /about ...
