@@ -129,7 +129,7 @@ export default async function PeoplePage({
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen pb-40 sm:pb-8">
       <div className="max-w-5xl mx-auto px-4 py-10">
         {/* Header */}
         <div className="mb-6">

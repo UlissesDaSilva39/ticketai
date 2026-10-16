@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type Item = { href: string; label: string; icon: React.ReactNode; match?: string };
+type Item = { href: string; label: string; icon: React.ReactNode };
 
 export default function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
   const pathname = usePathname();
@@ -12,7 +12,6 @@ export default function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
     {
       href: "/",
       label: "Discover",
-      match: "home",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="11" cy="11" r="7" />
@@ -42,7 +41,7 @@ export default function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
       ),
     },
     {
-      href: "/messages",
+      href: "/inbox",
       label: "Inbox",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -53,32 +52,25 @@ export default function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
     {
       href: isSignedIn ? "/notifications" : "/login",
       label: isSignedIn ? "Alerts" : "Sign in",
-      icon: isSignedIn
-        ? (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M6 8a6 6 0 0112 0c0 7 3 8 3 8H3s3-1 3-8" />
-              <path d="M10 21a2 2 0 004 0" />
-            </svg>
-          )
-        : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
-            </svg>
-          ),
+      icon: isSignedIn ? (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M6 8a6 6 0 0112 0c0 7 3 8 3 8H3s3-1 3-8" />
+          <path d="M10 21a2 2 0 004 0" />
+        </svg>
+      ) : (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
+        </svg>
+      ),
     },
   ];
 
-  const isActive = (item: Item) => {
-    if (item.href === "/") return pathname === "/";
-    return pathname?.startsWith(item.href);
-  };
-
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-center justify-around h-14">
         {items.map((it) => {
-          const active = isActive(it);
+          const active = it.href === "/" ? pathname === "/" : pathname?.startsWith(it.href);
           return (
             <Link
               key={it.href}

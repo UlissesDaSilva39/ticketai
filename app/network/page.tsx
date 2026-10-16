@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import PersonCard from "@/components/network/PersonCard";
@@ -64,7 +64,7 @@ export default async function NetworkPage({
 
   if (!userId) {
     return (
-      <div className="bg-gray-50 min-h-screen pb-32">
+      <div className="bg-gray-50 min-h-screen pb-32 sm:pb-0">
         <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-3">
             <Sidebar />
@@ -153,7 +153,7 @@ export default async function NetworkPage({
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="bg-gray-50 min-h-screen pb-32 sm:pb-0">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />

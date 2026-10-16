@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import FollowButton from "./FollowButton";
 
 type Person = {
@@ -41,7 +41,7 @@ export default function PersonCard({
   const href = person.username ? "/artists/" + person.username : "#";
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col gap-3">
+    <div className="relative z-10 bg-white border border-gray-200 rounded-2xl p-4 flex flex-col gap-3">
       <Link href={href} className="flex items-start gap-3 group">
         {person.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element

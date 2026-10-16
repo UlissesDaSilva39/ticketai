@@ -92,7 +92,7 @@ export const DROPDOWN_MAP = {
 export const PROFILE_MENU = {
   header: {
     name: 'Ulisses Da Silva',
-    subtitle: 'Music Entrepreneur Ã‚Â· Producer',
+    subtitle: 'Music Entrepreneur · Producer',
   },
   sections: [
     { title: 'MY GRID', items: [
