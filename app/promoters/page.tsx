@@ -1,112 +1,73 @@
-import { createServerSupabase } from "@/lib/supabase/server";
-import Link from "next/link";
+import { createServerSupabase } from '@/lib/supabase/server';
 
-export const dynamic = "force-dynamic";
+import { PromoterHero }        from '@/components/promoters/PromoterHero';
+import { PromoterOS }          from '@/components/promoters/PromoterOS';
+import { VenueAvailability }   from '@/components/promoters/VenueAvailability';
+import { Economics }           from '@/components/promoters/Economics';
+import { PromoterFilters }     from '@/components/promoters/PromoterFilters';
+import { PromoterGrid }        from '@/components/promoters/PromoterGrid';
+import { Distribution }        from '@/components/promoters/Distribution';
+import { WorkspacePreview }    from '@/components/promoters/WorkspacePreview';
+import { Proof }               from '@/components/promoters/Proof';
+import { Faq }                 from '@/components/promoters/Faq';
+import { DualCTA }             from '@/components/promoters/DualCTA';
+
+import type { Promoter }       from '@/lib/promoters';
+
+export const dynamic = 'force-dynamic';
+
+export const metadata = {
+  title: 'Promoters — GRID',
+  description:
+    'Discover the promoters behind the best nights out — or run your own. Find venues, book artists, sell tickets, message promoters, and get paid the same day.',
+};
+
+function rowToPromoter(row: any): Promoter {
+  const social = row.social ?? {};
+
+  return {
+    id:          row.id          ?? '',
+    userId:      row.user_id     ?? '',
+    slug:        row.slug        ?? row.id ?? '',
+    name:        row.display_name ?? row.name ?? 'Untitled promoter',
+    city:        row.city        ?? '',
+    bio:         row.bio         ?? '',
+    verified:    row.verified    ?? false,
+    eventCount:  row.event_count ?? 0,
+    ticketsSold: row.tickets_sold ?? 0,
+    photos:      Array.isArray(row.photos) ? row.photos : [],
+    nextEvent:   row.next_event ?? undefined,
+    social: {
+      instagram: social.instagram ?? row.instagram ?? undefined,
+      tiktok:    social.tiktok    ?? row.tiktok    ?? undefined,
+      youtube:   social.youtube   ?? row.youtube   ?? undefined,
+    },
+  };
+}
 
 export default async function PromotersPage() {
   const supabase = await createServerSupabase();
 
-  const { data: promoters } = await supabase
-    .from("promoters")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const { data: rows } = await supabase
+    .from('promoters')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-  const list = promoters || [];
-
-  // Fetch signed-in user's role
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  let role: string | null = null;
-  if (user) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .maybeSingle();
-    role = profile?.role ?? null;
-  }
-
-  const canAccessDashboard = role === "promoter" || role === "admin";
+  const promoters: Promoter[] = (rows ?? []).map(rowToPromoter);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <h1
-        className="text-6xl md:text-7xl font-bold mb-3 uppercase tracking-tight"
-        style={{ fontFamily: "var(--font-antonio)" }}
-      >
-        PROMOTERS
-      </h1>
-      <p className="text-gray-500 mb-10 max-w-2xl">
-        Creators who bring audiences to events. Get paid for every ticket sold
-        through your unique code.
-      </p>
-
-      <div className="mb-10">
-        {canAccessDashboard ? (
-          <Link
-            href="/promoter/dashboard"
-            className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800"
-          >
-            Promoter Dashboard
-          </Link>
-        ) : (
-          <Link
-            href="/for-promoters"
-            className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800"
-          >
-            Become a promoter
-          </Link>
-        )}
-      </div>
-
-      {list.length === 0 ? (
-        <div className="bg-gray-50 rounded-lg p-12 text-center">
-          <p className="text-lg text-gray-500">
-            No promoters yet. Be the first.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {list.map((p) => (
-            <Link
-              key={p.id}
-              href={"/promoters/" + p.id}
-              className="border border-gray-200 rounded-lg p-6 transition hover:border-black block"
-            >
-              <h3 className="font-bold text-xl mb-1">{p.display_name}</h3>
-              {p.city && (
-                <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">
-                  {p.city}
-                </p>
-              )}
-              {p.bio && (
-                <p className="text-sm text-gray-600 mb-4 line-clamp-3">
-                  {p.bio}
-                </p>
-              )}
-              <div className="flex flex-wrap gap-2 text-xs">
-                {p.instagram && (
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">
-                    IG @{p.instagram}
-                  </span>
-                )}
-                {p.tiktok && (
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">
-                    TikTok @{p.tiktok}
-                  </span>
-                )}
-                {p.youtube && (
-                  <span className="px-3 py-1 bg-gray-100 rounded-full">
-                    YT {p.youtube}
-                  </span>
-                )}
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
+    <main className="mx-auto max-w-[1400px] px-6 pb-24">
+      <PromoterHero />
+      <PromoterOS />
+      <VenueAvailability />
+      <Economics />
+      <PromoterFilters />
+      <PromoterGrid promoters={promoters} />
+      <Distribution />
+      <WorkspacePreview />
+      <Proof />
+      <Faq />
+      <DualCTA />
+    </main>
   );
 }
