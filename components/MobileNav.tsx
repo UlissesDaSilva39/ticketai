@@ -2,11 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type Item = { href: string; label: string; icon: React.ReactNode };
 
 export default function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
   const pathname = usePathname();
+  const [inboxUnread, setInboxUnread] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchCount() {
+      try {
+        const res = await fetch("/api/inbox/count", { cache: "no-store" });
+        const data = await res.json();
+        if (!cancelled) setInboxUnread(Number(data.unread ?? 0));
+      } catch {}
+    }
+    fetchCount();
+    const id = setInterval(fetchCount, 30000);
+    return () => { cancelled = true; clearInterval(id); };
+  }, [pathname]);
 
   const items: Item[] = [
     {

@@ -5,6 +5,7 @@ import { Logo } from './Logo';
 import { NavLink } from './NavLink';
 import { NavDropdown } from './NavDropdown';
 import { NotificationBell } from './NotificationBell';
+import { InboxBell } from './InboxBell';
 import { ProfileMenu } from './ProfileMenu';
 
 export type NavbarUser = {
@@ -55,6 +56,7 @@ export function Navbar({
           {signedIn ? (
             <>
               <NotificationBell count={notificationCount} />
+              <InboxBell />
               <ProfileMenu user={user} />
             </>
           ) : (

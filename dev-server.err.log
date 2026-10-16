@@ -1,3 +1,49 @@
 ⚠ Warning: Next.js ignored package-lock.json in C:\Users\User because it is outside the current Git repository (C:\Users\User\ticketai).
  To use this directory, set `outputFileTracingRoot` in your Next.js config.
 
+⨯ TypeError: __webpack_modules__[moduleId] is not a function
+    at ignore-listed frames {
+  digest: '2251400817'
+}
+[browser] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. 
+[browser] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. 
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, open 'C:\Users\User\ticketai\.next\dev\cache\webpack\client-development\3.pack.gz_'
+⨯ The directory at "C:\Users\User\ticketai\.next\dev" was deleted.
+
+Deleting this directory while Next.js is running can lead to undefined behavior. Restarting the server to recover...
+⚠ Warning: Next.js ignored package-lock.json in C:\Users\User because it is outside the current Git repository (C:\Users\User\ticketai).
+ To use this directory, set `outputFileTracingRoot` in your Next.js config.
+
+⨯ ./components/nav/Navbar.tsx:8:1
+Module not found: Can't resolve './InboxBell'
+   6 | import { NavDropdown } from './NavDropdown';
+   7 | import { NotificationBell } from './NotificationBell';
+>  8 | import { InboxBell } from './InboxBell';
+     | ^
+   9 | import { ProfileMenu } from './ProfileMenu';
+  10 |
+  11 | export type NavbarUser = {
+
+https://nextjs.org/docs/messages/module-not-found
+⨯ ./components/nav/Navbar.tsx:8:1
+Module not found: Can't resolve './InboxBell'
+   6 | import { NavDropdown } from './NavDropdown';
+   7 | import { NotificationBell } from './NotificationBell';
+>  8 | import { InboxBell } from './InboxBell';
+     | ^
+   9 | import { ProfileMenu } from './ProfileMenu';
+  10 |
+  11 | export type NavbarUser = {
+
+https://nextjs.org/docs/messages/module-not-found
+⨯ ./components/nav/Navbar.tsx:8:1
+Module not found: Can't resolve './InboxBell'
+   6 | import { NavDropdown } from './NavDropdown';
+   7 | import { NotificationBell } from './NotificationBell';
+>  8 | import { InboxBell } from './InboxBell';
+     | ^
+   9 | import { ProfileMenu } from './ProfileMenu';
+  10 |
+  11 | export type NavbarUser = {
+
+https://nextjs.org/docs/messages/module-not-found
