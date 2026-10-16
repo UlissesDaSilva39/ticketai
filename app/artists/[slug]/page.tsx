@@ -1,14 +1,19 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArtistProfileHeader } from '@/components/artists/ArtistProfileHeader';
-import { ArtistTracksList }    from '@/components/artists/ArtistTracksList';
-import { ArtistCredits }       from '@/components/artists/ArtistCredits';
-import { ArtistServicesPanel } from '@/components/artists/ArtistServicesPanel';
-import { WhyGridBlock }        from '@/components/artists/WhyGridBlock';
-import { ArtistReviews }       from '@/components/artists/ArtistReviews';
-import { MetaSalesBlock }      from '@/components/artists/MetaSalesBlock';
-import { ArtistRelated }       from '@/components/artists/ArtistRelated';
-import { ArtistBottomCTA }     from '@/components/artists/ArtistBottomCTA';
+import { ArtistProfileHeader }   from '@/components/artists/ArtistProfileHeader';
+import { ArtistLatestDrop }      from '@/components/artists/ArtistLatestDrop';
+import { ArtistTracksList }      from '@/components/artists/ArtistTracksList';
+import { ArtistCredits }         from '@/components/artists/ArtistCredits';
+import { ArtistServicesPanel }   from '@/components/artists/ArtistServicesPanel';
+import { ArtistMerch }           from '@/components/artists/ArtistMerch';
+import { ArtistBundle }          from '@/components/artists/ArtistBundle';
+import { ArtistMembership }      from '@/components/artists/ArtistMembership';
+import { WhyGridBlock }          from '@/components/artists/WhyGridBlock';
+import { ArtistReviews }         from '@/components/artists/ArtistReviews';
+import { ArtistMerchReviews }    from '@/components/artists/ArtistMerchReviews';
+import { MetaSalesBlock }        from '@/components/artists/MetaSalesBlock';
+import { ArtistRelated }         from '@/components/artists/ArtistRelated';
+import { ArtistBottomCTA }       from '@/components/artists/ArtistBottomCTA';
 import { getArtistBySlug, getRelatedArtists } from '@/lib/artists';
 
 type Params = { params: Promise<{ slug: string }> };
@@ -29,10 +34,7 @@ export default async function ArtistProfilePage({ params }: Params) {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <Link
-        href="/artists"
-        className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black"
-      >
+      <Link href="/artists" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black">
         ← Back to artists
       </Link>
 
@@ -51,6 +53,7 @@ export default async function ArtistProfilePage({ params }: Params) {
           responseTime={artist.responseTime}
           memberSince={artist.memberSince}
           photo={artist.photos?.[0]}
+          supportUrl={artist.membership?.url}
           social={artist.social}
         />
       </div>
@@ -63,6 +66,12 @@ export default async function ArtistProfilePage({ params }: Params) {
           </div>
         ))}
       </div>
+
+      {artist.latestDrop && (
+        <div className="mt-8">
+          <ArtistLatestDrop drop={artist.latestDrop} />
+        </div>
+      )}
 
       <div className="mt-10">
         <ArtistTracksList tracks={artist.tracks} />
@@ -90,11 +99,27 @@ export default async function ArtistProfilePage({ params }: Params) {
       </div>
 
       <div className="mt-10">
+        <ArtistMerch items={artist.merch} />
+      </div>
+
+      <div className="mt-10">
+        <ArtistBundle bundle={artist.bundle} />
+      </div>
+
+      <div className="mt-10">
+        <ArtistMembership membership={artist.membership} />
+      </div>
+
+      <div className="mt-10">
         <WhyGridBlock />
       </div>
 
       <div className="mt-10">
         <ArtistReviews reviews={artist.reviews} />
+      </div>
+
+      <div className="mt-10">
+        <ArtistMerchReviews reviews={artist.reviews} />
       </div>
 
       <div className="mt-10">
