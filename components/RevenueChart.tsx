@@ -42,7 +42,7 @@ export default function RevenueChart({
                 <YAxis fontSize={12} stroke="#888" />
                 <Tooltip
                   contentStyle={{ borderRadius: 8, border: "1px solid #eee" }}
-                  formatter={(v: number) => "£" + Number(v).toFixed(2)}
+                  formatter={(v: any) => "£" + Number(v).toFixed(2)}
                 />
                 <Line
                   type="monotone"
@@ -113,7 +113,7 @@ export default function RevenueChart({
                 />
                 <Tooltip
                   contentStyle={{ borderRadius: 8, border: "1px solid #eee" }}
-                  formatter={(v: number) => "£" + Number(v).toFixed(2)}
+                  formatter={(v: any) => "£" + Number(v).toFixed(2)}
                 />
                 <Bar dataKey="revenue" fill="#000000" radius={[0, 6, 6, 0]} />
               </BarChart>

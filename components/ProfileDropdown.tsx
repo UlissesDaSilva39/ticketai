@@ -24,12 +24,12 @@ export default function ProfileDropdown({
   const isVenue = role === "venue" || isAdmin;
 
   useEffect(() => {
-    function onClick(e) {
+    function onClick(e: any) {
       if (ref.current && !ref.current.contains(e.target)) {
         setOpen(false);
       }
     }
-    function onKey(e) {
+    function onKey(e: any) {
       if (e.key === "Escape") setOpen(false);
     }
     document.addEventListener("mousedown", onClick);

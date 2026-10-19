@@ -115,7 +115,7 @@ export default function PromoterDashboard() {
 
   const shareOnSocial = (platform: string, eventId: string, code: string, title: string) => {
     const url = buildReferralUrl(eventId, code);
-    const text = "Check out " + title + " Ã¢â‚¬â€ tickets available now";
+    const text = "Check out " + title + " Ã¢â‚¬” tickets available now";
     let shareUrl = "";
     if (platform === "x") {
       shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url);

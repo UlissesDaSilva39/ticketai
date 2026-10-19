@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Refund Policy â€” GRID",
+  title: "Refund Policy — GRID",
   description: "How refunds work on GRID.",
 };
 
@@ -80,7 +80,7 @@ export default function RefundsPage() {
           <h2 className="text-2xl font-bold mt-8 mb-3 text-black">7. Refund Method</h2>
           <p>
             Refunds are issued to the original payment method. Depending on your bank, refunds
-            may take 5â€“10 business days to appear on your statement.
+            may take 5—10 business days to appear on your statement.
           </p>
         </section>
 
@@ -96,7 +96,7 @@ export default function RefundsPage() {
           <h2 className="text-2xl font-bold mt-8 mb-3 text-black">9. Chargebacks</h2>
           <p>
             If you raise a chargeback with your bank, we may suspend your account pending
-            investigation. Please contact us first â€” we can usually resolve issues faster than
+            investigation. Please contact us first — we can usually resolve issues faster than
             the chargeback process.
           </p>
         </section>

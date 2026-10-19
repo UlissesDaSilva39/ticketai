@@ -54,10 +54,10 @@ export default function ForPromotersPage() {
               className="text-3xl font-bold uppercase"
               style={{ fontFamily: "var(--font-antonio)" }}
             >
-              Â£0 commission
+              £0 commission
             </p>
             <p className="mt-3 text-gray-700">
-              Other platforms take 3.5% + 49p per ticket. We take Â£0. You pay
+              Other platforms take 3.5% + 49p per ticket. We take £0. You pay
               only the Stripe processing fee that any payment processor charges.
             </p>
           </div>
@@ -110,8 +110,8 @@ export default function ForPromotersPage() {
             </thead>
             <tbody>
               {[
-                ["Listing fee", "Â£0", "Â£0", "Â£0"],
-                ["Per-ticket commission", "3.5% + 49p", "~5%", "Â£0"],
+                ["Listing fee", "£0", "£0", "£0"],
+                ["Per-ticket commission", "3.5% + 49p", "~5%", "£0"],
                 ["Payout delay", "5ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Å“30 days", "5 days", "3 days"],
                 ["Built-in campaign tracking", "No", "No", "Yes"],
                 ["Click & conversion attribution", "No", "No", "Yes"],
@@ -192,12 +192,12 @@ export default function ForPromotersPage() {
           {[
             {
               t: "Featured placement",
-              p: "from Â£19/day",
+              p: "from £19/day",
               d: "Pin your event to the top of search results in your city.",
             },
             {
               t: "Push to your followers",
-              p: "from Â£9 per blast",
+              p: "from £9 per blast",
               d: "Notify everyone who follows you on GRID.",
             },
             {

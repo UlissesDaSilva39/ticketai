@@ -30,7 +30,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
         '<p style="margin: 0; font-weight: 600; font-size: 16px;">' +
         t.ticket_type +
         "</p>" +
-        '<p style="margin: 4px 0 8px 0; font-size: 13px; color: #666;">Â£' +
+        '<p style="margin: 4px 0 8px 0; font-size: 13px; color: #666;">£' +
         Number(t.price).toFixed(2) +
         "</p>" +
         '<img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=' +
@@ -62,7 +62,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
     "</table></td></tr>" +
     '<tr><td style="padding: 32px;"><table width="100%" style="background: #f5f5f5; border-radius: 8px; padding: 20px;">' +
     '<tr><td style="font-size: 14px; color: #666;">Total paid</td>' +
-    '<td style="text-align: right; font-size: 20px; font-weight: 700;">Â£' +
+    '<td style="text-align: right; font-size: 20px; font-weight: 700;">£' +
     data.totalAmount.toFixed(2) +
     "</td></tr>" +
     "</table></td></tr>" +
@@ -71,7 +71,7 @@ export async function sendTicketEmail(data: TicketEmailData) {
     '<a href="https://GRID.org.uk/my-tickets" style="display: inline-block; background: #fff; color: #000; padding: 16px 32px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 15px; border: 2px solid #000;">View My Tickets</a>' +
     "</td></tr>" +
     '<tr><td style="background: #f9f9f9; padding: 24px 32px; text-align: center; font-size: 12px; color: #999;">' +
-    '<p style="margin: 0;">GRID Â· AI-powered ticketing</p>' +
+    '<p style="margin: 0;">GRID · AI-powered ticketing</p>' +
     '<p style="margin: 8px 0 0 0;">Order ' +
     data.orderId.slice(0, 8).toUpperCase() +
     "</p></td></tr>" +
@@ -162,7 +162,7 @@ export async function sendResaleNotification(data: ResaleEmailData) {
     '</strong> has just been returned by its original owner.</p>' +
     '<p style="font-size:15px;line-height:1.6;">Ticket type: <strong>' +
     data.ticketType +
-    '</strong><br>Price: <strong>Â£' +
+    '</strong><br>Price: <strong>£' +
     data.price.toFixed(2) +
     '</strong> (original face value)</p>' +
     '<p style="font-size:14px;color:#999;">This link expires on ' +
@@ -173,7 +173,7 @@ export async function sendResaleNotification(data: ResaleEmailData) {
     '" style="display:inline-block;margin-top:16px;background:#000;color:#fff;padding:16px 32px;border-radius:999px;text-decoration:none;font-weight:600;font-size:15px;">Claim Ticket</a>' +
     '</td></tr>' +
     '<tr><td style="background:#f9f9f9;padding:24px 32px;text-align:center;font-size:12px;color:#999;">' +
-    '<p style="margin:0;">GRID Â· Face value resale</p>' +
+    '<p style="margin:0;">GRID · Face value resale</p>' +
     '</td></tr>' +
     '</table></td></tr></table></body></html>';
 

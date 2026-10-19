@@ -251,7 +251,7 @@ test.describe("8. Event page", () => {
   test("8.4 no mojibake on page", async ({ page }) => {
     await page.goto(`${BASE}/event/${KNOWN_EVENT}`);
     const body = await page.locator("body").innerText();
-    const bad = ["Ã", "Â£", "Ãƒ", "â€", "Â·"];
+    const bad = ["Ã", "£", "Ãƒ", "â€", "·"];
     const found = bad.filter((b) => body.includes(b));
     expect(found, "mojibake found: " + found.join(", ")).toEqual([]);
   });

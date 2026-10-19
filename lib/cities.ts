@@ -1,4 +1,5 @@
 export type City = {
+  description?: string;
   slug: string;
   name: string;
   country: string;

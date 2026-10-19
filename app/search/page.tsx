@@ -32,7 +32,7 @@ export default async function SearchPage({
     query = query.eq("event_type", type);
   }
 
-  // City filter â€” via venue lookup
+  // City filter — via venue lookup
   if (city) {
     const { data: venueRows } = await supabase
       .from("venues")
@@ -42,7 +42,7 @@ export default async function SearchPage({
     if (venueIds.length > 0) {
       query = query.in("venue_id", venueIds);
     } else {
-      // No venues match â€” force no results
+      // No venues match — force no results
       query = query.eq("id", "00000000-0000-0000-0000-000000000000");
     }
   }
@@ -86,7 +86,7 @@ export default async function SearchPage({
   const { data: artists } = await artistQuery;
   let eventList = (events as Event[]) || [];
 
-  // Price filter â€” post-fetch because ticket_types is JSON
+  // Price filter — post-fetch because ticket_types is JSON
   if (price) {
     const priceOf = (e: Event): number => {
       const types = Array.isArray(e.ticket_types) ? e.ticket_types : [];

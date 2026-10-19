@@ -13,7 +13,7 @@ type Props = {
   initialCount: number;
   signedIn: boolean;
   label?: string;
-  variant?: "pill" | "compact";
+  variant?: "pill" | "compact" | "light" | "dark";
 };
 
 export default function FollowButton({

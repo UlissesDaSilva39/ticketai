@@ -1,89 +1,37 @@
 import type { Metadata } from "next";
 import { Inter, Antonio } from "next/font/google";
-import { createServerSupabase } from "@/lib/supabase/server";
-import SignOutButton from "@/components/SignOutButton";
-import ProfileDropdown from "@/components/ProfileDropdown";
-import SocialDropdown from "@/components/SocialDropdown";
-import MyArtistLink from "@/components/MyArtistLink";
-import ArtistsDropdown from "@/components/ArtistsDropdown";
-import NotificationBell from "@/components/NotificationBell";
-import InstallPrompt from "@/components/InstallPrompt";
-import MobileNav from "@/components/MobileNav";
-import { Toaster } from "sonner";
 import "./globals.css";
-import { Navbar } from '@/components/nav/Navbar';
-import { PlayerProvider } from '@/components/player/GlobalPlayer';
-import { CartProvider } from '@/components/merch/CartProvider';
-import { CartWidget } from '@/components/merch/CartWidget';
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const antonio = Antonio({
-  variable: "--font-antonio",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-export const viewport = {
-  themeColor: "#00FF87",
-};
-
-const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
+import Navbar from "@/components/Navbar";
+import MobileNav from "@/components/MobileNav";
+import InstallPrompt from "@/components/InstallPrompt";
+import { Toaster } from "sonner";
+import { createServerSupabase } from "@/lib/supabase/server";
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const antonio = Antonio({ subsets: ["latin"], variable: "--font-antonio" });
 
 export const metadata: Metadata = {
-  manifest: "/manifest.webmanifest",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "GRID",
-  },
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "GRID — The network for music.",
-    template: "%s | GRID",
-  },
-  description:
-    "The social and professional network for live music — discover events, connect with artists, book talent, and grow your career.",
-  openGraph: {
-    type: "website",
-    siteName: "GRID",
-    title: "GRID — The network for music.",
-    description: "Discover events. Connect with artists. Book talent. Grow your career.",
-    url: SITE_URL,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "GRID — The network for music.",
-    description: "Discover events. Connect with artists. Book talent. Grow your career.",
-  },
+  title: "GRID",
+  description: "The social and professional network for live music",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createServerSupabase();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  let role: string | null = null;
   let username: string | null = null;
+  let role: string | null = null;
   let artistSlug: string | null = null;
   let pendingRequestCount = 0;
-  let unreadMessageCount = 0;
   let notificationCount = 0;
+
   if (user) {
-    const { data: profile } = await supabase
+    const { data: profileRow } = await supabase
       .from("profiles")
-      .select("role, username")
+      .select("username, role")
       .eq("id", user.id)
       .maybeSingle();
-    role = profile?.role ?? null;
-    username = profile?.username ?? null;
+    username = profileRow?.username ?? null;
+    role = profileRow?.role ?? null;
 
     const { data: artistRow } = await supabase
       .from("artists")
@@ -100,20 +48,6 @@ export default async function RootLayout({
       .eq("status", "pending");
     pendingRequestCount = count ?? 0;
 
-    const { data: convs } = await supabase
-      .from("conversations")
-      .select("id")
-      .or("participant_a.eq." + user.id + ",participant_b.eq." + user.id);
-    const convIds = (convs || []).map((c) => c.id);
-    if (convIds.length > 0) {
-      const { count: uc } = await supabase
-        .from("messages")
-        .select("*", { count: "exact", head: true })
-        .in("conversation_id", convIds)
-        .neq("sender_id", user.id)
-        .is("read_at", null);
-      unreadMessageCount = uc ?? 0;
-    }
     const { count: nc } = await supabase
       .from("notifications")
       .select("*", { count: "exact", head: true })
@@ -124,9 +58,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${antonio.variable} font-sans antialiased bg-white text-black`}
-      >
+      <body className={`${inter.variable} ${antonio.variable} font-sans antialiased bg-white text-black`}>
         <Navbar
           user={
             user
@@ -142,27 +74,15 @@ export default async function RootLayout({
           }
           notificationCount={notificationCount}
         />
-        {/* OLD HEADER DISABLED FOR GRID REBRAND */}
-        <main><PlayerProvider>{children}</PlayerProvider></main>
-                <div className="fixed right-6 top-20 z-40 hidden sm:block">
-          <CartWidget />
-        </div>
-        <InstallPrompt />
+        <main>{children}</main>
+                <InstallPrompt />
         <footer className="border-t border-gray-200 mt-24 py-12">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
-              <a href="/terms" className="text-gray-500 hover:text-black">
-                Terms of Service
-              </a>
-              <a href="/privacy" className="text-gray-500 hover:text-black">
-                Privacy Policy
-              </a>
-              <a href="/refunds" className="text-gray-500 hover:text-black">
-                Refund Policy
-              </a>
-              <a href="/contact" className="text-gray-500 hover:text-black">
-                Contact
-              </a>
+              <a href="/terms" className="text-gray-500 hover:text-black">Terms of Service</a>
+              <a href="/privacy" className="text-gray-500 hover:text-black">Privacy Policy</a>
+              <a href="/refunds" className="text-gray-500 hover:text-black">Refund Policy</a>
+              <a href="/contact" className="text-gray-500 hover:text-black">Contact</a>
             </div>
             <p className="text-center text-sm text-gray-500">
               <span
@@ -171,28 +91,14 @@ export default async function RootLayout({
               >
                 Discover · Connect · Create · Book · Grow
               </span>
-              {"\u00A9 " +
-                new Date().getFullYear() +
-                " GRID. All rights reserved."}
+              {"© " + new Date().getFullYear() + " GRID. All rights reserved."}
             </p>
           </div>
         </footer>
         <MobileNav isSignedIn={!!user} />
-        <div className="h-14 sm:hidden" />        <Toaster position="bottom-right" richColors />
-        </CartProvider>
-      
+        <div className="h-14 sm:hidden" />
+        <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );
 }
-
-
-
-
-
-
-
-
-
-
-

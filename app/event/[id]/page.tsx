@@ -442,7 +442,7 @@ export default async function EventPage({
                   href={`/event/${e.id}/attendees`}
                   className="inline-block mt-3 text-sm text-white/70 underline hover:text-white"
                 >
-                  See all {goingCount} attendees · {attendingCount} going
+                  See all {goingCount} attendees · {goingCount} going
                 </a>
               </div>
             )}

@@ -198,21 +198,21 @@ export default async function TicketDetailPage({ params }: Props) {
                 <dl className="divide-y divide-gray-100 text-sm">
                   <div className="flex justify-between py-2.5">
                     <dt className="text-gray-500">Event</dt>
-                    <dd className="font-semibold text-right">{event?.title || "â€”"}</dd>
+                    <dd className="font-semibold text-right">{event?.title || "—"}</dd>
                   </div>
                   <div className="flex justify-between py-2.5">
                     <dt className="text-gray-500">Date</dt>
-                    <dd className="font-semibold text-right">{dateStr || "â€”"}</dd>
+                    <dd className="font-semibold text-right">{dateStr || "—"}</dd>
                   </div>
                   <div className="flex justify-between py-2.5">
                     <dt className="text-gray-500">Time</dt>
-                    <dd className="font-semibold text-right">{timeStr || "â€”"}</dd>
+                    <dd className="font-semibold text-right">{timeStr || "—"}</dd>
                   </div>
                   {venue ? (
                     <>
                       <div className="flex justify-between py-2.5">
                         <dt className="text-gray-500">Venue</dt>
-                        <dd className="font-semibold text-right">{venue.name || "â€”"}</dd>
+                        <dd className="font-semibold text-right">{venue.name || "—"}</dd>
                       </div>
                       {venue.address ? (
                         <div className="flex justify-between py-2.5">
@@ -259,7 +259,7 @@ export default async function TicketDetailPage({ params }: Props) {
                     <button
                       type="button"
                       className="rounded-full border border-gray-300 text-gray-800 text-sm font-semibold px-5 py-2 hover:border-gray-400"
-                      // download via browser â€” no server action needed
+                      // download via browser — no server action needed
                     >
                       Save as image
                     </button>

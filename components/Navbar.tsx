@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import "./Navbar.css";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,7 +20,7 @@ const ACCOUNT_LINKS = [
   { href: "/settings",   label: "Settings" },
 ];
 
-export default function Navbar() {
+export default function Navbar(props?: any) {
   const [openMenu, setOpenMenu] = useState<MenuName>(null);
   const navRef = useRef<HTMLElement>(null);
 

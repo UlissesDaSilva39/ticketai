@@ -108,7 +108,7 @@ export default function ForVenuesPage() {
             </thead>
             <tbody>
               {[
-                ["Listing fee", "Â£100+ / month", "Â£0"],
+                ["Listing fee", "£100+ / month", "£0"],
                 ["Contract", "12 months", "None"],
                 ["Revenue share", "Platform keeps it", "You earn it"],
                 ["Direct promoter contact", "No", "Yes"],

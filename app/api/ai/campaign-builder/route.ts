@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
     const ticketInfo =
       Array.isArray(event.ticket_types) && event.ticket_types.length > 0
         ? (event.ticket_types as Array<{ name: string; price: number; quantity?: number }>)
-            .map((t) => `${t.name} at Â£${t.price}`)
+            .map((t) => `${t.name} at £${t.price}`)
             .join(", ")
         : "no ticket types defined";
 

@@ -67,7 +67,7 @@ export default function AskGRID() {
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Example: House music events in London this weekend under Â£30"
+          placeholder="Example: House music events in London this weekend under £30"
           rows={3}
           disabled={loading}
           className="w-full p-4 border border-gray-200 rounded-lg text-base resize-y"
@@ -114,14 +114,14 @@ export default function AskGRID() {
                     day: "numeric",
                     month: "short",
                   })}
-                  {e.venue ? " Ãƒâ€šÂ· " + e.venue : ""}
+                  {e.venue ? " Ãƒâ€š· " + e.venue : ""}
                 </p>
                 <p className="text-sm font-medium">
                   {e.lowest_price === null
                     ? "Tickets available"
                     : e.lowest_price === 0
                     ? "Free"
-                    : "From Â£" + e.lowest_price.toFixed(2)}
+                    : "From £" + e.lowest_price.toFixed(2)}
                 </p>
               </div>
             </Link>

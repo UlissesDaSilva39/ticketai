@@ -68,6 +68,7 @@ export type LatestDrop = {
 };
 
 export type Artist = {
+  featuredDemo?: any;
   id: string;
   userId: string;
   slug: string;

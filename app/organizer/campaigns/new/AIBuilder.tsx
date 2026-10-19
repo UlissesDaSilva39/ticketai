@@ -80,7 +80,7 @@ export default function AIBuilder({
     console.log("APPLY CLICKED");
     console.log("result =", result);
     if (!result) {
-      console.log("No result Ã¢â‚¬â€ bailing out");
+      console.log("No result Ã¢â‚¬” bailing out");
       return;
     }
     const now = new Date();
@@ -107,7 +107,7 @@ export default function AIBuilder({
   return (
     <section className="rounded-xl border-2 border-black bg-white p-6">
       <div className="mb-4 flex items-center gap-3">
-        <span className="text-2xl">Ã°Å¸Â¤â€“</span>
+        <span className="text-2xl">Ã°Å¸Â¤—</span>
         <div>
           <h2 className="text-lg font-semibold">AI Campaign Builder</h2>
           <p className="text-sm text-gray-500">
@@ -154,7 +154,7 @@ export default function AIBuilder({
                 onClick={apply}
                 className="rounded-full bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-800"
               >
-                Apply to form Ã¢â€ â€™
+                Apply to form Ã¢â€ ’
               </button>
             </div>
 
@@ -162,7 +162,7 @@ export default function AIBuilder({
               <div className="rounded-lg border bg-white p-4">
                 <p className="text-xs uppercase tracking-wider text-gray-500">Audience</p>
                 <p className="mt-1 font-medium">
-                  {result.audience.location || "Ã¢â‚¬â€"} Ã‚· {result.audience.ageMin}Ã¢â‚¬â€œ{result.audience.ageMax}
+                  {result.audience.location || "Ã¢â‚¬”"} Ã‚· {result.audience.ageMin}Ã¢â‚¬“{result.audience.ageMax}
                 </p>
                 <p className="mt-2 text-sm text-gray-600">
                   {result.audience.interests.join(" Ã‚· ")}

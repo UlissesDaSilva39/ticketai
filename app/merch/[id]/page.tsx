@@ -19,41 +19,23 @@ export default async function MerchProductPage({ params }: Params) {
         </div>
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
-            Merch
-          </p>
-          <h1 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">
-            {id}
-          </h1>
-          <p className="mt-3 text-sm text-neutral-600">
-            Limited edition item. Ships worldwide. 100% of proceeds go to the artist.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Merch</p>
+          <h1 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{id}</h1>
+          <p className="mt-3 text-sm text-neutral-600">Limited edition item. Ships worldwide.</p>
           <p className="mt-5 text-2xl font-black">£5.00</p>
-
           <div className="mt-6 space-y-3">
             <label htmlFor="size" className="block text-sm font-semibold">Size</label>
-            <select
-              id="size"
-              name="size"
-              className="w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm outline-none focus:border-neutral-900"
-            >
+            <select id="size" name="size" className="w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm outline-none focus:border-neutral-900">
               <option>S</option>
               <option>M</option>
               <option>L</option>
               <option>XL</option>
             </select>
           </div>
-
-          <button
-            type="button"
-            className="mt-6 w-full rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
-          >
+          <button type="button" className="mt-6 w-full rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
             Add to cart · £5.00
           </button>
-
-          <p className="mt-4 text-xs text-neutral-500">
-            Free shipping over £30 · 30-day returns · Secure checkout
-          </p>
+          <p className="mt-4 text-xs text-neutral-500">Free shipping over £30 · 30-day returns · Secure checkout</p>
         </div>
       </div>
     </div>

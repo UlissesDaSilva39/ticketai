@@ -43,9 +43,6 @@ export default async function ArtistRegisterPage() {
         </section>
 
         <ArtistRegisterForm
-        defaultName={profile?.full_name ?? ""}
-        defaultHandle={profile?.username ?? ""}
-        defaultEmail={user.email ?? ""}
       />
       </div>
     </div>

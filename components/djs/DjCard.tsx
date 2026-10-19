@@ -38,7 +38,7 @@ export function DjCard({ dj }: { dj: DJ }) {
             {set.date} â€š· Set {set.setTime} â€š· {set.city}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
-            <span className="text-sm font-semibold text-neutral-900">{set.feeFrom}</span>
+            <span className="text-sm font-semibold text-neutral-900">{set.price}</span>
             <Link href={`/djs/${dj.slug}/book`}
               className="rounded-full bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-neutral-800">
               BOOK NOW
@@ -60,7 +60,7 @@ export function DjCard({ dj }: { dj: DJ }) {
           {dj.gigCount} gigs
         </span>
         <span className="rounded-full bg-neutral-100 px-2 py-1">
-          {dj.ticketsSold.toLocaleString()}+ tickets
+          {(dj.ticketsSold ?? 0).toLocaleString()}+ tickets
         </span>
       </div>
 
