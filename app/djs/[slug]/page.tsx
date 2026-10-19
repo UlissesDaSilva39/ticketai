@@ -37,7 +37,7 @@ export default async function DjProfilePage({ params }: Params) {
         </div>
         <p className="mt-1 text-sm text-neutral-500">@{dj.slug}</p>
         <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-          {dj.city}{dj.timezone ? ` · ${dj.timezone}` : ''} · DJ
+          {dj.city}{dj.timezone ? ` · ${dj.timezone} ` : ''} · DJ
           {dj.djSince && <> · Since {dj.djSince}</>}
         </p>
         <p className="mt-3 max-w-2xl text-base text-neutral-700">{dj.bio}</p>
@@ -53,21 +53,11 @@ export default async function DjProfilePage({ params }: Params) {
         )}
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <Link
-            href={`/book/dj/${dj.slug}`}
+            href={` /book/dj/${dj.slug} `}
             className="rounded-full bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
           >
             Book this DJ
           </Link>
-          {dj.membership && (
-            <a
-              href={dj.membership.url}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-full border border-neutral-300 px-5 py-3 text-sm font-semibold hover:border-neutral-900"
-            >
-              Join {dj.membership.tier} · {dj.membership.price}
-            </a>
-          )}
         </div>
       </header>
 

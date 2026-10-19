@@ -18,7 +18,7 @@ export default async function PromoterProfilePage({ params }: Params) {
     { label: 'Events run', value: promoter.eventCount },
     { label: 'Tickets sold', value: promoter.ticketsSold.toLocaleString() },
     { label: 'Venues', value: promoter.venuesWorked?.length ?? 0 },
-    { label: 'Avg. fill', value: promoter.avgFill ? `${promoter.avgFill}%` : '—' },
+    { label: 'Avg. fill', value: promoter.avgFill ? ` ${promoter.avgFill}% ` : '—' },
   ];
 
   return (
@@ -38,7 +38,7 @@ export default async function PromoterProfilePage({ params }: Params) {
         </div>
         <p className="mt-1 text-sm text-neutral-500">@{promoter.slug}</p>
         <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-          {promoter.city}{promoter.timezone ? ` · ${promoter.timezone}` : ''} · Promoter
+          {promoter.city}{promoter.timezone ? ` · ${promoter.timezone} ` : ''} · Promoter
         </p>
         <p className="mt-3 max-w-2xl text-base text-neutral-700">{promoter.bio}</p>
         <div className="mt-3 flex flex-wrap gap-1.5">
@@ -56,29 +56,11 @@ export default async function PromoterProfilePage({ params }: Params) {
         )}
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <Link
-            href={`/book/promoter/${promoter.slug}`}
+            href={` /book/promoter/${promoter.slug} `}
             className="rounded-full bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
           >
             Propose partnership
           </Link>
-          {promoter.demoSubmissionUrl && (
-            <Link
-              href={promoter.demoSubmissionUrl}
-              className="rounded-full border border-neutral-300 px-5 py-3 text-sm font-semibold hover:border-neutral-900"
-            >
-              Submit demo
-            </Link>
-          )}
-          {promoter.social.instagram && (
-            <a
-              href={`https://instagram.com/${promoter.social.instagram}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-sm text-neutral-500 underline-offset-2 hover:text-black hover:underline"
-            >
-              @{promoter.social.instagram}
-            </a>
-          )}
         </div>
       </header>
 
@@ -110,10 +92,7 @@ export default async function PromoterProfilePage({ params }: Params) {
         <PromoterVenuesWorked venues={promoter.venuesWorked} />
         <PromoterResidentDjs residents={promoter.residentDjs} />
         <PromoterReviews reviews={promoter.reviews} />
-        <PromoterDemoCTA
-          promoterName={promoter.name}
-          demoSubmissionUrl={promoter.demoSubmissionUrl}
-        />
+        <PromoterDemoCTA promoterName={promoter.name} />
       </div>
     </div>
   );
