@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -59,7 +59,7 @@ export function ArtistRelated({ artists }: { artists: Related[] }) {
             <p className="text-xs text-neutral-500">{a.city}</p>
             {a.role && <p className="text-xs text-neutral-500">{a.role}</p>}
             <p className="mt-3 text-xs font-semibold text-neutral-700 group-hover:text-black">
-              View profile →
+              View profile â†’
             </p>
           </Link>
         ))}

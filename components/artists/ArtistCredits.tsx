@@ -1,4 +1,4 @@
-import type { Credit } from '@/lib/artists';
+﻿import type { Credit } from '@/lib/artists';
 
 export function ArtistCredits({ credits }: { credits?: Credit[] }) {
   if (!credits || credits.length === 0) return null;

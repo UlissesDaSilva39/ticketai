@@ -86,7 +86,7 @@ export default async function GenrePage({ params }: Props) {
             {artists.map((a) => {
               const initials = (a.name || "?")
                 .split(" ")
-                .map((w: any) => w[0])
+                .map((w) => w[0])
                 .join("")
                 .slice(0, 2)
                 .toUpperCase();

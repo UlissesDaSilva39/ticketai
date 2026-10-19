@@ -22,7 +22,7 @@ function StatCard({
       </p>
       <p className="text-3xl font-bold mt-1">{value}</p>
       <p className={`text-xs mt-2 ${positive ? "text-green-600" : "text-gray-400"}`}>
-        {positive && delta > 0 ? "← +" + delta + " this week" : "→ 0 this week"}
+        {positive && delta > 0 ? "â†‘ +" + delta + " this week" : "â†’ 0 this week"}
       </p>
     </div>
   );

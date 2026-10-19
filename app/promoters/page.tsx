@@ -33,7 +33,6 @@ function rowToPromoter(row: any): Promoter {
     city:        row.city        ?? '',
     bio:         row.bio         ?? '',
     verified:    row.verified    ?? false,
-    genres: [],
     eventCount:  row.event_count ?? 0,
     ticketsSold: row.tickets_sold ?? 0,
     photos:      Array.isArray(row.photos) ? row.photos : [],

@@ -1,6 +1,6 @@
 ﻿import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
-import ArtistCard from "@/components/artist/ArtistCard";
+import { ArtistCard } from "@/components/artists/ArtistCard";
 import CardRow from "@/components/artist/CardRow";
 import { priceFrom } from "@/lib/posts";
 import { Sidebar } from "@/components/sidebar/Sidebar";

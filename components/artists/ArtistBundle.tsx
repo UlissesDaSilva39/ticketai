@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { Bundle } from '@/lib/artists';
 
 export function ArtistBundle({ bundle }: { bundle?: Bundle }) {
@@ -25,7 +25,7 @@ export function ArtistBundle({ bundle }: { bundle?: Bundle }) {
         href={bundle.url}
         className="mt-5 inline-flex rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
       >
-        Add bundle to cart →
+        Add bundle to cart â†’
       </Link>
 
       {typeof bundle.stock === 'number' && (

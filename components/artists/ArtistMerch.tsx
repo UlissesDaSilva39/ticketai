@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { MerchItem } from '@/lib/artists';
 
 export function ArtistMerch({ items }: { items?: MerchItem[] }) {
@@ -58,7 +58,7 @@ export function ArtistMerch({ items }: { items?: MerchItem[] }) {
 
       <div className="mt-4">
         <Link href="/merch" className="text-sm font-semibold text-neutral-700 hover:text-black">
-          View all merch →
+          View all merch â†’
         </Link>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import type { Review } from '@/lib/artists';
+﻿import type { Review } from '@/lib/artists';
 
 export function ArtistReviews({ reviews }: { reviews?: Review[] }) {
   if (!reviews || reviews.length === 0) return null;
@@ -16,8 +16,8 @@ export function ArtistReviews({ reviews }: { reviews?: Review[] }) {
         <p className="text-3xl font-black tracking-tight">{avg.toFixed(1)}</p>
         <div>
           <p className="text-sm text-amber-500">
-            {'★'.repeat(Math.round(avg))}
-            <span className="text-neutral-300">{'★'.repeat(5 - Math.round(avg))}</span>
+            {'â˜…'.repeat(Math.round(avg))}
+            <span className="text-neutral-300">{'â˜…'.repeat(5 - Math.round(avg))}</span>
           </p>
           <p className="text-xs text-neutral-500">
             From {count} {count === 1 ? 'client' : 'clients'}
@@ -30,7 +30,7 @@ export function ArtistReviews({ reviews }: { reviews?: Review[] }) {
           <figure key={i} className="rounded-2xl border border-neutral-200 bg-white p-5">
             <div className="flex items-center justify-between">
               <div className="text-sm text-amber-500">
-                {'★'.repeat(r.rating ?? 5)}
+                {'â˜…'.repeat(r.rating ?? 5)}
               </div>
               {r.date && (
                 <p className="text-xs text-neutral-400">{r.date}</p>
@@ -46,7 +46,7 @@ export function ArtistReviews({ reviews }: { reviews?: Review[] }) {
               </div>
               {r.verified && (
                 <span className="ml-auto rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
-                  ✓ Verified booking
+                  âœ“ Verified booking
                 </span>
               )}
             </figcaption>

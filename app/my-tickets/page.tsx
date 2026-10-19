@@ -113,7 +113,7 @@ export default async function MyTicketsPage() {
                       />
                     ) : (
                       <div className="text-center text-gray-400">
-                        <p className="text-4xl mb-2">{isUsed ? "Y" : isReturned ? "ÃƒÂ¢Ã‚â€ Ã‚©" : "X"}</p>
+                        <p className="text-4xl mb-2">{isUsed ? "Y" : isReturned ? "ÃƒÂ¢Ã‚â€ Ã‚Â©" : "X"}</p>
                         <p className="text-xs uppercase tracking-widest">
                           {isUsed ? "Used" : isReturned ? "Returned" : "Resold"}
                         </p>

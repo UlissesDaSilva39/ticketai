@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
@@ -104,7 +104,7 @@ export default async function FeedPage({
     for (const l of userLikes || []) likedSet.add(l.post_id);
   }
 
-  // Following filter — only applies when tab=following
+  // Following filter â€” only applies when tab=following
   let followIds: Set<string> = new Set();
   if (tab === "following") {
     const { data: followRows } = await supabase
@@ -231,7 +231,7 @@ export default async function FeedPage({
                     Load more
                   </Link>
                 ) : (
-                  <p className="text-xs text-gray-400">— End of feed —</p>
+                  <p className="text-xs text-gray-400">â€” End of feed â€”</p>
                 )}
               </div>
             </div>

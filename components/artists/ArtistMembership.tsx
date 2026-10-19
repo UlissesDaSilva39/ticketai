@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { Membership } from '@/lib/artists';
 
 export function ArtistMembership({ membership }: { membership?: Membership }) {
@@ -17,7 +17,7 @@ export function ArtistMembership({ membership }: { membership?: Membership }) {
 
         <ul className="mt-5 space-y-2 text-sm text-neutral-200">
           {membership.perks.map((perk) => (
-            <li key={perk}>✓ {perk}</li>
+            <li key={perk}>âœ“ {perk}</li>
           ))}
         </ul>
 
@@ -27,7 +27,7 @@ export function ArtistMembership({ membership }: { membership?: Membership }) {
           rel="noreferrer"
           className="mt-7 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-neutral-100"
         >
-          Join the {membership.tier} →
+          Join the {membership.tier} â†’
         </Link>
 
         {membership.comparison && (

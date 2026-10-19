@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createServerSupabase as createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -35,7 +35,7 @@ export default async function OrganizerDashboard() {
     if (orders) {
       orderCount = orders.length;
       totalRevenue = orders.reduce(
-        (sum: number, o: any) => sum + Number(o.total_amount || 0),
+        (sum, o) => sum + Number(o.total_amount || 0),
         0
       );
       for (const o of orders) {

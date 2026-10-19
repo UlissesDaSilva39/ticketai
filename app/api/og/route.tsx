@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
   }
 
   const price = priceFrom(event.ticket_types);
-  const priceLabel = price !== null ? "From £" + price.toFixed(2) : "";
+  const priceLabel = price !== null ? "From Â£" + price.toFixed(2) : "";
   const dateLabel = formatDate(event.start_date);
 
   return new ImageResponse(
@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
             <span>{dateLabel}</span>
             {priceLabel && (
               <>
-                <span style={{ color: "#00FF87" }}>Ãƒâ€š·</span>
+                <span style={{ color: "#00FF87" }}>Ãƒâ€šÂ·</span>
                 <span style={{ color: "#00FF87", fontWeight: 700 }}>{priceLabel}</span>
               </>
             )}

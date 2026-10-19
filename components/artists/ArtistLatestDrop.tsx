@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { LatestDrop } from '@/lib/artists';
 
 export function ArtistLatestDrop({ drop }: { drop?: LatestDrop }) {
@@ -9,7 +9,7 @@ export function ArtistLatestDrop({ drop }: { drop?: LatestDrop }) {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-xs font-bold uppercase tracking-widest text-amber-600">
-            🎵 {drop.label}
+            ðŸŽµ {drop.label}
           </p>
           <p className="mt-1 text-lg font-black tracking-tight">{drop.title}</p>
           <p className="mt-0.5 text-sm text-neutral-500">{drop.subtitle}</p>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import type { Service } from '@/lib/artists';
@@ -43,13 +43,13 @@ export function ArtistServicesPanel({
         ))}
       </ul>
       <p className="mt-4 text-xs text-neutral-500">
-        All engagements include contract + invoice. Paid through GRID · 3% per booking · Payout next day.
+        All engagements include contract + invoice. Paid through GRID Â· 3% per booking Â· Payout next day.
       </p>
       <Link
         href={`/artists/${slug}/book`}
         className="mt-4 inline-flex rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-neutral-800"
       >
-        Book a session →
+        Book a session â†’
       </Link>
     </section>
   );
