@@ -35,7 +35,7 @@ export function DjCard({ dj }: { dj: DJ }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{set.venue}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {set.date} · Set {set.setTime} · {set.city}
+            {set.date} â€š· Set {set.setTime} â€š· {set.city}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <span className="text-sm font-semibold text-neutral-900">{set.feeFrom}</span>
@@ -47,7 +47,7 @@ export function DjCard({ dj }: { dj: DJ }) {
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-500">
-          No upcoming sets yet —{' '}
+          No upcoming sets yet ¢¢â€š¬¢â‚¬{' '}
           <Link href={`/djs/${dj.slug}`} className="underline">
             follow to be notified
           </Link>
@@ -66,7 +66,7 @@ export function DjCard({ dj }: { dj: DJ }) {
 
       {dj.photos.length > 0 && (
         <div className="mt-3 flex gap-1.5">
-          {dj.photos.slice(0, 4).map((src, i) => (
+          {dj.photos.slice(0, 4).map((src: string, i: number) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={i} src={src} alt="" className="h-10 w-10 rounded-md object-cover" />
           ))}
@@ -82,7 +82,7 @@ export function DjCard({ dj }: { dj: DJ }) {
         />
         <Link href={`/djs/${dj.slug}`}
           className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black hover:underline">
-          View profile →
+          View profile ¢¢â‚¬ ¢â‚¬â„¢
         </Link>
       </div>
 

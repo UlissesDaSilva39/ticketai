@@ -37,19 +37,18 @@ export function PromoterCard({
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{next.title}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {next.date} · {next.venue}
+            {next.date} â€š· {next.venue}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <span className="text-sm font-semibold text-neutral-900">{next.priceFrom}</span>
             <Link href={`/events/${next.slug}`}
               className="rounded-full bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-neutral-800">
-              GET TICKETS
-            </Link>
+              Get tickets ¢â€ ’</Link>
           </div>
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-500">
-          No upcoming events yet —{' '}
+          No upcoming events yet ¢¢â€š¬¢â‚¬{' '}
           <Link href={`/promoters/${promoter.slug}`} className="underline">
             follow to be notified
           </Link>
@@ -84,7 +83,7 @@ export function PromoterCard({
             </Link>
             <Link href={`/promoters/${promoter.slug}/edit`}
               className="ml-auto text-xs font-semibold text-neutral-700 hover:text-black">
-              Edit profile →
+              Edit profile ¢¢â‚¬ ¢â‚¬â„¢
             </Link>
           </>
         ) : (
@@ -97,7 +96,7 @@ export function PromoterCard({
             />
             <Link href={`/promoters/${promoter.slug}`}
               className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black hover:underline">
-              View profile →
+              View profile ¢¢â‚¬ ¢â‚¬â„¢
             </Link>
           </>
         )}
