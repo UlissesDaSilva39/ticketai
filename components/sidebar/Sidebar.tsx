@@ -1,4 +1,7 @@
-﻿import { SIDEBAR_LIBRARY } from '@/config/sidebar';
+﻿'use client';
+import Link from 'next/link';
+
+import { SIDEBAR_LIBRARY } from '@/config/sidebar';
 import { Icon } from '@/components/ui/Icon';
 
 export function Sidebar() {
@@ -40,12 +43,14 @@ export function Sidebar() {
           Grow on GRID
         </div>
         <p className="text-xs text-gray-500 mb-3">Get verified, unlock booking tools and AI.</p>
-        <a href="/for-promoters" className="block w-full text-center rounded-full border border-gray-900 px-4 py-2 text-sm font-medium hover:bg-gray-900 hover:text-white transition">
+        <Link href="/pro" className="block w-full text-center rounded-full border border-gray-900 px-4 py-2 text-sm font-medium hover:bg-gray-900 hover:text-white transition">
           Upgrade to Pro
-        </a>
+        </Link>
       </div>
     </aside>
   );
 }
+
+
 
 
