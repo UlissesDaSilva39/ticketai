@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
 
-// Only 3x interest-free plan is legally safe under FCA merchant exemption
 export type PaymentPlan = 'full' | '3x';
 
 const s: Record<string, CSSProperties> = {
@@ -68,7 +67,6 @@ export default function PaymentAgreement({
     onAgreeChange(e.target.checked);
   };
 
-  // Only show for instalment plans
   if (plan === 'full') {
     return null;
   }
@@ -86,16 +84,7 @@ export default function PaymentAgreement({
           style={s.checkbox}
         />
         <span style={s.label}>
-          I agree to the <span style={s.link}>GRID Payment Plan Terms</span> and understand that:
-          <br />
-          <br />
-          <strong>1. Deposit & Non-Refundable:</strong> I will pay a deposit of £{depositAmount} today. This deposit is <strong>non-refundable</strong> if I miss any future payment.
-          <br />
-          <strong>2. Payment Schedule:</strong> I will be charged 2 additional payments of £{monthlyAmount} on the same date each month until the balance is cleared. This is an <strong>interest-free</strong> plan.
-          <br />
-          <strong>3. Ticket Hold:</strong> My ticket will remain <strong>PENDING</strong> and will not be released until the full balance is paid. I understand I cannot resell or transfer this ticket while a payment plan is active.
-          <br />
-          <strong>4. Default Policy:</strong> If I miss a payment by more than 5 days, my ticket will be void, my deposit will be forfeited, and I will be barred from future instalment plans.
+          I agree to pay a <strong>30% deposit (£{depositAmount})</strong> today and <strong>2 monthly payments of £{monthlyAmount}</strong> starting in 30 days. This is an interest-free plan. The deposit is non-refundable if I default. My ticket will be held until the balance is paid. <span style={s.link}>Read full terms</span>.
         </span>
       </label>
 
