@@ -1,13 +1,13 @@
 ﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import PaymentAgreement from '@/components/checkout/PaymentAgreement';
 import type { PaymentPlan } from '@/components/checkout/PaymentAgreement';
 import {
   CalendarIcon, MapPinIcon, UsersIcon, DollarIcon, TagIcon,
-  MusicIcon, GiftIcon, XIcon, TrophyIcon, ClockIcon, PlayIcon, ChartIcon, BookmarkIcon
+  MusicIcon, GiftIcon, XIcon, TrophyIcon, ClockIcon, PlayIcon, ChartIcon, BookmarkIcon, ShareIcon
 } from '@/components/people/Icons';
 
 // ============ MOCK DATA ============
@@ -83,7 +83,11 @@ const s: Record<string, React.CSSProperties> = {
   heroOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%)', zIndex: 1 },
   heroInner: { maxWidth: 1100, margin: '0 auto', padding: '32px 24px', width: '100%', position: 'relative', zIndex: 2 },
   verifiedBadge: { display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(16,185,129,0.2)', border: '1px solid #10b981', color: '#10b981', padding: '4px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, marginBottom: 16 },
+  
+  titleRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' as const },
   eventTitle: { fontSize: 52, fontWeight: 800, margin: '0 0 8px', lineHeight: 1.1, letterSpacing: '-0.02em' },
+  shareBtn: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 16px', borderRadius: 999, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer', backdropFilter: 'blur(10px)' },
+  
   eventVenue: { fontSize: 20, color: '#d1d5db', margin: '0 0 24px' },
   metaRow: { display: 'flex', gap: 24, flexWrap: 'wrap' as const, fontSize: 14, color: '#e5e7eb', marginBottom: 32 },
   metaItem: { display: 'flex', alignItems: 'center', gap: 6 },
@@ -103,8 +107,11 @@ const s: Record<string, React.CSSProperties> = {
   section: { padding: '64px 0', borderBottom: '1px solid #e5e7eb' },
   sectionTitle: { fontSize: 28, fontWeight: 800, margin: '0 0 24px' },
 
+  // Selling fast banner
+  sellingFastBanner: { background: 'linear-gradient(90deg, #fef2f2, #fef3c7)', borderTop: '1px solid #fca5a5', borderBottom: '1px solid #f59e0b', padding: '14px 24px', textAlign: 'center' as const, fontSize: 15, fontWeight: 700, color: '#991b1b', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 },
+
   // Trust badges
-  trustBadgeStrip: { display: 'flex', justifyContent: 'center', gap: 32, padding: '24px 0', background: '#f9fafb', borderBottom: '1px solid #e5e7eb' },
+  trustBadgeStrip: { display: 'flex', justifyContent: 'center', gap: 32, padding: '24px 0', background: '#f9fafb', borderBottom: '1px solid #e5e7eb', flexWrap: 'wrap' as const },
   trustBadge: { display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 600, color: '#4b5563' },
 
   // Lineup
@@ -146,6 +153,10 @@ const s: Record<string, React.CSSProperties> = {
   modalSub: { margin: '0 0 24px', fontSize: 14, color: '#6b7280' },
   closeBtn: { position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', padding: 4 },
 
+  // Tier groups
+  tierGroup: { marginBottom: 24 },
+  tierGroupTitle: { fontSize: 13, fontWeight: 800, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: 6 },
+  
   tierCard: { border: '1px solid #e5e7eb', borderRadius: 12, padding: 16, marginBottom: 12 },
   tierCardActive: { border: '2px solid #111827', borderRadius: 12, padding: 16, marginBottom: 12, background: '#f9fafb' },
   tierCardSold: { border: '1px solid #e5e7eb', borderRadius: 12, padding: 16, marginBottom: 12, opacity: 0.5 },
@@ -176,10 +187,12 @@ const s: Record<string, React.CSSProperties> = {
   upsellDesc: { fontSize: 12, color: '#6b7280', margin: '0 0 8px' },
   upsellPrice: { fontSize: 14, fontWeight: 700 },
   addBtn: { padding: '8px 16px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' },
-  skipRow: { display: 'flex', gap: 12, marginTop: 20 },
-  skipBtn: { flex: 1, padding: '14px 0', borderRadius: 12, background: 'transparent', border: '1px solid #d1d5db', color: '#111827', fontSize: 15, fontWeight: 600, cursor: 'pointer' },
-  continueBtn: { flex: 2, padding: '14px 0', borderRadius: 12, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 15, fontWeight: 700, cursor: 'pointer' },
-  continueBtnDisabled: { flex: 2, padding: '14px 0', borderRadius: 12, background: '#d1d5db', color: '#9ca3af', border: 'none', fontSize: 15, fontWeight: 700, cursor: 'not-allowed' },
+
+  // Promo code
+  promoLink: { background: 'none', border: 'none', color: '#7c5cff', fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline', padding: 0, marginTop: 12 },
+  promoInputRow: { display: 'flex', gap: 8, marginTop: 12 },
+  promoInput: { flex: 1, padding: '10px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, outline: 'none' },
+  promoApplyBtn: { padding: '10px 16px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' },
 
   // Resale
   resaleNotice: { background: '#eff6ff', border: '1px solid #93c5fd', borderRadius: 12, padding: 16, marginBottom: 20, fontSize: 13, color: '#1e40af' },
@@ -191,8 +204,6 @@ const s: Record<string, React.CSSProperties> = {
   resaleSeller: { fontSize: 13, color: '#4b5563', marginBottom: 4 },
   resaleNote: { fontSize: 12, color: '#10b981', marginBottom: 12 },
   resaleBtn: { width: '100%', padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' },
-  resellLink: { textAlign: 'center' as const, fontSize: 13, color: '#6b7280', marginTop: 24 },
-  resellLinkBtn: { background: 'none', border: 'none', color: '#7c5cff', fontWeight: 700, cursor: 'pointer', fontSize: 13, textDecoration: 'underline' },
 };
 
 export default function EventPage() {
@@ -200,21 +211,41 @@ export default function EventPage() {
   const id = params?.id as string;
   const EVENT = EVENT_DB[id as keyof typeof EVENT_DB] || FALLBACK_EVENT;
 
-  const [modal, setModal] = useState<'none' | 'tier' | 'upsell' | 'resale' | 'success'>('none');
+  const [modal, setModal] = useState<'none' | 'checkout' | 'resale' | 'success'>('none');
   const [quantities, setQuantities] = useState<Record<string, number>>({ ga: 1 });
   const [addedUpsells, setAddedUpsells] = useState<string[]>([]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlan>('full');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [promoOpen, setPromoOpen] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [shared, setShared] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const TIERS = [
-    { id: 'early', name: 'EARLY BIRD', price: Math.floor(EVENT.fromPrice * 0.8), remaining: 0, desc: 'Sold out', soldOut: true },
-    { id: 'ga', name: 'GENERAL ADMISSION', price: EVENT.fromPrice, remaining: 12, desc: 'Only 12 left at this price', soldOut: false },
-    { id: 'vip', name: 'VIP', price: EVENT.fromPrice + 20, remaining: 8, desc: 'Early entry + signed poster', soldOut: false },
+    {
+      group: 'Standard Access',
+      tiers: [
+        { id: 'early', name: 'EARLY BIRD', price: Math.floor(EVENT.fromPrice * 0.8), remaining: 0, desc: 'Sold out', soldOut: true },
+        { id: 'ga', name: 'GENERAL ADMISSION', price: EVENT.fromPrice, remaining: 12, desc: 'Only 12 left at this price', soldOut: false },
+      ],
+    },
+    {
+      group: 'VIP Experiences',
+      tiers: [
+        { id: 'vip', name: 'VIP SOUNDCHECK', price: EVENT.fromPrice + 20, remaining: 8, desc: 'Early entry + signed poster', soldOut: false },
+      ],
+    },
   ];
 
+  const flatTiers = TIERS.flatMap(g => g.tiers);
   const ticketTotal = Object.entries(quantities).reduce((sum, [tierId, qty]) => {
-    const tier = TIERS.find(t => t.id === tierId);
+    const tier = flatTiers.find(t => t.id === tierId);
     return sum + (tier ? tier.price * qty : 0);
   }, 0);
   const upsellTotal = addedUpsells.reduce((sum, upsellId) => {
@@ -222,7 +253,15 @@ export default function EventPage() {
     return sum + (upsell ? upsell.price : 0);
   }, 0);
   const platformFee = Math.round(ticketTotal * 0.05 * 100) / 100;
-  const grandTotal = ticketTotal + upsellTotal + platformFee;
+  const grandTotalBeforeDiscount = ticketTotal + upsellTotal + platformFee;
+  const discount = promoApplied ? Math.round(grandTotalBeforeDiscount * 0.1 * 100) / 100 : 0;
+  const grandTotal = grandTotalBeforeDiscount - discount;
+
+  // Calculate selling fast status
+  const totalRemaining = flatTiers.reduce((sum, t) => sum + (t.soldOut ? 0 : t.remaining), 0);
+  const totalCapacity = EVENT.capacity;
+  const soldPercentage = Math.round(((totalCapacity - totalRemaining) / totalCapacity) * 100);
+  const sellingFast = soldPercentage >= 70;
 
   const updateQty = (tierId: string, delta: number) => {
     setQuantities(prev => {
@@ -231,11 +270,26 @@ export default function EventPage() {
     });
   };
 
-  const toggleUpsell = (id: string) => {
-    setAddedUpsells(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  const toggleUpsell = (uid: string) => {
+    setAddedUpsells(prev => prev.includes(uid) ? prev.filter(x => x !== uid) : [...prev, uid]);
   };
 
   const canCheckout = paymentPlan === 'full' || (paymentPlan === '3x' && agreedToTerms);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: EVENT.title, url });
+        setShared(true);
+        setTimeout(() => setShared(false), 2000);
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    }
+  };
 
   return (
     <main style={s.page}>
@@ -247,18 +301,25 @@ export default function EventPage() {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             VERIFIED EVENT
           </div>
-          <h1 style={s.eventTitle}>{EVENT.title}</h1>
+          <div style={s.titleRow}>
+            <h1 style={s.eventTitle}>{EVENT.title}</h1>
+            {isMounted && (
+              <button onClick={handleShare} style={s.shareBtn}>
+                <ShareIcon width={14} height={14} /> {shared ? 'Link copied!' : 'Share'}
+              </button>
+            )}
+          </div>
           <p style={s.eventVenue}>{EVENT.venue} · {EVENT.city}</p>
 
           <div style={s.metaRow}>
             <span style={s.metaItem}><CalendarIcon width={16} height={16} /> {EVENT.date} · {EVENT.time}</span>
             <span style={s.metaItem}><MusicIcon width={16} height={16} /> {EVENT.genre}</span>
             <span style={s.metaItem}><UsersIcon width={16} height={16} /> {EVENT.capacity} capacity</span>
-            <span style={s.metaItem}><DollarIcon width={16} height={16} /> From £{EVENT.fromPrice}</span>
+            <span style={s.metaItem}><DollarIcon width={16} height={16} /> From £{EVENT.fromPrice} all-in</span>
           </div>
 
           <div style={s.ctaRow}>
-            <button onClick={() => setModal('tier')} style={s.btnPrimary}>
+            <button onClick={() => setModal('checkout')} style={s.btnPrimary}>
               <span style={s.btnLabel}>Primary Tickets</span>
               <span style={s.btnTitle}>BUY TICKETS</span>
             </button>
@@ -275,6 +336,14 @@ export default function EventPage() {
           </div>
         </div>
       </section>
+
+      {/* SELLING FAST BANNER */}
+      {sellingFast && (
+        <div style={s.sellingFastBanner}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+          SELLING FAST — {soldPercentage}% sold. Final tickets remaining.
+        </div>
+      )}
 
       {/* TRUST BADGE STRIP */}
       <div style={s.trustBadgeStrip}>
@@ -350,16 +419,13 @@ export default function EventPage() {
       <section style={s.section}>
         <div style={s.container}>
           <h2 style={s.sectionTitle}>What attendees say</h2>
-
           <div style={s.reviewCard}>
             <div style={s.ratingRow}>
               <span style={s.stars}>★★★★★</span>
               <span style={s.ratingNum}>{EVENT.rating} / 5</span>
               <span style={{ color: '#6b7280', fontSize: 14 }}>({EVENT.reviewCount} reviews)</span>
             </div>
-            <p style={s.reviewText}>
-              "Absolute banger of a night. Sound system was incredible. Already bought my resale ticket for the next one."
-            </p>
+            <p style={s.reviewText}>"Absolute banger of a night. Sound system was incredible. Already bought my resale ticket for the next one."</p>
             <p style={s.reviewAuthor}>— @amelia.grant · Verified attendee</p>
           </div>
         </div>
@@ -383,8 +449,8 @@ export default function EventPage() {
         </div>
       </section>
 
-      {/* ===== MODAL: TIER SELECTOR ===== */}
-      {modal === 'tier' && (
+      {/* ===== MODAL: CHECKOUT ===== */}
+      {modal === 'checkout' && (
         <div style={s.overlay} onClick={() => setModal('none')}>
           <div style={s.modal} onClick={e => e.stopPropagation()}>
             <button style={s.closeBtn} onClick={() => setModal('none')}>
@@ -393,86 +459,65 @@ export default function EventPage() {
             <h2 style={s.modalTitle}>Select your tickets</h2>
             <p style={s.modalSub}>{EVENT.title} · {EVENT.date}</p>
 
-            {TIERS.map(tier => (
-              <div key={tier.id} style={tier.soldOut ? s.tierCardSold : (quantities[tier.id] > 0 ? s.tierCardActive : s.tierCard)}>
-                <div style={s.tierHeader}>
-                  <span style={s.tierName}>{tier.name}</span>
-                  <span style={s.tierPrice}>£{tier.price}</span>
+            {/* Grouped Tiers */}
+            {TIERS.map((group, gi) => (
+              <div key={gi} style={s.tierGroup}>
+                <div style={s.tierGroupTitle}>
+                  <TagIcon width={14} height={14} /> {group.group}
                 </div>
-                <p style={tier.soldOut ? s.tierDesc : (tier.remaining < 20 ? s.tierDescScarcity : s.tierDesc)}>
-                  {tier.soldOut ? 'Sold out' : `🔥 ${tier.desc}`}
-                </p>
-                {!tier.soldOut && (
-                  <div style={s.qtyControl}>
-                    <button style={s.qtyBtn} onClick={() => updateQty(tier.id, -1)}>−</button>
-                    <span style={s.qtyValue}>{quantities[tier.id] || 0}</span>
-                    <button style={s.qtyBtn} onClick={() => updateQty(tier.id, 1)}>+</button>
+                {group.tiers.map(tier => (
+                  <div key={tier.id} style={tier.soldOut ? s.tierCardSold : (quantities[tier.id] > 0 ? s.tierCardActive : s.tierCard)}>
+                    <div style={s.tierHeader}>
+                      <span style={s.tierName}>{tier.name}</span>
+                      <span style={s.tierPrice}>£{tier.price}</span>
+                    </div>
+                    <p style={tier.soldOut ? s.tierDesc : (tier.remaining < 20 ? s.tierDescScarcity : s.tierDesc)}>
+                      {tier.soldOut ? 'Sold out' : `🔥 ${tier.desc}`}
+                    </p>
+                    {!tier.soldOut && (
+                      <div style={s.qtyControl}>
+                        <button style={s.qtyBtn} onClick={() => updateQty(tier.id, -1)}>−</button>
+                        <span style={s.qtyValue}>{quantities[tier.id] || 0}</span>
+                        <button style={s.qtyBtn} onClick={() => updateQty(tier.id, 1)}>+</button>
+                      </div>
+                    )}
+                    {tier.soldOut && (
+                      <button style={{ marginTop: 12, padding: '8px 16px', borderRadius: 8, border: '1px solid #111827', background: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer', width: '100%' }}>
+                        Join Waitlist
+                      </button>
+                    )}
                   </div>
-                )}
-                {tier.soldOut && (
-                  <button style={{ marginTop: 12, padding: '8px 16px', borderRadius: 8, border: '1px solid #111827', background: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer', width: '100%' }}>
-                    Join Waitlist
-                  </button>
-                )}
+                ))}
               </div>
             ))}
 
-            <div style={s.summary}>
-              <div style={s.summaryRow}>
-                <span>Tickets</span>
-                <span>£{ticketTotal.toFixed(2)}</span>
+            {/* Upsells */}
+            <div style={{ marginTop: 24, marginBottom: 16 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 12 }}>
+                Enhance your experience
               </div>
-              <div style={s.summaryRow}>
-                <span>Platform fee (5%)</span>
-                <span>£{platformFee.toFixed(2)}</span>
-              </div>
-              <div style={s.summaryTotal}>
-                <span>Total</span>
-                <span>£{(ticketTotal + platformFee).toFixed(2)}</span>
-              </div>
+              {UPSELLS.map(upsell => {
+                const isAdded = addedUpsells.includes(upsell.id);
+                return (
+                  <div key={upsell.id} style={s.upsellCard}>
+                    <img src={upsell.image} alt={upsell.name} style={s.upsellImg} />
+                    <div style={s.upsellBody}>
+                      <p style={s.upsellName}>{upsell.name}</p>
+                      <p style={s.upsellDesc}>{upsell.desc}</p>
+                      <span style={s.upsellPrice}>£{upsell.price}</span>
+                    </div>
+                    <button style={s.addBtn} onClick={() => toggleUpsell(upsell.id)}>
+                      {isAdded ? '✓ Added' : 'Add'}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
 
-            <button
-              style={s.checkoutBtn}
-              onClick={() => setModal('upsell')}
-              disabled={ticketTotal === 0}
-            >
-              Continue to Checkout →
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ===== MODAL: UPSELL + PAYMENT ===== */}
-      {modal === 'upsell' && (
-        <div style={s.overlay} onClick={() => setModal('none')}>
-          <div style={s.modal} onClick={e => e.stopPropagation()}>
-            <button style={s.closeBtn} onClick={() => setModal('none')}>
-              <XIcon width={20} height={20} />
-            </button>
-            <h2 style={s.modalTitle}>You're going to {EVENT.title}!</h2>
-            <p style={s.modalSub}>Add a souvenir or choose a payment plan.</p>
-
-            {UPSELLS.map(upsell => {
-              const isAdded = addedUpsells.includes(upsell.id);
-              return (
-                <div key={upsell.id} style={s.upsellCard}>
-                  <img src={upsell.image} alt={upsell.name} style={s.upsellImg} />
-                  <div style={s.upsellBody}>
-                    <p style={s.upsellName}>{upsell.name}</p>
-                    <p style={s.upsellDesc}>{upsell.desc}</p>
-                    <span style={s.upsellPrice}>£{upsell.price}</span>
-                  </div>
-                  <button style={s.addBtn} onClick={() => toggleUpsell(upsell.id)}>
-                    {isAdded ? '✓ Added' : 'Add'}
-                  </button>
-                </div>
-              );
-            })}
-
-            <div style={{ marginTop: 20 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#111827', marginBottom: 12 }}>
-                Choose your payment plan
+            {/* Payment Plan */}
+            <div style={{ marginTop: 24 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 12 }}>
+                Payment Plan
               </div>
 
               <div
@@ -504,6 +549,33 @@ export default function EventPage() {
               />
             </div>
 
+            {/* Promo Code (collapsed) */}
+            {!promoOpen ? (
+              <button style={s.promoLink} onClick={() => setPromoOpen(true)}>
+                Have a promo code?
+              </button>
+            ) : (
+              <div style={s.promoInputRow}>
+                <input
+                  style={s.promoInput}
+                  placeholder="Enter code"
+                  value={promoCode}
+                  onChange={e => setPromoCode(e.target.value.toUpperCase())}
+                />
+                <button
+                  style={s.promoApplyBtn}
+                  onClick={() => {
+                    if (promoCode === 'GRID10') {
+                      setPromoApplied(true);
+                    }
+                  }}
+                >
+                  Apply
+                </button>
+              </div>
+            )}
+
+            {/* Summary */}
             <div style={s.summary}>
               <div style={s.summaryRow}>
                 <span>Tickets</span>
@@ -516,28 +588,31 @@ export default function EventPage() {
                 </div>
               )}
               <div style={s.summaryRow}>
-                <span>Platform fee</span>
+                <span>Platform fee (5%)</span>
                 <span>£{platformFee.toFixed(2)}</span>
               </div>
+              {promoApplied && (
+                <div style={s.summaryRow}>
+                  <span style={{ color: '#10b981', fontWeight: 600 }}>Promo (GRID10)</span>
+                  <span style={{ color: '#10b981', fontWeight: 600 }}>-£{discount.toFixed(2)}</span>
+                </div>
+              )}
               <div style={s.summaryTotal}>
                 <span>Total</span>
                 <span>£{grandTotal.toFixed(2)}</span>
               </div>
             </div>
 
-            <div style={s.skipRow}>
-              <button style={s.skipBtn} onClick={() => setModal('success')}>Skip</button>
-              <button
-                style={canCheckout ? s.continueBtn : s.continueBtnDisabled}
-                onClick={() => {
-                  if (canCheckout) setModal('success');
-                }}
-              >
-                {paymentPlan === '3x' && !agreedToTerms
-                  ? 'Agree to terms to continue'
-                  : `Pay £${(paymentPlan === '3x' ? grandTotal * 0.3 : grandTotal).toFixed(2)} →`}
-              </button>
-            </div>
+            <button
+              style={canCheckout ? s.checkoutBtn : { ...s.checkoutBtn, background: '#d1d5db', color: '#9ca3af', cursor: 'not-allowed' }}
+              onClick={() => {
+                if (canCheckout) setModal('success');
+              }}
+            >
+              {paymentPlan === '3x' && !agreedToTerms
+                ? 'Agree to terms to continue'
+                : `Pay £${(paymentPlan === '3x' ? grandTotal * 0.3 : grandTotal).toFixed(2)} →`}
+            </button>
           </div>
         </div>
       )}
@@ -602,3 +677,5 @@ export default function EventPage() {
     </main>
   );
 }
+
+
