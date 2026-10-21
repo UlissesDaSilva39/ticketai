@@ -213,6 +213,7 @@ export default function EventPage() {
   const [selectedArtist, setSelectedArtist] = useState<any>(null);
   const [clubModal, setClubModal] = useState<'none' | 'buy' | 'success'>('none');
   const [clubTier, setClubTier] = useState<string>('superfan');
+  const [clubActionType, setClubActionType] = useState<'superfan' | 'free' | 'stage'>('superfan');
   
   // Existing state
   const [quantities, setQuantities] = useState<Record<string, number>>({ ga: 1 });
@@ -223,6 +224,7 @@ export default function EventPage() {
   const [checkoutVipAdded, setCheckoutVipAdded] = useState(false);
   const [upsellArtist, setUpsellArtist] = useState<any>(null);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
@@ -339,7 +341,7 @@ export default function EventPage() {
             <span style={s.metaItem}><CalendarIcon width={16} height={16} /> {EVENT.date} · {EVENT.time}</span>
             <span style={s.metaItem}><MusicIcon width={16} height={16} /> {EVENT.genre}</span>
             <span style={s.metaItem}><UsersIcon width={16} height={16} /> {EVENT.capacity} capacity</span>
-            <span style={s.metaItem}><DollarIcon width={16} height={16} /> From £{EVENT.fromPrice} all-in</span>
+            <span style={s.metaItem}><DollarIcon width={16} height={16} /> From £{EVENT.fromPrice} + 5% fee</span>
           </div>
 
           <div style={s.ctaRow}>
@@ -408,10 +410,10 @@ export default function EventPage() {
                       </div>
                     ) : (
                       <div style={s.artistBtnRow}>
-                        <button onClick={() => openClubModal(artist, 'superfan')} style={s.joinClubBtn}>
+                        <button onClick={() => { setClubActionType('superfan'); openClubModal(artist, 'superfan'); }} style={s.joinClubBtn}>
                           Join Club
                         </button>
-                        <button onClick={() => openClubModal(artist, 'stage')} style={s.stageVipBtn}>
+                        <button onClick={() => { setClubActionType('stage'); openClubModal(artist, 'stage'); }} style={s.stageVipBtn}>
                           Stage VIP
                         </button>
                       </div>
@@ -506,7 +508,7 @@ export default function EventPage() {
                 ✓ Get notified of new events
               </div>
               <button
-                onClick={() => handleClubPurchase()}
+                onClick={() => { setClubActionType('free'); handleClubPurchase(); }}
                 style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: '#f3f4f6', border: 'none', fontWeight: 600, cursor: 'pointer' }}
               >
                 Follow for Free
@@ -526,7 +528,7 @@ export default function EventPage() {
                 ✓ Monthly Q&A with {selectedArtist.name}
               </div>
               <button
-                onClick={() => handleClubPurchase()}
+                onClick={() => { setClubActionType('superfan'); handleClubPurchase(); }}
                 style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontWeight: 600, cursor: 'pointer' }}
               >
                 Join Club — £5/mo
@@ -545,7 +547,7 @@ export default function EventPage() {
                 ✓ Signed setlist + photo
               </div>
               <button
-                onClick={() => handleClubPurchase()}
+                onClick={() => { setClubActionType('stage'); handleClubPurchase(); }}
                 style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: '#ffffff', color: '#111827', border: 'none', fontWeight: 600, cursor: 'pointer' }}
               >
                 Buy Stage Access — £75
@@ -559,11 +561,26 @@ export default function EventPage() {
       {clubModal === 'success' && selectedArtist && (
         <div style={s.overlay} onClick={closeClubModal}>
           <div style={{ ...s.modal, textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-            <div style={{ fontSize: 64, marginBottom: 16 }}>⭐</div>
-            <h2 style={s.modalTitle}>You're in!</h2>
+            <div style={{ fontSize: 64, marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
+              {clubActionType === 'free' && (
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              )}
+              {clubActionType === 'superfan' && (
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#7c5cff" strokeWidth="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+              )}
+              {clubActionType === 'stage' && (
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              )}
+            </div>
+            <h2 style={s.modalTitle}>
+              {clubActionType === 'free' && 'Following!'}
+              {clubActionType === 'superfan' && "You're in the Club!"}
+              {clubActionType === 'stage' && 'Stage Access Confirmed!'}
+            </h2>
             <p style={s.modalSub}>
-              Welcome to the {selectedArtist.name} Club.<br />
-              You now have early access to tickets and exclusive mixes.
+              {clubActionType === 'free' && `You are now following ${selectedArtist.name}. You will get notified of their next events.`}
+              {clubActionType === 'superfan' && `Welcome to the ${selectedArtist.name} Superfan Club. You now have early access to tickets, exclusive mixes, and a monthly Q&A.`}
+              {clubActionType === 'stage' && `Your Stage Access for ${selectedArtist.name} is confirmed. You'll receive details closer to the event.`}
             </p>
             <button
               onClick={closeClubModal}
@@ -724,7 +741,19 @@ export default function EventPage() {
               </div>
             </div>
 
-            <button
+                        {/* Marketing Consent (GDPR/PECR Compliant) */}
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 16, marginBottom: 8, cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={marketingConsent}
+                onChange={e => setMarketingConsent(e.target.checked)}
+                style={{ width: 18, height: 18, marginTop: 2, cursor: 'pointer', flexShrink: 0 }}
+              />
+              <span style={{ fontSize: 12, color: '#4b5563', lineHeight: 1.5 }}>
+                Keep me updated about events from this artist.
+              </span>
+            </label>
+<button
               style={canCheckout ? s.checkoutBtn : { ...s.checkoutBtn, background: '#d1d5db', color: '#9ca3af', cursor: 'not-allowed' }}
               onClick={() => { if (canCheckout) setModal('club_upsell'); }}
             >
@@ -880,5 +909,6 @@ export default function EventPage() {
     </main>
   );
 }
+
 
 
