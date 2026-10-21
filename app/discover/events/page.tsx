@@ -344,7 +344,7 @@ export default function DiscoverEventsPage() {
           {FEATURED_EVENTS.map(f => (
             <div key={f.id} style={s.featuredCard}>
               <div style={{ position: 'relative' }}>
-                <img src={f.banner} alt={f.title} style={s.featuredImg} />
+                <Link href={`/events/${f.id}`}><img src={f.banner} alt={f.title} style={s.featuredImg} /></Link>
                 {f.verified && (
                   <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -365,7 +365,7 @@ export default function DiscoverEventsPage() {
                 </div>
                 <div style={s.featuredPriceRow}>
                   <span style={s.featuredPrice}>From £{f.price.toFixed(2)}</span>
-                  <Link href={`/events/${f.id}`} style={s.featuredCta}>
+                  <Link href={`/events/${f.id}`} style={{ ...s.featuredCta, display: 'block', textAlign: 'center' }}>
                     Get Tickets →
                   </Link>
                 </div>
@@ -396,7 +396,7 @@ export default function DiscoverEventsPage() {
             {filtered.map(e => (
               <div key={e.id} style={s.card}>
                 <div style={{ position: 'relative' }}>
-                  <img src={e.banner} alt={e.title} style={s.cardImg} />
+                  <Link href={`/events/${e.id}`}><img src={e.banner} alt={e.title} style={s.cardImg} /></Link>
                   {e.soldOut && <div style={s.soldOutBanner}>SOLD OUT</div>}
                   {e.verified && !e.soldOut && (
                     <div style={s.verifiedBadgeSmall}>
@@ -441,7 +441,7 @@ export default function DiscoverEventsPage() {
                   ) : (
                     <div style={s.cardFooter}>
                       <span style={s.cardPrice}>From £{e.price.toFixed(2)}</span>
-                      <Link href={`/events/${e.id}`} style={s.cardCta}>Get Tickets →</Link>
+                      <Link href={`/events/${e.id}`} style={{ ...s.cardCta, display: 'block', textAlign: 'center' }}>Get Tickets →</Link>
                     </div>
                   )}
                 </div>
@@ -469,3 +469,4 @@ export default function DiscoverEventsPage() {
     </div>
   );
 }
+
