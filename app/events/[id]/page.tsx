@@ -207,7 +207,7 @@ export default function EventPage() {
   const EVENT = EVENT_DB[id as keyof typeof EVENT_DB] || FALLBACK_EVENT;
 
   // Main modals
-  const [modal, setModal] = useState<'none' | 'checkout' | 'resale' | 'success'>('none');
+  const [modal, setModal] = useState<'none' | 'checkout' | 'resale' | 'success' | 'club_upsell' | 'club_upsell_success'>('none');
   
   // Club modals (separate from main flow)
   const [selectedArtist, setSelectedArtist] = useState<any>(null);
@@ -219,6 +219,9 @@ export default function EventPage() {
   const [addedUpsells, setAddedUpsells] = useState<string[]>([]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlan>('full');
+  const [checkoutClubAdded, setCheckoutClubAdded] = useState(false);
+  const [checkoutVipAdded, setCheckoutVipAdded] = useState(false);
+  const [upsellArtist, setUpsellArtist] = useState<any>(null);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);
   const [promoCode, setPromoCode] = useState('');
@@ -723,9 +726,7 @@ export default function EventPage() {
 
             <button
               style={canCheckout ? s.checkoutBtn : { ...s.checkoutBtn, background: '#d1d5db', color: '#9ca3af', cursor: 'not-allowed' }}
-              onClick={() => {
-                if (canCheckout) setModal('success');
-              }}
+              onClick={() => { if (canCheckout) setModal('club_upsell'); }}
             >
               {paymentPlan === '3x' && !agreedToTerms
                 ? 'Agree to terms to continue'
@@ -769,6 +770,90 @@ export default function EventPage() {
           </div>
         </div>
       )}
+      {/* ===== MODAL: CLUB UPSELL (After Ticket Selection) ===== */}
+      {modal === 'club_upsell' && (
+        <div style={s.overlay} onClick={() => setModal('none')}>
+          <div style={s.modal} onClick={e => e.stopPropagation()}>
+            <button style={s.closeBtn} onClick={() => setModal('none')}>
+              <XIcon width={20} height={20} />
+            </button>
+            <div style={{ textAlign: 'center', marginBottom: 24 }}>
+              <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center', color: '#7c5cff' }}>
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+  </svg>
+</div>
+              <h2 style={s.modalTitle}>One more thing...</h2>
+              <p style={s.modalSub}>Since you're going to {EVENT.title}, why not get closer to the artists?</p>
+            </div>
+
+            <div style={s.clubTierFeatured}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <span style={{ fontSize: 14, fontWeight: 700 }}>Superfan Club (Analog Dreams)</span>
+                <span style={{ fontSize: 16, fontWeight: 800, color: '#7c5cff' }}>£5/mo</span>
+              </div>
+              <div style={{ fontSize: 12, color: '#4b5563', marginBottom: 12 }}>
+                ✓ Early ticket access (24h before public)<br/>
+                ✓ Exclusive unreleased mixes<br/>
+                ✓ 10% off merch<br/>
+                ✓ Monthly Q&A
+              </div>
+              <button
+                onClick={() => setCheckoutClubAdded(!checkoutClubAdded)}
+                style={{
+                  width: '100%', padding: '10px 0', borderRadius: 8,
+                  background: checkoutClubAdded ? '#f0fdf4' : 'linear-gradient(135deg, #7c5cff, #ff5c8a)',
+                  color: checkoutClubAdded ? '#065f46' : '#ffffff',
+                  border: checkoutClubAdded ? '1px solid #10b981' : 'none',
+                  fontWeight: 600, cursor: 'pointer'
+                }}
+              >
+                {checkoutClubAdded ? '✓ Added to Order' : 'Add Club Membership — £5/mo'}
+              </button>
+            </div>
+
+            <div style={s.clubTierVIP}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <span style={{ fontSize: 14, fontWeight: 700 }}>Stage Access (Analog Dreams)</span>
+                <span style={{ fontSize: 16, fontWeight: 800 }}>£75</span>
+              </div>
+              <div style={{ fontSize: 12, color: '#d1d5db', marginBottom: 12 }}>
+                ✓ Watch the set from the side of the stage<br/>
+                ✓ Meet the artist after the show<br/>
+                ✓ Signed setlist + photo
+              </div>
+              <button
+                onClick={() => setCheckoutVipAdded(!checkoutVipAdded)}
+                style={{
+                  width: '100%', padding: '10px 0', borderRadius: 8,
+                  background: checkoutVipAdded ? '#f0fdf4' : '#ffffff',
+                  color: checkoutVipAdded ? '#065f46' : '#111827',
+                  border: checkoutVipAdded ? '1px solid #10b981' : 'none',
+                  fontWeight: 600, cursor: 'pointer'
+                }}
+              >
+                {checkoutVipAdded ? '✓ Added to Order' : 'Add Stage Access — £75'}
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+              <button
+                onClick={() => setModal('success')}
+                style={{ flex: 1, padding: '14px 0', borderRadius: 12, background: 'transparent', border: '1px solid #d1d5db', color: '#111827', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}
+              >
+                No thanks, just tickets
+              </button>
+              <button
+                onClick={() => setModal('success')}
+                style={{ flex: 2, padding: '14px 0', borderRadius: 12, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
+              >
+                {checkoutClubAdded || checkoutVipAdded ? 'Add to Order & Pay →' : 'Continue to Payment →'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* ===== MODAL: SUCCESS ===== */}
       {modal === 'success' && (
@@ -795,3 +880,5 @@ export default function EventPage() {
     </main>
   );
 }
+
+
