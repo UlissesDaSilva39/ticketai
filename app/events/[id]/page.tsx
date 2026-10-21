@@ -225,15 +225,34 @@ export default function EventPage() {
   const [upsellArtist, setUpsellArtist] = useState<any>(null);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(false);
+  const [waitlistEmail, setWaitlistEmail] = useState('');
+  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
+  const [waitlistModal, setWaitlistModal] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
   const [shared, setShared] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [clubMember, setClubMember] = useState<string | null>(null); // tracks who you joined
 
   useEffect(() => {
     setIsMounted(true);
+    setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    // Fix 7: Auto-open promo field if URL has ?promo=
+    const urlParams = new URLSearchParams(window.location.search);
+    const promo = urlParams.get('promo');
+    if (promo) {
+      setPromoOpen(true);
+      setPromoCode(promo.toUpperCase());
+      if (promo.toUpperCase() === 'GRID10') {
+        setPromoApplied(true);
+      }
+    }
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const TIERS = [
@@ -383,6 +402,10 @@ export default function EventPage() {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           100% Verified Resale
         </div>
+        <div style={s.trustBadge}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+          100% Refund if Cancelled
+        </div>
       </div>
 
       <section style={s.section}>
@@ -393,10 +416,21 @@ export default function EventPage() {
               <div style={s.lineupGrid}>
                 {EVENT.lineup.map((artist, i) => (
                   <div key={i} style={s.artistCard}>
-                    <img src={artist.image} alt={artist.name} style={s.artistImg} />
+                    <Link href={`/artist/${artist.name.toLowerCase().replace(/[^a-z0-9]+/g, '')}`}><img src={artist.image} alt={artist.name} style={s.artistImg} /></Link>
                     <div style={{ textAlign: 'center' }}>
-                      <p style={s.artistName}>{artist.name}</p>
+                      <Link href={`/artist/${artist.name.toLowerCase().replace(/[^a-z0-9]+/g, '')}`}><p style={s.artistName}>{artist.name}</p></Link>
                       <p style={s.artistRole}>{artist.role}</p>
+                      <button
+                        onClick={() => {
+                          if (typeof window !== 'undefined') {
+                            localStorage.setItem(`follow_${artist.name}`, 'true');
+                            alert(`You are now following ${artist.name}!`);
+                          }
+                        }}
+                        style={{ padding: '4px 12px', borderRadius: 999, background: '#ffffff', border: '1px solid #7c5cff', color: '#7c5cff', fontSize: 11, fontWeight: 700, cursor: 'pointer', marginTop: 4 }}
+                      >
+                        + Follow
+                      </button>
                       <p style={s.artistFollowers}>
                         <UsersIcon width={12} height={12} /> {artist.followers} followers
                       </p>
@@ -410,10 +444,10 @@ export default function EventPage() {
                       </div>
                     ) : (
                       <div style={s.artistBtnRow}>
-                        <button onClick={() => { setClubActionType('superfan'); openClubModal(artist, 'superfan'); }} style={s.joinClubBtn}>
+                        <button onClick={() => { setClubActionType('superfan'); setSelectedArtist(artist); setClubModal('buy'); }} style={s.joinClubBtn}>
                           Join Club
                         </button>
-                        <button onClick={() => { setClubActionType('stage'); openClubModal(artist, 'stage'); }} style={s.stageVipBtn}>
+                        <button onClick={() => { setClubActionType('stage'); setSelectedArtist(artist); setClubModal('buy'); }} style={s.stageVipBtn}>
                           Stage VIP
                         </button>
                       </div>
@@ -591,6 +625,27 @@ export default function EventPage() {
           </div>
         </div>
       )}
+      {/* ===== MOBILE STICKY BUY BAR ===== */}
+      {isMounted && typeof window !== 'undefined' && window.innerWidth <= 768 && (
+        <div style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0,
+          background: '#ffffff', borderTop: '1px solid #e5e7eb',
+          padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          boxShadow: '0 -4px 12px rgba(0,0,0,0.08)', zIndex: 90,
+        }}>
+          <div>
+            <div style={{ fontSize: 11, color: '#6b7280', fontWeight: 500 }}>From</div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#111827' }}>£{EVENT.fromPrice}</div>
+          </div>
+          <button
+            onClick={() => setModal('checkout')}
+            style={{ padding: '12px 32px', borderRadius: 10, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
+          >
+            Buy Tickets →
+          </button>
+        </div>
+      )}
+
 
       {/* ===== MODAL: CHECKOUT ===== */}
       {modal === 'checkout' && (
@@ -624,9 +679,12 @@ export default function EventPage() {
                       </div>
                     )}
                     {tier.soldOut && (
-                      <button style={{ marginTop: 12, padding: '8px 16px', borderRadius: 8, border: '1px solid #111827', background: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer', width: '100%' }}>
-                        Join Waitlist
-                      </button>
+                      <button
+                          onClick={() => setWaitlistModal(true)}
+                          style={{ marginTop: 12, padding: '8px 16px', borderRadius: 8, border: '1px solid #111827', background: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer', width: '100%' }}
+                        >
+                          Join Waitlist
+                        </button>
                     )}
                   </div>
                 ))}
@@ -895,7 +953,7 @@ export default function EventPage() {
             <p style={s.modalSub}>
               {paymentPlan === '3x'
                 ? `Your 30% deposit (£${(grandTotal * 0.3).toFixed(2)}) has been charged. Check your email for the payment schedule.`
-                : "Your tickets are confirmed. Check your email."}
+                : "Your tickets are confirmed. Check your email. We'll send you a follow-up 24h after the event with photos and next events."}
             </p>
             <Link
               href="/my-tickets"
@@ -909,6 +967,11 @@ export default function EventPage() {
     </main>
   );
 }
+
+
+
+
+
 
 
 
