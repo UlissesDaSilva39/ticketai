@@ -66,16 +66,33 @@ export default function GenericClubPage() {
   async function joinClub(tierId: string) {
     setJoining(tierId);
     try {
-      const res = await fetch(`/api/clubs/${entityType}/${slug}`, {
+      const res = await fetch(`/api/clubs/${entityType}/${slug}/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tierId }),
       });
-      if (res.ok) alert('Welcome to the club! Check your email.');
-      else if (res.status === 401) window.location.href = `/login?next=/clubs/${entityType}/${slug}`;
-      else alert('Could not join - try again');
-    } catch {
-      alert('Error joining');
+
+      if (res.status === 401) {
+        window.location.href = `/login?next=/clubs/${entityType}/${slug}`;
+        return;
+      }
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(err.error || 'Could not start checkout - try again');
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.checkout_url) {
+        // Redirect to Stripe Checkout (or fallback success page in dev)
+        window.location.href = data.checkout_url;
+      } else {
+        alert('No checkout URL returned');
+      }
+    } catch (err: any) {
+      alert('Error starting checkout: ' + (err.message || 'unknown'));
     } finally {
       setJoining(null);
     }
