@@ -79,7 +79,12 @@ export async function CityEventsPage({ city }: { city: CityMeta }) {
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {list.map((e) => (
-              <EventCard key={e.id} event={e} />
+              <EventCard
+              key={e.id} event={e}
+              artists={event.artists || []}
+              venue={event.venue || null}
+              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+            />
             ))}
           </div>
         )}

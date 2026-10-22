@@ -10,6 +10,12 @@ export interface Profile {
   contact_phone: string | null;
   website: string | null;
   created_at: string;
+  venue?: { id: string; slug: string; name: string; city: string | null; membership_url?: string | null } | null;
+  promoter?: { id: string; slug: string; name: string } | null;
+  artists?: { slug: string; name: string; verified?: boolean }[];
+  membership_url?: string | null;
+  age_restriction?: string | null;
+  doors_open_at?: string | null;
 }
 
 export interface Organizer {
@@ -21,6 +27,12 @@ export interface Organizer {
   verified: boolean;
   payout_enabled: boolean;
   created_at: string;
+  venue?: { id: string; slug: string; name: string; city: string | null; membership_url?: string | null } | null;
+  promoter?: { id: string; slug: string; name: string } | null;
+  artists?: { slug: string; name: string; verified?: boolean }[];
+  membership_url?: string | null;
+  age_restriction?: string | null;
+  doors_open_at?: string | null;
 }
 
 export interface Venue {
@@ -53,6 +65,12 @@ export interface Venue {
   contact_phone: string | null;
   website: string | null;
   created_at: string;
+  venue?: { id: string; slug: string; name: string; city: string | null; membership_url?: string | null } | null;
+  promoter?: { id: string; slug: string; name: string } | null;
+  artists?: { slug: string; name: string; verified?: boolean }[];
+  membership_url?: string | null;
+  age_restriction?: string | null;
+  doors_open_at?: string | null;
 }
 
 export interface TicketType {
@@ -84,6 +102,12 @@ export interface Event {
   featured_tier: string | null;
   featured_paid: number | null;
   created_at: string;
+  venue?: { id: string; slug: string; name: string; city: string | null; membership_url?: string | null } | null;
+  promoter?: { id: string; slug: string; name: string } | null;
+  artists?: { slug: string; name: string; verified?: boolean }[];
+  membership_url?: string | null;
+  age_restriction?: string | null;
+  doors_open_at?: string | null;
 }
 
 export interface Order {
@@ -103,6 +127,12 @@ export interface Order {
   venue_id: string | null;
   venue_revenue: number;
   created_at: string;
+  venue?: { id: string; slug: string; name: string; city: string | null; membership_url?: string | null } | null;
+  promoter?: { id: string; slug: string; name: string } | null;
+  artists?: { slug: string; name: string; verified?: boolean }[];
+  membership_url?: string | null;
+  age_restriction?: string | null;
+  doors_open_at?: string | null;
 }
 
 export interface Ticket {
@@ -122,4 +152,31 @@ export interface Ticket {
   resale_completed_at: string | null;
   resale_new_owner_id: string | null;
   created_at: string;
+  venue?: { id: string; slug: string; name: string; city: string | null; membership_url?: string | null } | null;
+  promoter?: { id: string; slug: string; name: string } | null;
+  artists?: { slug: string; name: string; verified?: boolean }[];
+  membership_url?: string | null;
+  age_restriction?: string | null;
+  doors_open_at?: string | null;
 }
+
+export type Artist = {
+  id: string;
+  slug: string;
+  name: string;
+  bio: string | null;
+  city: string | null;
+  avatar_url: string | null;
+  verified: boolean;
+  membership_url: string | null;
+};
+nexport type SavedSearch = {
+  id: string;
+  user_id: string;
+  query: string | null;
+  city: string | null;
+  genre: string | null;
+  price_max: number | null;
+  notify: boolean;
+  created_at: string;
+};

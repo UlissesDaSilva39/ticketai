@@ -134,7 +134,12 @@ export default async function PublicProfilePage({
             {events
               .filter((e) => goingIds.includes(e.id))
               .map((e) => (
-                <EventCard key={e.id} event={e} />
+                <EventCard
+              key={e.id} event={e}
+              artists={event.artists || []}
+              venue={event.venue || null}
+              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+            />
               ))}
           </div>
         </div>
@@ -152,7 +157,12 @@ export default async function PublicProfilePage({
             {events
               .filter((e) => interestedIds.includes(e.id))
               .map((e) => (
-                <EventCard key={e.id} event={e} />
+                <EventCard
+              key={e.id} event={e}
+              artists={event.artists || []}
+              venue={event.venue || null}
+              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+            />
               ))}
           </div>
         </div>

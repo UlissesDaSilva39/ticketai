@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -87,80 +87,37 @@ export default function ArtistCard({ artist }: Props) {
   };
 
   return (
-    <li className="w-44 shrink-0 relative">
-      <Link
-        href={artist.username ? "/artists/" + artist.username : "#"}
-        className="group block p-3 rounded-2xl hover:bg-gray-100 transition-colors"
-      >
-        <div className="aspect-square w-full rounded-xl bg-gradient-to-br from-gray-200 to-gray-300 mb-3 flex items-center justify-center overflow-hidden relative shadow-md">
-          {artist.avatar_url ? (
-            <img
-              src={artist.avatar_url}
-              alt=""
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          ) : (
-            <span className="text-5xl font-bold text-gray-500 group-hover:scale-105 transition-transform duration-300">
-              {initials}
-            </span>
-          )}
-
-          <span className="absolute top-2 right-2 text-[9px] font-bold uppercase tracking-wider bg-black text-white px-2 py-1 rounded-full">
-            {roleLabel}
-          </span>
-
-          <button
-            type="button"
-            onClick={play}
-            aria-label={"Open " + name}
-            className="absolute bottom-2 right-2 w-11 h-11 rounded-full bg-black text-white shadow-lg flex items-center justify-center text-base opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all"
-          >
-            â–¶
-          </button>
-        </div>
-
-        <p className="font-bold text-sm truncate">{name}</p>
-        {artist.username ? (
-          <p className="text-xs text-gray-500 truncate mt-0.5">
-            @{artist.username}
-          </p>
-        ) : null}
-        {artist.genre || artist.city ? (
-          <p className="text-xs text-gray-400 truncate mt-1">
-            {[artist.genre, artist.city].filter(Boolean).join(" · ")}
-          </p>
-        ) : null}
-
-        <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button
-            type="button"
-            onClick={toggleFollow}
-            disabled={busy}
-            className={
-              "flex-1 text-[11px] font-bold px-3 py-1.5 rounded-full transition-colors disabled:opacity-50 " +
-              (following
-                ? "bg-white border border-black text-black hover:bg-gray-50"
-                : "bg-black text-white hover:bg-gray-800")
-            }
-          >
+    <Link href={`/artists/${artist.username || artist.id}`} className="group block">
+      <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition hover:border-neutral-900">
+        <header className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            {artist.avatar_url ? (
+              <img src={artist.avatar_url} alt={name} className="h-12 w-12 rounded-full object-cover" />
+            ) : (
+              <div className="h-12 w-12 rounded-full bg-neutral-900 text-white flex items-center justify-center text-sm font-bold">
+                {initials}
+              </div>
+            )}
+            <div className="min-w-0">
+              <h3 className="truncate text-lg font-semibold group-hover:underline">{name}</h3>
+              <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">{artist.city || "Unknown"}</p>
+            </div>
+          </div>
+          <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-semibold text-neutral-600">{roleLabel}</span>
+        </header>
+        {artist.genre && (
+          <div className="mt-3 flex flex-wrap gap-1.5 text-[11px]">
+            <span className="rounded-full bg-neutral-100 px-2 py-1 font-medium">{artist.genre}</span>
+          </div>
+        )}
+        <div className="mt-4 flex items-center justify-between gap-2 text-xs">
+          <button onClick={toggleFollow} disabled={busy} className={`rounded-full px-4 py-1.5 font-semibold transition ${following ? "bg-neutral-100 text-neutral-700" : "bg-black text-white hover:bg-neutral-800"}`}>
             {following ? "Following" : "+ Follow"}
           </button>
-          <button
-            type="button"
-            onClick={share}
-            aria-label="Share"
-            className="w-7 h-7 rounded-full bg-white border border-gray-300 hover:bg-gray-50 flex items-center justify-center text-xs"
-          >
-            â†—
-          </button>
+          <button onClick={share} className="rounded-full border border-neutral-300 px-4 py-1.5 font-semibold text-neutral-700 hover:border-neutral-900">Share</button>
         </div>
-      </Link>
-
-      {showToast ? (
-        <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-3 py-1.5 rounded-full shadow-lg pointer-events-none whitespace-nowrap">
-          {showToast}
-        </div>
-      ) : null}
-    </li>
+      </article>
+      {showToast && <div className="fixed bottom-4 right-4 rounded-lg bg-black px-4 py-2 text-sm text-white shadow-lg">{showToast}</div>}
+    </Link>
   );
 }

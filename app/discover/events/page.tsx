@@ -1,41 +1,15 @@
-﻿'use client';
+'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   CalendarIcon, MapPinIcon, UsersIcon, DollarIcon, FlameIcon,
   BookmarkIcon, ClockIcon, MusicIcon, TagIcon,
 } from '@/components/people/Icons';
+import { FALLBACK_FEATURED, FALLBACK_ALL } from '@/lib/events/fallback';
+import type { DiscoverEvent } from '@/lib/events/fallback';
 
 // ============ MOCK DATA ============
-const FEATURED_EVENTS = [
-  {
-    id: 'f1',
-    title: 'Paper Lions Jazz Night',
-    date: 'Tue, 3 Nov',
-    time: '19:16',
-    venue: 'The Blue Note',
-    city: 'London',
-    price: 25,
-    banner: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop',
-    verified: true,
-    friendsGoing: 12,
-    urgent: '87% sold',
-  },
-  {
-    id: 'f2',
-    title: 'Basement Collective Presents',
-    date: 'Mon, 2 Nov',
-    time: '17:16',
-    venue: 'Test 15%',
-    city: 'London',
-    price: 20,
-    banner: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=800&auto=format&fit=crop',
-    verified: true,
-    friendsGoing: 8,
-    urgent: 'Selling fast',
-  },
-];
 
 const STARTING_SOON = [
   { id: 's1', title: 'Pomoer Odyssey Live', time: '22:00', ticketsLeft: 5, banner: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=400&auto=format&fit=crop' },
@@ -157,6 +131,61 @@ const s: Record<string, React.CSSProperties> = {
 };
 
 export default function DiscoverEventsPage() {
+
+  // ============ DATA STATE ============
+  const [FEATURED_EVENTS, setFeaturedEvents] = useState<DiscoverEvent[]>(FALLBACK_FEATURED);
+  const [ALL_EVENTS, setAllEvents] = useState<DiscoverEvent[]>(FALLBACK_ALL);
+  const [dataSource, setDataSource] = useState<"loading" | "db" | "fallback">("loading");
+  const [userCity, setUserCity] = useState<string | null>(null);
+
+  // ============ FETCH FROM API ============
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [featRes, allRes] = await Promise.all([
+          fetch("/api/events/featured").then(r => r.ok ? r.json() : { events: [] }).catch(() => ({ events: [] })),
+          fetch("/api/events/all?sort=popular").then(r => r.ok ? r.json() : { events: [] }).catch(() => ({ events: [] })),
+        ]);
+        if (cancelled) return;
+        if (featRes.events?.length > 0) setFeaturedEvents(featRes.events);
+        if (allRes.events?.length > 0) setAllEvents(allRes.events);
+        setDataSource(featRes.events?.length || allRes.events?.length ? "db" : "fallback");
+      } catch {
+        if (!cancelled) setDataSource("fallback");
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  // ============ NEAR ME ============
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        if (lat > 51.2 && lat < 51.7) setUserCity("London");
+        else if (lat > 53.3 && lat < 53.6) setUserCity("Manchester");
+        else if (lat > 52.3 && lat < 52.7) setUserCity("Birmingham");
+      },
+      () => {}
+    );
+  }, []);
+
+  // ============ SAVE SEARCH ============
+  async function saveSearch() {
+    try {
+      const res = await fetch("/api/saved-searches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ city: userCity, notify: true }),
+      });
+      if (res.ok) alert("Search saved - you'll get email alerts");
+      else alert("Sign in to save searches");
+    } catch {
+      alert("Could not save - try again");
+    }
+  }
   const [city, setCity] = useState('All');
   const [genre, setGenre] = useState('All');
   const [when, setWhen] = useState('All');
@@ -344,30 +373,89 @@ export default function DiscoverEventsPage() {
           {FEATURED_EVENTS.map(f => (
             <div key={f.id} style={s.featuredCard}>
               <div style={{ position: 'relative' }}>
-                <Link href={`/events/${f.id}`}><img src={f.banner} alt={f.title} style={s.featuredImg} /></Link>
+                <Link href={`/events/${f.id}`}>
+                  <img src={f.banner} alt={f.title} style={s.featuredImg} />
+                </Link>
                 {f.verified && (
                   <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     VERIFIED
                   </div>
                 )}
+                {f.membershipUrl && (
+                  <Link
+                    href={f.membershipUrl}
+                    style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(251,191,36,0.95)', color: '#78350f', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, textDecoration: 'none' }}
+                  >
+                    Join Club
+                  </Link>
+                )}
               </div>
               <div style={s.featuredBody}>
                 <h3 style={s.featuredTitle}>{f.title}</h3>
-                <p style={s.featuredMeta}>{f.date} · {f.time} · {f.venue}, {f.city}</p>
+                <p style={s.featuredMeta}>
+                  {f.date} · {f.time} ·{' '}
+                  <Link
+                    href={`/venues/${f.venueSlug || (f.venue || '').toLowerCase().replace(/\s+/g, '-')}`}
+                    style={{ color: 'inherit', textDecoration: 'underline' }}
+                  >
+                    {f.venue}
+                  </Link>
+                  {f.city ? `, ${f.city}` : ''}
+                </p>
+                {f.artists && f.artists.length > 0 && (
+                  <p style={{ fontSize: 12, color: '#6b7280', margin: '4px 0', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                    <span>Feat.</span>
+                    {f.artists.slice(0, 3).map((a, i) => (
+                      <Link
+                        key={a.slug}
+                        href={`/artist/${a.slug}`}
+                        style={{ color: 'inherit', textDecoration: 'underline' }}
+                      >
+                        {a.name}{i < Math.min(2, f.artists.length - 1) ? ',' : ''}
+                      </Link>
+                    ))}
+                  </p>
+                )}
+                {f.promoter && (
+                  <p style={{ fontSize: 12, color: '#6b7280', margin: '4px 0' }}>
+                    Presenter:{' '}
+                    <Link
+                      href={`/promoters/${f.promoter.slug}`}
+                      style={{ color: 'inherit', textDecoration: 'underline' }}
+                    >
+                      {f.promoter.name}
+                    </Link>
+                  </p>
+                )}
                 <div style={s.badgeRow}>
                   <span style={{ ...s.badge, ...s.badgeGreen }}>
                     <UsersIcon width={12} height={12} /> {f.friendsGoing} going
                   </span>
-                  <span style={{ ...s.badge, ...s.badgeRed }}>
-                    <FlameIcon width={12} height={12} /> {f.urgent}
-                  </span>
+                  {f.urgent && (
+                    <span style={{ ...s.badge, ...s.badgeRed }}>
+                      <FlameIcon width={12} height={12} /> {f.urgent}
+                    </span>
+                  )}
                 </div>
                 <div style={s.featuredPriceRow}>
                   <span style={s.featuredPrice}>From £{f.price.toFixed(2)}</span>
-                  <Link href={`/events/${f.id}`} style={{ ...s.featuredCta, display: 'block', textAlign: 'center' }}>
-                    Get Tickets →
+                </div>
+                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                  <Link
+                    href={`/events/${f.id}`}
+                    style={{ ...s.featuredCta, flex: 1, display: 'block', textAlign: 'center' }}
+                  >
+                    Get Tickets
                   </Link>
+                  {f.artists && f.artists.length > 0 && (
+                    <Link
+                      href={`/book/artist/${f.artists[0].slug}`}
+                      style={{ flex: 1, display: 'block', textAlign: 'center', padding: '10px 16px', border: '1px solid #d1d5db', borderRadius: 8, fontSize: 13, fontWeight: 600, color: '#111827', textDecoration: 'none' }}
+                    >
+                      Book artist
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

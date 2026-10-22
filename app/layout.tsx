@@ -14,8 +14,6 @@ import "./globals.css";
 import { Navbar } from '@/components/nav/Navbar';
 import { PlayerProvider } from '@/components/player/GlobalPlayer';
 import { CartProvider } from '@/components/merch/CartProvider';
-import { CartWidget } from '@/components/merch/CartWidget';
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -41,21 +39,21 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "GRID â€” The network for music.",
+    default: "GRID — The network for music.",
     template: "%s | GRID",
   },
   description:
-    "The social and professional network for live music â€” discover events, connect with artists, book talent, and grow your career.",
+    "The social and professional network for live music — discover events, connect with artists, book talent, and grow your career.",
   openGraph: {
     type: "website",
     siteName: "GRID",
-    title: "GRID â€” The network for music.",
+    title: "GRID — The network for music.",
     description: "Discover events. Connect with artists. Book talent. Grow your career.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "GRID â€” The network for music.",
+    title: "GRID — The network for music.",
     description: "Discover events. Connect with artists. Book talent. Grow your career.",
   },
 };
@@ -144,10 +142,7 @@ export default async function RootLayout({
         />
         {/* OLD HEADER DISABLED FOR GRID REBRAND */}
         <main><PlayerProvider>{children}</PlayerProvider></main>
-                <div className="fixed right-6 top-20 z-40 hidden sm:block">
-          <CartWidget />
-        </div>
-        <InstallPrompt />
+                        <InstallPrompt />
         <footer className="border-t border-gray-200 mt-24 py-12">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
@@ -169,7 +164,7 @@ export default async function RootLayout({
                 className="block text-sm uppercase tracking-[0.3em] text-gray-400 mb-4"
                 style={{ fontFamily: "var(--font-antonio)" }}
               >
-                Discover Â· Connect Â· Create Â· Book Â· Grow
+                Discover · Connect · Create · Book · Grow
               </span>
               {"\u00A9 " +
                 new Date().getFullYear() +
@@ -178,9 +173,8 @@ export default async function RootLayout({
           </div>
         </footer>
         <MobileNav isSignedIn={!!user} />
-        <div className="h-14 sm:hidden" />        <Toaster position="bottom-right" richColors />
-        </CartProvider>
-      
+        <div className="h-14 sm:hidden" />
+        <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );

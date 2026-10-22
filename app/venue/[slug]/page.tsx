@@ -269,14 +269,17 @@ export default async function VenuePage({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {upcomingEvents.map((event) => (
                     <EventCard
-                      key={event.id}
+              key={event.id}
                       event={event}
                       soldCount={soldMap[event.id] || 0}
                       likeCount={likeCounts[event.id] || 0}
                       userLiked={userLikes[event.id] || false}
                       followerCount={followerCounts[event.organizer_id] || 0}
                       userFollowing={userFollows[event.organizer_id] || false}
-                    />
+              artists={event.artists || []}
+              venue={event.venue || null}
+              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+            />
                   ))}
                 </div>
               )}

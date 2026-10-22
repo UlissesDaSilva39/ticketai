@@ -167,10 +167,13 @@ export default async function OrganizerProfilePage({
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {eventList.map((event) => (
               <EventCard
-                key={event.id}
+              key={event.id}
                 event={event}
                 soldCount={soldMap[event.id] || 0}
-              />
+              artists={event.artists || []}
+              venue={event.venue || null}
+              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+            />
             ))}
           </div>
         )}

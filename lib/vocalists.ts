@@ -25,7 +25,8 @@ export type Vocalist = {
     instagram?: string;
     tiktok?: string;
     youtube?: string;
-    spotify?: stringbandcamp?: string;;
+    spotify?: string;
+    bandcamp?: string;
   };
 };
 
