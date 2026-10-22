@@ -1,345 +1,194 @@
-import Link from "next/link";
-import type { Metadata } from "next";
-import { createServerSupabase } from "@/lib/supabase/server";
-import { Search, MapPin, Building2, Users, Sparkles } from "lucide-react";
+'use client';
 
-export const metadata: Metadata = {
-  title: "Discover Venues",
-  description:
-    "Browse every venue on GRID. Filter by city, capacity, and genre. Find the perfect space for your next event.",
+import { useState, useEffect } from 'react';
+
+// ============ STYLES ============
+const s: Record<string, React.CSSProperties> = {
+  page: { background: '#f9fafb', minHeight: '100vh', fontFamily: 'system-ui, sans-serif', paddingBottom: 80 },
+  container: { maxWidth: 1200, margin: '0 auto', padding: '32px 24px' },
+  header: { marginBottom: 32 },
+  h1: { margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' },
+  subtitle: { margin: 0, fontSize: 16, color: '#6b7280' },
+  filterSection: { marginBottom: 24 },
+  filterLabel: { fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase' as const, marginBottom: 8 },
+  pillRow: { display: 'flex', gap: 8, flexWrap: 'wrap' as const },
+  pill: { padding: '8px 16px', borderRadius: 999, fontSize: 13, cursor: 'pointer', background: '#ffffff', border: '1px solid #d1d5db', color: '#374151', transition: 'all 0.2s' },
+  pillActive: { padding: '8px 16px', borderRadius: 999, fontSize: 13, cursor: 'pointer', background: '#111827', border: '1px solid #111827', color: '#ffffff' },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 24, marginTop: 32 },
+  card: { background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 16, overflow: 'hidden', display: 'flex', flexDirection: 'column' as const, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' },
+  cardImageContainer: { position: 'relative' as const, height: 200, width: '100%', background: '#e5e7eb' },
+  cardImage: { width: '100%', height: '100%', objectFit: 'cover' as const },
+  verifiedBadge: { position: 'absolute' as const, top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 },
+  cardBody: { padding: 20, display: 'flex', flexDirection: 'column' as const, gap: 12, flex: 1 },
+  cardTitle: { fontSize: 20, fontWeight: 800, margin: 0, color: '#111827' },
+  cardMeta: { fontSize: 14, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 6 },
+  statRow: { display: 'flex', gap: 16, padding: '12px 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6', margin: '4px 0' },
+  statItem: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#374151', fontWeight: 500 },
+  btnClub: { width: '100%', padding: '12px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  btnClubActive: { width: '100%', padding: '12px 0', borderRadius: 8, background: '#f0fdf4', color: '#065f46', border: '1px solid #10b981', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  actionRow: { display: 'flex', gap: 12, marginTop: 'auto' },
+  btnView: { flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 14, fontWeight: 600, cursor: 'pointer', textAlign: 'center' as const },
+  btnEnquire: { flex: 2, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer', textAlign: 'center' as const },
+  overlay: { position: 'fixed' as const, top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'grid', placeItems: 'center', zIndex: 100, padding: 24 },
+  modal: { background: '#ffffff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 500, position: 'relative' as const, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' },
+  modalTitle: { margin: '0 0 8px', fontSize: 24, fontWeight: 800, color: '#111827' },
+  modalSub: { margin: '0 0 24px', fontSize: 14, color: '#6b7280' },
+  formGroup: { marginBottom: 16 },
+  formLabel: { display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 },
+  formInput: { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const },
+  btnSubmit: { width: '100%', padding: '12px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginTop: 8 },
 };
 
-export const dynamic = "force-dynamic";
+export default function DiscoverVenuesPage() {
+  const [venues, setVenues] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [clubMembers, setClubMembers] = useState<string[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+  const [enquireVenue, setEnquireVenue] = useState<any>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
-type Venue = {
-  id: string;
-  slug: string;
-  name: string;
-  venue_type: string | null;
-  city: string | null;
-  country: string | null;
-  capacity: number | null;
-  hero_image: string | null;
-};
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      const savedClubs = JSON.parse(localStorage.getItem('venue_club_members') || '[]');
+      setClubMembers(savedClubs);
+    } catch {}
 
-const VENUE_TYPES = [
-  { key: "all", label: "All" },
-  { key: "nightclub", label: "Nightclubs" },
-  { key: "pub", label: "Pubs" },
-  { key: "bar", label: "Bars" },
-  { key: "theatre", label: "Theatres" },
-  { key: "festival", label: "Festivals" },
-  { key: "warehouse", label: "Warehouses" },
-];
+    // FETCH FROM DATABASE
+    fetch('/api/venues')
+      .then(res => res.json())
+      .then(data => {
+        setVenues(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
-const CITIES = ["London", "Manchester", "Berlin", "Paris", "New York"];
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
 
-const CAPACITIES = [
-  { key: "small", label: "Under 200" },
-  { key: "medium", label: "200-500" },
-  { key: "large", label: "500-1500" },
-  { key: "huge", label: "1500+" },
-];
+  const toggleClub = (id: string, name: string) => {
+    if (clubMembers.includes(id)) return;
+    const next = [...clubMembers, id];
+    setClubMembers(next);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('venue_club_members', JSON.stringify(next));
+    }
+    showToast('\u2713 Joined ' + name + ' Venue Club!');
+  };
 
-function buildUrl(params: Record<string, string | undefined>) {
-  const qs = Object.entries(params)
-    .filter(([, v]) => v && v !== "all")
-    .map(([k, v]) => `${k}=${encodeURIComponent(v as string)}`)
-    .join("&");
-  return "/discover/venues" + (qs ? `?${qs}` : "");
-}
-
-function formatCapacity(n: number | null) {
-  if (!n) return "—";
-  return n.toLocaleString("en-GB");
-}
-
-export default async function DiscoverVenuesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    q?: string;
-    type?: string;
-    city?: string;
-    capacity?: string;
-  }>;
-}) {
-  const params = await searchParams;
-  const q = params.q || "";
-  const type = params.type || "all";
-  const city = params.city || "";
-  const capacity = params.capacity || "";
-
-  const supabase = await createServerSupabase();
-
-  let query = supabase
-    .from("venues")
-    .select("id, slug, name, venue_type, city, country, capacity, hero_image")
-    .eq("status", "published")
-    .order("name", { ascending: true })
-    .limit(60);
-
-  if (q) {
-    query = query.or(`name.ilike.%${q}%,city.ilike.%${q}%,venue_type.ilike.%${q}%`);
-  }
-  if (type && type !== "all") {
-    query = query.eq("venue_type", type);
-  }
-  if (city) {
-    query = query.ilike("city", `%${city}%`);
-  }
-  if (capacity === "small") {
-    query = query.lt("capacity", 200).gt("capacity", 0);
-  } else if (capacity === "medium") {
-    query = query.gte("capacity", 200).lt("capacity", 500);
-  } else if (capacity === "large") {
-    query = query.gte("capacity", 500).lt("capacity", 1500);
-  } else if (capacity === "huge") {
-    query = query.gte("capacity", 1500);
-  }
-
-  const { data: venues } = await query;
-  const list = (venues ?? []) as Venue[];
+  if (loading) return <div style={{ padding: 40, textAlign: 'center' }}>Loading venues...</div>;
+  if (!venues.length) return <div style={{ padding: 40, textAlign: 'center' }}>No venues found in database.</div>;
 
   return (
-    <main className="bg-gray-50 min-h-screen">
-      <div className="mx-auto max-w-[1400px] px-6 py-10">
-        {/* HEADER */}
-        <div className="mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-600 mb-4">
-            <Sparkles className="h-3.5 w-3.5 text-fuchsia-500" />
-            Discover
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900">
-            Discover venues
-          </h1>
-          <p className="mt-2 text-gray-500 max-w-2xl">
-            Browse every venue on GRID. Filter by city, capacity, and venue type.
-            Find the perfect space for your next event.
-          </p>
+    <main style={s.page}>
+      <div style={s.container}>
+        <div style={s.header}>
+          <h1 style={s.h1}>Discover venues</h1>
+          <p style={s.subtitle}>Browse every venue on GRID. Filter by city, capacity, and venue type. Find the perfect space for your next event.</p>
         </div>
 
-        {/* FILTERS */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
-          <form
-            action="/discover/venues"
-            method="get"
-            className="flex items-center rounded-full border border-gray-300 bg-white px-4 py-2 focus-within:border-black"
-          >
-            <Search className="h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              name="q"
-              defaultValue={q}
-              placeholder="Search by name, city, or type..."
-              className="flex-1 bg-transparent outline-none text-sm ml-2"
-            />
-            {type !== "all" && <input type="hidden" name="type" value={type} />}
-            {city && <input type="hidden" name="city" value={city} />}
-            {capacity && <input type="hidden" name="capacity" value={capacity} />}
-            <button
-              type="submit"
-              className="rounded-full bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-900 transition"
-            >
-              Search
-            </button>
-          </form>
-
-          {/* Type chips */}
-          <div className="mt-5">
-            <div className="text-xs font-semibold tracking-wider text-gray-500 mb-2">
-              VENUE TYPE
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {VENUE_TYPES.map((t) => (
-                <Link
-                  key={t.key}
-                  href={buildUrl({ q, type: t.key === "all" ? undefined : t.key, city, capacity })}
-                  className={
-                    "rounded-full px-4 py-1.5 text-xs font-medium transition " +
-                    (type === t.key || (t.key === "all" && type === "all")
-                      ? "bg-black text-white"
-                      : "border border-gray-200 hover:bg-gray-50")
-                  }
-                >
-                  {t.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Capacity chips */}
-          <div className="mt-5">
-            <div className="text-xs font-semibold tracking-wider text-gray-500 mb-2">
-              CAPACITY
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {CAPACITIES.map((c) => (
-                <Link
-                  key={c.key}
-                  href={buildUrl({ q, type, city, capacity: capacity === c.key ? undefined : c.key })}
-                  className={
-                    "rounded-full px-4 py-1.5 text-xs font-medium transition " +
-                    (capacity === c.key
-                      ? "bg-black text-white"
-                      : "border border-gray-200 hover:bg-gray-50")
-                  }
-                >
-                  {c.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* City chips */}
-          <div className="mt-5">
-            <div className="text-xs font-semibold tracking-wider text-gray-500 mb-2">
-              CITIES
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {CITIES.map((c) => (
-                <Link
-                  key={c}
-                  href={buildUrl({ q, type, city: city === c ? undefined : c, capacity })}
-                  className={
-                    "rounded-full px-4 py-1.5 text-xs font-medium transition " +
-                    (city === c
-                      ? "bg-black text-white"
-                      : "border border-gray-200 hover:bg-gray-50")
-                  }
-                >
-                  {c}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Clear */}
-          {(q || type !== "all" || city || capacity) && (
-            <div className="mt-5 pt-5 border-t border-gray-100">
-              <Link
-                href="/discover/venues"
-                className="text-xs font-medium text-gray-500 hover:text-black"
-              >
-                Clear all filters
-              </Link>
-            </div>
-          )}
-        </div>
-
-        {/* RESULTS */}
-        <div className="mb-4 text-sm text-gray-500">
-          {list.length === 0 ? "No venues found" : `${list.length} ${list.length === 1 ? "venue" : "venues"} found`}
-        </div>
-
-        {list.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center">
-            <Building2 className="mx-auto h-8 w-8 text-gray-400" />
-            <div className="mt-3 text-sm font-medium text-gray-900">
-              No venues match your filters
-            </div>
-            <p className="mt-1 text-xs text-gray-500">
-              Try broadening your search or clearing filters.
-            </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <Link
-                href="/discover/venues"
-                className="rounded-full border border-gray-300 px-4 py-2 text-xs font-medium hover:bg-gray-50 transition"
-              >
-                Clear filters
-              </Link>
-              <Link
-                href="/venues/join"
-                className="rounded-full bg-black px-4 py-2 text-xs font-medium text-white hover:bg-gray-900 transition"
-              >
-                List your venue
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {list.map((v) => (
-              <div
-                key={v.id}
-                className="rounded-2xl border border-gray-200 bg-white overflow-hidden hover:border-black transition"
-              >
-                <div className="relative h-32 bg-gradient-to-br from-fuchsia-500 to-cyan-400">
-                  {v.hero_image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={v.hero_image}
-                      alt={v.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="grid h-full place-items-center text-white text-2xl font-black">
-                      {v.name[0]}
+        <div style={s.grid}>
+          {venues.map((v: any) => {
+            const isMember = clubMembers.includes(v.id);
+            return (
+              <div key={v.id} style={s.card}>
+                <div style={s.cardImageContainer}>
+                  <img src={v.image || ''} alt={v.name} style={s.cardImage} />
+                  {v.verified && (
+                    <div style={s.verifiedBadge}>
+                      <span style={{ fontSize: 14 }}>{String.fromCharCode(10003)}</span> VERIFIED
                     </div>
                   )}
                 </div>
-                <div className="p-4">
-                  <Link
-                    href={`/venue/${v.slug}`}
-                    className="text-sm font-bold text-gray-900 hover:underline block truncate"
-                  >
-                    {v.name}
-                  </Link>
-
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
-                    {v.venue_type && (
-                      <span className="capitalize">{v.venue_type}</span>
-                    )}
-                    {v.city && (
-                      <span className="inline-flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {v.city}
-                      </span>
-                    )}
+                
+                <div style={s.cardBody}>
+                  <div>
+                    <h3 style={s.cardTitle}>{v.name}</h3>
+                    <div style={s.cardMeta}>
+                      <span style={{ fontSize: 14 }}>{String.fromCharCode(128205)}</span> {v.type} · {v.city}
+                    </div>
                   </div>
 
-                  {v.capacity && (
-                    <div className="mt-2 inline-flex items-center gap-1 text-xs text-gray-500">
-                      <Users className="h-3 w-3" />
-                      {formatCapacity(v.capacity)} capacity
-                    </div>
+                  <div style={s.statRow}>
+                    <span style={s.statItem}><span style={{ fontSize: 14 }}>{String.fromCharCode(128101)}</span> {v.capacity} cap</span>
+                    <span style={s.statItem}><span style={{ fontSize: 14, color: '#f59e0b' }}>{String.fromCharCode(9733)}</span> {v.rating} ({v.reviews})</span>
+                  </div>
+                  
+                  <div style={{ fontSize: 13, color: '#10b981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{ fontSize: 14 }}>{String.fromCharCode(128197)}</span> Booked {v.bookings} times this month
+                  </div>
+
+                  {isMounted && (
+                    isMember ? (
+                      <div style={s.btnClubActive}>
+                        <span style={{ fontSize: 16 }}>{String.fromCharCode(127942)}</span> Venue Club Member
+                      </div>
+                    ) : (
+                      <button onClick={() => toggleClub(v.id, v.name)} style={s.btnClub}>
+                        <span style={{ fontSize: 16 }}>{String.fromCharCode(127942)}</span> Join Venue Club — £15/mo
+                      </button>
+                    )
                   )}
 
-                  <div className="mt-4 flex gap-2">
-                    <Link
-                      href={`/venue/${v.slug}`}
-                      className="flex-1 rounded-full border border-gray-300 px-3 py-1.5 text-xs font-medium text-center hover:bg-gray-50 transition"
-                    >
-                      View
-                    </Link>
-                    <Link
-                      href={`/venue/${v.slug}#enquire`}
-                      className="flex-1 rounded-full bg-black px-3 py-1.5 text-xs font-medium text-white text-center hover:bg-gray-900 transition"
-                    >
-                      Enquire
-                    </Link>
+                  <div style={s.actionRow}>
+                    <button style={s.btnView}>View</button>
+                    <button onClick={() => setEnquireVenue(v)} style={s.btnEnquire}>Enquire →</button>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-
-        {/* CTA */}
-        <div className="mt-12 rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center">
-          <div className="text-sm font-medium text-gray-900">
-            Run a venue?
-          </div>
-          <p className="mt-1 text-xs text-gray-500">
-            List it on GRID to receive booking enquiries from promoters.
-          </p>
-          <Link
-            href="/venues/join"
-            className="mt-4 inline-block rounded-full bg-black px-5 py-2 text-xs font-medium text-white hover:bg-gray-900 transition"
-          >
-            List your venue
-          </Link>
+            );
+          })}
         </div>
       </div>
+
+      {enquireVenue && (
+        <div style={s.overlay} onClick={() => setEnquireVenue(null)}>
+          <div style={s.modal} onClick={e => e.stopPropagation()}>
+            <button style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#6b7280' }} onClick={() => setEnquireVenue(null)}>
+              {String.fromCharCode(10005)}
+            </button>
+            <h2 style={s.modalTitle}>Enquire: {enquireVenue.name}</h2>
+            <p style={s.modalSub}>Send a structured brief to the venue.</p>
+
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Date of Event</label>
+              <input type="date" style={s.formInput} />
+            </div>
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Expected Attendance (Max {enquireVenue.capacity})</label>
+              <input type="number" placeholder="e.g. 350" style={s.formInput} />
+            </div>
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Event Type</label>
+              <select style={s.formInput}>
+                <option>Club Night</option>
+                <option>Live Music</option>
+                <option>Private Party</option>
+                <option>Corporate Event</option>
+              </select>
+            </div>
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Message to Venue</label>
+              <textarea placeholder="Hi, we are looking to host..." style={{ ...s.formInput, minHeight: 80 }}></textarea>
+            </div>
+            <button onClick={() => { showToast('Enquiry sent to ' + enquireVenue.name); setEnquireVenue(null); }} style={s.btnSubmit}>
+              Send Enquiry
+            </button>
+          </div>
+        </div>
+      )}
+
+      {toast && (
+        <div style={{ position: 'fixed', bottom: 24, right: 24, background: '#10b981', color: '#ffffff', padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600, zIndex: 200 }}>
+          {String.fromCharCode(10003)} {toast}
+        </div>
+      )}
     </main>
   );
 }

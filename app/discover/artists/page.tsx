@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -27,7 +27,6 @@ const FEATURED_ARTISTS = [
 
 const ARTISTS = [
   { id: '1', name: 'Basement Collective', role: 'Band', genre: 'Techno', city: 'London', followers: '12k', verified: true, price: 800, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '5 sold-out shows' },
-  { id: '2', name: 'Demo Artist Edit Button', role: 'DJ', genre: 'Hip-Hop', city: 'London', followers: '8k', verified: true, price: 400, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '3 shows' },
   { id: '3', name: 'Frost and Fire', role: 'Band', genre: 'Post-Rock', city: 'Glasgow', followers: '5k', verified: true, price: 600, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=200&auto=format&fit=crop', pastShows: '2 shows' },
   { id: '4', name: 'Paper Lions', role: 'Band', genre: 'Jazz Fusion', city: 'Paris', followers: '45k', verified: true, price: 2500, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', pastShows: '12 sold-out shows' },
   { id: '5', name: 'Ulisses Da Silva', role: 'Singer', genre: 'MPB', city: 'London', followers: '22k', verified: true, price: 1200, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '8 shows' },
@@ -38,11 +37,10 @@ const ARTISTS = [
   { id: '10', name: 'Bobby Beats', role: 'Producer', genre: 'UK Garage', city: 'London', followers: '9k', verified: false, price: 450, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop', pastShows: '2 shows' },
   { id: '11', name: 'Charlie Sounds', role: 'Singer', genre: 'Indie', city: 'Brighton', followers: '11k', verified: false, price: 550, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=200&auto=format&fit=crop', pastShows: '0 shows' },
   { id: '12', name: 'Concrete Garden', role: 'Band', genre: 'Industrial', city: 'Berlin', followers: '20k', verified: false, price: 1100, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '5 shows' },
-  { id: '13', name: 'DJ Poxy', role: 'DJ', genre: 'House', city: 'London', followers: '150k', verified: true, price: 1500, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '28 sold-out shows' },
-  { id: '14', name: 'DjProxyArtist', role: 'DJ', genre: 'Jazz', city: 'London', followers: '5k', verified: false, price: 300, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop', pastShows: '1 show' },
+  { id: '13', name: 'DJ Poxy', role: 'DJ', genre: 'House', city: 'London', followers: '150k', verified: true,price: 1500, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '28 sold-out shows' },
   { id: '15', name: 'Electric Tide', role: 'Band', genre: 'House', city: 'Brighton', followers: '14k', verified: false, price: 650, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop', pastShows: '2 shows' },
   { id: '16', name: 'Midnight Arcade', role: 'Producer', genre: 'Retro Wave', city: 'London', followers: '22k', verified: false, price: 850, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', pastShows: '7 shows' },
-  { id: '17', name: 'Moonlit Roads', role: 'Singer', genre: 'Folk', city: 'Leeds', followers: '7k', verified: false, price: 350, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '0 shows' },
+  { id: '17', name: 'Moonlit Roads', role: 'Singer', genre: 'Folk', city: 'Leeds', followers: '7k', verified:false, price: 350, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '0 shows' },
   { id: '18', name: 'Neon Circuit', role: 'Band', genre: 'Techno', city: 'Amsterdam', followers: '32k', verified: false, price: 1300, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '9 shows' },
   { id: '19', name: 'Pomoer Odyssey', role: 'Producer', genre: 'Ambient', city: 'Berlin', followers: '11k', verified: false, price: 500, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=200&auto=format&fit=crop', pastShows: '3 shows' },
   { id: '20', name: 'Rooftop Sunsets', role: 'Band', genre: 'Balearic', city: 'Barcelona', followers: '19k', verified: false, price: 950, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop', pastShows: '4 shows' },
@@ -58,7 +56,7 @@ const BUDGETS = ['All', 'Under £500', '£500 - £1,000', '£1,000 - £2,000', '
 
 // ============ STYLES ============
 const s: Record<string, React.CSSProperties> = {
-  page: { background: '#ffffff', minHeight: '100vh', fontFamily: 'system-ui, sans-serif', paddingBottom: 80 },
+  page: { background: '#ffffff', minHeight: '100vh', fontFamily: 'system-ui, sans-serif', paddingBottom: 80 },  
   container: { maxWidth: 1200, margin: '0 auto', padding: '32px 24px' },
   
   header: { marginBottom: 32 },
@@ -67,7 +65,7 @@ const s: Record<string, React.CSSProperties> = {
 
   searchRow: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, padding: '14px 20px', borderRadius: 12, border: '1px solid #d1d5db', background: '#ffffff' },
   searchInput: { border: 'none', outline: 'none', fontSize: 15, flex: 1, color: '#111827', background: 'transparent' },
-  searchBtn: { padding: '8px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer' },
+  searchBtn: { padding: '8px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none',fontSize: 14, fontWeight: 600, cursor: 'pointer' },
 
   filterSection: { marginBottom: 24 },
   filterLabel: { fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase' as const, marginBottom: 8 },
@@ -98,7 +96,7 @@ const s: Record<string, React.CSSProperties> = {
   featuredCta: { padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer', textDecoration: 'none' },
 
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 },
-  card: { background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, display: 'flex', flexDirection: 'column' as const, gap: 12 },
+  card: { background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, display: 'flex',flexDirection: 'column' as const, gap: 12 },
   cardHeader: { display: 'flex', alignItems: 'center', gap: 12 },
   avatar: { width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' as const, flexShrink: 0 },
   cardName: { fontSize: 16, fontWeight: 700, margin: 0, color: '#111827', display: 'flex', alignItems: 'center', gap: 6 },
@@ -111,11 +109,11 @@ const s: Record<string, React.CSSProperties> = {
   btnView: { flex: 1, minWidth: 80, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 13, fontWeight: 600, cursor: 'pointer', textAlign: 'center' as const, textDecoration: 'none' },
   btnBook: { flex: 1, minWidth: 80, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   btnFollow: { padding: '10px 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #7c5cff', color: '#7c5cff', fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnClub: { width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 },
+  btnClub: { width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff,#ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 },
   btnClubActive: { width: '100%', padding: '10px 0', borderRadius: 8, background: '#f0fdf4', color: '#065f46', border: '1px solid #10b981', fontSize: 13, fontWeight: 700, cursor: 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 },
 
   // Club modal
-  overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'grid', placeItems: 'center', zIndex: 100, padding: 24 },
+  overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display:'grid', placeItems: 'center', zIndex: 100, padding: 24 },
   modal: { background: '#ffffff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 540, maxHeight: '90vh', overflowY: 'auto' as const, position: 'relative' },
   modalTitle: { margin: '0 0 8px', fontSize: 24, fontWeight: 800 },
   modalSub: { margin: '0 0 24px', fontSize: 14, color: '#6b7280' },
@@ -133,7 +131,7 @@ const s: Record<string, React.CSSProperties> = {
   clubBtnVIP: { width: '100%', padding: '12px 0', borderRadius: 8, background: '#ffffff', color: '#111827', border: 'none', fontWeight: 700, fontSize: 14, cursor: 'pointer', marginTop: 12 },
 
   // Toast
-  toast: { position: 'fixed', bottom: 24, right: 24, background: '#10b981', color: '#ffffff', padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600, boxShadow: '0 10px 30px rgba(16,185,129,0.4)', zIndex: 200, display: 'flex', alignItems: 'center', gap: 10 },
+  toast: { position: 'fixed', bottom: 24, right: 24, background: '#10b981', color: '#ffffff', padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600, boxShadow: '0 10px 30px rgba(16,185,129,0.4)', zIndex:200, display: 'flex', alignItems: 'center', gap: 10 },
 };
 
 export default function DiscoverArtistsPage() {
@@ -211,7 +209,7 @@ export default function DiscoverArtistsPage() {
         </div>
 
         <div style={s.searchRow}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65"y2="16.65"></line></svg>
           <input style={s.searchInput} placeholder="Search by name, genre, or city..." />
           <button style={s.searchBtn}>Search</button>
         </div>
@@ -228,7 +226,7 @@ export default function DiscoverArtistsPage() {
 
         <div style={s.filterSection}>
           <div style={s.filterLabel}>Cities</div>
-          <div style={s.pillRow}>{CITIES.map(c => (<button key={c} onClick={() => setCity(c)} style={city === c ? s.pillActive : s.pill}>{c}</button>))}</div>
+          <div style={s.pillRow}>{CITIES.map(c => (<button key={c} onClick={() => setCity(c)} style={city ===c ? s.pillActive : s.pill}>{c}</button>))}</div>
         </div>
 
         <div style={s.filterSection}>
@@ -238,7 +236,7 @@ export default function DiscoverArtistsPage() {
 
         <div style={s.filterRow}>
           <label style={s.availableToggle}>
-            <input type="checkbox" checked={availableOnly} onChange={e => setAvailableOnly(e.target.checked)} />
+            <input type="checkbox" checked={availableOnly} onChange={e => setAvailableOnly(e.target.checked)}/>
             Available for booking
           </label>
           <span style={s.countText}>{filtered.length} artists found</span>
@@ -255,7 +253,7 @@ export default function DiscoverArtistsPage() {
               <div style={{ position: 'relative' }}>
                 <img src={f.banner} alt={f.name} style={s.featuredImg} />
                 {f.verified && (
-                  <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)',color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     VERIFIED
                   </div>
@@ -270,7 +268,7 @@ export default function DiscoverArtistsPage() {
                 </div>
                 <div style={s.featuredPriceRow}>
                   <span style={s.featuredPrice}>From £{f.price}</span>
-                  <Link href={`/artist/${f.name.toLowerCase().replace(/\s+/g, '-')}`} style={s.featuredCta}>View Profile →</Link>
+                  <Link href={"/artist/" + f.name.toLowerCase().replace(/\s+/g, "-")} style={s.featuredCta}>View Profile →</Link>
                 </div>
               </div>
             </div>
@@ -283,52 +281,57 @@ export default function DiscoverArtistsPage() {
           <p style={s.sectionSub}>{filtered.length} found</p>
         </div>
         <div style={s.grid}>
-          {filtered.map(a => (
-            <div key={a.id} style={s.card}>
-              <div style={s.cardHeader}>
-                <img src={a.image} alt={a.name} style={s.avatar} />
-                <div style={{ flex: 1 }}>
-                  <h3 style={s.cardName}>
-                    {a.name}
-                    {a.verified && (<svg style={s.verifiedIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>)}
-                  </h3>
-                  <p style={s.cardRole}>{a.role} · {a.genre}</p>
+          {filtered.map(a => {
+            const isMember = clubMembers.includes(a.id);
+            const isFollowed = followed.includes(a.id);
+            
+            return (
+              <div key={a.id} style={s.card}>
+                <div style={s.cardHeader}>
+                  <img src={a.image} alt={a.name} style={s.avatar} />
+                  <div style={{ flex: 1 }}>
+                    <h3 style={s.cardName}>
+                      {a.name}
+                      {a.verified && (<svg style={s.verifiedIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>)}
+                    </h3>
+                    <p style={s.cardRole}>{a.role} · {a.genre}</p>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, color: '#6b7280' }}>
+                  <span style={s.cardMeta}><MapPinIcon width={12} height={12} /> {a.city} · From £{a.price}</span>
+                  <span style={s.followersRow}><UsersIcon width={12} height={12} /> {a.followers} followers · <TrophyIcon width={12} height={12} /> {a.pastShows}</span>
+                </div>
+
+                {/* JOIN CLUB BUTTON (primary upsell) */}
+                {isMounted && (
+                  isMember ? (
+                    <div style={s.btnClubActive}>
+                      <TrophyIcon width={14} height={14} /> Superfan Member
+                    </div>
+                  ) : (
+                    <button onClick={() => setSelectedArtist(a)} style={s.btnClub}>
+                      <TrophyIcon width={14} height={14} /> Join Club — £5/mo
+                    </button>
+                  )
+                )}
+
+                <div style={s.actionRow}>
+                  <Link href={"/artist/" + a.name.toLowerCase().replace(/\s+/g, "-")} style={s.btnView}>View</Link>
+                  <button onClick={() => showToast("Booking request sent to " + a.name)} style={s.btnBook}>Book</button>
+                  {isMounted && !isMember && (
+                    <button onClick={() => toggleFollow(a.id)} style={{ ...s.btnFollow, background: isFollowed ? '#7c5cff' : '#ffffff', color: isFollowed ? '#ffffff' : '#7c5cff' }}>
+                      {isFollowed ? '✓' : '+ Follow'}
+                    </button>
+                  )}
                 </div>
               </div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, color: '#6b7280' }}>
-                <span style={s.cardMeta}><MapPinIcon width={12} height={12} /> {a.city} · From £{a.price}</span>
-                <span style={s.followersRow}><UsersIcon width={12} height={12} /> {a.followers} followers · <TrophyIcon width={12} height={12} /> {a.pastShows}</span>
-              </div>
-
-              {/* JOIN CLUB BUTTON (primary upsell) */}
-              {isMounted && (
-                clubMembers.includes(a.id) ? (
-                  <div style={s.btnClubActive}>
-                    <TrophyIcon width={14} height={14} /> Superfan Member
-                  </div>
-                ) : (
-                  <button onClick={() => setSelectedArtist(a)} style={s.btnClub}>
-                    <TrophyIcon width={14} height={14} /> Join Club — £5/mo
-                  </button>
-                )
-              )}
-
-              <div style={s.actionRow}>
-                <Link href={`/artist/${a.name.toLowerCase().replace(/\s+/g, '-')}`} style={s.btnView}>View</Link>
-                <button onClick={() => showToast(`Booking request sent to ${a.name}`)} style={s.btnBook}>Book</button>
-                {isMounted && (
-                  <button onClick={() => toggleFollow(a.id)} style={{ ...s.btnFollow, background: followed.includes(a.id) ? '#7c5cff' : '#ffffff', color: followed.includes(a.id) ? '#ffffff' : '#7c5cff' }}>
-                    {followed.includes(a.id) ? '✓' : '+ Follow'}
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* POST CTA */}
-        <div style={{ background: 'linear-gradient(135deg, #111827, #1f2937)', borderRadius: 20, padding: 48, marginTop: 64, textAlign: 'center', color: '#ffffff' }}>
+        <div style={{ background: 'linear-gradient(135deg, #111827, #1f2937)', borderRadius: 20, padding: 48,marginTop: 64, textAlign: 'center', color: '#ffffff' }}>
           <h2 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 8px' }}>Can't find who you need?</h2>
           <p style={{ fontSize: 16, color: '#9ca3af', margin: '0 0 24px' }}>Post an opportunity and artists will apply.</p>
           <Link href="/opportunities" style={{ padding: '14px 32px', borderRadius: 12, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', fontSize: 15, fontWeight: 700, textDecoration: 'none', display: 'inline-block' }}>Post opportunity →</Link>
@@ -366,7 +369,7 @@ export default function DiscoverArtistsPage() {
                 <span style={{ ...s.clubPrice, color: '#7c5cff' }}>£5/mo</span>
               </div>
               <div style={s.clubFeature}><ClockIcon width={14} height={14} /> Early ticket access (24h)</div>
-              <div style={s.clubFeature}><MusicIcon width={14} height={14} /> Exclusive unreleased mixes</div>
+              <div style={s.clubFeature}><MusicIcon width={14} height={14} /> Exclusive unreleased mixes</div>              
               <div style={s.clubFeature}><GiftIcon width={14} height={14} /> 10% off merch</div>
               <div style={s.clubFeature}><ChartIcon width={14} height={14} /> Monthly Q&amp;A</div>
               <button onClick={() => joinClub(selectedArtist, 'Superfan Club')} style={s.clubBtnFeatured}>
@@ -380,7 +383,7 @@ export default function DiscoverArtistsPage() {
                 <span style={s.clubName}>Stage Access</span>
                 <span style={s.clubPrice}>£75</span>
               </div>
-              <div style={{ ...s.clubFeature, color: '#d1d5db' }}><TrophyIcon width={14} height={14} /> Watch from the stage</div>
+              <div style={{ ...s.clubFeature, color: '#d1d5db' }}><TrophyIcon width={14} height={14} /> Watchfrom the stage</div>
               <div style={{ ...s.clubFeature, color: '#d1d5db' }}><UsersIcon width={14} height={14} /> Meet {selectedArtist.name} after</div>
               <div style={{ ...s.clubFeature, color: '#d1d5db' }}><GiftIcon width={14} height={14} /> Signed setlist + photo</div>
               <button onClick={() => joinClub(selectedArtist, 'Stage Access')} style={s.clubBtnVIP}>
