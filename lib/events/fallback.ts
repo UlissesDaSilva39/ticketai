@@ -30,7 +30,7 @@ export const FALLBACK_FEATURED: DiscoverEvent[] = [
       { slug: 'nightshift-collective', name: 'Nightshift Collective', verified: true },
     ],
     promoter: { slug: 'nightshift-presents', name: 'Nightshift Presents' },
-    membershipUrl: '/promoters/nightshift-presents/join', featured: true,
+    membershipUrl: '/clubs/promoter/nightshift-presents', featured: true,
   },
   {
     id: 'f2', title: 'Basement Collective Presents', date: 'Mon, 2 Nov', time: '17:16',

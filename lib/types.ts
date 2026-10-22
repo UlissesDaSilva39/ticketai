@@ -170,7 +170,7 @@ export type Artist = {
   verified: boolean;
   membership_url: string | null;
 };
-nexport type SavedSearch = {
+export type SavedSearch = {
   id: string;
   user_id: string;
   query: string | null;
