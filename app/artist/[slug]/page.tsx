@@ -524,7 +524,34 @@ export default async function ArtistPage({ params }: Props) {
                 </div>
               </dl>
             </section>
-          </aside>
+          
+        {/* BOOKING RATE CARD */}
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 20, padding: 24, marginTop: 24 }}>
+          <h3 style={{ fontSize: 14, fontWeight: 800, margin: '0 0 16px', textTransform: 'uppercase', letterSpacing: 0.5, color: '#6b7280' }}>
+            Booking Rates
+          </h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <li style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #f3f4f6' }}>
+              <span style={{ fontSize: 13 }}>Club night · 2h set</span>
+              <span style={{ fontSize: 13, fontWeight: 700 }}>From £800</span>
+            </li>
+            <li style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #f3f4f6' }}>
+              <span style={{ fontSize: 13 }}>Festival slot · 1h</span>
+              <span style={{ fontSize: 13, fontWeight: 700 }}>From £1,200</span>
+            </li>
+            <li style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0' }}>
+              <span style={{ fontSize: 13 }}>Private event</span>
+              <span style={{ fontSize: 13, fontWeight: 700 }}>On request</span>
+            </li>
+          </ul>
+          <Link 
+            href={`/book/artist/${artist.slug}`}
+            style={{ display: 'block', marginTop: 16, textAlign: 'center', padding: '12px', background: '#111827', color: '#fff', borderRadius: 10, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}
+          >
+            Request Custom Quote →
+          </Link>
+        </div>
+</aside>
         </div>
       </div>
     </div>
