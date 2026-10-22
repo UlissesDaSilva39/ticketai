@@ -24,6 +24,15 @@ const s: Record<string, React.CSSProperties> = {
   actionRow: { display: 'flex', gap: 12, marginTop: 'auto' },
   btnView: { flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 14, fontWeight: 600, cursor: 'pointer', textAlign: 'center' as const },
   btnEnquire: { flex: 2, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer', textAlign: 'center' as const },
+  overlay: { position: 'fixed' as const, top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'grid', placeItems: 'center', zIndex: 100, padding: 24 },
+  modal: { background: '#ffffff', borderRadius: 16, padding: 32, width: '100%', maxWidth: 500, position: 'relative' as const, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' },
+  modalTitle: { margin: '0 0 8px', fontSize: 24, fontWeight: 800, color: '#111827' },
+  modalSub: { margin: '0 0 24px', fontSize: 14, color: '#6b7280' },
+  formGroup: { marginBottom: 16 },
+  formLabel: { display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 },
+  formInput: { width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const },
+  btnSubmit: { width: '100%', padding: '12px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginTop: 8 },
+  toast: { position: 'fixed' as const, bottom: 24, right: 24, background: '#10b981', color: '#ffffff', padding: '14px 20px', borderRadius: 12, fontSize: 14, fontWeight: 600, zIndex: 200, boxShadow: '0 10px 30px rgba(16,185,129,0.4)' },
 };
 
 export default function DiscoverVenuesPage() {
@@ -31,6 +40,8 @@ export default function DiscoverVenuesPage() {
   const [venues, setVenues] = useState<any[]>([]);
   const [clubMembers, setClubMembers] = useState<string[]>([]);
   const [isMounted, setIsMounted] = useState(false);
+  const [enquireVenue, setEnquireVenue] = useState<any>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -38,17 +49,20 @@ export default function DiscoverVenuesPage() {
       const savedClubs = JSON.parse(localStorage.getItem('venue_club_members') || '[]');
       setClubMembers(savedClubs);
     } catch {}
-
     fetch('/api/venues')
       .then(res => res.json())
       .then(data => { if (data && data.length > 0) setVenues(data); })
       .catch(err => console.error(err));
   }, []);
 
-    const resetTestState = () => {
-    localStorage.removeItem('venue_club_members');
-    setClubMembers([]);
-    window.location.reload();
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const submitEnquiry = () => {
+    showToast('Enquiry sent to ' + enquireVenue.name + '!');
+    setEnquireVenue(null);
   };
 
   return (
@@ -63,13 +77,7 @@ export default function DiscoverVenuesPage() {
           {venues.map((v: any) => {
             const isMember = clubMembers.includes(v.id);
             const slug = v.name.toLowerCase().replace(/\s+/g, '-');
-              const resetTestState = () => {
-    localStorage.removeItem('venue_club_members');
-    setClubMembers([]);
-    window.location.reload();
-  };
-
-  return (
+            return (
               <div key={v.id} style={s.card}>
                 <div style={s.cardImageContainer}>
                   <img src={v.image || ''} alt={v.name} style={s.cardImage} />
@@ -105,20 +113,51 @@ export default function DiscoverVenuesPage() {
                     )
                   )}
                   <div style={s.actionRow}>
-                    <button style={s.btnView}>View</button>
-                    <button style={s.btnEnquire}>Enquire →</button>
+                    <button onClick={() => router.push('/venues/' + slug)} style={s.btnView}>View</button>
+                    <button onClick={() => setEnquireVenue(v)} style={s.btnEnquire}>Enquire →</button>
                   </div>
                 </div>
               </div>
             );
           })}
         </div>
-              <div style={{ textAlign: 'center', marginTop: 64 }}>
-          <button onClick={resetTestState} style={{ background: 'none', border: '1px dashed #9ca3af', color: '#6b7280', padding: '8px 16px', borderRadius: 8, cursor: 'pointer', fontSize: 12 }}>
-            (Dev Only) Reset Venue Club Test Data
-          </button>
-        </div>
       </div>
+
+      {enquireVenue && (
+        <div style={s.overlay} onClick={() => setEnquireVenue(null)}>
+          <div style={s.modal} onClick={e => e.stopPropagation()}>
+            <button style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#6b7280' }} onClick={() => setEnquireVenue(null)}>
+              {String.fromCharCode(10005)}
+            </button>
+            <h2 style={s.modalTitle}>Enquire: {enquireVenue.name}</h2>
+            <p style={s.modalSub}>Send a structured brief to the venue. They usually respond within 48 hours.</p>
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Date of Event</label>
+              <input type="date" style={s.formInput} />
+            </div>
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Expected Attendance (Max {enquireVenue.capacity})</label>
+              <input type="number" placeholder="e.g. 350" style={s.formInput} />
+            </div>
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Event Type</label>
+              <select style={s.formInput}>
+                <option>Club Night</option>
+                <option>Live Music</option>
+                <option>Private Party</option>
+                <option>Corporate Event</option>
+              </select>
+            </div>
+            <div style={s.formGroup}>
+              <label style={s.formLabel}>Message to Venue</label>
+              <textarea placeholder="Hi, we are looking to host..." style={{ ...s.formInput, minHeight: 80 }}></textarea>
+            </div>
+            <button onClick={submitEnquiry} style={s.btnSubmit}>Send Enquiry</button>
+          </div>
+        </div>
+      )}
+
+      {toast && <div style={s.toast}>{toast}</div>}
     </main>
   );
 }
