@@ -1,0 +1,40 @@
+# GRID - Project Roadmap & Next Steps
+Date: 2026-10-22
+
+## Current Status
+The UI and routing are fully built for:
+- Event discovery (/discover/events) with artist/venue links and Join Club buttons
+- Club membership pages (/clubs/[entityType]/[slug]) for Venues, Artists, Promoters
+- Artist booking pages (/book/artist/[slug]) with high-conversion design
+- Subscription dashboard (/settings/subscriptions)
+- Stripe checkout API routes and success page
+
+## Immediate Blocker (To Fix First)
+The "Join Club" button returns a 500 error. The API is working (it returns 401 when not logged in), but the database tables are missing.
+1. Open Supabase -> SQL Editor
+2. Run: supabase/migrations/20261022_unified_clubs.sql
+3. Run: supabase/migrations/20261022_stripe_memberships.sql
+4. Sign in and test the "Join Club" flow.
+
+## Priority 1: Stripe Integration (Real Payments)
+- Run: npm install stripe
+- Add STRIPE_SECRET_KEY to .env.local
+- Create Stripe Webhook endpoint (/api/webhooks/stripe) to listen for checkout.session.completed
+- Update user_memberships status based on webhook
+
+## Priority 2: Artist Dashboard
+- Build /dashboard/bookings so artists see booking requests
+- Add "Accept" / "Decline" buttons
+- Send email notifications on new booking requests
+
+## Priority 3: Discovery Page Filters
+- Wire up the filter buttons on /discover/events
+- Make them hit /api/events/all?city=X&genre=Y
+
+## Priority 4: Database Cleanup
+- Replace hardcoded lib/events/fallback.ts with real Supabase queries
+- Seed the events table with real data
+
+## Priority 5: Manage Subscriptions
+- Add "Manage Subscription" button linking to Stripe Customer Portal
+- Show next billing date on /settings/subscriptions
