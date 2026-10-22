@@ -529,7 +529,14 @@ export default function DiscoverEventsPage() {
                   ) : (
                     <div style={s.cardFooter}>
                       <span style={s.cardPrice}>From £{e.price.toFixed(2)}</span>
-                      <Link href={`/events/${e.id}`} style={{ ...s.cardCta, display: 'block', textAlign: 'center' }}>Get Tickets →</Link>
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        <Link href={`/events/${e.id}`} style={{ ...s.cardCta, display: 'block', textAlign: 'center' }}>Get Tickets →</Link>
+                        {e.artists && e.artists.length > 0 && (
+                          <Link href={`/book/artist/${e.artists[0].slug}`} style={{ padding: '10px 12px', border: '1px solid #d1d5db', color: '#111827', borderRadius: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                            Book artist
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>

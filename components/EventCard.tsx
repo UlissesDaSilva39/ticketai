@@ -115,7 +115,7 @@ export function EventCard({
         </p>
       )}
 
-      {artists.length > 0 && (
+      {artists && artists.length > 0 && (
         <p className={"text-xs uppercase tracking-widest mt-1 flex flex-wrap items-center gap-1 " + (dark ? "text-gray-400" : "text-gray-500")}>
           <Users className="h-3 w-3" />
           <span>Feat.</span>
@@ -170,7 +170,7 @@ export function EventCard({
           >
             Get Tickets
           </Link>
-          {artists.length > 0 && (
+          {artists && artists.length > 0 && (
             <Link
               href={"/book/artist/" + artists[0].slug}
               className={"px-4 py-3 text-sm font-medium rounded-full border transition-colors " + (dark ? "border-white/30 text-white hover:border-white" : "border-gray-300 text-black hover:border-black")}
