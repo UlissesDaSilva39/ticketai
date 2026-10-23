@@ -1,412 +1,223 @@
-﻿import Link from "next/link";
-import { createServerSupabase } from "@/lib/supabase/server";
-import ArtistCard from "@/components/artist/ArtistCard";
-import CardRow from "@/components/artist/CardRow";
-import { priceFrom } from "@/lib/posts";
-import { Sidebar } from "@/components/sidebar/Sidebar";
-import { PlayChip } from "@/components/player/PlayChip";
+'use client';
 
-export const dynamic = "force-dynamic";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export const metadata = {
-  title: "Discover",
-  description: "Discover events, promoters, venues, and artists on GRID.",
-};
+// ============ MOCK DATA ============
+const FEATURED_ARTISTS = [
+  { id: 'f1', name: 'Paper Lions', role: 'Band', genre: 'Jazz Fusion', city: 'Paris', followers: '45k', verified: true, price: 2500, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop', pastShows: '12 sold-out shows' },
+  { id: 'f2', name: 'DJ Poxy', role: 'DJ', genre: 'House', city: 'London', followers: '150k', verified: true, price: 1500, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=400&auto=format&fit=crop', pastShows: '28 sold-out shows' },
+];
 
-type TrackRow = {
-  id: string;
-  title: string;
-  artist_name: string | null;
-  cover_url: string | null;
-  audio_url: string | null;
-  duration_seconds?: number | null;
-  play_count?: number | null;
-};
+const ARTISTS = [
+  { id: '1', name: 'Basement Collective', role: 'Band', genre: 'Techno', city: 'London', followers: '12k', verified: true, price: 800, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '5 sold-out shows' },
+  { id: '3', name: 'Frost and Fire', role: 'Band', genre: 'Post-Rock', city: 'Glasgow', followers: '5k', verified: true, price: 600, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=200&auto=format&fit=crop', pastShows: '2 shows' },
+  { id: '4', name: 'Paper Lions', role: 'Band', genre: 'Jazz Fusion', city: 'Paris', followers: '45k', verified: true, price: 2500, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', pastShows: '12 sold-out shows' },
+  { id: '5', name: 'Ulisses Da Silva', role: 'Singer', genre: 'MPB', city: 'London', followers: '22k', verified: true, price: 1200, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '8 shows' },
+  { id: '6', name: 'Voice Records Crew', role: 'Group', genre: 'Hip Hop', city: 'Manchester', followers: '18k', verified: true, price: 1000, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop', pastShows: '6 shows' },
+  { id: '7', name: 'Alex Morgan', role: 'A&R', genre: 'electronic', city: 'London', followers: '35k', verified: false, price: 500, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop', pastShows: '1 show' },
+  { id: '8', name: 'Alice Waves', role: 'Singer', genre: 'Synth Pop', city: 'Manchester', followers: '28k', verified: false, price: 900, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', pastShows: '4 shows' },
+  { id: '9', name: 'Analog Dreams', role: 'Band', genre: 'Drum & Bass', city: 'Bristol', followers: '15k', verified: false, price: 700, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '3 shows' },
+  { id: '10', name: 'Bobby Beats', role: 'Producer', genre: 'UK Garage', city: 'London', followers: '9k', verified: false, price: 450, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop', pastShows: '2 shows' },
+  { id: '11', name: 'Charlie Sounds', role: 'Singer', genre: 'Indie', city: 'Brighton', followers: '11k', verified: false, price: 550, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=200&auto=format&fit=crop', pastShows: '0 shows' },
+  { id: '12', name: 'Concrete Garden', role: 'Band', genre: 'Industrial', city: 'Berlin', followers: '20k', verified: false, price: 1100, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '5 shows' },
+  { id: '13', name: 'DJ Poxy', role: 'DJ', genre: 'House', city: 'London', followers: '150k', verified: true,price: 1500, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '28 sold-out shows' },
+  { id: '15', name: 'Electric Tide', role: 'Band', genre: 'House', city: 'Brighton', followers: '14k', verified: false, price: 650, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop', pastShows: '2 shows' },
+  { id: '16', name: 'Midnight Arcade', role: 'Producer', genre: 'Retro Wave', city: 'London', followers: '22k', verified: false, price: 850, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', pastShows: '7 shows' },
+  { id: '17', name: 'Moonlit Roads', role: 'Singer', genre: 'Folk', city: 'Leeds', followers: '7k', verified:false, price: 350, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '0 shows' },
+  { id: '18', name: 'Neon Circuit', role: 'Band', genre: 'Techno', city: 'Amsterdam', followers: '32k', verified: false, price: 1300, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '9 shows' },
+  { id: '19', name: 'Pomoer Odyssey', role: 'Producer', genre: 'Ambient', city: 'Berlin', followers: '11k', verified: false, price: 500, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=200&auto=format&fit=crop', pastShows: '3 shows' },
+  { id: '20', name: 'Rooftop Sunsets', role: 'Band', genre: 'Balearic', city: 'Barcelona', followers: '19k', verified: false, price: 950, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop', pastShows: '4 shows' },
+  { id: '21', name: 'Signal Lost', role: 'Band', genre: 'Electronic', city: 'Dublin', followers: '6k', verified: false, price: 400, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', pastShows: '1 show' },
+  { id: '22', name: 'Static Bloom', role: 'Band', genre: 'Shoegaze', city: 'Birmingham', followers: '8k', verified: false, price: 450, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=200&auto=format&fit=crop', pastShows: '2 shows' },
+  { id: '23', name: 'Sugarplum Trio', role: 'Band', genre: 'Jazz', city: 'Bristol', followers: '13k', verified: false, price: 700, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=200&auto=format&fit=crop', pastShows: '5 shows' },
+];
 
-type ProfileRow = {
-  id: string;
-  full_name: string | null;
-  username: string | null;
-  avatar_url: string | null;
-  genre: string | null;
-  city: string | null;
-  role: string | null;
-};
+const TYPES = ['All', 'DJs', 'Producers', 'Vocalists', 'Bands'];
+const GENRES = ['All', 'House', 'Techno', 'Hip-Hop', 'Jazz', 'Electronic', 'Afrobeats'];
+const CITIES = ['All', 'London', 'Manchester', 'Birmingham', 'Berlin', 'Paris', 'New York', 'Glasgow', 'Brighton', 'Bristol', 'Amsterdam', 'Barcelona', 'Dublin', 'Leeds'];
 
-type EventRow = {
-  id: string;
-  title: string;
-  start_date: string;
-  hero_image: string | null;
-  ticket_types: { price: number }[] | null;
-  venue_id: string | null;
-  views?: number;
-};
+export default function ArtistsPage() {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedType, setSelectedType] = useState('All');
+  const [selectedGenre, setSelectedGenre] = useState('All');
+  const [selectedCity, setSelectedCity] = useState('All');
+  const [clubMembers, setClubMembers] = useState<string[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
-export default async function ArtistsIndexPage() {
-  const supabase = await createServerSupabase();
-  const { data: { user } } = await supabase.auth.getUser();
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      const savedClubs = JSON.parse(localStorage.getItem('artist_club_members') || '[]');
+      setClubMembers(savedClubs);
+    } catch {}
+  }, []);
 
-  const [profileRes, artistsRes, eventsRes, trendingRes, followingRes,
-         tracksRes, albumsRes, playlistsRes, radioRes] =
-    await Promise.all([
-      user
-        ? supabase
-            .from("profiles")
-            .select("username, full_name")
-            .eq("id", user.id)
-            .maybeSingle()
-        : Promise.resolve({ data: null }),
-      supabase
-        .from("profiles")
-        .select("id, full_name, username, avatar_url, genre, city, role")
-        .not("username", "is", null)
-        .limit(24),
-      supabase
-        .from("events")
-        .select("id, title, start_date, hero_image, ticket_types, venue_id")
-        .gte("start_date", new Date().toISOString())
-        .eq("status", "published")
-        .order("start_date", { ascending: true })
-        .limit(24),
-      supabase
-        .from("events")
-        .select("id, title, start_date, hero_image, ticket_types, venue_id, views")
-        .eq("status", "published")
-        .order("views", { ascending: false })
-        .limit(12),
-      user
-        ? supabase.from("follows").select("target_id").eq("follower_id", user.id)
-        : Promise.resolve({ data: [] }),
-      supabase
-        .from("tracks")
-        .select("id,title,artist_name,cover_url,audio_url,duration_seconds,play_count")
-        .eq("kind", "song")
-        .order("play_count", { ascending: false })
-        .limit(12),
-      supabase
-        .from("tracks")
-        .select("id,title,artist_name,cover_url,audio_url")
-        .eq("kind", "album")
-        .limit(12),
-      supabase
-        .from("tracks")
-        .select("id,title,cover_url,audio_url")
-        .eq("kind", "playlist")
-        .limit(12),
-      supabase
-        .from("tracks")
-        .select("id,title,cover_url,audio_url")
-        .eq("kind", "radio")
-        .limit(12),
-    ]);
-
-  const artists: ProfileRow[] = (artistsRes.data as ProfileRow[]) || [];
-  const events: EventRow[] = (eventsRes.data as EventRow[]) || [];
-  const trending: EventRow[] = (trendingRes.data as EventRow[]) || [];
-  const following = ((followingRes.data || []) as { target_id: string }[]).map(
-    (f) => f.target_id,
-  );
-
-  const songs: TrackRow[] = (tracksRes.data as TrackRow[]) || [];
-  const albums: TrackRow[] = (albumsRes.data as TrackRow[]) || [];
-  const playlists: TrackRow[] = (playlistsRes.data as TrackRow[]) || [];
-  const radio: TrackRow[] = (radioRes.data as TrackRow[]) || [];
-
-  const promoters = artists.filter((a) => !following.includes(a.id)).slice(0, 8);
-  const venues = artists.slice(8, 16);
-  const creators = artists.slice(16, 24);
-
-  const cityCounts = new Map<string, number>();
-  for (const e of events) {
-    const venue = (e as unknown as { venues?: { city?: string } }).venues;
-    const city = venue?.city;
-    if (city) cityCounts.set(city, (cityCounts.get(city) || 0) + 1);
-  }
-  const popularCities = Array.from(cityCounts.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10);
-
-  const countryCounts = new Map<string, number>();
-  for (const e of events) {
-    const venue = (e as unknown as { venues?: { country?: string } }).venues;
-    const country = venue?.country;
-    if (country) countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
-  }
-  const popularCountries = Array.from(countryCounts.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10);
-
-  const FLAGS: Record<string, string> = {
-    UK: "GB", "United Kingdom": "GB",
-    US: "US", USA: "US", "United States": "US",
-    France: "FR", FR: "FR",
-    Germany: "DE", DE: "DE",
-    Spain: "ES", ES: "ES",
-    Italy: "IT", IT: "IT",
-    Netherlands: "NL", NL: "NL",
-    Ireland: "IE", IE: "IE",
-    Canada: "CA", CA: "CA",
-    Australia: "AU", AU: "AU",
+  const toggleClub = (id: string) => {
+    if (clubMembers.includes(id)) return;
+    const next = [...clubMembers, id];
+    setClubMembers(next);
+    localStorage.setItem('artist_club_members', JSON.stringify(next));
   };
 
+  const filteredArtists = ARTISTS.filter(a => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      if (!a.name.toLowerCase().includes(q) && !a.city.toLowerCase().includes(q) && !a.genre.toLowerCase().includes(q)) return false;
+    }
+    if (selectedType !== 'All') {
+      const typeMap: Record<string, string[]> = { 'DJs': ['DJ'], 'Producers': ['Producer'], 'Vocalists': ['Singer'], 'Bands': ['Band', 'Group'] };
+      if (!typeMap[selectedType]?.includes(a.role)) return false;
+    }
+    if (selectedGenre !== 'All' && a.genre !== selectedGenre) return false;
+    if (selectedCity !== 'All' && a.city !== selectedCity) return false;
+    return true;
+  });
+
   return (
-    <div className="bg-gray-50 min-h-screen pb-24">
-      <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
-        <div className="col-span-12 lg:col-span-3">
-          <Sidebar />
+    <main style={{ minHeight: '100vh', background: '#f9fafb', fontFamily: 'system-ui, sans-serif', paddingBottom: 80 }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
+        <div style={{ marginBottom: 32 }}>
+          <h1 style={{ margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Discover artists</h1>
+          <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Browse every artist on GRID. Filter by genre, city, and availability.</p>
         </div>
-        <div className="col-span-12 lg:col-span-9">
-          <main className="min-w-0">
-            <header className="mb-8">
-              <h1
-                className="text-4xl md:text-5xl font-bold uppercase"
-                style={{ fontFamily: "var(--font-antonio)" }}
-              >
-                Discover
-              </h1>
-              <p className="text-gray-600 mt-2">
-                Events, promoters, venues, and artists - all in one place.
-              </p>
-            </header>
 
-            {trending.length > 0 ? (
-              <CardRow title="Trending events" seeAllHref="/search?sort=popular">
-                {trending.map((e) => (
-                  <EventCardSmall key={e.id} event={e} />
-                ))}
-              </CardRow>
-            ) : null}
+        {/* Search Bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, padding: '14px 20px', borderRadius: 12, border: '1px solid #d1d5db', background: '#ffffff' }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input 
+            style={{ border: 'none', outline: 'none', fontSize: 15, flex: 1, color: '#111827', background: 'transparent' }} 
+            placeholder="Search by name, genre, or city..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
-            {promoters.length > 0 ? (
-              <CardRow title="Popular promoters" seeAllHref="/artists?role=promoter">
-                {promoters.map((a) => (
-                  <ArtistCard key={a.id} artist={a} />
-                ))}
-              </CardRow>
-            ) : null}
+        {/* Filters */}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8 }}>Type</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {TYPES.map(t => (
+              <button key={t} onClick={() => setSelectedType(t)} style={{ padding: '8px 16px', borderRadius: 999, fontSize: 13, cursor: 'pointer', background: selectedType === t ? '#111827' : '#ffffff', border: '1px solid #d1d5db', color: selectedType === t ? '#ffffff' : '#374151' }}>{t}</button>
+            ))}
+          </div>
+        </div>
 
-            {venues.length > 0 ? (
-              <CardRow title="Popular venues" seeAllHref="/artists?role=venue">
-                {venues.map((a) => (
-                  <ArtistCard key={a.id} artist={a} />
-                ))}
-              </CardRow>
-            ) : null}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8 }}>Genres</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {GENRES.map(g => (
+              <button key={g} onClick={() => setSelectedGenre(g)} style={{ padding: '8px 16px', borderRadius: 999, fontSize: 13, cursor: 'pointer', background: selectedGenre === g ? '#111827' : '#ffffff', border: '1px solid #d1d5db', color: selectedGenre === g ? '#ffffff' : '#374151' }}>{g}</button>
+            ))}
+          </div>
+        </div>
 
-            {events.length > 0 ? (
-              <CardRow title="Upcoming events" seeAllHref="/search">
-                {events.slice(0, 12).map((e) => (
-                  <EventCardSmall key={e.id} event={e} />
-                ))}
-              </CardRow>
-            ) : null}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8 }}>Cities</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {CITIES.map(c => (
+              <button key={c} onClick={() => setSelectedCity(c)} style={{ padding: '8px 16px', borderRadius: 999, fontSize: 13, cursor: 'pointer', background: selectedCity === c ? '#111827' : '#ffffff', border: '1px solid #d1d5db', color: selectedCity === c ? '#ffffff' : '#374151' }}>{c}</button>
+            ))}
+          </div>
+        </div>
 
-            {creators.length > 0 ? (
-              <CardRow title="Popular artists" seeAllHref="/artists?role=artist">
-                {creators.map((a) => (
-                  <ArtistCard key={a.id} artist={a} />
-                ))}
-              </CardRow>
-            ) : null}
+        {/* Count */}
+        <div style={{ marginBottom: 32, paddingBottom: 16, borderBottom: '1px solid #e5e7eb' }}>
+          <span style={{ fontSize: 14, color: '#6b7280' }}>{filteredArtists.length} artists found</span>
+        </div>
 
-            {popularCities.length > 0 ? (
-              <CardRow title="Popular by city">
-                {popularCities.map(([city, count]) => (
-                  <li key={city} className="w-52 shrink-0">
-                    <Link
-                      href={"/events/" + city.toLowerCase().replace(/\s+/g, "-")}
-                      className="block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
-                    >
-                      <div className="h-32 bg-gradient-to-br from-gray-900 via-black to-gray-800" />
-                      <div className="p-4">
-                        <p className="font-bold text-base truncate">{city}</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {count} event{count === 1 ? "" : "s"}
-                        </p>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </CardRow>
-            ) : null}
+        {/* Featured Section */}
+        <div style={{ marginBottom: 48 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+            <div>
+              <h2 style={{ fontSize: 24, fontWeight: 800, margin: 0, color: '#111827' }}>Featured artists</h2>
+              <p style={{ fontSize: 14, color: '#6b7280', marginTop: 4, margin: 0 }}>Verified & available for booking</p>
+            </div>
+            <button onClick={() => router.push('/discover/artists')} style={{ background: 'none', border: 'none', color: '#7c5cff', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
+              Show all &rarr;
+            </button>
+          </div>
 
-            {trending.length >= 5 ? (
-              <CardRow title="Featured charts - Top events" seeAllHref="/search?sort=popular">
-                {trending.slice(0, 5).map((e, i) => (
-                  <li key={e.id} className="w-56 shrink-0">
-                    <Link
-                      href={"/event/" + e.id}
-                      className="block bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span
-                          className="text-4xl font-bold text-gray-300 leading-none"
-                          style={{ fontFamily: "var(--font-antonio)" }}
-                        >
-                          {i + 1}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold truncate">{e.title}</p>
-                          <p className="text-xs text-gray-500 mt-0.5">
-                            {e.views?.toLocaleString() ?? 0} views
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </CardRow>
-            ) : null}
-
-            {radio.length > 0 ? (
-              <CardRow title="Popular radio">
-                {radio.map((r) => {
-                  const name = r.artist_name || r.title || "Radio";
-                  return (
-                    <li key={"radio-" + r.id} className="w-56 shrink-0">
-                      <div className="group block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
-                        <div className="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-4xl font-bold text-gray-500 relative">
-                          {name.charAt(0).toUpperCase()}
-                          <PlayChip track={r} />
-                        </div>
-                        <div className="p-4">
-                          <p className="font-bold text-sm truncate">{name} Radio</p>
-                          <p className="text-xs text-gray-500 mt-1 truncate">
-                            With similar promoters
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </CardRow>
-            ) : null}
-
-            {albums.length > 0 ? (
-              <CardRow title="Popular albums and singles">
-                {albums.map((a) => (
-                  <li key={a.id} className="w-44 shrink-0">
-                    <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-                      <div className="aspect-square rounded-xl bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 mb-3 flex items-center justify-center text-white shadow-md relative">
-                        <span className="text-4xl font-bold opacity-40">
-                          {a.title.charAt(0)}
-                        </span>
-                        <PlayChip track={a} />
-                      </div>
-                      <p className="font-bold text-sm truncate">{a.title}</p>
-                      <p className="text-xs text-gray-500 truncate mt-0.5">
-                        {a.artist_name}
-                      </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
+            {FEATURED_ARTISTS.map((f) => (
+              <div key={f.id} style={{ background: '#ffffff', border: '2px solid #7c5cff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 12px rgba(124,92,255,0.15)' }}>
+                <div style={{ position: 'relative', height: 180, width: '100%', background: '#e5e7eb' }}>
+                  <img src={f.image} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  {f.verified && (
+                    <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      VERIFIED
                     </div>
-                  </li>
-                ))}
-              </CardRow>
-            ) : null}
-
-            {songs.length > 0 ? (
-              <CardRow title="Trending songs">
-                {songs.map((s) => (
-                  <li key={s.id} className="w-40 shrink-0">
-                    <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-                      <div className="aspect-square rounded-xl bg-gradient-to-br from-gray-300 to-gray-400 mb-3 flex items-center justify-center text-3xl font-bold text-white shadow-md relative">
-                        &#9834;
-                        <PlayChip track={s} />
-                      </div>
-                      <p className="font-bold text-sm truncate">{s.title}</p>
-                      <p className="text-xs text-gray-500 truncate mt-0.5">
-                        {s.artist_name}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </CardRow>
-            ) : null}
-
-            {playlists.length > 0 ? (
-              <CardRow title="Featured playlists">
-                {playlists.map((p) => (
-                  <li key={p.id} className="w-44 shrink-0">
-                    <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-                      <div className="aspect-square rounded-xl bg-gradient-to-br from-black via-gray-800 to-gray-900 mb-3 flex flex-col justify-end p-4 text-white shadow-md relative">
-                        <p className="text-lg font-bold leading-tight">{p.title}</p>
-                        <PlayChip track={p} />
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </CardRow>
-            ) : null}
-
-            {popularCountries.length > 0 ? (
-              <CardRow title="Popular by country">
-                {popularCountries.map(([country, count]) => (
-                  <li key={country} className="w-40 shrink-0">
-                    <div className="group p-3 rounded-2xl hover:bg-gray-100 transition-colors cursor-pointer">
-                      <div className="aspect-square rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 mb-3 flex items-center justify-center text-6xl shadow-md">
-                        {FLAGS[country] ?? "??"}
-                      </div>
-                      <p className="font-bold text-sm truncate">{country}</p>
-                      <p className="text-xs text-gray-500 truncate mt-0.5">
-                        {count} event{count === 1 ? "" : "s"}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </CardRow>
-            ) : null}
-
-            {artists.length === 0 && events.length === 0 ? (
-              <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-                <p className="text-gray-900 font-medium mb-1">Nothing here yet</p>
-                <p className="text-gray-600 text-sm">
-                  Promoters, venues, and events will appear once they join.
-                </p>
+                  )}
+                </div>
+                <div style={{ padding: 20 }}>
+                  <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px', color: '#111827' }}>{f.name}</h3>
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{f.role} · {f.genre} · {f.city}</p>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>👥 {f.followers} followers</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>🏆 {f.pastShows}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
+                    <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From £{f.price}</span>
+                    <button onClick={() => router.push('/artist/' + f.name.toLowerCase().replace(/\s+/g, '-'))} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                      View Profile &rarr;
+                    </button>
+                  </div>
+                </div>
               </div>
-            ) : null}
-          </main>
+            ))}
+          </div>
+        </div>
+
+        {/* All Artists Section */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+            <div>
+              <h2 style={{ fontSize: 24, fontWeight: 800, margin: 0, color: '#111827' }}>All artists</h2>
+              <p style={{ fontSize: 14, color: '#6b7280', marginTop: 4, margin: 0 }}>{filteredArtists.length} found</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+            {filteredArtists.map(a => {
+              const isMember = clubMembers.includes(a.id);
+              return (
+                <div key={a.id} style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <img src={a.image} alt={a.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
+                    <div>
+                      <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0, color: '#111827' }}>{a.name}</h3>
+                      <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{a.role} · {a.genre}</p>
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, color: '#6b7280' }}>
+                    <span>📍 {a.city} · From £{a.price}</span>
+                    <span style={{ color: '#10b981', fontWeight: 600 }}>👥 {a.followers} followers · {a.pastShows}</span>
+                  </div>
+
+                  {isMounted && (
+                    isMember ? (
+                      <div style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: '#f0fdf4', color: '#065f46', border: '1px solid #10b981', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                        🏆 Club Member
+                      </div>
+                    ) : (
+                      <button onClick={() => toggleClub(a.id)} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                        🏆 Join Club — £5/mo
+                      </button>
+                    )
+                  )}
+
+                  <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
+                    <button onClick={() => router.push('/artist/' + a.name.toLowerCase().replace(/\s+/g, '-'))} style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>View</button>
+                    <button style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Book</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
-
-function EventCardSmall({ event }: { event: EventRow }) {
-  const from = priceFrom(event.ticket_types);
-  const date = event.start_date
-    ? new Date(event.start_date).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-      })
-    : "";
-
-  return (
-    <li className="w-52 shrink-0">
-      <Link
-        href={"/event/" + event.id}
-        className="block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
-      >
-        {event.hero_image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={event.hero_image}
-            alt={event.title}
-            className="w-full h-32 object-cover"
-          />
-        ) : (
-          <div className="w-full h-32 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-4xl font-bold text-gray-500">
-            {event.title?.charAt(0) || "E"}
-          </div>
-        )}
-        <div className="p-4">
-          <p className="font-bold text-sm truncate">{event.title}</p>
-          <p className="text-xs text-gray-500 mt-1 truncate">
-            {date}
-            {from ? " - From \u00A3" + from : ""}
-          </p>
-        </div>
-      </Link>
-    </li>
-  );
-}
-
