@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@/components/Sidebar';
+import TopAdBanner from '@/components/TopAdBanner';
+
 
 // ============ MOCK DATA ============
 const PROMOTERS = [
@@ -39,9 +40,9 @@ export default function PromotersPage() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
-      <Sidebar />
-      <main style={{ marginLeft: 260, flex: 1, paddingTop: 64, width: 'calc(100% - 260px)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
+      
+      <main style={{ flex: 1, paddingTop: 64, width: '100%' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>`n          <TopAdBanner />
           
           <div style={{ marginBottom: 32 }}>
             <h1 style={{ margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Discover promoters</h1>

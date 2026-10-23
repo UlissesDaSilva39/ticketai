@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@/components/Sidebar';
+import TopAdBanner from '@/components/TopAdBanner';
+
 
 // ============ MOCK DATA ============
 const FEATURED_ARTISTS = [
@@ -44,23 +45,6 @@ export default function ArtistsPage() {
   const [selectedType, setSelectedType] = useState('All');
   const [selectedGenre, setSelectedGenre] = useState('All');
   const [selectedCity, setSelectedCity] = useState('All');
-  const [clubMembers, setClubMembers] = useState<string[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    try {
-      const savedClubs = JSON.parse(localStorage.getItem('artist_club_members') || '[]');
-      setClubMembers(savedClubs);
-    } catch {}
-  }, []);
-
-  const toggleClub = (id: string) => {
-    if (clubMembers.includes(id)) return;
-    const next = [...clubMembers, id];
-    setClubMembers(next);
-    localStorage.setItem('artist_club_members', JSON.stringify(next));
-  };
 
   const filteredArtists = ARTISTS.filter(a => {
     if (searchQuery) {
@@ -78,27 +62,22 @@ export default function ArtistsPage() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
-      <Sidebar />
-      <Sidebar />
-      <main style={{ marginLeft: 260, flex: 1, paddingTop: 64, width: 'calc(100% - 260px)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
+      
+      <main style={{ flex: 1, paddingTop: 64, width: '100%' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>`n          <TopAdBanner />
+          
           <div style={{ marginBottom: 32 }}>
             <h1 style={{ margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Discover artists</h1>
             <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Browse every artist on GRID. Filter by genre, city, and availability.</p>
           </div>
 
-          {/* Search Bar */}
+          {/* SEARCH BAR */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, padding: '14px 20px', borderRadius: 12, border: '1px solid #d1d5db', background: '#ffffff' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input 
-              style={{ border: 'none', outline: 'none', fontSize: 15, flex: 1, color: '#111827', background: 'transparent' }} 
-              placeholder="Search by name, genre, or city..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <input style={{ border: 'none', outline: 'none', fontSize: 15, flex: 1, color: '#111827', background: 'transparent' }} placeholder="Search by name, genre, or city..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           </div>
 
-          {/* Filters */}
+          {/* FILTERS */}
           <div style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8 }}>Type</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -126,33 +105,24 @@ export default function ArtistsPage() {
             </div>
           </div>
 
-          {/* Count */}
           <div style={{ marginBottom: 32, paddingBottom: 16, borderBottom: '1px solid #e5e7eb' }}>
             <span style={{ fontSize: 14, color: '#6b7280' }}>{filteredArtists.length} artists found</span>
           </div>
 
-          {/* Featured Section */}
+          {/* FEATURED */}
           <div style={{ marginBottom: 48 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
                 <h2 style={{ fontSize: 24, fontWeight: 800, margin: 0, color: '#111827' }}>Featured artists</h2>
                 <p style={{ fontSize: 14, color: '#6b7280', marginTop: 4, margin: 0 }}>Verified & available for booking</p>
               </div>
-              <button onClick={() => router.push('/discover/artists')} style={{ background: 'none', border: 'none', color: '#7c5cff', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
-                Show all &rarr;
-              </button>
             </div>
-
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
               {FEATURED_ARTISTS.map((f) => (
                 <div key={f.id} style={{ background: '#ffffff', border: '2px solid #7c5cff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 12px rgba(124,92,255,0.15)' }}>
                   <div style={{ position: 'relative', height: 180, width: '100%', background: '#e5e7eb' }}>
                     <img src={f.image} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    {f.verified && (
-                      <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                        VERIFIED
-                      </div>
-                    )}
+                    {f.verified && <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700 }}>VERIFIED</div>}
                   </div>
                   <div style={{ padding: 20 }}>
                     <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px', color: '#111827' }}>{f.name}</h3>
@@ -163,9 +133,7 @@ export default function ArtistsPage() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
                       <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From £{f.price}</span>
-                      <button onClick={() => router.push('/artist/' + f.name.toLowerCase().replace(/\s+/g, '-'))} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                        View Profile &rarr;
-                      </button>
+                      <button onClick={() => router.push('/artist/' + f.name.toLowerCase().replace(/\s+/g, '-'))} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>View Profile &rarr;</button>
                     </div>
                   </div>
                 </div>
@@ -173,7 +141,7 @@ export default function ArtistsPage() {
             </div>
           </div>
 
-          {/* All Artists Section */}
+          {/* ALL ARTISTS */}
           <div style={{ marginBottom: 32 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
@@ -181,10 +149,8 @@ export default function ArtistsPage() {
                 <p style={{ fontSize: 14, color: '#6b7280', marginTop: 4, margin: 0 }}>{filteredArtists.length} found</p>
               </div>
             </div>
-
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
               {filteredArtists.map(a => {
-                const isMember = clubMembers.includes(a.id);
                 return (
                   <div key={a.id} style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -194,23 +160,18 @@ export default function ArtistsPage() {
                         <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{a.role} · {a.genre}</p>
                       </div>
                     </div>
-                    
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, color: '#6b7280' }}>
                       <span>📍 {a.city} · From £{a.price}</span>
                       <span style={{ color: '#10b981', fontWeight: 600 }}>👥 {a.followers} followers · {a.pastShows}</span>
                     </div>
-
-                    {isMounted && (
-                      isMember ? (
-                        <div style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: '#f0fdf4', color: '#065f46', border: '1px solid #10b981', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                          🏆 Club Member
-                        </div>
-                      ) : (
-                        <button onClick={() => toggleClub(a.id)} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                          🏆 Join Club — £5/mo
-                        </button>
-                      )
-                    )}
+                    
+                    {/* JOIN CLUB BUTTON */}
+                    <button 
+                      onClick={() => router.push('/artists/' + a.name.toLowerCase().replace(/\s+/g, '-') + '/join')} 
+                      style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+                    >
+                      🏆 Join Club — £5/mo
+                    </button>
 
                     <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
                       <button onClick={() => router.push('/artist/' + a.name.toLowerCase().replace(/\s+/g, '-'))} style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>View</button>
@@ -221,6 +182,19 @@ export default function ArtistsPage() {
               })}
             </div>
           </div>
+
+          {/* ADVERTISE BANNER */}
+          <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 16, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>📢</div>
+              <div>
+                <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px', color: '#111827' }}>Promote your event here</p>
+                <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>Reach thousands of promoters and artists on GRID.</p>
+              </div>
+            </div>
+            <button onClick={() => window.location.href = '/advertise'} style={{ padding: '10px 24px', borderRadius: 8, background: '#111827', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none' }}>Advertise Now</button>
+          </div>
+
         </div>
       </main>
     </div>
