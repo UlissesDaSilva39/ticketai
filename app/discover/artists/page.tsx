@@ -79,6 +79,7 @@ export default function ArtistsPage() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
       <Sidebar />
+      <Sidebar />
       <main style={{ marginLeft: 260, flex: 1, paddingTop: 64, width: 'calc(100% - 260px)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
           <div style={{ marginBottom: 32 }}>

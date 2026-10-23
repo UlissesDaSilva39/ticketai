@@ -113,6 +113,7 @@ export default function DiscoverVenuesPage() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
       <Sidebar />
+      <Sidebar />
       <main style={{ marginLeft: 260, flex: 1, paddingTop: 64, width: 'calc(100% - 260px)' }}>
         <div style={s.container}>
           <div style={s.header}>

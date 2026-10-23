@@ -12,14 +12,20 @@ const IconMessage = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="
 const IconStar = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
 const IconBriefcase = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
 const IconGrid = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>;
+const IconCompass = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>;
 
 export default function Sidebar() {
   const pathname = usePathname();
 
-  const navItems = [
-    { name: 'Home', href: '/', icon: <IconHome /> },
+  const discoverItems = [
     { name: 'Artists', href: '/discover/artists', icon: <IconUsers /> },
-    { name: 'Search', href: '/discover/events', icon: <IconSearch /> },
+    { name: 'Venues', href: '/discover/venues', icon: <IconGrid /> },
+    { name: 'Events', href: '/discover/events', icon: <IconSearch /> },
+    { name: 'Promoters', href: '/discover/promoters', icon: <IconUsers /> },
+  ];
+
+  const libraryItems = [
+    { name: 'Home', href: '/', icon: <IconHome /> },
     { name: 'My Tickets', href: '/tickets', icon: <IconTicket /> },
     { name: 'Friends', href: '/friends', icon: <IconUsers /> },
     { name: 'Messages', href: '/messages', icon: <IconMessage /> },
@@ -45,13 +51,35 @@ export default function Sidebar() {
       overflowY: 'auto'
     }}>
       
-      <div style={{ padding: '0 12px', marginBottom: 24, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+      {/* DISCOVER SECTION */}
+      <div style={{ padding: '0 12px', marginBottom: 16, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <IconCompass />
+        <h2 style={{ fontSize: 13, fontWeight: 800, margin: 0, color: '#6b7280', letterSpacing: '0.05em' }}>DISCOVER</h2>
+      </div>
+
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 24 }}>
+        {discoverItems.map(item => {
+          const isActive = pathname === item.href || pathname.startsWith(item.href);
+          return (
+            <Link key={item.name} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 8, textDecoration: 'none', background: isActive ? '#f3f4f6' : 'transparent', color: isActive ? '#111827' : '#6b7280', fontWeight: isActive ? 700 : 500, fontSize: 14 }}>
+              <span style={{ color: isActive ? '#111827' : '#9ca3af' }}>{item.icon}</span>
+              {item.name}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* DIVIDER */}
+      <div style={{ height: 1, background: '#e5e7eb', margin: '0 12px 24px' }} />
+
+      {/* YOUR LIBRARY SECTION */}
+      <div style={{ padding: '0 12px', marginBottom: 16, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         <h2 style={{ fontSize: 13, fontWeight: 800, margin: 0, color: '#6b7280', letterSpacing: '0.05em' }}>YOUR LIBRARY</h2>
       </div>
 
       <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
-        {navItems.map(item => {
+        {libraryItems.map(item => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
           return (
             <Link key={item.name} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 8, textDecoration: 'none', background: isActive ? '#f3f4f6' : 'transparent', color: isActive ? '#111827' : '#6b7280', fontWeight: isActive ? 700 : 500, fontSize: 14 }}>

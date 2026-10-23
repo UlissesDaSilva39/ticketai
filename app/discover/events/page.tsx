@@ -6,15 +6,15 @@ import Sidebar from '@/components/Sidebar';
 
 // ============ MOCK DATA ============
 const EVENTS = [
-  { id: 'e1', title: 'Paper Lions Jazz Night', date: 'Tue, 3 Nov', time: '19:16', venue: 'The Blue Note, London', featuring: 'Paper Lions, Nightshift Collective', presenter: 'Nightshift Presents', going: 12, sold: '87% sold', price: 25.00, verified: true, featured: true, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e2', title: 'Basement Collective Presents', date: 'Mon, 2 Nov', time: '17:16', venue: 'Test 15%, London', featuring: 'DJ Proxy, Analog Dreams', presenter: 'Basement Collective', going: 8, sold: 'Selling fast', price: 20.00, verified: true, featured: true, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e3', title: 'Analog Dreams Live', date: 'Sat, 24 Oct', time: '18:16', venue: 'Test - First Venue, London', featuring: 'Amelia G, Sam O', presenter: '', going: 2, sold: 'Only 15 tickets left', price: 16.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e4', title: 'Alice Waves Live', date: 'Tue, 27 Oct', time: '17:16', venue: 'The Blue Note, London', featuring: 'Maya C, Lily M', presenter: '', going: 4, sold: '', price: 14.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e5', title: 'Voice Records Crew Live', date: 'Thu, 29 Oct', time: '17:16', venue: 'Test 15%, London', featuring: '', presenter: '', going: 4, sold: '', price: 12.00, verified: false, featured: false, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e6', title: 'Concrete Garden Live', date: 'Thu, 29 Oct', time: '17:16', venue: 'Test 15%, London', featuring: 'Alex M', presenter: '', going: 1, sold: '', price: 16.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e7', title: 'Bobby Beats Garage Night', date: 'Sat, 31 Oct', time: '17:16', venue: 'Test - First Venue, London', featuring: '', presenter: '', going: 0, sold: '', price: 15.00, verified: false, featured: false, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e8', title: 'Ulisses Da Silva Live', date: 'Fri, 6 Nov', time: '17:16', venue: 'Test 15%, London', featuring: 'Amelia G', presenter: '', going: 4, sold: '', price: 22.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400&auto=format&fit=crop' },
-  { id: 'e9', title: 'Warehouse Sessions 12', date: 'Sat, 15 Nov', time: '22:00', venue: 'Basement 44, London', featuring: 'Sam O, Maya C', presenter: '', going: 10, sold: 'SOLD OUT', price: 0, verified: false, featured: false, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e1', title: 'Paper Lions Jazz Night', date: 'Tue, 3 Nov', time: '19:16', venue: 'The Blue Note, London', featuring: 'Paper Lions, Nightshift Collective', promoter: 'Nightshift Presents', going: 12, sold: '87% sold', price: 25.00, verified: true, featured: true, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e2', title: 'Basement Collective Presents', date: 'Mon, 2 Nov', time: '17:16', venue: 'Test 15%, London', featuring: 'DJ Proxy, Analog Dreams', promoter: 'Basement Collective', going: 8, sold: 'Selling fast', price: 20.00, verified: true, featured: true, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e3', title: 'Analog Dreams Live', date: 'Sat, 24 Oct', time: '18:16', venue: 'Test - First Venue, London', featuring: 'Amelia G, Sam O', promoter: 'Analog Dreams', going: 2, sold: 'Only 15 tickets left', price: 16.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e4', title: 'Alice Waves Live', date: 'Tue, 27 Oct', time: '17:16', venue: 'The Blue Note, London', featuring: 'Maya C, Lily M', promoter: 'Nightshift Presents', going: 4, sold: '', price: 14.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e5', title: 'Voice Records Crew Live', date: 'Thu, 29 Oct', time: '17:16', venue: 'Test 15%, London', featuring: '', promoter: 'Voice Records Crew', going: 4, sold: '', price: 12.00, verified: false, featured: false, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e6', title: 'Concrete Garden Live', date: 'Thu, 29 Oct', time: '17:16', venue: 'Test 15%, London', featuring: 'Alex M', promoter: 'Concrete Garden', going: 1, sold: '', price: 16.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e7', title: 'Bobby Beats Garage Night', date: 'Sat, 31 Oct', time: '17:16', venue: 'Test - First Venue, London', featuring: '', promoter: 'Bobby Beats', going: 0, sold: '', price: 15.00, verified: false, featured: false, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e8', title: 'Ulisses Da Silva Live', date: 'Fri, 6 Nov', time: '17:16', venue: 'Test 15%, London', featuring: 'Amelia G', promoter: 'Nightshift Presents', going: 4, sold: '', price: 22.00, verified: true, featured: false, image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400&auto=format&fit=crop' },
+  { id: 'e9', title: 'Warehouse Sessions 12', date: 'Sat, 15 Nov', time: '22:00', venue: 'Basement 44, London', featuring: 'Sam O, Maya C', promoter: 'Warehouse Sessions', going: 10, sold: 'SOLD OUT', price: 0, verified: false, featured: false, image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=400&auto=format&fit=crop' },
 ];
 
 const WHEN_OPTIONS = ['All', 'Tonight', 'This Weekend', 'This Week', 'This Month'];
@@ -116,6 +116,13 @@ export default function DiscoverEventsPage() {
                       <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From £{e.price.toFixed(2)}</span>
                       <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Get Tickets</button>
                     </div>
+                    {/* JOIN CLUB BUTTON */}
+                    <button 
+                      onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} 
+                      style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}
+                    >
+                      🏆 Join {e.promoter} Club
+                    </button>
                   </div>
                 </div>
               ))}
@@ -134,14 +141,21 @@ export default function DiscoverEventsPage() {
               {filteredEvents.map(e => (
                 <div key={e.id} style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                   <img src={e.image} alt={e.title} style={{ width: '100%', height: 140, objectFit: 'cover' }} />
-                  <div style={{ padding: 16 }}>
+                  <div style={{ padding: 16, display: 'flex', flexDirection: 'column', flex: 1 }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>{e.title}</h3>
                     <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 8px' }}>{e.date} · {e.time}</p>
                     <p style={{ fontSize: 13, color: '#374151', margin: '0 0 12px' }}>{e.venue}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
                       <span style={{ fontSize: 14, fontWeight: 700 }}>From £{e.price.toFixed(2)}</span>
                       <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '8px 16px', borderRadius: 6, background: '#111827', color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Tickets</button>
                     </div>
+                    {/* JOIN CLUB BUTTON */}
+                    <button 
+                      onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} 
+                      style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: '#f3f4f6', color: '#111827', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}
+                    >
+                      🏆 Join Club
+                    </button>
                   </div>
                 </div>
               ))}
