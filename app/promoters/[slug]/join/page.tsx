@@ -7,38 +7,29 @@ export default function PromoterJoinPage() {
   const router = useRouter();
   const params = useParams();
   const slug = params?.slug as string;
-  const [promoter, setPromoter] = useState<any>(null);
+  const [promoterName, setPromoterName] = useState<string>('');
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
 
   useEffect(() => {
     if (!slug) return;
-    // Mock data lookup (in a real app, this would be a fetch to /api/promoters)
-    const PROMOTERS = [
-      { id: 'p1', name: 'Amsterdam Dance Events' },
-      { id: 'p2', name: 'Brighton Beats' },
-      { id: 'p3', name: 'Bristol Underground' },
-      { id: 'p4', name: 'Drum and Bass Nation' },
-      { id: 'p5', name: 'East End Promotions' },
-      { id: 'p6', name: 'Electronic Europe' },
-      { id: 'p7', name: 'Nightshift Presents' },
-      { id: 'p8', name: 'Paris Nocturne' },
-      { id: 'p9', name: 'Techno Nation' },
-      { id: 'p10', name: 'Warehouse Sessions' },
-    ];
-    const found = PROMOTERS.find((p: any) => p.name.toLowerCase().replace(/\s+/g, '-') === slug);
-    if (found) setPromoter(found);
+    // Converter o slug (ex: nightshift-presents) para o nome legível (Nightshift Presents)
+    const formattedName = slug
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    setPromoterName(formattedName);
   }, [slug]);
 
   const handleJoin = (tierName: string, price: number) => {
     setLoadingTier(tierName);
     // Simulate a redirect to Stripe after a short delay
     setTimeout(() => {
-      alert('Redirecting to Stripe for ' + tierName + ' membership (£' + price + '/mo)');
+      alert('Redirecting to Stripe for ' + tierName + ' membership (£' + price + '/mo) for ' + promoterName);
       setLoadingTier(null);
     }, 1500);
   };
 
-  if (!promoter) return <div style={{ padding: 60, textAlign: 'center' }}>Loading...</div>;
+  if (!promoterName) return <div style={{ padding: 60, textAlign: 'center' }}>Loading...</div>;
 
   return (
     <main style={{ minHeight: '100vh', background: '#f9fafb', padding: '40px 24px', fontFamily: 'system-ui' }}>
@@ -48,7 +39,7 @@ export default function PromoterJoinPage() {
         </button>
         
         <h1 style={{ fontSize: 40, fontWeight: 800, textAlign: 'center', margin: '0 0 8px' }}>
-          Join the {promoter.name} Club
+          Join the {promoterName} Club
         </h1>
         <p style={{ textAlign: 'center', color: '#6b7280', fontSize: 18, margin: '0 0 48px' }}>
           Get exclusive access to pre-sales, merch drops, and VIP events.
