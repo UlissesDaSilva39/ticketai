@@ -9,7 +9,9 @@ export default function AdvertisePage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  const [showUpsell, setShowUpsell] = useState(false);
+  // Upsell Modals
+  const [showBasicUpsell, setShowBasicUpsell] = useState(false);
+  const [showPremiumUpsell, setShowPremiumUpsell] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState('Basic');
 
   const handleSubmit = async (e: any) => {
@@ -33,11 +35,13 @@ export default function AdvertisePage() {
   };
 
   const handlePlanClick = (plan: string) => {
+    setSelectedPlan(plan);
     if (plan === 'Basic') {
-      setSelectedPlan(plan);
-      setShowUpsell(true);
+      setShowBasicUpsell(true);
+    } else if (plan === 'Premium') {
+      setShowPremiumUpsell(true);
     } else {
-      setSelectedPlan(plan);
+      // Enterprise -> scroll to form
       document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -176,8 +180,8 @@ export default function AdvertisePage() {
         </div>
       </div>
 
-      {/* UPSELL MODAL */}
-      {showUpsell && (
+      {/* BASIC UPSELL MODAL */}
+      {showBasicUpsell && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 24, backdropFilter: 'blur(4px)' }}>
           <div style={{ background: 'white', borderRadius: 24, padding: 40, maxWidth: 450, width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>🚀</div>
@@ -186,10 +190,31 @@ export default function AdvertisePage() {
               Upgrade to Premium for just <strong>+£50</strong> and get featured on all discovery pages, plus priority placement in search.
             </p>
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={() => { setShowUpsell(false); setSelectedPlan('Premium'); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => { setShowBasicUpsell(false); setSelectedPlan('Premium'); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
                 Yes, upgrade!
               </button>
-              <button onClick={() => { setShowUpsell(false); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: '#f3f4f6', color: '#374151', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => { setShowBasicUpsell(false); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: '#f3f4f6', color: '#374151', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+                No thanks
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PREMIUM UPSELL MODAL */}
+      {showPremiumUpsell && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 24, backdropFilter: 'blur(4px)' }}>
+          <div style={{ background: 'white', borderRadius: 24, padding: 40, maxWidth: 450, width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>🏆</div>
+            <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 8px' }}>Go Enterprise?</h2>
+            <p style={{ fontSize: 15, color: '#6b7280', margin: '0 0 24px' }}>
+              For just <strong>+£50/month</strong>, get a homepage banner takeover, email newsletter feature, and a dedicated account manager. 
+            </p>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button onClick={() => { setShowPremiumUpsell(false); setSelectedPlan('Enterprise'); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+                Yes, upgrade!
+              </button>
+              <button onClick={() => { setShowPremiumUpsell(false); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: '#f3f4f6', color: '#374151', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
                 No thanks
               </button>
             </div>

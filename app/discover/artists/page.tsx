@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import TopAdBanner from '@/components/TopAdBanner';
+import Sidebar from '@/components/Sidebar';
 
-
-// ============ MOCK DATA ============
 const FEATURED_ARTISTS = [
   { id: 'f1', name: 'Paper Lions', role: 'Band', genre: 'Jazz Fusion', city: 'Paris', followers: '45k', verified: true, price: 2500, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop', pastShows: '12 sold-out shows' },
   { id: 'f2', name: 'DJ Poxy', role: 'DJ', genre: 'House', city: 'London', followers: '150k', verified: true, price: 1500, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=400&auto=format&fit=crop', pastShows: '28 sold-out shows' },
@@ -62,22 +60,25 @@ export default function ArtistsPage() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
-      
-      <main style={{ flex: 1, paddingTop: 64, width: '100%' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>`n          <TopAdBanner />
+      <Sidebar />
+      <main style={{ marginLeft: 260, flex: 1, paddingTop: 64, width: 'calc(100% - 260px)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
           
-          <div style={{ marginBottom: 32 }}>
-            <h1 style={{ margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Discover artists</h1>
-            <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Browse every artist on GRID. Filter by genre, city, and availability.</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+            <div>
+              <h1 style={{ margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Discover artists</h1>
+              <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Browse every artist on GRID. Filter by genre, city, and availability.</p>
+            </div>
+            <button onClick={() => router.push('/advertise')} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap' }}>
+              📢 Advertise
+            </button>
           </div>
 
-          {/* SEARCH BAR */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, padding: '14px 20px', borderRadius: 12, border: '1px solid #d1d5db', background: '#ffffff' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input style={{ border: 'none', outline: 'none', fontSize: 15, flex: 1, color: '#111827', background: 'transparent' }} placeholder="Search by name, genre, or city..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
           </div>
 
-          {/* FILTERS */}
           <div style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8 }}>Type</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -109,7 +110,6 @@ export default function ArtistsPage() {
             <span style={{ fontSize: 14, color: '#6b7280' }}>{filteredArtists.length} artists found</span>
           </div>
 
-          {/* FEATURED */}
           <div style={{ marginBottom: 48 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
@@ -141,7 +141,6 @@ export default function ArtistsPage() {
             </div>
           </div>
 
-          {/* ALL ARTISTS */}
           <div style={{ marginBottom: 32 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
@@ -164,15 +163,7 @@ export default function ArtistsPage() {
                       <span>📍 {a.city} · From £{a.price}</span>
                       <span style={{ color: '#10b981', fontWeight: 600 }}>👥 {a.followers} followers · {a.pastShows}</span>
                     </div>
-                    
-                    {/* JOIN CLUB BUTTON */}
-                    <button 
-                      onClick={() => router.push('/artists/' + a.name.toLowerCase().replace(/\s+/g, '-') + '/join')} 
-                      style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
-                    >
-                      🏆 Join Club — £5/mo
-                    </button>
-
+                    <button onClick={() => router.push('/artists/' + a.name.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>🏆 Join Club — £5/mo</button>
                     <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
                       <button onClick={() => router.push('/artist/' + a.name.toLowerCase().replace(/\s+/g, '-'))} style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>View</button>
                       <button style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Book</button>
@@ -183,7 +174,6 @@ export default function ArtistsPage() {
             </div>
           </div>
 
-          {/* ADVERTISE BANNER */}
           <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 16, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>📢</div>

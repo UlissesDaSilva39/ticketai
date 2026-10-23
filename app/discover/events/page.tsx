@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import TopAdBanner from '@/components/TopAdBanner';
+import Sidebar from '@/components/Sidebar';
 
-
-// ============ MOCK DATA ============
 const EVENTS = [
   { id: 'e1', title: 'Paper Lions Jazz Night', date: 'Tue, 3 Nov', time: '19:16', venue: 'The Blue Note, London', featuring: 'Paper Lions, Nightshift Collective', promoter: 'Nightshift Presents', going: 12, sold: '87% sold', price: 25.00, verified: true, featured: true, image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop' },
   { id: 'e2', title: 'Basement Collective Presents', date: 'Mon, 2 Nov', time: '17:16', venue: 'Test 15%, London', featuring: 'DJ Proxy, Analog Dreams', promoter: 'Basement Collective', going: 8, sold: 'Selling fast', price: 20.00, verified: true, featured: true, image: 'https://images.unsplash.com/photo-1574154893626-3b6e6f6dc55c?q=80&w=400&auto=format&fit=crop' },
@@ -43,23 +41,26 @@ export default function DiscoverEventsPage() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb' }}>
-      
-      <main style={{ flex: 1, paddingTop: 64, width: '100%' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>`n          <TopAdBanner />
+      <Sidebar />
+      <main style={{ marginLeft: 260, flex: 1, paddingTop: 64, width: 'calc(100% - 260px)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
           
-          <div style={{ marginBottom: 32 }}>
-            <h1 style={{ margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Discover events</h1>
-            <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Find your next live experience. Filter by date, city, genre, and price.</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+            <div>
+              <h1 style={{ margin: '0 0 8px', fontSize: 36, fontWeight: 800, color: '#111827', letterSpacing: '-0.02em' }}>Discover events</h1>
+              <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Find your next live experience. Filter by date, city, genre, and price.</p>
+            </div>
+            <button onClick={() => router.push('/advertise')} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap' }}>
+              📢 Advertise
+            </button>
           </div>
 
-          {/* SEARCH BAR */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, padding: '14px 20px', borderRadius: 12, border: '1px solid #d1d5db', background: '#ffffff' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input style={{ border: 'none', outline: 'none', fontSize: 15, flex: 1, color: '#111827', background: 'transparent' }} placeholder="Search by event, artist, or venue..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <button style={{ padding: '8px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>Search</button>
           </div>
 
-          {/* FILTERS */}
           <div style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: '#6b7280', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 8 }}>When</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>{WHEN_OPTIONS.map(w => <button key={w} onClick={() => setSelectedWhen(w)} style={{ padding: '8px 16px', borderRadius: 999, fontSize: 13, cursor: 'pointer', background: selectedWhen === w ? '#111827' : '#ffffff', border: '1px solid #d1d5db', color: selectedWhen === w ? '#ffffff' : '#374151' }}>{w}</button>)}</div>
@@ -91,7 +92,6 @@ export default function DiscoverEventsPage() {
             </div>
           </div>
 
-          {/* FEATURED EVENTS */}
           <div style={{ marginBottom: 48 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
@@ -117,20 +117,13 @@ export default function DiscoverEventsPage() {
                       <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From £{e.price.toFixed(2)}</span>
                       <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Get Tickets</button>
                     </div>
-                    {/* JOIN CLUB BUTTON */}
-                    <button 
-                      onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} 
-                      style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}
-                    >
-                      🏆 Join {e.promoter} Club
-                    </button>
+                    <button onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}>🏆 Join {e.promoter} Club</button>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ALL EVENTS */}
           <div style={{ marginBottom: 32 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
@@ -142,21 +135,15 @@ export default function DiscoverEventsPage() {
               {filteredEvents.map(e => (
                 <div key={e.id} style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                   <img src={e.image} alt={e.title} style={{ width: '100%', height: 140, objectFit: 'cover' }} />
-                  <div style={{ padding: 16, display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <div style={{ padding: 16 }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>{e.title}</h3>
                     <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 8px' }}>{e.date} · {e.time}</p>
                     <p style={{ fontSize: 13, color: '#374151', margin: '0 0 12px' }}>{e.venue}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: 14, fontWeight: 700 }}>From £{e.price.toFixed(2)}</span>
                       <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '8px 16px', borderRadius: 6, background: '#111827', color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Tickets</button>
                     </div>
-                    {/* JOIN CLUB BUTTON */}
-                    <button 
-                      onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} 
-                      style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: '#f3f4f6', color: '#111827', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}
-                    >
-                      🏆 Join Club
-                    </button>
+                    <button onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: '#f3f4f6', color: '#111827', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}>🏆 Join Club</button>
                   </div>
                 </div>
               ))}
