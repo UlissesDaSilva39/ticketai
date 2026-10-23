@@ -15,21 +15,25 @@ export default function VenueJoinPage() {
     fetch('/api/venues')
       .then(r => r.json())
       .then(data => {
-        const found = data.find((v: any) => v.name.toLowerCase().replace(/\s+/g, '-') === slug);
+        const found = data.find((v: any) => v.name.toLowerCase().replace(/\s+/g, '-') === slug || v.id === slug);
         if (found) setVenue(found);
       });
   }, [slug]);
 
   const handleJoin = async (tierName: string, price: number) => {
     setLoadingTier(tierName);
-    const res = await fetch('/api/venues/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ venueId: venue.id, venueName: venue.name, tierName, price }),
-    });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-    else { alert(data.error || 'Error'); setLoadingTier(null); }
+    try {
+      const res = await fetch('/api/venues/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ venueId: venue.id, venueName: venue.name, tierName, price }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else { alert(data.error || 'Error'); setLoadingTier(null); }
+    } catch {
+      setLoadingTier(null);
+    }
   };
 
   if (!venue) return <div style={{ padding: 60, textAlign: 'center' }}>Loading...</div>;
@@ -37,7 +41,7 @@ export default function VenueJoinPage() {
   return (
     <main style={{ minHeight: '100vh', background: '#f9fafb', padding: '40px 24px', fontFamily: 'system-ui' }}>
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: 24, fontSize: 14, color: '#6b7280' }}>← Voltar</button>
+        <button onClick={() => router.push('/discover/venues')} style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: 24, fontSize: 14, color: '#6b7280' }}>← Voltar</button>
         <h1 style={{ fontSize: 40, fontWeight: 800, textAlign: 'center', margin: '0 0 8px' }}>Join the {venue.name} Club</h1>
         <p style={{ textAlign: 'center', color: '#6b7280', fontSize: 18, margin: '0 0 48px' }}>Unlock exclusive perks, skip the queue, and save money on your next event.</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
