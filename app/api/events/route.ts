@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from('events')
-    .select('id, title, description, start_date, end_date, timezone, event_type, status, hero_image, views, lineup, ticket_types, venue_id, featured_until, featured_tier')
+    .select('id, title, description, start_date, end_date, timezone, event_type, status, hero_image, views, lineup, ticket_types, venue_id, featured_until, featured_tier, venues(name, city)')
     .eq('is_test', false)
     .eq('status', 'published')
     .gte('start_date', new Date().toISOString())
@@ -42,3 +42,4 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({ events: data ?? [] });
 }
+
