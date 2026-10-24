@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -35,6 +35,7 @@ export default function Sidebar() {
     { name: 'Network', href: '/network', icon: <IconUsers /> },
     { name: 'Opportunities', href: '/opportunities', icon: <IconBriefcase /> },
     { name: 'Dashboard', href: '/dashboard', icon: <IconGrid /> },
+    { name: 'Data Ingestion', href: '/admin/ingestion', icon: <IconGrid /> },
   ];
 
   return (

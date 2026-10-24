@@ -14,5 +14,6 @@ export const SIDEBAR_LIBRARY = [
     { icon: 'globe',   label: 'Network',       href: '/network' },
     { icon: 'sparkle', label: 'Opportunities', href: '/opportunities' },
     { icon: 'chart',   label: 'Dashboard',     href: '/organizer' },
+    { icon: 'chart',   label: 'Data Ingestion', href: '/admin/ingestion' },
   ]},
 ] as const;
