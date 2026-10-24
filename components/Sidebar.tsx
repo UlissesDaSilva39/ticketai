@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -22,6 +22,8 @@ export default function Sidebar() {
     { name: 'Venues', href: '/discover/venues', icon: <IconGrid /> },
     { name: 'Events', href: '/discover/events', icon: <IconSearch /> },
     { name: 'Promoters', href: '/discover/promoters', icon: <IconUsers /> },
+    { name: 'Festivals', href: '/discover/festivals', icon: <IconUsers /> },
+    { name: 'Labels', href: '/discover/labels', icon: <IconUsers /> },
   ];
 
   const libraryItems = [
