@@ -35,6 +35,8 @@ export async function runTicketmasterSync(maxResults = 20): Promise<IngestionRes
         event_type: e.event_type,
         status: 'published',
         hero_image: e.hero_image,
+        venue_name: e.venue_name,
+        venue_city: e.venue_city,
         is_test: false,
       };
       if (existingId) {

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -57,8 +57,8 @@ export default function DiscoverEventsPage() {
               date: dateStr,
               time: timeStr,
               image: ev.hero_image || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400&auto=format&fit=crop',
-              venue: ev.venues?.name || 'Venue TBA',
-              city: ev.venues?.city || '',
+              venue: ev.venues?.name || ev.venue_name || 'Venue TBA',
+              city: ev.venues?.city || ev.venue_city || '',
               genre: ev.event_type || 'Event',
               price,
               promoter: ev.venues?.name || 'TicketAI',

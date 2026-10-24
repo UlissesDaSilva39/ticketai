@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from('events')
-    .select('id, title, description, start_date, end_date, timezone, event_type, status, hero_image, views, lineup, ticket_types, venue_id, featured_until, featured_tier, venues(name, city)')
+    .select('id, title, description, start_date, end_date, timezone, event_type, status, hero_image, views, lineup, ticket_types, venue_id, venue_name, venue_city, featured_until, featured_tier, venues(name, city)')
     .eq('is_test', false)
     .eq('status', 'published')
     .gte('start_date', new Date().toISOString())
