@@ -193,7 +193,7 @@ export default function DiscoverEventsPage() {
                           ? (e.priceMin === e.priceMax
                               ? 'From £' + e.priceMin.toFixed(2)
                               : 'From £' + e.priceMin.toFixed(2) + ' – £' + e.priceMax.toFixed(2))
-                          : 'Tickets available'}
+                          : (e.ticketUrl ? 'See price on Ticketmaster' : 'Tickets TBA')}
                       </span>
                       {e.ticketUrl ? (
                         <a

@@ -2,19 +2,38 @@ import { NormalisedEvent } from '@/lib/ingestion/types';
 
 const API_KEY = process.env.TICKETMASTER_API_KEY;
 const BASE = 'https://app.ticketmaster.com/discovery/v2';
+const PAGE_SIZE = 200;
 
 export async function fetchTicketmasterEvents(
   countryCode = 'GB',
-  size = 20
+  size = 500
 ): Promise<NormalisedEvent[]> {
   if (!API_KEY) throw new Error('TICKETMASTER_API_KEY not set');
+
   const now = new Date().toISOString().split('.')[0] + 'Z';
-  const url = BASE + '/events.json?apikey=' + API_KEY + '&countryCode=' + countryCode + '&size=' + size + '&sort=date,asc&startDateTime=' + now + '&classificationName=Music';
-  const res = await fetch(url, { cache: 'no-store' });
-  if (!res.ok) throw new Error('Ticketmaster ' + res.status + ': ' + (await res.text()));
-  const json = await res.json();
-  const events = json._embedded?.events ?? [];
-  return events.map((e: any) => normalise(e));
+  const totalPages = Math.ceil(size / PAGE_SIZE);
+  const allEvents: NormalisedEvent[] = [];
+
+  for (let page = 0; page < totalPages; page++) {
+    const url = BASE + '/events.json?apikey=' + API_KEY + '&countryCode=' + countryCode + '&size=' + PAGE_SIZE + '&page=' + page + '&sort=date,asc&startDateTime=' + now + '&classificationName=Music';
+
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) {
+        console.warn('Ticketmaster page ' + page + ' failed: ' + res.status);
+        break;
+      }
+      const json = await res.json();
+      const batch = (json._embedded?.events ?? []).map((e: any) => normalise(e));
+      allEvents.push(...batch);
+      if (batch.length < PAGE_SIZE) break;
+    } catch (err) {
+      console.warn('Ticketmaster page ' + page + ' error:', err);
+      break;
+    }
+  }
+
+  return allEvents.slice(0, size);
 }
 
 function normalise(e: any): NormalisedEvent {

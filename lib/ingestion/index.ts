@@ -3,7 +3,7 @@ import { fetchTicketmasterEvents } from './sources/ticketmaster';
 import { findExistingRecord, recordExternal } from './deduplicate';
 import { IngestionResult } from './types';
 
-export async function runTicketmasterSync(maxResults = 200): Promise<IngestionResult> {
+export async function runTicketmasterSync(maxResults = 500): Promise<IngestionResult> {
   const supabase = createAdminClient();
   const { data: source } = await supabase
     .from('data_sources')

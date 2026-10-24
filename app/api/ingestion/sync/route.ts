@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
     const source = body.source ?? 'ticketmaster';
-    const maxResults = Math.min(Number(body.maxResults ?? 200), 200);
+    const maxResults = Math.min(Number(body.maxResults ?? 500), 500);
 
     if (source === 'ticketmaster') {
       return NextResponse.json(await runTicketmasterSync(maxResults));
