@@ -6,6 +6,7 @@ import { PromoterResidentDjs } from '@/components/promoters/PromoterResidentDjs'
 import { PromoterReviews }     from '@/components/promoters/PromoterReviews';
 import { PromoterDemoCTA }     from '@/components/promoters/PromoterDemoCTA';
 import { getPromoterBySlug }   from '@/lib/promoters';
+import { ClaimButton } from '@/components/claims/ClaimButton';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -47,6 +48,9 @@ export default async function PromoterProfilePage({ params }: Params) {
               {g}
             </span>
           ))}
+        </div>
+        <div className="mt-4">
+          <ClaimButton targetType="promoter" targetId={promoter.id} targetName={promoter.name} />
         </div>
         {promoter.responseTime && (
           <p className="mt-3 text-sm text-neutral-500">

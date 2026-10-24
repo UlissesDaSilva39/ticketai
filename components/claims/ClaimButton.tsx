@@ -16,6 +16,7 @@ export function ClaimButton({
   const [error, setError] = useState<string | null>(null);
 
   async function handleClaim() {
+    console.log('ClaimButton:', { targetType, targetId, targetName });
     setLoading(true);
     setError(null);
     try {
