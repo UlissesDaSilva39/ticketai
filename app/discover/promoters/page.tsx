@@ -1,22 +1,22 @@
-'use client';
+﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import TopAdBanner from '@/components/TopAdBanner';
 
 
 // ============ MOCK DATA ============
 const PROMOTERS = [
-  { id: 'p1', initials: 'AD', name: 'Amsterdam Dance Events', city: 'Amsterdam', memberSince: '2021', description: 'ADE regulars and year-round parties.', events: 12, rating: '4.8', reviews: 12, merch: '🛍️ Merch', availability: 'Available now', nextEvent: 'Warehouse · 15 Nov', verified: true },
-  { id: 'p2', initials: 'BB', name: 'Brighton Beats', city: 'Brighton', memberSince: '2022', description: 'Seafront parties and summer festivals.', events: 9, rating: '4.6', reviews: 8, merch: null, availability: 'Fully booked', nextEvent: 'Pier Party · 22 Nov', verified: true },
-  { id: 'p3', initials: 'BU', name: 'Bristol Underground', city: 'Bristol', memberSince: '2019', description: 'The best of Bristol\'s underground scene.', events: 15, rating: '4.9', reviews: 21, merch: '🛍️ Merch', availability: 'Available now', nextEvent: 'Basement · 8 Nov', verified: true },
-  { id: 'p4', initials: 'DA', name: 'Drum and Bass Nation', city: 'Bristol', memberSince: '2018', description: 'The UK\'s largest DnB promoters.', events: 28, rating: '4.7', reviews: 43, merch: '🛍️ Merch', availability: 'Limited availability', nextEvent: 'DnB Night · 12 Nov', verified: true },
-  { id: 'p5', initials: 'EE', name: 'East End Promotions', city: 'London', memberSince: '2020', description: 'Shoreditch and Hackney events.', events: 22, rating: '4.5', reviews: 19, merch: null, availability: 'Available now', nextEvent: 'Shoreditch · 9 Nov', verified: true },
-  { id: 'p6', initials: 'EE', name: 'Electronic Europe', city: 'Amsterdam', memberSince: '2017', description: 'Pan-European electronic events.', events: 19, rating: '4.8', reviews: 31, merch: '🛍️ Merch', availability: 'Limited availability', nextEvent: 'Euro Tour · 20 Nov', verified: true },
-  { id: 'p7', initials: 'NP', name: 'Nightshift Presents', city: 'London', memberSince: '2019', description: 'London\'s premiere underground events since 2019.', events: 24, rating: '4.9', reviews: 52, merch: '🛍️ Merch', availability: 'Available now', nextEvent: 'Nightshift · 16 Nov', verified: true },
-  { id: 'p8', initials: 'PN', name: 'Paris Nocturne', city: 'Paris', memberSince: '2021', description: 'French electronic music events.', events: 16, rating: '4.6', reviews: 14, merch: null, availability: 'Fully booked', nextEvent: 'Nocturne · 14 Nov', verified: true },
-  { id: 'p9', initials: 'TN', name: 'Techno Nation', city: 'London', memberSince: '2016', description: 'UK-wide techno events.', events: 31, rating: '4.8', reviews: 67, merch: '🛍️ Merch', availability: 'Available now', nextEvent: 'Techno All · 10 Nov', verified: true },
-  { id: 'p10', initials: 'WS', name: 'Warehouse Sessions', city: 'Berlin', memberSince: '2019', description: 'Berlin warehouse parties and industrial raves.', events: 18, rating: '4.7', reviews: 22, merch: null, availability: 'Available now', nextEvent: 'Warehouse · 18 Nov', verified: true },
+  { id: 'p1', initials: 'AD', name: 'Amsterdam Dance Events', city: 'Amsterdam', memberSince: '2021', description: 'ADE regulars and year-round parties.', events: 12, rating: '4.8', reviews: 12, merch: 'ðŸ›ï¸ Merch', availability: 'Available now', nextEvent: 'Warehouse Â· 15 Nov', verified: true },
+  { id: 'p2', initials: 'BB', name: 'Brighton Beats', city: 'Brighton', memberSince: '2022', description: 'Seafront parties and summer festivals.', events: 9, rating: '4.6', reviews: 8, merch: null, availability: 'Fully booked', nextEvent: 'Pier Party Â· 22 Nov', verified: true },
+  { id: 'p3', initials: 'BU', name: 'Bristol Underground', city: 'Bristol', memberSince: '2019', description: 'The best of Bristol\'s underground scene.', events: 15, rating: '4.9', reviews: 21, merch: 'ðŸ›ï¸ Merch', availability: 'Available now', nextEvent: 'Basement Â· 8 Nov', verified: true },
+  { id: 'p4', initials: 'DA', name: 'Drum and Bass Nation', city: 'Bristol', memberSince: '2018', description: 'The UK\'s largest DnB promoters.', events: 28, rating: '4.7', reviews: 43, merch: 'ðŸ›ï¸ Merch', availability: 'Limited availability', nextEvent: 'DnB Night Â· 12 Nov', verified: true },
+  { id: 'p5', initials: 'EE', name: 'East End Promotions', city: 'London', memberSince: '2020', description: 'Shoreditch and Hackney events.', events: 22, rating: '4.5', reviews: 19, merch: null, availability: 'Available now', nextEvent: 'Shoreditch Â· 9 Nov', verified: true },
+  { id: 'p6', initials: 'EE', name: 'Electronic Europe', city: 'Amsterdam', memberSince: '2017', description: 'Pan-European electronic events.', events: 19, rating: '4.8', reviews: 31, merch: 'ðŸ›ï¸ Merch', availability: 'Limited availability', nextEvent: 'Euro Tour Â· 20 Nov', verified: true },
+  { id: 'p7', initials: 'NP', name: 'Nightshift Presents', city: 'London', memberSince: '2019', description: 'London\'s premiere underground events since 2019.', events: 24, rating: '4.9', reviews: 52, merch: 'ðŸ›ï¸ Merch', availability: 'Available now', nextEvent: 'Nightshift Â· 16 Nov', verified: true },
+  { id: 'p8', initials: 'PN', name: 'Paris Nocturne', city: 'Paris', memberSince: '2021', description: 'French electronic music events.', events: 16, rating: '4.6', reviews: 14, merch: null, availability: 'Fully booked', nextEvent: 'Nocturne Â· 14 Nov', verified: true },
+  { id: 'p9', initials: 'TN', name: 'Techno Nation', city: 'London', memberSince: '2016', description: 'UK-wide techno events.', events: 31, rating: '4.8', reviews: 67, merch: 'ðŸ›ï¸ Merch', availability: 'Available now', nextEvent: 'Techno All Â· 10 Nov', verified: true },
+  { id: 'p10', initials: 'WS', name: 'Warehouse Sessions', city: 'Berlin', memberSince: '2019', description: 'Berlin warehouse parties and industrial raves.', events: 18, rating: '4.7', reviews: 22, merch: null, availability: 'Available now', nextEvent: 'Warehouse Â· 18 Nov', verified: true },
 ];
 
 const CITIES = ['All', 'London', 'Manchester', 'Birmingham', 'Berlin', 'Paris', 'New York'];
@@ -28,7 +28,56 @@ export default function PromotersPage() {
   const [selectedCity, setSelectedCity] = useState('All');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
 
-  const filteredPromoters = PROMOTERS.filter(p => {
+  const [promoters, setPromoters] = useState<typeof PROMOTERS>(PROMOTERS);
+  const [liveLoading, setLiveLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/promoters')
+      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+      .then((data) => {
+        if (cancelled) return;
+        if (Array.isArray(data.promoters) && data.promoters.length > 0) {
+          const normalised = data.promoters.map((p: any) => {
+            const name = p.display_name || 'Unnamed promoter';
+            const initials = name
+              .split(' ')
+              .filter(Boolean)
+              .map((w: string) => w[0])
+              .join('')
+              .toUpperCase()
+              .slice(0, 2);
+            return {
+              id: p.id,
+              name,
+              initials,
+              city: p.city || '',
+              description: p.bio || '',
+              verified: !!p.verified,
+              events: p.event_count || 0,
+              ticketsSold: p.tickets_sold || 0,
+              rating: 0,
+              reviews: 0,
+              merch: false,
+              available: true,
+              nextEvent: p.next_event || null,
+              instagram: p.instagram || '',
+              tiktok: p.tiktok || '',
+              youtube: p.youtube || '',
+              image: Array.isArray(p.photos) && p.photos[0]
+                ? p.photos[0]
+                : 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400&auto=format&fit=crop',
+            };
+          });
+          setPromoters(normalised);
+        }
+      })
+      .catch((err) => console.warn('promoters fetch failed, using mock fallback', err))
+      .finally(() => { if (!cancelled) setLiveLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const filteredPromoters = promoters.filter(p => {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       if (!p.name.toLowerCase().includes(q) && !p.city.toLowerCase().includes(q)) return false;
@@ -93,17 +142,17 @@ export default function PromotersPage() {
                     <div>
                       <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
                         {p.name}
-                        {p.verified && <span style={{ color: '#10b981', fontSize: 14 }}>✓</span>}
+                        {p.verified && <span style={{ color: '#10b981', fontSize: 14 }}>âœ“</span>}
                       </h3>
-                      <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{p.city} · Member since {p.memberSince}</p>
+                      <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{p.city} Â· Member since {p.memberSince}</p>
                     </div>
                   </div>
 
                   <p style={{ fontSize: 14, color: '#4b5563', margin: 0 }}>{p.description}</p>
 
                   <div style={{ display: 'flex', gap: 16, fontSize: 13, color: '#374151' }}>
-                    <span>📅 {p.events} events</span>
-                    <span>⭐ {p.rating} ({p.reviews})</span>
+                    <span>ðŸ“… {p.events} events</span>
+                    <span>â­ {p.rating} ({p.reviews})</span>
                   </div>
 
                   <div style={{ display: 'flex', gap: 8, fontSize: 12 }}>
@@ -119,7 +168,7 @@ export default function PromotersPage() {
                     onClick={() => router.push('/promoters/' + slug + '/join')} 
                     style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
                   >
-                    🏆 Join Club — £5/mo
+                    ðŸ† Join Club â€” Â£5/mo
                   </button>
 
                   <div style={{ display: 'flex', gap: 12, marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
@@ -127,7 +176,7 @@ export default function PromotersPage() {
                       View
                     </button>
                     <button style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
-                      ✉ Book
+                      âœ‰ Book
                     </button>
                   </div>
                 </div>
