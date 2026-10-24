@@ -1,20 +1,42 @@
-import { NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, company, message } = body;
+    const { name, email, promote, newsletter, plan } = body;
 
-    if (!name || !email) {
-      return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
+    if (!name || !email || !promote) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Simulate saving to database
-    console.log('New Advertise Lead:', { name, email, company, message });
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error('Advertise Error:', error.message);
-    return NextResponse.json({ error: 'Failed to submit' }, { status: 500 });
+    if (!url || !key) {
+      console.error('Missing Supabase env vars for advertise API');
+      return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    }
+
+    const supabase = createClient(url, key);
+
+    const { error } = await supabase.from('advertise_requests').insert({
+      name,
+      email,
+      promote,
+      newsletter: !!newsletter,
+      plan: plan || 'Basic',
+      status: 'new',
+    });
+
+    if (error) {
+      console.error('advertise insert error:', error);
+      return NextResponse.json({ error: 'Could not save request' }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error('advertise POST error:', err);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
