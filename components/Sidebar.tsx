@@ -34,7 +34,7 @@ export default function Sidebar() {
     { name: 'Following', href: '/following', icon: <IconStar /> },
     { name: 'Network', href: '/network', icon: <IconUsers /> },
     { name: 'Opportunities', href: '/opportunities', icon: <IconBriefcase /> },
-    { name: 'Dashboard', href: '/dashboard', icon: <IconGrid /> },
+    { name: 'Dashboard', href: '/organizer', icon: <IconGrid /> },
     { name: 'Data Ingestion', href: '/admin/ingestion', icon: <IconGrid /> },
   ];
 
