@@ -48,9 +48,10 @@ export default function DiscoverEventsPage() {
             const timeStr = start
               ? start.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
               : '';
-            const price = Array.isArray(ev.ticket_types) && ev.ticket_types[0]?.price
-              ? Number(ev.ticket_types[0].price)
-              : 0;
+            const priceMin = ev.price_min != null ? Number(ev.price_min) : 0;
+            const priceMax = ev.price_max != null ? Number(ev.price_max) : 0;
+            const hasRealPrice = priceMin > 0 || priceMax > 0;
+            const ticketUrl = ev.ticket_url || null;
             return {
               id: ev.id,
               title: ev.title,
@@ -60,7 +61,11 @@ export default function DiscoverEventsPage() {
               venue: ev.venues?.name || ev.venue_name || 'Venue TBA',
               city: ev.venues?.city || ev.venue_city || '',
               genre: ev.event_type || 'Event',
-              price,
+              price: priceMin,
+              priceMin,
+              priceMax,
+              hasRealPrice,
+              ticketUrl,
               promoter: ev.venues?.name || 'TicketAI',
               featured: !!ev.featured_until || !!ev.featured_tier,
             };
@@ -182,9 +187,26 @@ export default function DiscoverEventsPage() {
                     <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>{e.title}</h3>
                     <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 8px' }}>{e.date} · {e.time}</p>
                     <p style={{ fontSize: 13, color: '#374151', margin: '0 0 12px' }}>{e.venue}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 14, fontWeight: 700 }}>From £{e.price.toFixed(2)}</span>
-                      <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '8px 16px', borderRadius: 6, background: '#111827', color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Tickets</button>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 14, fontWeight: 700 }}>
+                        {e.hasRealPrice
+                          ? (e.priceMin === e.priceMax
+                              ? 'From £' + e.priceMin.toFixed(2)
+                              : 'From £' + e.priceMin.toFixed(2) + ' – £' + e.priceMax.toFixed(2))
+                          : 'Tickets available'}
+                      </span>
+                      {e.ticketUrl ? (
+                        <a
+                          href={e.ticketUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ padding: '8px 16px', borderRadius: 6, background: '#111827', color: '#ffffff', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer', textDecoration: 'none' }}
+                        >
+                          Get Tickets ↗
+                        </a>
+                      ) : (
+                        <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '8px 16px', borderRadius: 6, background: '#111827', color: '#ffffff', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Details</button>
+                      )}
                     </div>
                     <button onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: '#f3f4f6', color: '#111827', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}> Join Club</button>
                   </div>

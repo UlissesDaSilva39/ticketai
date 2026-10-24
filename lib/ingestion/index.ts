@@ -3,7 +3,7 @@ import { fetchTicketmasterEvents } from './sources/ticketmaster';
 import { findExistingRecord, recordExternal } from './deduplicate';
 import { IngestionResult } from './types';
 
-export async function runTicketmasterSync(maxResults = 20): Promise<IngestionResult> {
+export async function runTicketmasterSync(maxResults = 200): Promise<IngestionResult> {
   const supabase = createAdminClient();
   const { data: source } = await supabase
     .from('data_sources')
@@ -37,6 +37,10 @@ export async function runTicketmasterSync(maxResults = 20): Promise<IngestionRes
         hero_image: e.hero_image,
         venue_name: e.venue_name,
         venue_city: e.venue_city,
+        price_min: e.price_min,
+        price_max: e.price_max,
+        currency: e.currency,
+        ticket_url: e.ticket_url,
         is_test: false,
       };
       if (existingId) {

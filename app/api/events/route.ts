@@ -6,7 +6,6 @@ export const dynamic = 'force-dynamic';
 export async function GET(req: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
   if (!url || !key) {
     return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
   }
@@ -21,11 +20,18 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from('events')
-    .select('id, title, description, start_date, end_date, timezone, event_type, status, hero_image, views, lineup, ticket_types, venue_id, venue_name, venue_city, featured_until, featured_tier, venues(name, city)')
+    .select(`
+      id, title, description, start_date, end_date, timezone, event_type,
+      status, hero_image, views, lineup, ticket_types,
+      venue_id, venue_name, venue_city,
+      price_min, price_max, currency, ticket_url,
+      featured_until, featured_tier,
+      venues ( id, name, city )
+    `)
     .eq('is_test', false)
     .eq('status', 'published')
     .gte('start_date', new Date().toISOString())
-    .limit(100);
+    .limit(200);
 
   if (sort === 'Popular') query = query.order('views', { ascending: false });
   else query = query.order('start_date', { ascending: true });
@@ -36,10 +42,9 @@ export async function GET(req: NextRequest) {
   const { data, error } = await query;
 
   if (error) {
-    console.error('events GET error:', error);
-    return NextResponse.json({ error: 'Could not load events', detail: error.message }, { status: 500 });
+    console.error('events GET error:', JSON.stringify(error));
+    return NextResponse.json({ error: 'Could not load events', detail: error.message ?? JSON.stringify(error) }, { status: 500 });
   }
 
   return NextResponse.json({ events: data ?? [] });
 }
-
