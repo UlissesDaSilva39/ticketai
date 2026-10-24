@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { X, CheckCircle2 } from "lucide-react";
@@ -66,7 +66,7 @@ export default function BookingRequestModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 text-white"
       onClick={onClose}
     >
       <div

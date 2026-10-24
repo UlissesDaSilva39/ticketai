@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { X } from 'lucide-react';
@@ -24,7 +24,7 @@ export function ApplyModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4 text-white"
       onClick={onClose}
     >
       <div

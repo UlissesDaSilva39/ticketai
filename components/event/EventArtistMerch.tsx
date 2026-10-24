@@ -35,7 +35,7 @@ export default function EventArtistMerch({ items, viewAllHref }: { items: MerchI
                   <span className="text-5xl font-bold text-gray-400 opacity-60">{item.title.charAt(0).toUpperCase()}</span>
                 )}
                 {!inStock ? (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white">
                     <span className="text-white text-xs font-bold uppercase tracking-wider">Sold out</span>
                   </div>
                 ) : (

@@ -119,7 +119,7 @@ export default function CheckInPage() {
         </button>
       ) : (
         <div className="mb-6">
-          <div id="qr-reader" className="rounded-lg overflow-hidden bg-black min-h-[300px]" />
+          <div id="qr-reader" className="rounded-lg overflow-hidden bg-black min-h-[300px] text-white" />
           <button
             onClick={stopScanning}
             className="w-full mt-4 py-3 border-2 border-black font-medium rounded-full hover:bg-gray-50"

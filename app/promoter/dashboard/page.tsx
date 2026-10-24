@@ -186,6 +186,12 @@ export default function PromoterDashboard() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+        <Link
+          href="/promoter/dashboard/profile/edit"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white text-sm font-semibold hover:bg-gray-800 transition" style={{ color: '#ffffff' }}
+        >
+          Edit public profile
+        </Link>
         <div>
           <h1 className="text-5xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>PROMOTER</h1>
           <p className="text-gray-500 mt-2">{promoter.display_name}</p>

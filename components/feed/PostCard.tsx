@@ -1,4 +1,4 @@
-﻿import PostActions from "./PostActions";
+import PostActions from "./PostActions";
 import CommentThread from "./CommentThread";
 import PostAudioBar from "./PostAudioBar";
 
@@ -86,7 +86,7 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
             controls
             playsInline
             preload="metadata"
-            className="mt-3 rounded-xl w-full max-h-96 bg-black"
+            className="mt-3 rounded-xl w-full max-h-96 bg-black text-white"
           />
         ) : null}
 

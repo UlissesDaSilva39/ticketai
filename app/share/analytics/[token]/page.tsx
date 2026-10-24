@@ -171,7 +171,7 @@ export default async function SharedAnalyticsPage({ params }: PageProps) {
               {chartData.map((d) => (
                 <div
                   key={d.date}
-                  className="flex-1 bg-black rounded-t min-h-[2px]"
+                  className="flex-1 bg-black rounded-t min-h-[2px] text-white"
                   style={{ height: `${Math.max(2, (d.count / maxVal) * 100)}%` }}
                   title={`${d.date}: ${d.count}`}
                 />

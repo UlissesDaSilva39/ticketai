@@ -95,7 +95,7 @@ export default function LibrarySidebar({
                     href={"/event/" + e.id}
                     className="group flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-gray-100 transition-colors"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-black transition-colors" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-black transition-colors text-white" />
                     <span className="truncate">{e.title}</span>
                   </Link>
                 </li>

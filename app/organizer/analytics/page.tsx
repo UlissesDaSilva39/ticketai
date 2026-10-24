@@ -164,7 +164,7 @@ export default async function OrganizerAnalytics() {
               </div>
               <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
                 <div
-                  className="bg-black h-full rounded-full transition-all"
+                  className="bg-black h-full rounded-full transition-all text-white"
                   style={{ width: Math.min(stat.convRate * 4, 100) + "%" }}
                 />
               </div>

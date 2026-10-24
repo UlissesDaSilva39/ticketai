@@ -71,7 +71,7 @@ export default function PromoterMessageButton({ promoterId, promoterName }: Prop
 
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4"
+          className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4 text-white"
           onClick={() => setOpen(false)}
         >
           <div

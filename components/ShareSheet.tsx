@@ -66,7 +66,7 @@ export default function ShareSheet({ url, title }: { url: string; title: string 
 
       {open && (
         <>
-          <div className="fixed inset-0 z-40 bg-black/50" onClick={() => setOpen(false)} />
+          <div className="fixed inset-0 z-40 bg-black/50 text-white" onClick={() => setOpen(false)} />
           <div className="absolute left-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden border border-gray-200">
             {targets.map((t) => (
               <a

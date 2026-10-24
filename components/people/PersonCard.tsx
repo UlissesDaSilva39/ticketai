@@ -190,7 +190,7 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
 
       {msgOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4"
+          className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4 text-white"
           onClick={() => setMsgOpen(false)}
         >
           <div

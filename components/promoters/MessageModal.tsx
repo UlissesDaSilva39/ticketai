@@ -81,7 +81,7 @@ export function MessageModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 p-0 md:items-center md:p-6"
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 p-0 md:items-center md:p-6 text-white"
       role="dialog" aria-modal="true" aria-labelledby="message-modal-title"
       onClick={onClose}>
       <div className="w-full max-w-lg rounded-t-2xl bg-white shadow-2xl md:rounded-2xl"

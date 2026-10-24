@@ -81,7 +81,7 @@ export function DjMixesList({ mixes }: { mixes?: DjMix[] }) {
               {isPlaying && (
                 <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-neutral-200">
                   <div
-                    className="h-full bg-black transition-[width] duration-150"
+                    className="h-full bg-black transition-[width] duration-150 text-white"
                     style={{ width: `${pct}%` }}
                   />
                 </div>

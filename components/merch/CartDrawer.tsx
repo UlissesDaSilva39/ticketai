@@ -42,7 +42,7 @@ export function CartDrawer({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex justify-end bg-black/50"
+      className="fixed inset-0 z-[200] flex justify-end bg-black/50 text-white"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

@@ -64,7 +64,7 @@ export function EventCard({
             </div>
           )}
           {isSoldOut && (
-            <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center text-white">
               <div className="text-center">
                 <p className="text-white text-4xl md:text-5xl font-bold uppercase tracking-wider" style={{ fontFamily: "var(--font-antonio)" }}>
                   SOLD OUT

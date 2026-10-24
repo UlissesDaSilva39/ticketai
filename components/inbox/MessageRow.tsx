@@ -64,7 +64,7 @@ export default function MessageRow({ message }: { message: InboxMessage }) {
     >
       <div className="flex items-start gap-3">
         {!read && (
-          <span className="mt-2 h-2 w-2 rounded-full bg-black flex-shrink-0" aria-label="unread" />
+          <span className="mt-2 h-2 w-2 rounded-full bg-black flex-shrink-0 text-white" aria-label="unread" />
         )}
 
         <div className="flex-1 min-w-0">

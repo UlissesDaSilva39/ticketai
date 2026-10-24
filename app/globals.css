@@ -44,3 +44,15 @@ img {
   max-width: 100%;
   display: block;
 }
+
+/* ── Dark-background buttons and links ──
+   Any element with .text-white must override the global a { color: blue } rule */
+a.text-white,
+a.text-white:link,
+a.text-white:visited,
+a.text-white:hover,
+a.text-white:focus,
+button.text-white,
+button.text-white:hover {
+  color: #ffffff !important;
+}
