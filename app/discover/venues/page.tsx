@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 
@@ -23,7 +23,40 @@ export default function DiscoverVenuesPage() {
   const [selectedCity, setSelectedCity] = useState('All');
   const [availableOnly, setAvailableOnly] = useState(false);
 
-  const filteredVenues = VENUES.filter(v => {
+  const [venues, setVenues] = useState<typeof VENUES>(VENUES);
+  const [liveLoading, setLiveLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/venues')
+      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+      .then((data) => {
+        if (cancelled) return;
+        if (Array.isArray(data.venues) && data.venues.length > 0) {
+          const normalised = data.venues.map((v: any) => ({
+            id: v.id,
+            name: v.name,
+            type: v.venue_type || v.type || 'Venue',
+            capacity: v.capacity || 0,
+            city: v.city || '',
+            country: v.country || '',
+            rating: v.rating || 0,
+            reviews: v.reviews || 0,
+            image: v.hero_image || v.image || 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop',
+            description: v.description || '',
+            website: v.website || '',
+            verified: !!v.verified,
+            available: v.status === 'active',
+          }));
+          setVenues(normalised);
+        }
+      })
+      .catch((err) => console.warn('venues fetch failed, using mock fallback', err))
+      .finally(() => { if (!cancelled) setLiveLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const filteredVenues = venues.filter(v => {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       if (!v.name.toLowerCase().includes(q) && !v.city.toLowerCase().includes(q) && !v.type.toLowerCase().includes(q)) return false;
@@ -51,7 +84,7 @@ export default function DiscoverVenuesPage() {
               <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Browse every venue on GRID. Filter by city, capacity, and venue type. Find the perfect space for your next event.</p>
             </div>
             <button onClick={() => router.push('/advertise')} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap' }}>
-              📢 Advertise
+              ðŸ“¢ Advertise
             </button>
           </div>
 
@@ -101,17 +134,17 @@ export default function DiscoverVenuesPage() {
                   <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
                     <div>
                       <h3 style={{ fontSize: 20, fontWeight: 800, margin: 0, color: '#111827' }}>{v.name}</h3>
-                      <p style={{ fontSize: 14, color: '#6b7280', margin: '2px 0 0' }}>{v.type} · {v.city}</p>
+                      <p style={{ fontSize: 14, color: '#6b7280', margin: '2px 0 0' }}>{v.type} Â· {v.city}</p>
                     </div>
                     <div style={{ display: 'flex', gap: 16, padding: '12px 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
-                      <span style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>👥 {v.capacity} cap</span>
-                      <span style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>⭐ {v.rating} ({v.reviews})</span>
+                      <span style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>ðŸ‘¥ {v.capacity} cap</span>
+                      <span style={{ fontSize: 13, color: '#374151', fontWeight: 500 }}>â­ {v.rating} ({v.reviews})</span>
                     </div>
-                    <div style={{ fontSize: 13, color: '#10b981', fontWeight: 600 }}>📅 Booked {v.bookings} times this month</div>
-                    <button onClick={() => router.push('/venues/' + slug + '/join')} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>🏆 Join Venue Club</button>
+                    <div style={{ fontSize: 13, color: '#10b981', fontWeight: 600 }}>ðŸ“… Booked {v.bookings} times this month</div>
+                    <button onClick={() => router.push('/venues/' + slug + '/join')} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>ðŸ† Join Venue Club</button>
                     <div style={{ display: 'flex', gap: 12, marginTop: 'auto' }}>
                       <button onClick={() => router.push('/venues/' + slug)} style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>View</button>
-                      <button style={{ flex: 2, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Enquire →</button>
+                      <button style={{ flex: 2, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Enquire â†’</button>
                     </div>
                   </div>
                 </div>
