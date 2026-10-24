@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 
@@ -19,7 +19,7 @@ const EVENTS = [
 const WHEN_OPTIONS = ['All', 'Tonight', 'This Weekend', 'This Week', 'This Month'];
 const CITIES = ['All', 'London', 'Manchester', 'Birmingham', 'Berlin', 'Paris', 'New York'];
 const GENRES = ['All', 'House', 'Techno', 'Hip-Hop', 'Jazz', 'Electronic', 'Afrobeats'];
-const PRICES = ['All', 'Free', 'Under £20', '£20-£50', '£50+'];
+const PRICES = ['All', 'Free', 'Under Â£20', 'Â£20-Â£50', 'Â£50+'];
 
 export default function DiscoverEventsPage() {
   const router = useRouter();
@@ -30,7 +30,49 @@ export default function DiscoverEventsPage() {
   const [selectedPrice, setSelectedPrice] = useState('All');
   const [sortBy, setSortBy] = useState('Popular');
 
-  const filteredEvents = EVENTS.filter(e => {
+  const [events, setEvents] = useState<typeof EVENTS>(EVENTS);
+  const [liveLoading, setLiveLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/events')
+      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+      .then((data) => {
+        if (cancelled) return;
+        if (Array.isArray(data.events) && data.events.length > 0) {
+          const normalised = data.events.map((ev: any) => {
+            const start = ev.start_date ? new Date(ev.start_date) : null;
+            const dateStr = start
+              ? start.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+              : 'TBA';
+            const timeStr = start
+              ? start.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+              : '';
+            const price = Array.isArray(ev.ticket_types) && ev.ticket_types[0]?.price
+              ? Number(ev.ticket_types[0].price)
+              : 0;
+            return {
+              id: ev.id,
+              title: ev.title,
+              date: dateStr,
+              time: timeStr,
+              image: ev.hero_image || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400&auto=format&fit=crop',
+              venue: ev.venues?.name || 'Venue TBA',
+              city: ev.venues?.city || '',
+              genre: ev.event_type || 'Event',
+              price,
+              promoter: ev.venues?.name || 'TicketAI',
+            };
+          });
+          setEvents(normalised);
+        }
+      })
+      .catch((err) => console.warn('events fetch failed, using mock fallback', err))
+      .finally(() => { if (!cancelled) setLiveLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const filteredEvents = events.filter(e => {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       if (!e.title.toLowerCase().includes(q) && !e.venue.toLowerCase().includes(q)) return false;
@@ -51,7 +93,7 @@ export default function DiscoverEventsPage() {
               <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Find your next live experience. Filter by date, city, genre, and price.</p>
             </div>
             <button onClick={() => router.push('/advertise')} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap' }}>
-              📢 Advertise
+              ðŸ“¢ Advertise
             </button>
           </div>
 
@@ -100,7 +142,7 @@ export default function DiscoverEventsPage() {
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
-              {EVENTS.filter(e => e.featured).map(e => (
+              {events.filter(e => e.featured).map(e => (
                 <div key={e.id} style={{ background: '#ffffff', border: '2px solid #7c5cff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 12px rgba(124,92,255,0.15)' }}>
                   <div style={{ position: 'relative', height: 180, width: '100%', background: '#e5e7eb' }}>
                     <img src={e.image} alt={e.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -108,16 +150,16 @@ export default function DiscoverEventsPage() {
                   </div>
                   <div style={{ padding: 20 }}>
                     <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px', color: '#111827' }}>{e.title}</h3>
-                    <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{e.date} · {e.time} · {e.venue}</p>
+                    <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{e.date} Â· {e.time} Â· {e.venue}</p>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>👥 {e.going} going</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>ðŸ‘¥ {e.going} going</span>
                       <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#fef2f2', color: '#dc2626' }}>{e.sold}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
-                      <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From £{e.price.toFixed(2)}</span>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From Â£{e.price.toFixed(2)}</span>
                       <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Get Tickets</button>
                     </div>
-                    <button onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}>🏆 Join {e.promoter} Club</button>
+                    <button onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}>ðŸ† Join {e.promoter} Club</button>
                   </div>
                 </div>
               ))}
@@ -137,13 +179,13 @@ export default function DiscoverEventsPage() {
                   <img src={e.image} alt={e.title} style={{ width: '100%', height: 140, objectFit: 'cover' }} />
                   <div style={{ padding: 16 }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>{e.title}</h3>
-                    <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 8px' }}>{e.date} · {e.time}</p>
+                    <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 8px' }}>{e.date} Â· {e.time}</p>
                     <p style={{ fontSize: 13, color: '#374151', margin: '0 0 12px' }}>{e.venue}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 14, fontWeight: 700 }}>From £{e.price.toFixed(2)}</span>
+                      <span style={{ fontSize: 14, fontWeight: 700 }}>From Â£{e.price.toFixed(2)}</span>
                       <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '8px 16px', borderRadius: 6, background: '#111827', color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Tickets</button>
                     </div>
-                    <button onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: '#f3f4f6', color: '#111827', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}>🏆 Join Club</button>
+                    <button onClick={() => router.push('/promoters/' + e.promoter.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '8px 0', borderRadius: 8, background: '#f3f4f6', color: '#111827', border: 'none', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginTop: 12 }}>ðŸ† Join Club</button>
                   </div>
                 </div>
               ))}
