@@ -4,13 +4,14 @@ export const dynamic = 'force-dynamic';
 
 async function getArtist(slug: string) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return null;
   const supabase = createClient(url, key);
   const { data } = await supabase
     .from('artists')
-    .select('*')
+    .select('id, slug, name, handle, artist_type, genre, secondary_genres, city, country, bio, website, spotify, instagram, avatar_url, cover_image, verified')
     .eq('slug', slug)
+    .eq('status', 'active')
     .maybeSingle();
   return data;
 }
@@ -34,7 +35,7 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
         <div style={{ background: 'white', borderRadius: 16, padding: 32, border: '1px solid #e5e7eb' }}>
           <h1 style={{ fontSize: 36, fontWeight: 800, color: '#111827', margin: '0 0 8px' }}>{artist.name}</h1>
           <p style={{ fontSize: 16, color: '#6b7280', margin: '0 0 24px' }}>
-            {[artist.role, artist.genre, artist.city].filter(Boolean).join(' · ')}
+            {[artist.artist_type, artist.genre, artist.city].filter(Boolean).join(' · ')}
           </p>
           {artist.bio && (
             <p style={{ fontSize: 16, color: '#374151', lineHeight: 1.6, margin: '0 0 24px' }}>{artist.bio}</p>
@@ -47,3 +48,6 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
     </div>
   );
 }
+
+
+

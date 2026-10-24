@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 
@@ -44,14 +44,32 @@ export default function ArtistsPage() {
   const [selectedGenre, setSelectedGenre] = useState('All');
   const [selectedCity, setSelectedCity] = useState('All');
 
-  const filteredArtists = ARTISTS.filter(a => {
+  const [artists, setArtists] = useState<typeof ARTISTS>(ARTISTS);
+  const [liveLoading, setLiveLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/artists')
+      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+      .then((data) => {
+        if (cancelled) return;
+        if (Array.isArray(data.artists) && data.artists.length > 0) {
+          setArtists(data.artists);
+        }
+      })
+      .catch((err) => console.warn('artists fetch failed, using mock fallback', err))
+      .finally(() => { if (!cancelled) setLiveLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const filteredArtists = artists.filter(a => {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       if (!a.name.toLowerCase().includes(q) && !a.city.toLowerCase().includes(q) && !a.genre.toLowerCase().includes(q)) return false;
     }
     if (selectedType !== 'All') {
       const typeMap: Record<string, string[]> = { 'DJs': ['DJ'], 'Producers': ['Producer'], 'Vocalists': ['Singer'], 'Bands': ['Band', 'Group'] };
-      if (!typeMap[selectedType]?.includes(a.role)) return false;
+      if (!typeMap[selectedType]?.includes(a.artist_type)) return false;
     }
     if (selectedGenre !== 'All' && a.genre !== selectedGenre) return false;
     if (selectedCity !== 'All' && a.city !== selectedCity) return false;
@@ -70,7 +88,7 @@ export default function ArtistsPage() {
               <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Browse every artist on GRID. Filter by genre, city, and availability.</p>
             </div>
             <button onClick={() => router.push('/advertise')} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap' }}>
-              📢 Advertise
+              ðŸ“¢ Advertise
             </button>
           </div>
 
@@ -121,18 +139,18 @@ export default function ArtistsPage() {
               {FEATURED_ARTISTS.map((f) => (
                 <div key={f.id} style={{ background: '#ffffff', border: '2px solid #7c5cff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 12px rgba(124,92,255,0.15)' }}>
                   <div style={{ position: 'relative', height: 180, width: '100%', background: '#e5e7eb' }}>
-                    <img src={f.image} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={f.avatar_url} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     {f.verified && <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(16,185,129,0.95)', color: '#ffffff', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700 }}>VERIFIED</div>}
                   </div>
                   <div style={{ padding: 20 }}>
                     <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px', color: '#111827' }}>{f.name}</h3>
-                    <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{f.role} · {f.genre} · {f.city}</p>
+                    <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{f.artist_type} Â· {f.genre} Â· {f.city}</p>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>👥 {f.followers} followers</span>
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>🏆 {f.pastShows}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>ðŸ‘¥ {f.followers} followers</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>ðŸ† {f.pastShows}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
-                      <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From £{f.price}</span>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From Â£{f.price}</span>
                       <button onClick={() => router.push('/artist/' + f.name.toLowerCase().replace(/\s+/g, '-'))} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>View Profile &rarr;</button>
                     </div>
                   </div>
@@ -153,17 +171,17 @@ export default function ArtistsPage() {
                 return (
                   <div key={a.id} style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <img src={a.image} alt={a.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
+                      <img src={a.avatar_url} alt={a.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
                       <div>
                         <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0, color: '#111827' }}>{a.name}</h3>
-                        <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{a.role} · {a.genre}</p>
+                        <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{a.artist_type} Â· {a.genre}</p>
                       </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, color: '#6b7280' }}>
-                      <span>📍 {a.city} · From £{a.price}</span>
-                      <span style={{ color: '#10b981', fontWeight: 600 }}>👥 {a.followers} followers · {a.pastShows}</span>
+                      <span>ðŸ“ {a.city} Â· From Â£{a.price}</span>
+                      <span style={{ color: '#10b981', fontWeight: 600 }}>ðŸ‘¥ {a.followers} followers Â· {a.pastShows}</span>
                     </div>
-                    <button onClick={() => router.push('/artists/' + a.name.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>🏆 Join Club — £5/mo</button>
+                    <button onClick={() => router.push('/artists/' + a.name.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>ðŸ† Join Club â€” Â£5/mo</button>
                     <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
                       <button onClick={() => router.push('/artist/' + a.name.toLowerCase().replace(/\s+/g, '-'))} style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>View</button>
                       <button style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Book</button>
@@ -176,7 +194,7 @@ export default function ArtistsPage() {
 
           <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 16, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>📢</div>
+              <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>ðŸ“¢</div>
               <div>
                 <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px', color: '#111827' }}>Promote your event here</p>
                 <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>Reach thousands of promoters and artists on GRID.</p>
