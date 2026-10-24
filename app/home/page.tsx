@@ -6,6 +6,7 @@ import RightSidebar from "@/components/feed/RightSidebar";
 import PostComposer from "@/components/feed/PostComposer";
 import PostCard from "@/components/feed/PostCard";
 import FeedTabs from "@/components/feed/FeedTabs";
+import MusicNewsSection from "@/components/feed/MusicNewsSection";
 import { relativeTime } from "@/lib/format-time";
 
 export const dynamic = "force-dynamic";
@@ -234,8 +235,11 @@ export default async function FeedPage({
                   <p className="text-xs text-gray-400">— End of feed —</p>
                 )}
               </div>
+
             </div>
           )}
+
+          <MusicNewsSection />
         </main>
 
         <aside aria-label="Suggestions" className="col-span-12 lg:col-span-3">

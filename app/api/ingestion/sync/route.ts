@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { runTicketmasterSync } from '@/lib/ingestion';
+import { runTicketmasterSync, runRssSync } from '@/lib/ingestion';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -10,12 +10,13 @@ export async function POST(req: NextRequest) {
     const source = body.source ?? 'ticketmaster';
     const maxResults = Math.min(Number(body.maxResults ?? 20), 100);
 
-    if (source !== 'ticketmaster') {
-      return NextResponse.json({ error: 'Only ticketmaster supported so far' }, { status: 400 });
+    if (source === 'ticketmaster') {
+      return NextResponse.json(await runTicketmasterSync(maxResults));
     }
-
-    const result = await runTicketmasterSync(maxResults);
-    return NextResponse.json(result);
+    if (source === 'rss') {
+      return NextResponse.json(await runRssSync());
+    }
+    return NextResponse.json({ error: 'Unknown source: ' + source }, { status: 400 });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 500 });
