@@ -8,7 +8,8 @@ export async function fetchTicketmasterEvents(
   size = 20
 ): Promise<NormalisedEvent[]> {
   if (!API_KEY) throw new Error('TICKETMASTER_API_KEY not set');
-  const url = BASE + '/events.json?apikey=' + API_KEY + '&countryCode=' + countryCode + '&size=' + size + '&sort=date,asc';
+  const now = new Date().toISOString().split('.')[0] + 'Z';
+  const url = BASE + '/events.json?apikey=' + API_KEY + '&countryCode=' + countryCode + '&size=' + size + '&sort=date,asc&startDateTime=' + now + '&classificationName=Music';
   const res = await fetch(url, { cache: 'no-store' });
   if (!res.ok) throw new Error('Ticketmaster ' + res.status + ': ' + (await res.text()));
   const json = await res.json();
