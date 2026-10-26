@@ -1,0 +1,192 @@
+import type { Metadata } from "next";
+import { Inter, Antonio } from "next/font/google";
+import { createServerSupabase } from "@/lib/supabase/server";
+import SignOutButton from "@/components/SignOutButton";
+import ProfileDropdown from "@/components/ProfileDropdown";
+import SocialDropdown from "@/components/SocialDropdown";
+import MyArtistLink from "@/components/MyArtistLink";
+import ArtistsDropdown from "@/components/ArtistsDropdown";
+import NotificationBell from "@/components/NotificationBell";
+import InstallPrompt from "@/components/InstallPrompt";
+import MobileNav from "@/components/MobileNav";
+import { Toaster } from "sonner";
+import "./globals.css";
+import { Navbar } from '@/components/nav/Navbar';
+import { PlayerProvider } from '@/components/player/GlobalPlayer';
+import { CartProvider } from '@/components/merch/CartProvider';
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const antonio = Antonio({
+  variable: "--font-antonio",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+export const viewport = {
+  themeColor: "#00FF87",
+};
+
+const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
+
+export const metadata: Metadata = {
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "GRID",
+  },
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "GRID — The network for music.",
+    template: "%s | GRID",
+  },
+  description:
+    "The social and professional network for live music — discover events, connect with artists, book talent, and grow your career.",
+  openGraph: {
+    type: "website",
+    siteName: "GRID",
+    title: "GRID — The network for music.",
+    description: "Discover events. Connect with artists. Book talent. Grow your career.",
+    url: SITE_URL,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GRID — The network for music.",
+    description: "Discover events. Connect with artists. Book talent. Grow your career.",
+  },
+};
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const supabase = await createServerSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let role: string | null = null;
+  let username: string | null = null;
+  let artistSlug: string | null = null;
+  let pendingRequestCount = 0;
+  let unreadMessageCount = 0;
+  let notificationCount = 0;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, username")
+      .eq("id", user.id)
+      .maybeSingle();
+    role = profile?.role ?? null;
+    username = profile?.username ?? null;
+
+    const { data: artistRow } = await supabase
+      .from("artists")
+      .select("slug")
+      .eq("owner_id", user.id)
+      .eq("status", "active")
+      .maybeSingle();
+    artistSlug = artistRow?.slug ?? null;
+
+    const { count } = await supabase
+      .from("friendships")
+      .select("*", { count: "exact", head: true })
+      .eq("friend_id", user.id)
+      .eq("status", "pending");
+    pendingRequestCount = count ?? 0;
+
+    const { data: convs } = await supabase
+      .from("conversations")
+      .select("id")
+      .or("participant_a.eq." + user.id + ",participant_b.eq." + user.id);
+    const convIds = (convs || []).map((c) => c.id);
+    if (convIds.length > 0) {
+      const { count: uc } = await supabase
+        .from("messages")
+        .select("*", { count: "exact", head: true })
+        .in("conversation_id", convIds)
+        .neq("sender_id", user.id)
+        .is("read_at", null);
+      unreadMessageCount = uc ?? 0;
+    }
+    const { count: nc } = await supabase
+      .from("notifications")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .is("read_at", null);
+    notificationCount = nc ?? 0;
+  }
+
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${antonio.variable} font-sans antialiased bg-white text-black`}
+      >
+        <Navbar
+          user={
+            user
+              ? {
+                  email: user.email ?? null,
+                  username,
+                  role,
+                  artistSlug,
+                  displayName: username,
+                  pendingRequestCount,
+                }
+              : null
+          }
+          notificationCount={notificationCount}
+        />
+        {/* OLD HEADER DISABLED FOR GRID REBRAND */}
+        <main><PlayerProvider>{children}</PlayerProvider></main>
+                        <InstallPrompt />
+        <footer className="border-t border-gray-200 mt-24 py-12">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
+              <a href="/terms" className="text-gray-500 hover:text-black">
+                Terms of Service
+              </a>
+              <a href="/privacy" className="text-gray-500 hover:text-black">
+                Privacy Policy
+              </a>
+              <a href="/refunds" className="text-gray-500 hover:text-black">
+                Refund Policy
+              </a>
+              <a href="/contact" className="text-gray-500 hover:text-black">
+                Contact
+              </a>
+            </div>
+            <p className="text-center text-sm text-gray-500">
+              <span
+                className="block text-sm uppercase tracking-[0.3em] text-gray-400 mb-4"
+                style={{ fontFamily: "var(--font-antonio)" }}
+              >
+                Discover · Connect · Create · Book · Grow
+              </span>
+              {"\u00A9 " +
+                new Date().getFullYear() +
+                " GRID. All rights reserved."}
+            </p>
+          </div>
+        </footer>
+        <MobileNav isSignedIn={!!user} />
+        <div className="h-14 sm:hidden" />
+        <Toaster position="bottom-right" richColors />
+      </body>
+    </html>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
