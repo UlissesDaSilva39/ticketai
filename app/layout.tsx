@@ -31,6 +31,11 @@ export const viewport = {
 const SITE_URL = process.env.NEXT_PUBLIC_ROOT_URL || "https://GRID.org.uk";
 
 export const metadata: Metadata = {
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/icon.svg",
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
@@ -180,6 +185,7 @@ export default async function RootLayout({
     </html>
   );
 }
+
 
 
 
