@@ -189,7 +189,7 @@ export default function Home() {
 <div className="flex items-center justify-between mb-4">
 <div>
 <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-1">Artist Pages</div>
-<a href="/artists" className="block mb-6 rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition"><img src="/screenshots/artists.svg" alt="GRID artists page" className="w-full" /></a>
+<a href="/demo/artists" className="block mb-6 rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition"><img src="/screenshots/artists.svg" alt="GRID artists page" className="w-full" /></a>
             <h3 className="text-2xl font-bold">Your career, one URL</h3>
 </div>
 
@@ -220,7 +220,7 @@ export default function Home() {
 <div className="flex items-center justify-between mb-4">
 <div>
 <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-1">Event Pages</div>
-<a href="/discover/events" className="block mb-6 rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition"><img src="/screenshots/events.svg" alt="GRID events page" className="w-full" /></a>
+<a href="/demo/events" className="block mb-6 rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition"><img src="/screenshots/events.svg" alt="GRID events page" className="w-full" /></a>
             <h3 className="text-2xl font-bold">Sell tickets your way</h3>
 </div>
 
@@ -231,7 +231,7 @@ export default function Home() {
 { title: 'Basement Collective Presents', venue: 'Basement 44 - London', date: 'Mon, 2 Nov - 17:16', price: '20', sold: '93%', tag: 'Selling fast' },
 { title: 'Analog Dreams Live', venue: 'Fabric - London', date: 'Sat, 24 Oct - 18:16', price: '16', sold: '93%', tag: 'Last tickets' },
 ].map((e) => (
-<a key={e.title} href="/discover/events" className="rounded-2xl border border-gray-200 bg-white overflow-hidden hover:shadow-md hover:border-violet-300 transition">
+<a key={e.title} href="/demo/events" className="rounded-2xl border border-gray-200 bg-white overflow-hidden hover:shadow-md hover:border-violet-300 transition">
 <div className="h-32 bg-gradient-to-br from-violet-200 to-pink-200 relative">
 <div className="absolute bottom-3 right-3 rounded-full bg-red-500 text-white text-xs px-2 py-1 font-medium">{e.tag}</div>
 </div>
@@ -249,7 +249,7 @@ export default function Home() {
 </div>
 </div>
 </section>
-<section className="max-w-6xl mx-auto px-6 py-12"><a href="/discover/venues" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition"><img src="/screenshots/venues.svg" alt="GRID venues page" className="w-full" /></a></section>
+<section className="max-w-6xl mx-auto px-6 py-12"><a href="/demo/venues" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition"><img src="/screenshots/venues.svg" alt="GRID venues page" className="w-full" /></a></section>
 <section className="max-w-6xl mx-auto px-6 py-20">
 <div className="text-center mb-12">
 <h2 className="text-4xl font-bold mb-3">{/* ============ SECTION A - SELL TICKETS / FILL ROOMS ============ */}
@@ -265,7 +265,7 @@ export default function Home() {
       {/* EVENTS */}
       <div className="flex flex-col md:flex-row items-start gap-8">
         <div className="w-full md:w-1/2 flex-shrink-0">
-          <a href="/discover/events" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+          <a href="/demo/events" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
             <img src="/screenshots/events.svg" alt="Events page" className="w-full" />
           </a>
         </div>
@@ -279,7 +279,7 @@ export default function Home() {
             <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>33% higher conversion than standard checkout</li>
             <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Instant payouts — get paid the day after the event</li>
           </ul>
-          <a href="/discover/events" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+          <a href="/demo/events" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
             Browse events
           </a>
         </div>
@@ -288,7 +288,7 @@ export default function Home() {
       {/* VENUES */}
       <div className="flex flex-col md:flex-row-reverse items-start gap-8">
         <div className="w-full md:w-1/2 flex-shrink-0">
-          <a href="/discover/venues" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+          <a href="/demo/venues" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
             <img src="/screenshots/venues.svg" alt="Venues page" className="w-full" />
           </a>
         </div>
@@ -311,7 +311,7 @@ export default function Home() {
       {/* PROMOTERS */}
       <div className="flex flex-col md:flex-row items-start gap-8">
         <div className="w-full md:w-1/2 flex-shrink-0">
-          <a href="/discover/promoters" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+          <a href="/demo/promoters" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
             <img src="/screenshots/promoters.svg" alt="Promoters page" className="w-full" />
           </a>
         </div>
@@ -347,7 +347,7 @@ export default function Home() {
     {/* ARTISTS */}
     <div className="flex flex-col md:flex-row-reverse items-start gap-8">
       <div className="w-full md:w-1/2 flex-shrink-0">
-        <a href="/artists" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+        <a href="/demo/artists" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
           <img src="/screenshots/artists.svg" alt="Artists page" className="w-full" />
         </a>
       </div>
@@ -361,7 +361,7 @@ export default function Home() {
           <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Analytics dashboard — see who's actually listening</li>
           <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Instant payout after every show</li>
         </ul>
-        <a href="/artists" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+        <a href="/demo/artists" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
           Browse 45,000+ artists
         </a>
       </div>
@@ -370,7 +370,7 @@ export default function Home() {
     {/* MESSAGES */}
     <div className="flex flex-col md:flex-row items-start gap-8">
       <div className="w-full md:w-1/2 flex-shrink-0">
-        <a href="/messages" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+        <a href="/demo/messages" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
           <img src="/screenshots/messages.svg" alt="Messages page" className="w-full" />
         </a>
       </div>
@@ -384,7 +384,7 @@ export default function Home() {
           <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Message history kept — searchable for reference</li>
           <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Group threads for multi-party bookings</li>
         </ul>
-        <a href="/messages" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+        <a href="/demo/messages" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
           Open messages
         </a>
       </div>
@@ -393,7 +393,7 @@ export default function Home() {
     {/* OPPORTUNITIES */}
     <div className="flex flex-col md:flex-row-reverse items-start gap-8">
       <div className="w-full md:w-1/2 flex-shrink-0">
-        <a href="/opportunities" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+        <a href="/demo/opportunities" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
           <img src="/screenshots/opportunities.svg" alt="Opportunities page" className="w-full" />
         </a>
       </div>
@@ -407,7 +407,7 @@ export default function Home() {
           <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Direct messaging with hirers before accepting</li>
           <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Escrow-protected payment on acceptance</li>
         </ul>
-        <a href="/opportunities" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+        <a href="/demo/opportunities" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
           See opportunities
         </a>
       </div>
@@ -429,7 +429,7 @@ export default function Home() {
       {/* MERCH */}
       <div className="flex flex-col md:flex-row items-start gap-8">
         <div className="w-full md:w-1/2 flex-shrink-0">
-          <a href="/merch" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+          <a href="/demo/merch" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
             <img src="/screenshots/merch.svg" alt="Merch page" className="w-full" />
           </a>
         </div>
@@ -443,7 +443,7 @@ export default function Home() {
             <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>30% average revenue uplift per fan</li>
             <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Fans get merch shipped with ticket confirmation</li>
           </ul>
-          <a href="/merch" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+          <a href="/demo/merch" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
             Browse merch
           </a>
         </div>
@@ -486,7 +486,7 @@ export default function Home() {
   <div className="mb-16">
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-2xl font-bold">Featured artists</h3>
-      <a href="/artists" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 45,000+ →</a>
+      <a href="/demo/artists" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 45,000+ →</a>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
@@ -511,7 +511,7 @@ export default function Home() {
   <div className="mb-16">
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-2xl font-bold">Featured venues</h3>
-      <a href="/discover/venues" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 8,000+ →</a>
+      <a href="/demo/venues" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 8,000+ →</a>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
@@ -536,7 +536,7 @@ export default function Home() {
   <div>
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-2xl font-bold">Featured promoters</h3>
-      <a href="/discover/promoters" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 12,000+ →</a>
+      <a href="/demo/promoters" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 12,000+ →</a>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
@@ -755,6 +755,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 
