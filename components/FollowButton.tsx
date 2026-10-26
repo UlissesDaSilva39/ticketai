@@ -9,9 +9,9 @@ type TargetType = "artist" | "promoter" | "venue" | "user";
 type Props = {
   targetType: TargetType;
   targetId: string;
-  initialFollowing = false, boolean;
+  initialFollowing?: boolean;
   initialCount: number;
-  signedIn = false, boolean;
+  signedIn?: boolean;
   label?: string;
   variant?: "pill" | "compact" | "light" | "dark";
 };
@@ -19,9 +19,9 @@ type Props = {
 export default function FollowButton({
   targetType,
   targetId,
-  initialFollowing,
+  initialFollowing = false,
   initialCount,
-  signedIn,
+  signedIn = false,
   label,
   variant = "pill",
 }: Props) {
@@ -121,4 +121,3 @@ export default function FollowButton({
     </button>
   );
 }
-
