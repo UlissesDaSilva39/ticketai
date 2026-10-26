@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import { INDUSTRY_NAV_COLUMNS } from '@/config/industryNav';
 import {
   IconIndustry,
@@ -78,6 +78,7 @@ export default function IndustryPage() {
     <div className="min-h-screen bg-gray-50">
       {/* HERO */}
       <section className="bg-white border-b border-gray-200">
+        <p className="text-center text-sm text-gray-500 mb-2">12,000+ verified pros and crews on the platform</p>
         <div className="max-w-6xl mx-auto px-6 py-16">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 rounded-full bg-violet-100 text-violet-700 px-4 py-1.5 text-sm font-semibold mb-4">
@@ -138,7 +139,8 @@ export default function IndustryPage() {
             </div>
           </div>
         </div>
-      </section>
+      
+        <p className="text-center text-sm text-gray-500 mt-4">Available in London, Manchester, Berlin, Amsterdam, Paris, and 12 more cities.</p></section>
 
       {/* TRENDING SERVICES */}
       <section className="max-w-6xl mx-auto px-6 py-16">
@@ -245,7 +247,8 @@ export default function IndustryPage() {
             </div>
           ))}
         </div>
-      </section>
+      
+          <p className="text-sm text-gray-500 mt-6 text-center max-w-2xl mx-auto">Every completed hire becomes a public reference page — indexed by search engines, linked from your profile.</p></section>
 
       {/* HOW IT WORKS */}
       <section className="bg-white border-y border-gray-200 py-16">
@@ -264,6 +267,31 @@ export default function IndustryPage() {
                 <p className="text-sm text-gray-600">{step.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+      {/* ============ FREELANCER HOW IT WORKS ============ */}
+      <section className="bg-gray-50 border-y border-gray-100">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3 text-center">FOR FREELANCERS</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-center text-gray-900">Get booked. Get paid. Build reputation.</h2>
+          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">The other side of the marketplace. Show up, deliver, let your references do the selling.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <p className="text-5xl font-bold text-gray-300 mb-3">01</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Build your profile</h3>
+              <p className="text-gray-600">Add services, rates, past clients, and your rider. Verified badge after first hire.</p>
+            </div>
+            <div>
+              <p className="text-5xl font-bold text-gray-300 mb-3">02</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Get matched to briefs</h3>
+              <p className="text-gray-600">Promoters post briefs. GRID surfaces yours based on genre, city, and availability.</p>
+            </div>
+            <div>
+              <p className="text-5xl font-bold text-gray-300 mb-3">03</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Deliver and get paid</h3>
+              <p className="text-gray-600">Escrow releases on approval. Weekly payouts via Stripe. Reference published publicly.</p>
+            </div>
           </div>
         </div>
       </section>

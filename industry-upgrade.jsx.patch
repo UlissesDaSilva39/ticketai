@@ -1,0 +1,54 @@
+{/* ============ FAQ ============ */}
+<section className="max-w-4xl mx-auto px-6 py-16">
+  <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3 text-center">QUESTIONS</p>
+  <h2 className="text-3xl font-bold mb-10 text-center">Common questions about hiring</h2>
+  <div className="space-y-3">
+    {[
+      { q: 'How does escrow work?', a: 'Payment held by GRID until delivery approved. Full refund if work is not delivered.' },
+      { q: 'What is a rider?', a: 'Technical and hospitality requirements - one link shared with every promoter.' },
+      { q: 'How do verified references work?', a: 'Every completed hire becomes a public reference with real names and events.' },
+      { q: 'What does it cost?', a: 'Free to join. 5% fee only when you hire through the platform.' },
+      { q: 'How fast can I hire?', a: 'Post a brief, get proposals in about 24 hours.' },
+      { q: 'Can I hire a whole crew?', a: 'Yes - one brief for sound, lights, backline, or photographer.' },
+      { q: 'How do I get paid?', a: 'Escrow releases on delivery. Weekly payouts via Stripe.' },
+      { q: 'What does GRID take?', a: '5 percent platform fee, only when you get hired.' },
+      { q: 'Is payment data safe?', a: 'PCI-DSS via Stripe. GRID never stores card data.' },
+      { q: 'Can I export invoices?', a: 'Yes - CSV and PDF from your dashboard.' },
+    ].map((item, i) => (
+      <details key={i} className="border border-gray-200 rounded-lg p-4 group">
+        <summary className="flex justify-between items-center cursor-pointer font-medium">
+          {item.q}
+          <span className="text-gray-400 group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <p className="text-gray-600 mt-3 text-sm">{item.a}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<section className="max-w-6xl mx-auto px-6 py-20">
+  <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3 text-center">WHAT THEY SAY</p>
+  <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-900">Real hires. Real results.</h2>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <blockquote className="border border-gray-200 rounded-xl p-8">
+      <p className="text-lg text-gray-900 mb-6">"Booked a sound engineer in 20 minutes. Escrow meant no chasing invoices."</p>
+      <footer className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-700">MK</div>
+        <div>
+          <p className="font-semibold text-gray-900">Marcus Kane</p>
+          <p className="text-sm text-gray-600">Promoter - London</p>
+        </div>
+      </footer>
+    </blockquote>
+    <blockquote className="border border-gray-200 rounded-xl p-8">
+      <p className="text-lg text-gray-900 mb-6">"GRID pays weekly. Calendar full since March."</p>
+      <footer className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-700">SR</div>
+        <div>
+          <p className="font-semibold text-gray-900">Sofia Reyes</p>
+          <p className="text-sm text-gray-600">DJ - Manchester</p>
+        </div>
+      </footer>
+    </blockquote>
+  </div>
+</section>

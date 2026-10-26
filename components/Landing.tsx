@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { CATEGORY_PHOTOS } from '@/lib/category-photos';
 
 const TRUST = ["DJ Poxy","Basement 44","Voice Records","Pompeii Odyssey","Ulisses Booking","Demo Ticket"];
@@ -43,7 +43,7 @@ export default function Home() {
             The network for live music.
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mb-10 leading-relaxed">
-            Artists get booked. Promoters fill rooms. Venues get discovered. Fans find their next night. All in one place.
+            Artists get booked. Promoters fill rooms. Venues get discovered. Fans find their next night — all in one place.
           </p>
           <div className="flex flex-wrap gap-4 mb-16">
             <Link href="/login" className="inline-flex items-center gap-2 bg-black text-white font-medium px-8 py-4 rounded-full hover:bg-gray-800 transition">
@@ -97,6 +97,7 @@ export default function Home() {
       </section>
       <section className="border-b border-gray-200 py-6 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-gray-500 text-xs md:text-sm tracking-widest">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">4 million+ monthly visitors</p>
           <span className="text-gray-700 font-medium">TRUSTED BY LONDON&apos;S INDEPENDENT SCENE</span>
           {TRUST.map((name) => (
             <span key={name} className="flex items-center gap-2">
@@ -160,7 +161,8 @@ export default function Home() {
       <section id="how" className="bg-gray-50 border-y border-gray-200 py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-4xl md:text-6xl font-bold mb-16 tracking-tight text-black" style={{ fontFamily: "var(--font-antonio)" }}>
-            THREE STEPS. THAT IS IT.
+            HOW IT WORKS
+THREE STEPS. THAT IS IT.
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {STEPS.map((s) => (
@@ -465,7 +467,7 @@ export default function Home() {
             <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Discover events, artists, promoters in one feed</li>
             <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Follow who matters — curated, not algorithmic</li>
             <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Free forever — only pay when you sell tickets</li>
-            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>4 million+ monthly visitors</li>
+            
           </ul>
           <a href="/signup" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
             Create free profile
@@ -561,78 +563,7 @@ export default function Home() {
 </section>
 
 
-      <section className="max-w-6xl mx-auto px-6 py-20">
-  <div className="text-center mb-12">
-    <h2 className="text-4xl font-bold mb-3">Real people. Real rooms. Real nights.</h2>
-    <p className="text-gray-600">Meet some of the artists, venues, and promoters already on GRID.</p>
-  </div>
-
-  <div className="mb-12">
-    <h3 className="text-xl font-bold mb-4">Artists</h3>
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-      {[
-        { name: 'DJ Poxy', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
-        { name: 'Ultra Nate', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
-        { name: 'Honey Dijon', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
-        { name: 'Floating Points', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
-        { name: 'Peggy Gou', city: 'Berlin', img: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=400&fit=crop' },
-        { name: 'Four Tet', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
-      ].map((a) => (
-        <div key={a.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition">
-          <img src={a.img} alt={a.name} className="w-full aspect-square object-cover" />
-          <div className="p-3">
-            <div className="font-semibold text-sm">{a.name}</div>
-            <div className="text-xs text-gray-500">{a.city}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-
-  <div className="mb-12">
-    <h3 className="text-xl font-bold mb-4">Venues</h3>
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-      {[
-        { name: 'Fabric', city: 'London', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop' },
-        { name: 'Berghain', city: 'Berlin', img: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=400&h=400&fit=crop' },
-        { name: 'The Warehouse', city: 'Amsterdam', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=400&fit=crop' },
-        { name: 'Basement 44', city: 'London', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop' },
-        { name: 'Blue Note', city: 'Paris', img: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=400&h=400&fit=crop' },
-        { name: 'Village Underground', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
-      ].map((v) => (
-        <div key={v.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition">
-          <img src={v.img} alt={v.name} className="w-full aspect-square object-cover" />
-          <div className="p-3">
-            <div className="font-semibold text-sm">{v.name}</div>
-            <div className="text-xs text-gray-500">{v.city}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-
-  <div>
-    <h3 className="text-xl font-bold mb-4">Promoters</h3>
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-      {[
-        { name: 'Nightshift Presents', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
-        { name: 'Techno Nation', city: 'London', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop' },
-        { name: 'Electronic Europe', city: 'Amsterdam', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
-        { name: 'East End Promotions', city: 'London', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop' },
-        { name: 'Bristol Underground', city: 'Bristol', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=400&fit=crop' },
-        { name: 'DnB Nation', city: 'London', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
-      ].map((p) => (
-        <div key={p.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition">
-          <img src={p.img} alt={p.name} className="w-full aspect-square object-cover" />
-          <div className="p-3">
-            <div className="font-semibold text-sm">{p.name}</div>
-            <div className="text-xs text-gray-500">{p.city}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+      
 
 
       <section className="max-w-6xl mx-auto px-6 py-20">
@@ -669,7 +600,8 @@ export default function Home() {
   </div>
 </section>
 
-      Why not just use...?</h2>
+      WHY GRID
+Why not just use...?</h2>
 <p className="text-gray-600">RA, Dice, Eventbrite and Bandcamp each solve one piece. GRID solves all of them.</p>
 </div>
 <div className="overflow-x-auto">
@@ -730,28 +662,7 @@ export default function Home() {
 </div>
 </div>
 </section>
-<section className="max-w-6xl mx-auto px-6 py-20">
-<div className="text-center mb-12">
-<h2 className="text-4xl font-bold mb-3">Everything you need, on GRID</h2>
-<p className="text-gray-600">Built from research on RA, Dice, Spotify, Sony Music and Universal.</p>
-</div>
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-{[
-{ title: 'Face-Value Resale', desc: 'List tickets at face value or below. Anti-tout protection. Waitlists for sold-out shows.', who: 'RA, Dice standard' },
-{ title: '2-Click Payment', desc: 'One-tap checkout with saved cards, Apple Pay and Google Pay. 33% higher conversion.', who: 'RA model' },
-{ title: 'Music on Your Profile', desc: 'Embed Spotify, SoundCloud and Bandcamp. Show top tracks. Separate Events and Listen tabs.', who: 'Bandcamp, Spotify standard' },
-{ title: 'Structured Pitching', desc: 'Artists pitch to verified bookers. Platform matches by genre, market and experience.', who: 'BandPitch model' },
-{ title: 'Earnings Dashboard', desc: 'Real-time view of ticket sales, bookings, marketplace services and payouts. Export CSV.', who: 'Sony, UMG standard' },
-{ title: 'Industry Marketplace', desc: 'Hire producers, engineers, designers, photographers. Escrow, references and riders built in.', who: 'GRID unique' },
-].map((f) => (
-<div key={f.title} className="rounded-2xl border border-gray-200 bg-white p-6 hover:shadow-md hover:border-violet-300 transition">
-<h3 className="text-xl font-bold mb-2">{f.title}</h3>
-<p className="text-sm text-gray-600 mb-3">{f.desc}</p>
-<div className="text-xs font-medium uppercase tracking-wider text-violet-600">{f.who}</div>
-</div>
-))}
-</div>
-</section>
+
 <section className="bg-gray-50 border-y border-gray-200 py-20">
 <div className="max-w-3xl mx-auto px-6">
 <h2 className="text-4xl font-bold mb-12 text-center">Questions</h2>
