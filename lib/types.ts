@@ -1,4 +1,4 @@
-export type UserRole = "attendee" | "promoter" | "venue" | "artist" | "admin";
+﻿export type UserRole = "attendee" | "promoter" | "venue" | "artist" | "admin";
 
 export interface Profile {
   id: string;
@@ -169,6 +169,20 @@ export type Artist = {
   avatar_url: string | null;
   verified: boolean;
   membership_url: string | null;
+  // Optional joined fields - see app/u, CityPage, GenrePage, venue page
+  organizer?: { slug: string; name: string } | null;
+  venue?: { id: string; slug: string; name: string; city: string | null } | null;
+  artists?: Array<{ id: string; slug: string; name: string; role?: string }>;
+  hasRealPrice?: boolean;
+  priceMin?: number;
+  priceMax?: number;
+  ticketUrl?: string;
+  image?: string;
+  // Optional joined / legacy fields
+  username?: string;
+  avatar_url?: string;
+  artist_type?: string;
+  social?: { instagram?: string; twitter?: string; spotify?: string; website?: string } | null;
 };
 export type SavedSearch = {
   id: string;
@@ -180,3 +194,5 @@ export type SavedSearch = {
   notify: boolean;
   created_at: string;
 };
+
+

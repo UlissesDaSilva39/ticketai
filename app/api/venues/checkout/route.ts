@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     // Pro / VIP tier logic (Create Stripe Session)
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_data: { allow_redirects: 'never' } as any,
       mode: 'subscription',
       line_items: [
         {
@@ -47,3 +47,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+

@@ -1,4 +1,4 @@
-{
+﻿{
   "compilerOptions": {
     "target": "ES2017",
     "lib": [
@@ -39,5 +39,6 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["grid", "grid/grid", "tests", "node_modules", ".next"]
+  "exclude": ["_backup_*", "_backup_nav_*", "_backup_light_*", "_backup_duplicates_*", "_backup_fixnav_*", "_backup_fixes_*", "restore.ps1", "grid-light.ps1", "apply-fixes.ps1", "grid", "grid/grid", "tests", "node_modules", ".next"]
 }
+

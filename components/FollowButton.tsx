@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -9,9 +9,9 @@ type TargetType = "artist" | "promoter" | "venue" | "user";
 type Props = {
   targetType: TargetType;
   targetId: string;
-  initialFollowing: boolean;
+  initialFollowing?: boolean;
   initialCount: number;
-  signedIn: boolean;
+  signedIn?: boolean;
   label?: string;
   variant?: "pill" | "compact" | "light" | "dark";
 };
@@ -110,12 +110,12 @@ export default function FollowButton({
       {following ? (
         <>
           <UserCheck className="h-4 w-4" />
-          Following · {count}
+          Following Â· {count}
         </>
       ) : (
         <>
           <UserPlus className="h-4 w-4" />
-          {showLabel} · {count}
+          {showLabel} Â· {count}
         </>
       )}
     </button>

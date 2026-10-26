@@ -1,4 +1,5 @@
 ﻿import { createClient } from '@supabase/supabase-js';
+import { ClaimButton } from '@/components/claims/ClaimButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +12,6 @@ async function getArtist(slug: string) {
     .from('artists')
     .select('id, slug, name, handle, artist_type, genre, secondary_genres, city, country, bio, website, spotify, instagram, avatar_url, cover_image, verified')
     .eq('slug', slug)
-    .eq('status', 'active')
     .maybeSingle();
   return data;
 }
@@ -34,9 +34,12 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
         <div style={{ background: 'white', borderRadius: 16, padding: 32, border: '1px solid #e5e7eb' }}>
           <h1 style={{ fontSize: 36, fontWeight: 800, color: '#111827', margin: '0 0 8px' }}>{artist.name}</h1>
-          <p style={{ fontSize: 16, color: '#6b7280', margin: '0 0 24px' }}>
-            {[artist.artist_type, artist.genre, artist.city].filter(Boolean).join(' · ')}
+          <p style={{ fontSize: 16, color: '#6b7280', margin: '0 0 16px' }}>
+            {[artist.artist_type, artist.genre, artist.city].filter(Boolean).join('  -  ')}
           </p>
+          <div style={{ marginBottom: 24 }}>
+            <ClaimButton targetType="artist" targetId={artist.id} targetName={artist.name} />
+          </div>
           {artist.bio && (
             <p style={{ fontSize: 16, color: '#374151', lineHeight: 1.6, margin: '0 0 24px' }}>{artist.bio}</p>
           )}

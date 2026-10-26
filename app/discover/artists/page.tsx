@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -88,7 +88,7 @@ export default function ArtistsPage() {
               <p style={{ margin: 0, fontSize: 16, color: '#6b7280' }}>Browse every artist on GRID. Filter by genre, city, and availability.</p>
             </div>
             <button onClick={() => router.push('/advertise')} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap' }}>
-              ðŸ“¢ Advertise
+              [ad] Advertise
             </button>
           </div>
 
@@ -144,13 +144,13 @@ export default function ArtistsPage() {
                   </div>
                   <div style={{ padding: 20 }}>
                     <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px', color: '#111827' }}>{f.name}</h3>
-                    <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{f.artist_type} Â· {f.genre} Â· {f.city}</p>
+                    <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{f.artist_type} - {f.genre} - {f.city}</p>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>ðŸ‘¥ {f.followers} followers</span>
-                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>ðŸ† {f.pastShows}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>[ppl] {f.followers} followers</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#f0fdf4', color: '#10b981' }}>[win] {f.pastShows}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
-                      <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From Â£{f.price}</span>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: '#111827' }}>From ??{f.price}</span>
                       <button onClick={() => router.push('/artist/' + f.name.toLowerCase().replace(/\s+/g, '-'))} style={{ padding: '10px 20px', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>View Profile &rarr;</button>
                     </div>
                   </div>
@@ -174,14 +174,14 @@ export default function ArtistsPage() {
                       <img src={a.avatar_url} alt={a.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
                       <div>
                         <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0, color: '#111827' }}>{a.name}</h3>
-                        <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{a.artist_type} Â· {a.genre}</p>
+                        <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0' }}>{a.artist_type} - {a.genre}</p>
                       </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, color: '#6b7280' }}>
-                      <span>ðŸ“ {a.city} Â· From Â£{a.price}</span>
-                      <span style={{ color: '#10b981', fontWeight: 600 }}>ðŸ‘¥ {a.followers} followers Â· {a.pastShows}</span>
+                      <span>???? {a.city} - From ??{a.price}</span>
+                      <span style={{ color: '#10b981', fontWeight: 600 }}>[ppl] {a.followers} followers - {a.pastShows}</span>
                     </div>
-                    <button onClick={() => router.push('/artists/' + a.name.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>ðŸ† Join Club â€” Â£5/mo</button>
+                    <button onClick={() => router.push('/artists/' + a.name.toLowerCase().replace(/\s+/g, '-') + '/join')} style={{ width: '100%', padding: '10px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>[win] Join Club -- ??5/mo</button>
                     <div style={{ display: 'flex', gap: 6, marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
                       <button onClick={() => router.push('/artist/' + a.name.toLowerCase().replace(/\s+/g, '-'))} style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#111827', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>View</button>
                       <button style={{ flex: 1, padding: '10px 0', borderRadius: 8, background: '#111827', color: '#ffffff', border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Book</button>
@@ -194,7 +194,7 @@ export default function ArtistsPage() {
 
           <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 16, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>ðŸ“¢</div>
+              <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>[ad]</div>
               <div>
                 <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px', color: '#111827' }}>Promote your event here</p>
                 <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>Reach thousands of promoters and artists on GRID.</p>

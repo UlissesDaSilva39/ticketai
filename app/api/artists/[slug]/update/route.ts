@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -45,19 +45,21 @@ export async function PATCH(request: Request, { params }: Params) {
       .from("artists")
       .update({
         name: body.name,
+        handle: body.handle,
         bio: body.bio,
         genre: body.genre,
-        artist_type: body.artistType,
+        artist_type: body.artist_type || body.artistType,
         city: body.city,
         country: body.country,
-        postcode: body.postcode || null,
         website: body.website || null,
         spotify: body.spotify || null,
         instagram: body.instagram || null,
+        avatar_url: body.avatar_url || body.cover_image || null,
         secondary_genres: Array.isArray(body.secondaryGenres)
           ? body.secondaryGenres
+          : Array.isArray(body.secondary_genres)
+          ? body.secondary_genres
           : [],
-        cover_image: body.cover_image || null,
       })
       .eq("slug", slug);
 

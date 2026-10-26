@@ -66,3 +66,10 @@ export async function getAllPromoters() {
     reviews: [],
   }));
 }
+
+// --- Re-exports for backwards compat ---
+export type Promoter = any;
+export type PromoterEvent = any;
+export type PromoterReview = any;
+export type VenueWorked = any;
+
