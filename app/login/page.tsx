@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
@@ -48,6 +48,21 @@ function LoginInner() {
         const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
         if (signInError) throw signInError;
       }
+    // GRID - set role + club cookies for proxy.ts checks
+    try {
+      const { data: { user: __gridUser } } = await supabase.auth.getUser();
+      if (__gridUser) {
+        const { data: __gridProfile } = await supabase
+          .from('users')
+          .select('role, club_tier')
+          .eq('id', __gridUser.id)
+          .single();
+        document.cookie = 'grid_role=' + (__gridProfile?.role || 'fan') + '; path=/; max-age=86400; SameSite=Lax';
+        document.cookie = 'grid_club=' + (__gridProfile?.club_tier || 'free') + '; path=/; max-age=86400; SameSite=Lax';
+      }
+    } catch (__gridErr) {
+      console.warn('Failed to set role cookies', __gridErr);
+    }
       if (next) { router.push(next); } else { router.push("/home"); }
       router.refresh();
     } catch (err) {
@@ -155,3 +170,4 @@ export default function LoginPage() {
     </Suspense>
   );
 }
+
