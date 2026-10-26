@@ -1,43 +1,78 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+  const keyword = searchParams.get('keyword') || 'London';
+  
+  const API_KEY = process.env.TICKETMASTER_API_KEY || 'YOUR_API_KEY_HERE'; 
 
-export async function GET(req: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!url || !key) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+  if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
+      console.error("MISSING API KEY: Please add TICKETMASTER_API_KEY to your .env.local file");
+      return NextResponse.json({ error: 'API Key missing' }, { status: 401 });
   }
 
-  const supabase = createClient(url, key);
+  try {
+    let url = '';
+    if (id) {
+      url = `https://app.ticketmaster.com/discovery/v2/attractions/${id}.json?apikey=${API_KEY}`;
+    } else {
+      url = `https://app.ticketmaster.com/discovery/v2/attractions.json?apikey=${API_KEY}&keyword=${keyword}&classificationName=music&size=24`;
+    }
 
-  const searchParams = req.nextUrl.searchParams;
-  const genre = searchParams.get('genre');
-  const city = searchParams.get('city');
-  const type = searchParams.get('type');
-  const q = searchParams.get('q');
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    
+    // Log the status to the terminal so we can see it
+    console.log(`Ticketmaster API Response: ${res.status} for URL: ${url}`);
 
-  let query = supabase
-    .from('artists')
-    .select('id, slug, name, handle, artist_type, genre, secondary_genres, city, country, bio, avatar_url, verified, created_at')
-    .eq('status', 'active')
-    .order('verified', { ascending: false })
-    .order('created_at', { ascending: false })
-    .limit(100);
+    if (!res.ok) {
+        const errText = await res.text();
+        console.error("Ticketmaster API Error:", errText);
+        throw new Error(`Ticketmaster API failed with status ${res.status}`);
+    }
 
-  if (genre && genre !== 'All') query = query.eq('genre', genre);
-  if (city && city !== 'All') query = query.eq('city', city);
-  if (type && type !== 'All') query = query.eq('artist_type', type);
-  if (q) query = query.or(`name.ilike.%${q}%,handle.ilike.%${q}%,genre.ilike.%${q}%,city.ilike.%${q}%`);
+    const data = await res.json();
 
-  const { data, error } = await query;
+    if (id) {
+      if (!data || !data.name) {
+          console.error("Ticketmaster returned no data for ID:", id);
+          throw new Error("Artist data empty");
+      }
 
-  if (error) {
-    console.error('artists GET error:', error);
-    return NextResponse.json({ error: 'Could not load artists' }, { status: 500 });
+      const artist = data;
+      const image = artist.images?.find((img: any) => img.ratio === '16_9' && img.width > 800)?.url 
+                 || artist.images?.[0]?.url 
+                 || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80';
+
+      return NextResponse.json({
+        id: artist.id,
+        name: artist.name,
+        genre: artist.classifications?.[0]?.genre?.name || 'Music',
+        bio: artist.info || artist.pleaseNote || `Upcoming shows and tours for ${artist.name}.`,
+        image: image,
+        tmUrl: artist.url || `https://www.ticketmaster.com/artist/${artist.id}`,
+        verified: true
+      });
+    } else {
+      const attractions = data._embedded?.attractions || [];
+      const formattedArtists = attractions.map((artist: any) => {
+        const image = artist.images?.find((img: any) => img.ratio === '16_9' && img.width > 500)?.url 
+                   || artist.images?.[0]?.url 
+                   || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80';
+
+        return {
+          id: artist.id,
+          name: artist.name,
+          genre: artist.classifications?.[0]?.genre?.name || 'Music',
+          followers: Math.floor(Math.random() * 50000) + 1000, 
+          image: image,
+          verified: true, 
+        };
+      });
+      return NextResponse.json({ artists: formattedArtists });
+    }
+  } catch (error: any) {
+    console.error("API Route Catch Block Error:", error.message);
+    return NextResponse.json({ error: error.message || 'Failed to fetch' }, { status: 500 });
   }
-
-  return NextResponse.json({ artists: data ?? [] });
 }

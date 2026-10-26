@@ -1,40 +1,48 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+  const keyword = searchParams.get('keyword') || 'Live Nation';
+  
+  const API_KEY = process.env.TICKETMASTER_API_KEY || 'YOUR_API_KEY_HERE'; 
 
-export async function GET(req: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  try {
+    let url = '';
+    if (id) {
+      url = `https://app.ticketmaster.com/discovery/v2/attractions/${id}.json?apikey=${API_KEY}`;
+    } else {
+      // Promoters don't exist on TM, so we use attractions or organizations
+      url = `https://app.ticketmaster.com/discovery/v2/attractions.json?apikey=${API_KEY}&keyword=${keyword}&size=24`;
+    }
 
-  if (!url || !key) {
-    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) throw new Error('Ticketmaster API failed');
+    const data = await res.json();
+
+    if (id) {
+      const p = data;
+      return NextResponse.json({
+        id: p.id,
+        name: p.name,
+        city: 'Global',
+        bio: p.info || p.pleaseNote || `Promoter profile for ${p.name}.`,
+        image: p.images?.find((img: any) => img.ratio === '16_9')?.url || p.images?.[0]?.url || 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80',
+        tmUrl: p.url,
+      });
+    } else {
+      const items = data._embedded?.attractions || [];
+      const formatted = items.map((p: any) => {
+        return {
+          id: p.id,
+          name: p.name,
+          city: 'Global',
+          image: p.images?.find((img: any) => img.ratio === '16_9')?.url || p.images?.[0]?.url || 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&q=80',
+        };
+      });
+      return NextResponse.json({ promoters: formatted });
+    }
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 });
   }
-
-  const supabase = createClient(url, key);
-  const params = req.nextUrl.searchParams;
-
-  const city = params.get('city');
-  const verifiedOnly = params.get('verified') === 'true';
-  const q = params.get('q');
-
-  let query = supabase
-    .from('promoters')
-    .select('id, display_name, bio, instagram, tiktok, youtube, city, commission_rate, verified, created_at, next_event, event_count, tickets_sold, photos')
-    .order('verified', { ascending: false })
-    .order('created_at', { ascending: false })
-    .limit(100);
-
-  if (city && city !== 'All') query = query.eq('city', city);
-  if (verifiedOnly) query = query.eq('verified', true);
-  if (q) query = query.or(`display_name.ilike.%${q}%,city.ilike.%${q}%,bio.ilike.%${q}%`);
-
-  const { data, error } = await query;
-
-  if (error) {
-    console.error('promoters GET error:', error);
-    return NextResponse.json({ error: 'Could not load promoters', detail: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json({ promoters: data ?? [] });
 }
