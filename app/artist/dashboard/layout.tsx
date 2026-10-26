@@ -1,8 +1,8 @@
 ﻿import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { supabase } from '@/lib/supabase';
 
 export default async function artistDashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
+  const supabase = supabase;
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 

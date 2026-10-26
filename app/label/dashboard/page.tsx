@@ -1,8 +1,8 @@
 ﻿import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { supabase } from '@/lib/supabase';
 
 export default async function LabelDashboardPage() {
-  const supabase = await createClient();
+  const supabase = supabase;
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login?next=/label/dashboard');
 
@@ -19,9 +19,7 @@ export default async function LabelDashboardPage() {
     <div className="min-h-screen bg-gray-50 px-6 py-12">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">Label Dashboard</h1>
-        <p className="text-gray-600 mb-8">
-          A&R / record company tools — manage your roster, scout talent, track releases.
-        </p>
+        <p className="text-gray-600 mb-8">A&R / record company tools - manage your roster, scout talent, track releases.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="rounded-2xl border border-gray-200 bg-white p-6">
