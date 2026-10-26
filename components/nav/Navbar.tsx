@@ -43,10 +43,30 @@ export function Navbar({ user }: { user: NavbarUser }) {
           )}
         </ul>
         <div className="flex items-center gap-2">
-          <NotificationBell />
-          <ProfileMenu user={user} />
+          {user ? (
+            <>
+              <NotificationBell />
+              <ProfileMenu user={user} />
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="rounded-full px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/signup"
+                className="rounded-full bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-800"
+              >
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>
   );
 }
+
