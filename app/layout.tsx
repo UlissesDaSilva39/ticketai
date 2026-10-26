@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter, Antonio } from "next/font/google";
 import { createServerSupabase } from "@/lib/supabase/server";
 import SignOutButton from "@/components/SignOutButton";
@@ -39,21 +39,21 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "GRID â€” The network for music.",
+    default: "GRID — The network for music.",
     template: "%s | GRID",
   },
   description:
-    "The social and professional network for live music â€” discover events, connect with artists, book talent, and grow your career.",
+    "The social and professional network for live music — discover events, connect with artists, book talent, and grow your career.",
   openGraph: {
     type: "website",
     siteName: "GRID",
-    title: "GRID â€” The network for music.",
+    title: "GRID — The network for music.",
     description: "Discover events. Connect with artists. Book talent. Grow your career.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "GRID â€” The network for music.",
+    title: "GRID — The network for music.",
     description: "Discover events. Connect with artists. Book talent. Grow your career.",
   },
 };
@@ -126,7 +126,7 @@ export default async function RootLayout({
         className={`${inter.variable} ${antonio.variable} font-sans antialiased bg-white text-black`}
       >
         <Navbar
-        user={{
+          user={
             user
               ? {
                   email: user.email ?? null,
@@ -135,10 +135,7 @@ export default async function RootLayout({
                   artistSlug,
                   displayName: username,
                   pendingRequestCount,
-          role: profile?.role ?? 'fan',
-          clubTier: profile?.club_tier ?? 'free'
-        }}
-      
+                }
               : null
           }
           notificationCount={notificationCount}
@@ -167,7 +164,7 @@ export default async function RootLayout({
                 className="block text-sm uppercase tracking-[0.3em] text-gray-400 mb-4"
                 style={{ fontFamily: "var(--font-antonio)" }}
               >
-                Discover Â· Connect Â· Create Â· Book Â· Grow
+                Discover · Connect · Create · Book · Grow
               </span>
               {"\u00A9 " +
                 new Date().getFullYear() +
@@ -182,7 +179,6 @@ export default async function RootLayout({
     </html>
   );
 }
-
 
 
 

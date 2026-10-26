@@ -1,40 +1,46 @@
-﻿import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+﻿// GRID - Proxy (migrated from middleware.ts for Next.js 16)
+// Next.js 16 requires the middleware logic to live in proxy.ts
 
-const PROTECTED = ["/home", "/messages", "/notifications", "/profile"];
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-function isProtected(pathname: string) {
-  return PROTECTED.some(
-    (p) => pathname === p || pathname.startsWith(p + "/")
-  );
+const ROLE_ROUTES: Record<string, string[]> = {
+  '/artist/dashboard':    ['artist', 'admin'],
+  '/promoter/dashboard':  ['promoter', 'admin'],
+  '/venue/dashboard':     ['venue', 'admin'],
+  '/organizer':           ['promoter', 'admin'],
+  '/analytics':           ['artist', 'promoter', 'venue', 'admin'],
+};
+
+const CLUB_ROUTES = ['/analytics'];
+
+export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const role = request.cookies.get('grid_role')?.value || null;
+  const club = request.cookies.get('grid_club')?.value || 'free';
+
+  for (const [prefix, allowedRoles] of Object.entries(ROLE_ROUTES)) {
+    if (pathname.startsWith(prefix)) {
+      if (role && !allowedRoles.includes(role)) {
+        return NextResponse.redirect(new URL('/unauthorized', request.url));
+      }
+      if (CLUB_ROUTES.some((p) => pathname.startsWith(p))) {
+        if (club !== 'pro' && club !== 'premium') {
+          return NextResponse.redirect(new URL('/club/upgrade', request.url));
+        }
+      }
+    }
+  }
+
+  return NextResponse.next();
 }
 
-function hasSession(req: NextRequest) {
-  const cookies = req.cookies.getAll();
-  return cookies.some((c) => {
-    const n = c.name;
-    return (
-      n === "sb-access-token" ||
-      n === "sb-refresh-token" ||
-      (n.startsWith("sb-") && n.endsWith("-auth-token"))
-    );
-  });
-}
-
-export function proxy(req: NextRequest) {
-  const { pathname, search } = req.nextUrl;
-  if (!isProtected(pathname)) return NextResponse.next();
-  if (hasSession(req)) return NextResponse.next();
-
-  const url = req.nextUrl.clone();
-  url.pathname = "/login";
-  url.search = "";
-  url.searchParams.set("next", pathname + search);
-  return NextResponse.redirect(url);
-}
-
-// Match the exact paths AND their subpaths. Bare "/home" must match.
-// Using a broad matcher and filtering inside is the reliable pattern.
 export const config = {
-  matcher: ["/home", "/home/:path*", "/messages", "/messages/:path*", "/notifications", "/notifications/:path*", "/profile", "/profile/:path*"],
+  matcher: [
+    '/artist/dashboard/:path*',
+    '/promoter/dashboard/:path*',
+    '/venue/dashboard/:path*',
+    '/organizer/:path*',
+    '/analytics/:path*',
+  ],
 };
