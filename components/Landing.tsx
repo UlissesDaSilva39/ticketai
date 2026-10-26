@@ -252,155 +252,315 @@ export default function Home() {
 <section className="max-w-6xl mx-auto px-6 py-12"><a href="/discover/venues" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition"><img src="/screenshots/venues.svg" alt="GRID venues page" className="w-full" /></a></section>
 <section className="max-w-6xl mx-auto px-6 py-20">
 <div className="text-center mb-12">
-<h2 className="text-4xl font-bold mb-3"><section className="bg-gray-50 border-y border-gray-200 py-20">
+<h2 className="text-4xl font-bold mb-3">{/* ============ SECTION A - SELL TICKETS / FILL ROOMS ============ */}
+<section className="bg-gray-50 border-y border-gray-200 py-20">
   <div className="max-w-6xl mx-auto px-6">
     <div className="text-center mb-12">
-      <h2 className="text-4xl font-bold mb-3">Every page, built for you</h2>
-      <p className="text-gray-600">Screenshots from the real app - click any to try it.</p>
+      <h2 className="text-4xl font-bold mb-3">Sell tickets. Fill rooms. Get booked.</h2>
+      <p className="text-gray-600 max-w-2xl mx-auto">Every tool you need to run a night — face-value resale, escrow payments, instant payouts. All in one place.</p>
     </div>
 
-    <div className="mb-16">
-      <a href="/" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/home.svg" alt="GRID home page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Home - the network for music</h3>
-          <p className="text-sm text-gray-600">One feed for artists, promoters, venues, and fans. Create your free profile in 2 minutes.</p>
+    <div className="space-y-20">
+
+      {/* EVENTS */}
+      <div className="flex flex-col md:flex-row items-start gap-8">
+        <div className="w-full md:w-1/2 flex-shrink-0">
+          <a href="/discover/events" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+            <img src="/screenshots/events.svg" alt="Events page" className="w-full" />
+          </a>
         </div>
-        <a href="/signup" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">Sign up</a>
-      </div>
-    </div>
-
-    <div className="mb-16">
-      <a href="/artists" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/artists.svg" alt="Artists page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Artists - your career, one URL</h3>
-          <p className="text-sm text-gray-600">DJs, producers, bands, vocalists. Filter by genre, city, availability.</p>
-          <ul className="mt-3 space-y-1 text-sm text-gray-700">
-            <li>Verified artist profiles with music player</li>
-            <li>Booking requests directly to their inbox</li>
-            <li>Analytics dashboard</li>
+        <div className="w-full md:w-1/2">
+          <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">Events</div>
+          <h3 className="text-2xl font-bold mb-3">Sell tickets your way — no hidden fees</h3>
+          <p className="text-gray-600 mb-4">Sell directly from your page. Face-value resale with anti-tout protection. Waitlists for sold-out shows. Every transaction protected by escrow.</p>
+          <ul className="space-y-2 text-sm text-gray-700 mb-6">
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>2-click checkout with saved cards, Apple Pay, Google Pay</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Face-value resale — anti-tout protection, no scalping</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>33% higher conversion than standard checkout</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Instant payouts — get paid the day after the event</li>
           </ul>
+          <a href="/discover/events" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+            Browse events
+          </a>
         </div>
-        <a href="/artists" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">Browse artists</a>
       </div>
-    </div>
 
-    <div className="mb-16">
-      <a href="/discover/events" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/events.svg" alt="Events page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Events - sell tickets your way</h3>
-          <p className="text-sm text-gray-600">Sell directly. No hidden fees. Instant settlement. Face-value resale. Anti-tout protection. Waitlists.</p>
-          <ul className="mt-3 space-y-1 text-sm text-gray-700">
-            <li>2-click checkout (Apple Pay, Google Pay)</li>
-            <li>Face-value resale with anti-tout locks</li>
-            <li>33% higher conversion than standard</li>
-          </ul>
+      {/* VENUES */}
+      <div className="flex flex-col md:flex-row-reverse items-start gap-8">
+        <div className="w-full md:w-1/2 flex-shrink-0">
+          <a href="/discover/venues" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+            <img src="/screenshots/venues.svg" alt="Venues page" className="w-full" />
+          </a>
         </div>
-        <a href="/discover/events" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">Browse events</a>
+        <div className="w-full md:w-1/2">
+          <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">Venues</div>
+          <h3 className="text-2xl font-bold mb-3">Fill every night on your calendar</h3>
+          <p className="text-gray-600 mb-4">List your space. Get booked by verified promoters. Track revenue per night. No more empty Tuesdays. Real-time availability calendar and occupancy analytics.</p>
+          <ul className="space-y-2 text-sm text-gray-700 mb-6">
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Verified promoter bookings with escrow protection</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Revenue per night + occupancy analytics dashboard</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Compliance, capacity, and staff management</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Bar and food upsell at checkout</li>
+          </ul>
+          <a href="/venues/join" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+            List your venue
+          </a>
+        </div>
       </div>
-    </div>
 
-    <div className="mb-16">
-      <a href="/discover/venues" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/venues.svg" alt="Venues page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Venues - fill every night</h3>
-          <p className="text-sm text-gray-600">List your space. Get booked by verified promoters. Track revenue per night.</p>
-          <ul className="mt-3 space-y-1 text-sm text-gray-700">
-            <li>Verified promoter bookings</li>
-            <li>Revenue per night + occupancy analytics</li>
-            <li>Compliance and staff management</li>
-          </ul>
+      {/* PROMOTERS */}
+      <div className="flex flex-col md:flex-row items-start gap-8">
+        <div className="w-full md:w-1/2 flex-shrink-0">
+          <a href="/discover/promoters" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+            <img src="/screenshots/promoters.svg" alt="Promoters page" className="w-full" />
+          </a>
         </div>
-        <a href="/venues/join" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">List your venue</a>
+        <div className="w-full md:w-1/2">
+          <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">Promoters</div>
+          <h3 className="text-2xl font-bold mb-3">The people who fill rooms</h3>
+          <p className="text-gray-600 mb-4">Discover verified promoters in your city. See their past events, audience reach, and reputation. Book them directly with escrow protection.</p>
+          <ul className="space-y-2 text-sm text-gray-700 mb-6">
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Verified profiles with full event history</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Direct booking with escrow — no more chasing emails</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Track record — reviews from venues</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Audience demographics — know who you're reaching</li>
+          </ul>
+          <a href="/promoters/join" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+            Become a promoter
+          </a>
+        </div>
       </div>
-    </div>
 
-    <div className="mb-16">
-      <a href="/discover/promoters" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/promoters.svg" alt="Promoters page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Promoters - the people who fill rooms</h3>
-          <p className="text-sm text-gray-600">Verified promoters with past events, audience reach, and reputation.</p>
-          <ul className="mt-3 space-y-1 text-sm text-gray-700">
-            <li>Verified profiles with event history</li>
-            <li>Direct booking with escrow</li>
-            <li>Track record - reviews from venues</li>
-          </ul>
-        </div>
-        <a href="/promoters/join" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">Become a promoter</a>
-      </div>
-    </div>
-
-    <div className="mb-16">
-      <a href="/opportunities" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/opportunities.svg" alt="Opportunities page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Opportunities - gigs, jobs, collaborations</h3>
-          <p className="text-sm text-gray-600">Every open role in one feed. Bookings, freelance gigs, session work.</p>
-          <ul className="mt-3 space-y-1 text-sm text-gray-700">
-            <li>Gigs by genre, city, budget</li>
-            <li>One-click apply with your profile</li>
-            <li>Direct messaging with hirers</li>
-          </ul>
-        </div>
-        <a href="/opportunities" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">See opportunities</a>
-      </div>
-    </div>
-
-    <div className="mb-16">
-      <a href="/messages" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/messages.svg" alt="Messages page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Messages - talk directly to the industry</h3>
-          <p className="text-sm text-gray-600">No more chasing emails. Message promoters, venues, artists in one inbox.</p>
-          <ul className="mt-3 space-y-1 text-sm text-gray-700">
-            <li>Real-time messaging</li>
-            <li>Contract signing inside the app</li>
-            <li>Message history kept for reference</li>
-          </ul>
-        </div>
-        <a href="/messages" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">Open messages</a>
-      </div>
-    </div>
-
-    <div className="mb-16">
-      <a href="/merch" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-md hover:border-violet-300 transition mb-4">
-        <img src="/screenshots/merch.svg" alt="Merch page" className="w-full" />
-      </a>
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <h3 className="text-2xl font-bold mb-2">Merch - sell more than tickets</h3>
-          <p className="text-sm text-gray-600">Artists sell official merch directly to fans. T-shirts, vinyl, VIP bundles.</p>
-          <ul className="mt-3 space-y-1 text-sm text-gray-700">
-            <li>Sell merch + tickets in one checkout</li>
-            <li>Print-on-demand integration</li>
-            <li>30% average revenue uplift per fan</li>
-          </ul>
-        </div>
-        <a href="/merch" className="shrink-0 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">Browse merch</a>
-      </div>
     </div>
   </div>
 </section>
 
+{/* ============ SECTION B - BUILD YOUR CAREER ============ */}
 <section className="max-w-6xl mx-auto px-6 py-20">
+  <div className="text-center mb-12">
+    <h2 className="text-4xl font-bold mb-3">Build your career. Get discovered.</h2>
+    <p className="text-gray-600 max-w-2xl mx-auto">One URL for your whole career. Talk to the industry. Find your next gig.</p>
+  </div>
+
+  <div className="space-y-20">
+
+    {/* ARTISTS */}
+    <div className="flex flex-col md:flex-row-reverse items-start gap-8">
+      <div className="w-full md:w-1/2 flex-shrink-0">
+        <a href="/artists" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+          <img src="/screenshots/artists.svg" alt="Artists page" className="w-full" />
+        </a>
+      </div>
+      <div className="w-full md:w-1/2">
+        <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">Artists</div>
+        <h3 className="text-2xl font-bold mb-3">Your career, one URL</h3>
+        <p className="text-gray-600 mb-4">DJs, producers, bands, vocalists. Filter by genre, city, availability. Every profile is verified with a music player, shows, bio, and direct booking.</p>
+        <ul className="space-y-2 text-sm text-gray-700 mb-6">
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Verified artist profiles with embedded music player</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Booking requests directly to your inbox</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Analytics dashboard — see who's actually listening</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Instant payout after every show</li>
+        </ul>
+        <a href="/artists" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+          Browse 45,000+ artists
+        </a>
+      </div>
+    </div>
+
+    {/* MESSAGES */}
+    <div className="flex flex-col md:flex-row items-start gap-8">
+      <div className="w-full md:w-1/2 flex-shrink-0">
+        <a href="/messages" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+          <img src="/screenshots/messages.svg" alt="Messages page" className="w-full" />
+        </a>
+      </div>
+      <div className="w-full md:w-1/2">
+        <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">Messages</div>
+        <h3 className="text-2xl font-bold mb-3">Talk directly to the industry</h3>
+        <p className="text-gray-600 mb-4">No more chasing emails. Message promoters, venues, artists, and managers in one inbox. Contracts sent and signed inside the app — no third-party tools.</p>
+        <ul className="space-y-2 text-sm text-gray-700 mb-6">
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Real-time messaging with read receipts</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Contract signing inside the app</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Message history kept — searchable for reference</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Group threads for multi-party bookings</li>
+        </ul>
+        <a href="/messages" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+          Open messages
+        </a>
+      </div>
+    </div>
+
+    {/* OPPORTUNITIES */}
+    <div className="flex flex-col md:flex-row-reverse items-start gap-8">
+      <div className="w-full md:w-1/2 flex-shrink-0">
+        <a href="/opportunities" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+          <img src="/screenshots/opportunities.svg" alt="Opportunities page" className="w-full" />
+        </a>
+      </div>
+      <div className="w-full md:w-1/2">
+        <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">Opportunities</div>
+        <h3 className="text-2xl font-bold mb-3">Gigs, jobs, collaborations</h3>
+        <p className="text-gray-600 mb-4">Every open role in one feed. Bookings, freelance gigs, session work, and collaborations. Apply with your GRID profile in one click.</p>
+        <ul className="space-y-2 text-sm text-gray-700 mb-6">
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Filter by genre, city, and budget</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>One-click apply with your profile</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Direct messaging with hirers before accepting</li>
+          <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Escrow-protected payment on acceptance</li>
+        </ul>
+        <a href="/opportunities" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+          See opportunities
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{/* ============ SECTION C - SELL MORE THAN TICKETS ============ */}
+<section className="bg-gray-50 border-y border-gray-200 py-20">
+  <div className="max-w-6xl mx-auto px-6">
+    <div className="text-center mb-12">
+      <h2 className="text-4xl font-bold mb-3">Sell more than tickets.</h2>
+      <p className="text-gray-600 max-w-2xl mx-auto">Merch, music, VIP bundles. All in one checkout. 30% average revenue uplift per fan.</p>
+    </div>
+
+    <div className="space-y-20">
+
+      {/* MERCH */}
+      <div className="flex flex-col md:flex-row items-start gap-8">
+        <div className="w-full md:w-1/2 flex-shrink-0">
+          <a href="/merch" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+            <img src="/screenshots/merch.svg" alt="Merch page" className="w-full" />
+          </a>
+        </div>
+        <div className="w-full md:w-1/2">
+          <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">Merch</div>
+          <h3 className="text-2xl font-bold mb-3">Official merch, direct from artists</h3>
+          <p className="text-gray-600 mb-4">Artists sell official merch directly to fans. T-shirts, vinyl, VIP bundles. Fans pay at checkout with their ticket. No middleman fees.</p>
+          <ul className="space-y-2 text-sm text-gray-700 mb-6">
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Sell merch + tickets in one checkout</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Print-on-demand integration — no inventory</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>30% average revenue uplift per fan</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Fans get merch shipped with ticket confirmation</li>
+          </ul>
+          <a href="/merch" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+            Browse merch
+          </a>
+        </div>
+      </div>
+
+      {/* HOME */}
+      <div className="flex flex-col md:flex-row-reverse items-start gap-8">
+        <div className="w-full md:w-1/2 flex-shrink-0">
+          <a href="/" className="block rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg hover:border-violet-300 transition">
+            <img src="/screenshots/home.svg" alt="GRID home" className="w-full" />
+          </a>
+        </div>
+        <div className="w-full md:w-1/2">
+          <div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-2">The network</div>
+          <h3 className="text-2xl font-bold mb-3">One feed for everything</h3>
+          <p className="text-gray-600 mb-4">Artists, promoters, venues, and fans in one place. Create your free profile in 2 minutes. Pick your role. Add your links. Start booking.</p>
+          <ul className="space-y-2 text-sm text-gray-700 mb-6">
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Discover events, artists, promoters in one feed</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Follow who matters — curated, not algorithmic</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>Free forever — only pay when you sell tickets</li>
+            <li className="flex items-start gap-2"><span className="text-green-500 font-bold">✓</span>4 million+ monthly visitors</li>
+          </ul>
+          <a href="/signup" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-6 py-3 font-semibold hover:bg-neutral-800">
+            Create free profile
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{/* ============ SECTION D - REAL PEOPLE ============ */}
+<section className="max-w-6xl mx-auto px-6 py-20">
+  <div className="text-center mb-12">
+    <h2 className="text-4xl font-bold mb-3">Real people. Real rooms. Real nights.</h2>
+    <p className="text-gray-600 max-w-2xl mx-auto">Meet some of the artists, venues, and promoters already on GRID. 45,000+ verified profiles.</p>
+  </div>
+
+  <div className="mb-16">
+    <div className="flex items-center justify-between mb-6">
+      <h3 className="text-2xl font-bold">Featured artists</h3>
+      <a href="/artists" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 45,000+ →</a>
+    </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      {[
+        { name: 'DJ Poxy', role: 'DJ - House', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop' },
+        { name: 'Ultra Nate', role: 'Vocalist', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
+        { name: 'Honey Dijon', role: 'DJ - Techno', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=300&h=300&fit=crop' },
+        { name: 'Floating Points', role: 'Producer', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=300&h=300&fit=crop' },
+        { name: 'Peggy Gou', role: 'DJ - House', city: 'Berlin', img: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop' },
+        { name: 'Four Tet', role: 'Producer', city: 'London', img: 'https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=300&h=300&fit=crop' },
+      ].map((a) => (
+        <div key={a.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition group cursor-pointer">
+          <img src={a.img} alt={a.name} className="w-full aspect-square object-cover group-hover:scale-105 transition duration-300" />
+          <div className="p-3">
+            <div className="font-semibold text-sm">{a.name}</div>
+            <div className="text-xs text-gray-500">{a.role} - {a.city}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div className="mb-16">
+    <div className="flex items-center justify-between mb-6">
+      <h3 className="text-2xl font-bold">Featured venues</h3>
+      <a href="/discover/venues" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 8,000+ →</a>
+    </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      {[
+        { name: 'Fabric', city: 'London', cap: '1,600 cap', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=300&fit=crop' },
+        { name: 'Berghain', city: 'Berlin', cap: '1,500 cap', img: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=300&h=300&fit=crop' },
+        { name: 'The Warehouse', city: 'Amsterdam', cap: '2,000 cap', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&h=300&fit=crop' },
+        { name: 'Basement 44', city: 'London', cap: '300 cap', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop' },
+        { name: 'Blue Note', city: 'Paris', cap: '500 cap', img: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=300&h=300&fit=crop' },
+        { name: 'Village Underground', city: 'London', cap: '700 cap', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
+      ].map((v) => (
+        <div key={v.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition group cursor-pointer">
+          <img src={v.img} alt={v.name} className="w-full aspect-square object-cover group-hover:scale-105 transition duration-300" />
+          <div className="p-3">
+            <div className="font-semibold text-sm">{v.name}</div>
+            <div className="text-xs text-gray-500">{v.city} - {v.cap}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div>
+    <div className="flex items-center justify-between mb-6">
+      <h3 className="text-2xl font-bold">Featured promoters</h3>
+      <a href="/discover/promoters" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 12,000+ →</a>
+    </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      {[
+        { name: 'Nightshift Presents', city: 'London', events: '24 events', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop' },
+        { name: 'Techno Nation', city: 'London', events: '31 events', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=300&fit=crop' },
+        { name: 'Electronic Europe', city: 'Amsterdam', events: '19 events', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
+        { name: 'East End Promotions', city: 'London', events: '22 events', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop' },
+        { name: 'Bristol Underground', city: 'Bristol', events: '15 events', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&h=300&fit=crop' },
+        { name: 'DnB Nation', city: 'London', events: '28 events', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=300&h=300&fit=crop' },
+      ].map((p) => (
+        <div key={p.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition group cursor-pointer">
+          <img src={p.img} alt={p.name} className="w-full aspect-square object-cover group-hover:scale-105 transition duration-300" />
+          <div className="p-3">
+            <div className="font-semibold text-sm">{p.name}</div>
+            <div className="text-xs text-gray-500">{p.city} - {p.events}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+
+      <section className="max-w-6xl mx-auto px-6 py-20">
   <div className="text-center mb-12">
     <h2 className="text-4xl font-bold mb-3">Real people. Real rooms. Real nights.</h2>
     <p className="text-gray-600">Meet some of the artists, venues, and promoters already on GRID.</p>
@@ -595,6 +755,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 
