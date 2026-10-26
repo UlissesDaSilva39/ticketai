@@ -7,11 +7,11 @@ import { supabase } from '@/lib/supabase';
 
 type SignupRole = 'fan' | 'artist' | 'promoter' | 'venue';
 
-const ROLE_OPTIONS: { value: SignupRole; label: string; description: string; icon: string }[] = [
-  { value: 'fan',      label: 'Fan',      description: 'Follow artists, buy tickets, discover new music', icon: '🎧' },
-  { value: 'artist',   label: 'Artist',   description: 'DJ, producer, vocalist, band, A&R, record company', icon: '🎤' },
-  { value: 'promoter', label: 'Promoter', description: 'Run events, book artists, sell tickets', icon: '📅' },
-  { value: 'venue',    label: 'Venue',    description: 'List your space and get discovered', icon: '🏛️' },
+const ROLE_OPTIONS: { value: SignupRole; label: string; description: string }[] = [
+  { value: 'fan',      label: 'Fan',      description: 'Follow artists, buy tickets, discover new music' },
+  { value: 'artist',   label: 'Artist',   description: 'DJ, producer, vocalist, band, A&R, record company' },
+  { value: 'promoter', label: 'Promoter', description: 'Run events, book artists, sell tickets' },
+  { value: 'venue',    label: 'Venue',    description: 'List your space and get discovered' },
 ];
 
 export default function SignupPage() {
@@ -135,7 +135,6 @@ export default function SignupPage() {
                         : 'border-gray-200 bg-white hover:border-gray-300')
                     }
                   >
-                    <div className="text-2xl mb-2">{r.icon}</div>
                     <div className={
                       'font-semibold text-sm mb-1 ' +
                       (selected ? 'text-violet-700' : 'text-gray-900')
@@ -179,7 +178,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full bg-gradient-to-r from-violet-600 to-pink-500 text-white font-semibold py-3 disabled:opacity-50"
+            className="w-full rounded-full bg-black text-white font-semibold py-3 hover:bg-neutral-800 disabled:opacity-50"
           >
             {loading ? 'Creating account...' : 'Create account'}
           </button>
