@@ -1,3 +1,4 @@
+﻿import { Sidebar } from '@/components/sidebar/Sidebar';
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -100,7 +101,7 @@ export default async function FollowingPage() {
   const total = promoters.length + venues.length;
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
+    <div className="grid grid-cols-12 gap-6 max-w-7xl mx-auto px-6 py-8"><nav aria-label="Your library" className="col-span-12 lg:col-span-3"><Sidebar /></nav><main className="max-w-3xl mx-auto px-6 py-12" class="col-span-12 lg:col-span-9">
       <h1
         className="text-5xl font-bold uppercase mb-8"
         style={{ fontFamily: "var(--font-antonio)" }}
@@ -160,7 +161,7 @@ export default async function FollowingPage() {
                             {evs.map((e) => (
                               <li key={e.id}>
                                 <Link href={"/event/" + e.id} className="text-sm hover:underline">
-                                  <span className="text-gray-500">{formatDate(e.start_date)}</span> · {e.title}
+                                  <span className="text-gray-500">{formatDate(e.start_date)}</span> Â· {e.title}
                                 </Link>
                               </li>
                             ))}
@@ -201,6 +202,6 @@ export default async function FollowingPage() {
           )}
         </>
       )}
-    </div>
+    </main></div></div>
   );
 }
