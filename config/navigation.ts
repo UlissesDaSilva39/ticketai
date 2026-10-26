@@ -1,119 +1,107 @@
-export const PRIMARY_NAV = [
-  { key: 'home',        label: 'Home',           href: '/home',                auth: 'any'  },
-  { key: 'discover',    label: 'Discover',       href: '/discover/artists', auth: 'any',  dropdown: 'discover' },
-  { key: 'search',      label: 'Search',         href: '/search',          auth: 'any'  },
-  { key: 'artists',     label: 'Artists',        href: '/artists',         auth: 'any',  dropdown: 'artists' },
-  { key: 'social',      label: 'Social',         href: '/feed',            auth: 'user', dropdown: 'social' },
-  { key: 'network',     label: 'Network',        href: '/network',         auth: 'user', dropdown: 'network' },
-  { key: 'tickets',     label: 'My Tickets',     href: '/my-tickets',      auth: 'user' },
-  { key: 'artist-page', label: 'My artist page', href: '/artist',          auth: 'user' },
-] as const;
+﻿// GRID - Canonical Navigation Config
+// Exactly 7 top-level items. My Tickets + My artist page live in ProfileMenu only.
 
-export const ARTISTS_DROPDOWN = {
-  sections: [
-    { title: 'ARTISTS', items: [
-      { label: 'All Artists',           href: '/artists' },
-      { label: 'DJs',                   href: '/artists?type=dj' },
-      { label: 'Producers',             href: '/artists?type=producer' },
-      { label: 'Vocalists',             href: '/artists?type=vocalist' },
-      { label: 'Bands',                 href: '/artists?type=band' },
-    ]},
-    { title: 'DISCOVER', items: [
-      { label: 'Trending Artists',      href: '/artists?sort=trending' },
-      { label: 'New Releases',          href: '/artists?sort=new' },
-    ]},
-  ],
-} as const;
+export type NavRole = 'user' | 'artist' | 'promoter' | 'venue' | 'admin' | 'guest';
 
-export const SOCIAL_DROPDOWN = {
-  sections: [
-    { title: 'SOCIAL', items: [
-      { label: 'Feed',        href: '/feed' },
-      { label: 'Friends',     href: '/friends' },
-      { label: 'Messages',    href: '/messages' },
-      { label: 'People',      href: '/people' },
-      { label: 'Notifications', href: '/notifications' },
-    ]},
-    { title: 'MY SOCIAL', items: [
-      { label: 'My Profile',  href: '/profile' },
-      { label: 'Following',   href: '/following' },
-    ]},
-  ],
-} as const;
+export type NavSubItem = { label: string; href: string; description?: string };
+export type NavSection = { title: string; items: NavSubItem[] };
 
-export const NETWORK_DROPDOWN = {
-  sections: [
-    { title: 'NETWORK', items: [
-      { label: 'People',     href: '/people' },
-      { label: 'Artists',    href: '/artists' },
-      { label: 'Promoters',  href: '/promoters' },
-      { label: 'Venues',     href: '/venues' },
-    ]},
-    { title: 'OPPORTUNITIES', items: [
-      { label: 'All Opportunities', href: '/opportunities' },
-      { label: 'Gigs',              href: '/opportunities?type=gig' },
-      { label: 'Jobs',              href: '/opportunities?type=job' },
-      { label: 'Collaborations',    href: '/opportunities?type=collab' },
-      { label: 'Festivals',         href: '/opportunities?type=festival' },
-    ]},
-    { title: 'MY NETWORK', items: [
-      { label: 'Connections',   href: '/connections' },
-      { label: 'Following',     href: '/following' },
-      { label: 'Messages',      href: '/messages' },
-      { label: 'Notifications', href: '/notifications' },
-    ]},
-  ],
-} as const;
+export type NavItem = {
+  key: string;
+  label: string;
+  href: string;
+  dropdown?: keyof typeof DROPDOWN_MAP;
+  auth?: NavRole[];
+};
 
-
-export const DISCOVER_DROPDOWN = {
-  sections: [
-    { title: 'DISCOVER', items: [
-      { label: 'Events',          href: '/discover/events' },
-      { label: 'Artists',         href: '/discover/artists' },
-      { label: 'Venues',          href: '/discover/venues' },
-      { label: 'Promoters',       href: '/discover/promoters' },
-    ]},
-    { title: 'BROWSE', items: [
-      { label: 'Events',          href: '/events' },
-      { label: 'Opportunities',   href: '/opportunities' },
-      { label: 'Search',          href: '/search' },
-    ]},
-  ],
-} as const;
+export const PRIMARY_NAV: NavItem[] = [
+  { key: 'home',          label: 'Home',          href: '/' },
+  { key: 'discover',      label: 'Discover',      href: '/discover',      dropdown: 'discover' },
+  { key: 'search',        label: 'Search',        href: '/search' },
+  { key: 'artists',       label: 'Artists',       href: '/artists',       dropdown: 'artists' },
+  { key: 'social',        label: 'Social',        href: '/feed',          dropdown: 'social' },
+  { key: 'network',       label: 'Network',       href: '/network',       dropdown: 'network' },
+  { key: 'opportunities', label: 'Opportunities', href: '/opportunities' },
+];
 
 export const DROPDOWN_MAP = {
-  discover: DISCOVER_DROPDOWN,
-  artists: ARTISTS_DROPDOWN,
-  social:  SOCIAL_DROPDOWN,
-  network: NETWORK_DROPDOWN,
-} as const;
-
-export const PROFILE_MENU = {
-  header: {
-    name: 'Ulisses Da Silva',
-    subtitle: 'Music Entrepreneur · Producer',
+  discover: {
+    sections: [
+      {
+        title: 'Browse',
+        items: [
+          { label: 'Overview',  href: '/discover' },
+          { label: 'Artists',   href: '/discover/artists' },
+          { label: 'Venues',    href: '/discover/venues' },
+          { label: 'Events',    href: '/discover/events' },
+        ],
+      },
+      {
+        title: 'More',
+        items: [
+          { label: 'Promoters', href: '/discover/promoters' },
+          { label: 'Festivals', href: '/discover/festivals' },
+          { label: 'Labels',    href: '/discover/labels' },
+        ],
+      },
+    ],
   },
-  sections: [
-    { title: 'MY GRID', items: [
-      { label: 'My Profile',      href: '/profile' },
-      { label: 'My Artist Page',  href: '/artist' },
-      { label: 'My Tickets',      href: '/my-tickets' },
-      { label: 'Following',       href: '/following' },
-      { label: 'Friends',         href: '/friends' },
-      { label: 'Messages',        href: '/messages' },
-      { label: 'Notifications',   href: '/notifications' },
-    ]},
-    { title: 'SWITCH TO BUSINESS', items: [
-      { label: 'Organizer',           href: '/organizer' },
-      { label: 'Promoter',            href: '/promoter/dashboard' },
-      { label: 'Venue',               href: '/venue/dashboard' },
-      { label: 'Artist / Management', href: '/artist' },
-    ]},
-  ],
-  footer: [
-    { label: 'Settings', href: '/settings' },
-    { label: 'Sign out', href: '/auth/signout' },
-  ],
+  artists: {
+    sections: [
+      {
+        title: 'By Type',
+        items: [
+          { label: 'All Artists', href: '/artists' },
+          { label: 'DJs',         href: '/artists?type=dj' },
+          { label: 'Producers',   href: '/artists?type=producer' },
+          { label: 'Vocalists',   href: '/artists?type=vocalist' },
+          { label: 'Bands',       href: '/artists?type=band' },
+        ],
+      },
+    ],
+  },
+  social: {
+    sections: [
+      {
+        title: 'Your Feed',
+        items: [
+          { label: 'Feed',        href: '/feed' },
+          { label: 'Following',   href: '/following' },
+          { label: 'Connections', href: '/connections' },
+          { label: 'Messages',    href: '/messages' },
+        ],
+      },
+    ],
+  },
+  network: {
+    sections: [
+      {
+        title: 'Network',
+        items: [
+          { label: 'Overview',  href: '/network' },
+          { label: 'People',    href: '/people' },
+          { label: 'Artists',   href: '/network?tab=artists' },
+          { label: 'Promoters', href: '/network?tab=promoters' },
+          { label: 'Venues',    href: '/network?tab=venues' },
+        ],
+      },
+    ],
+  },
 } as const;
 
+// My Tickets + My artist page live HERE - not in top bar.
+export const PROFILE_MENU = [
+  { label: 'Profile',         href: '/profile' },
+  { label: 'My artist page',  href: '/artist/dashboard' },
+  { label: 'My Tickets',      href: '/my-tickets' },
+  { label: 'Settings',        href: '/settings' },
+  { label: 'Log out',         href: '/auth/signout' },
+];
+
+export function navForRole(role: NavRole): NavItem[] {
+  return PRIMARY_NAV.filter((item) => !item.auth || item.auth.includes(role));
+}
+
+export const NAV_LINKS  = PRIMARY_NAV;
+export const NAV_ITEMS  = PRIMARY_NAV;
+export const NAV_CONFIG = { primary: PRIMARY_NAV, dropdowns: DROPDOWN_MAP, profile: PROFILE_MENU };
