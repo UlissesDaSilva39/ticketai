@@ -1,4 +1,5 @@
 ﻿import Link from "next/link";
+import { CATEGORY_PHOTOS } from '@/lib/category-photos';
 
 const TRUST = ["DJ Poxy","Basement 44","Voice Records","Pompeii Odyssey","Ulisses Booking","Demo Ticket"];
 
@@ -634,6 +635,40 @@ export default function Home() {
 </section>
 
 
+      <section className="max-w-6xl mx-auto px-6 py-20">
+  <div className="text-center mb-12">
+    <h2 className="text-4xl font-bold mb-3">Browse by category</h2>
+    <p className="text-gray-600 max-w-2xl mx-auto">Clubs, pubs, theatres, festivals, live music, DJ sets - every kind of night out, in one place.</p>
+  </div>
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    {[
+      { key: 'clubs', label: 'Club nights', href: '/demo/clubs' },
+      { key: 'pubs', label: 'Pubs & bars', href: '/demo/pubs' },
+      { key: 'theatres', label: 'Theatres', href: '/demo/theatres' },
+      { key: 'outdoor', label: 'Festivals', href: '/demo/events' },
+      { key: 'liveMusic', label: 'Live music', href: '/demo/events' },
+      { key: 'dj', label: 'DJ sets', href: '/demo/artists' },
+      { key: 'warehouse', label: 'Warehouse', href: '/demo/venues' },
+      { key: 'jazz', label: 'Jazz clubs', href: '/demo/events' },
+      { key: 'rooftop', label: 'Rooftop bars', href: '/demo/venues' },
+      { key: 'promoters', label: 'Promoters', href: '/demo/promoters' },
+    ].map((cat) => (
+      <a key={cat.key} href={cat.href} className="group relative rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-lg hover:border-violet-300 transition aspect-square">
+        <img src={(CATEGORY_PHOTOS as any)[cat.key]?.[0]} alt={cat.label} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <div className="font-bold text-sm">{cat.label}</div>
+        </div>
+      </a>
+    ))}
+  </div>
+  <div className="text-center mt-8">
+    <a href="/signup" className="inline-flex items-center gap-2 rounded-full bg-black text-white px-8 py-3 font-semibold hover:bg-neutral-800">
+      Sign up to see everything
+    </a>
+  </div>
+</section>
+
       Why not just use...?</h2>
 <p className="text-gray-600">RA, Dice, Eventbrite and Bandcamp each solve one piece. GRID solves all of them.</p>
 </div>
@@ -755,6 +790,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 
