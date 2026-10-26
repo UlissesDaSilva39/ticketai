@@ -56,3 +56,33 @@ button.text-white,
 button.text-white:hover {
   color: #ffffff !important;
 }
+/* =========================================
+   MOBILE FIX: Hide Sidebar & Expand Content
+   ========================================= */
+@media (max-width: 768px) {
+  /* Hide the sidebar (assuming it uses <aside> or a specific class) */
+  aside, 
+  .sidebar, 
+  [class*="sidebar"] {
+    display: none !important;
+  }
+
+  /* Remove the left margin from the main content so it takes 100% width */
+  main, 
+  .main-content,
+  [class*="main-content"] {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+  }
+
+  /* Make the top navbar sticky so users can still navigate */
+  header, nav {
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 50 !important;
+    background-color: white !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+}
