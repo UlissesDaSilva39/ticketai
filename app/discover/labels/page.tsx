@@ -1,86 +1,98 @@
-﻿'use client';
+'use client'
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
-import { useState, useEffect } from 'react';
+export default function DiscoverLabelsPage() {
+  const [labels, setLabels] = useState<any[]>([])
+  const [search, setSearch] = useState('Records')
+  const [loading, setLoading] = useState(true)
 
-type Label = {
-  id: string;
-  name: string;
-  slug: string | null;
-  description: string | null;
-  city: string | null;
-  country: string | null;
-  genres: string[] | null;
-  hero_image: string | null;
-  verified: boolean;
-};
-
-export default function LabelsPage() {
-  const [labels, setLabels] = useState<Label[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const fetchLabels = async (query: string) => {
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/labels?keyword=${query}`)
+      const data = await res.json()
+      setLabels(data.labels || [])
+    } catch (e) {
+      console.error("Failed to load labels", e)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    let cancelled = false;
-    fetch('/api/labels')
-      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
-      .then((data) => {
-        if (cancelled) return;
-        if (Array.isArray(data.labels)) setLabels(data.labels);
-      })
-      .catch((err) => console.warn('labels fetch failed', err))
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
+    fetchLabels('Records')
+  }, [])
 
-  const filtered = labels.filter((l) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    const hay = `${l.name} ${l.city ?? ''} ${l.description ?? ''} ${(l.genres ?? []).join(' ')}`.toLowerCase();
-    return hay.includes(q);
-  });
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    fetchLabels(search)
+  }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '32px 24px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <h1 style={{ fontSize: 36, fontWeight: 800, color: '#111827', margin: '0 0 8px' }}>Labels</h1>
-        <p style={{ fontSize: 16, color: '#6b7280', margin: '0 0 24px' }}>Discover record labels and their rosters.</p>
+    <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2 text-gray-900">Discover labels</h1>
+        <p className="text-gray-600">Explore the record labels shaping the sound of the underground.</p>
+      </div>
 
-        <input
-          placeholder="Search labels..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: '100%', padding: '14px 20px', borderRadius: 12, border: '1px solid #d1d5db', background: 'white', fontSize: 15, marginBottom: 24, boxSizing: 'border-box' }}
+      <form onSubmit={handleSearch} className="mb-8 flex gap-2 max-w-md">
+        <input 
+          type="text" 
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search labels (e.g. Records, Label)..."
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
         />
+        <button type="submit" className="px-6 py-2 bg-black text-white font-semibold rounded-lg hover:bg-gray-800">
+          Search
+        </button>
+      </form>
 
-        <p style={{ fontSize: 14, color: '#6b7280', marginBottom: 16 }}>
-          {loading ? 'Loading...' : `${filtered.length} labels found`}
-        </p>
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1,2,3,4,5,6].map(i => (
+            <div key={i} className="animate-pulse bg-gray-200 rounded-xl h-64 w-full"></div>
+          ))}
+        </div>
+      ) : labels.length === 0 ? (
+        <div className="text-center py-20 text-gray-500">
+          No labels found for "{search}". Try "Records" or "Music".
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {labels.map((label: any) => (
+            <Link key={label.id} href={`/labels/${label.id}`} className="group border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all bg-white flex flex-col">
+              
+              <div className="h-40 bg-gray-100 relative">
+                <img 
+                  src={label.image} 
+                  alt={label.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
+              </div>
 
-        {!loading && filtered.length === 0 ? (
-          <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 16, padding: 48, textAlign: 'center' }}>
-            <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px' }}>No labels found</h2>
-            <p style={{ fontSize: 15, color: '#6b7280', margin: 0 }}>Try adjusting your search.</p>
-          </div>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
-            {filtered.map((l) => (
-              <div key={l.id} style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, position: 'relative' }}>
-                {l.verified && (
-                  <div style={{ position: 'absolute', top: 12, right: 12, background: '#10b981', color: 'white', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700 }}>VERIFIED</div>
+              <div className="p-5 flex-1 flex flex-col">
+                {label.verified && (
+                  <span className="inline-block text-[10px] font-bold tracking-wider text-blue-600 bg-blue-50 px-2 py-1 rounded mb-2 w-max">VERIFIED</span>
                 )}
-                <h3 style={{ fontSize: 18, fontWeight: 800, margin: '0 0 4px', color: '#111827' }}>{l.name}</h3>
-                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>{l.city ?? 'Location TBA'}</p>
-                <p style={{ fontSize: 13, color: '#374151', margin: '0 0 12px' }}>{l.description ?? ''}</p>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {(l.genres ?? []).map((g) => (
-                    <span key={g} style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#fef3c7', color: '#92400e' }}>{g}</span>
+                
+                <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:underline line-clamp-1">{label.name}</h3>
+                <p className="text-sm text-gray-500 mb-3">{label.city}</p>
+                <p className="text-sm text-gray-700 line-clamp-2 mb-4">{label.bio}</p>
+                
+                <div className="mt-auto flex flex-wrap gap-2">
+                  {label.tags.map((tag: string) => (
+                    <span key={tag} className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
-  );
+  )
 }

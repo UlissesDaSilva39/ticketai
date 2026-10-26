@@ -73,12 +73,13 @@ export default function DiscoverEventsPage() {
               </div>
 
               <div className="p-5 flex-1 flex flex-col">
-                <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-1">{event.name}</h3>
-                <p className="text-sm text-gray-600 font-medium mb-3">{event.date}</p>
+                <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-2">{event.name}</h3>
                 
-                <div className="flex items-center gap-2 mb-4 text-sm text-gray-500">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                  <span>{event.venue}, {event.city}</span>
+                <p className="text-sm font-semibold text-gray-900 mb-2">{event.date}</p>
+                
+                <div className="flex items-start gap-1.5 mb-4 text-sm text-gray-500">
+                  <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  <span className="line-clamp-2">{event.venue}, {event.city}</span>
                 </div>
 
                 <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
@@ -86,7 +87,7 @@ export default function DiscoverEventsPage() {
                     {event.priceMin ? (
                       <p className="text-sm font-semibold text-gray-900">From £{event.priceMin}</p>
                     ) : (
-                      <p className="text-sm font-semibold text-gray-900">See price on TM</p>
+                      <p className="text-sm font-semibold text-gray-500">See price on TM</p>
                     )}
                   </div>
                   <a 

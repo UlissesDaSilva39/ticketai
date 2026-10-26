@@ -1,92 +1,111 @@
-﻿'use client';
+'use client'
+import { useState, useEffect } from 'react'
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+export default function DiscoverFestivalsPage() {
+  const [festivals, setFestivals] = useState<any[]>([])
+  const [search, setSearch] = useState('Festival')
+  const [loading, setLoading] = useState(true)
 
-type Festival = {
-  id: string;
-  name: string;
-  slug: string | null;
-  description: string | null;
-  city: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  capacity: number | null;
-  genres: string[] | null;
-  hero_image: string | null;
-  verified: boolean;
-};
-
-export default function FestivalsPage() {
-  const router = useRouter();
-  const [festivals, setFestivals] = useState<Festival[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCity, setSelectedCity] = useState('All');
+  const fetchFestivals = async (query: string) => {
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/festivals?keyword=${query}`)
+      const data = await res.json()
+      setFestivals(data.festivals || [])
+    } catch (e) {
+      console.error("Failed to load festivals", e)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    let cancelled = false;
-    fetch('/api/festivals')
-      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
-      .then((data) => {
-        if (cancelled) return;
-        if (Array.isArray(data.festivals)) setFestivals(data.festivals);
-      })
-      .catch((err) => console.warn('festivals fetch failed', err))
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
+    fetchFestivals('Festival')
+  }, [])
 
-  const cities = ['All', ...Array.from(new Set(festivals.map((f) => f.city).filter(Boolean) as string[]))];
-  const filtered = festivals.filter((f) => {
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      const hay = `${f.name} ${f.city ?? ''} ${f.description ?? ''}`.toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
-    if (selectedCity !== 'All' && f.city !== selectedCity) return false;
-    return true;
-  });
-
-  const formatDates = (start: string | null, end: string | null) => {
-    if (!start) return 'Dates TBA';
-    const s = new Date(start).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    if (!end) return s;
-    const e = new Date(end).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    return `${s} – ${e}`;
-  };
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    fetchFestivals(search)
+  }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '32px 24px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <h1 style={{ fontSize: 36, fontWeight: 800, color: '#111827', margin: '0 0 8px' }}>Festivals</h1>
-        <p style={{ fontSize: 16, color: '#6b7280', margin: '0 0 24px' }}>Browse UK and international festivals.</p>
-        <input
-          placeholder="Search festivals..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: '100%', padding: '14px 20px', borderRadius: 12, border: '1px solid #d1d5db', background: 'white', fontSize: 15, marginBottom: 16 }}
+    <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-2 text-gray-900">Discover festivals</h1>
+        <p className="text-gray-600">The biggest multi-day events, lineups, and weekenders.</p>
+      </div>
+
+      <form onSubmit={handleSearch} className="mb-8 flex gap-2 max-w-md">
+        <input 
+          type="text" 
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search festivals (e.g. Glastonbury)..."
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
         />
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
-          {cities.map((c) => (
-            <button key={c} onClick={() => setSelectedCity(c)} style={{ padding: '8px 16px', borderRadius: 999, fontSize: 13, cursor: 'pointer', background: selectedCity === c ? '#111827' : 'white', border: '1px solid #d1d5db', color: selectedCity === c ? 'white' : '#374151' }}>{c}</button>
+        <button type="submit" className="px-6 py-2 bg-black text-white font-semibold rounded-lg hover:bg-gray-800">
+          Search
+        </button>
+      </form>
+
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1,2,3,4,5,6].map(i => (
+            <div key={i} className="animate-pulse bg-gray-200 rounded-xl h-80 w-full"></div>
           ))}
         </div>
-        <p style={{ fontSize: 14, color: '#6b7280', marginBottom: 16 }}>{loading ? 'Loading...' : `${filtered.length} festivals found`}</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
-          {filtered.map((f) => (
-            <div key={f.id} style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20 }}>
-              <h3 style={{ fontSize: 18, fontWeight: 800, margin: '0 0 4px' }}>{f.name}</h3>
-              <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 8px' }}>{formatDates(f.start_date, f.end_date)} · {f.city ?? 'TBA'}</p>
-              <p style={{ fontSize: 13, color: '#374151', margin: '0 0 12px' }}>{f.description ?? ''}</p>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
-                {(f.genres ?? []).map((g) => (<span key={g} style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: '#eff6ff', color: '#2563eb' }}>{g}</span>))}
+      ) : festivals.length === 0 ? (
+        <div className="text-center py-20 text-gray-500">
+          No festivals found for "{search}". Try "Music Festival".
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {festivals.map((fest: any) => (
+            <div key={fest.id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all bg-white flex flex-col">
+              
+              <div className="h-56 bg-gray-100 relative">
+                <img 
+                  src={fest.image} 
+                  alt={fest.name} 
+                  className="w-full h-full object-cover" 
+                />
+                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur text-xs font-bold px-2 py-1 rounded text-black">
+                  FESTIVAL
+                </div>
               </div>
-              {f.capacity && (<p style={{ fontSize: 12, color: '#10b981', fontWeight: 700, margin: 0 }}>{f.capacity.toLocaleString()} capacity</p>)}
+
+              <div className="p-5 flex-1 flex flex-col">
+                <h3 className="text-xl font-bold text-gray-900 line-clamp-2 mb-2">{fest.name}</h3>
+                
+                <p className="text-sm font-semibold text-gray-900 mb-2">{fest.date}</p>
+                
+                <div className="flex items-start gap-1.5 mb-4 text-sm text-gray-500">
+                  <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  <span className="line-clamp-2">{fest.venue}, {fest.city}</span>
+                </div>
+
+                <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                  <div>
+                    {fest.priceMin ? (
+                      <p className="text-sm font-semibold text-gray-900">From £{fest.priceMin}</p>
+                    ) : (
+                      <p className="text-sm font-semibold text-gray-500">See price on TM</p>
+                    )}
+                  </div>
+                  <a 
+                    href={fest.tmUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="px-4 py-2 bg-black text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors"
+                  >
+                    Get Tickets ↗
+                  </a>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-      </div>
+      )}
     </div>
-  );
+  )
 }
