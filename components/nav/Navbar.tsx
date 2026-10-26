@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { PRIMARY_NAV } from '@/config/navigation';
 import { NavLink } from './NavLink';
 import { NavDropdown } from './NavDropdown';
+import { IndustryDropdown } from './IndustryDropdown';
 import { ProfileMenu } from './ProfileMenu';
 import { NotificationBell } from './NotificationBell';
 import { Logo } from './Logo';
@@ -69,4 +70,5 @@ export function Navbar({ user }: { user: NavbarUser }) {
     </header>
   );
 }
+
 
