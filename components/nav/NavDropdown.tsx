@@ -1,44 +1,39 @@
 ﻿'use client';
-
-import { useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { useState } from 'react';
 import { DROPDOWN_MAP } from '@/config/navigation';
-import { useClickOutside } from '@/hooks/useClickOutside';
-import { ChevronDown } from 'lucide-react';
+import type { NavItem } from '@/config/navigation';
 
-export function NavDropdown({
-  label,
-  dropdownKey,
-  href,
-}: {
-  label: string;
-  dropdownKey: keyof typeof DROPDOWN_MAP;
-  href: string;
-}) {
+export function NavDropdown({ item, pathname }: { item: NavItem; pathname?: string }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-  const active = pathname.startsWith(href);
-  useClickOutside(ref, () => setOpen(false));
+  const key = item.dropdown;
+  const dropdown = key ? DROPDOWN_MAP[key] : undefined;
 
-  const dropdown = DROPDOWN_MAP[dropdownKey];
+  if (!dropdown) {
+    return (
+      <Link href={item.href} className="px-3 py-2 text-sm font-medium text-neutral-700 hover:text-neutral-900">
+        {item.label}
+      </Link>
+    );
+  }
+
+  const isActive = pathname ? pathname.startsWith(item.href) : false;
 
   return (
     <div
-      ref={ref}
       className="relative"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
       <button
         type="button"
-        className={[
-          'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors',
-          active ? 'text-black' : 'text-gray-700 hover:text-black',
-        ].join(' ')}
+        className={
+          'inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition ' +
+          (isActive ? 'text-neutral-900 bg-neutral-100' : 'text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100')
+        }
       >
-        {label}
-        <ChevronDown className="h-3.5 w-3.5" />
+        {item.label}
+        <span className="text-[10px] opacity-60">▾</span>
       </button>
 
       {open && (
@@ -49,18 +44,15 @@ export function NavDropdown({
                 <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
                   {section.title}
                 </div>
-                <ul>
-                  {section.items.map((item) => (
-                    <li key={item.href}>
-                      <a
-                        href={item.href}
-                        className="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black"
-                      >
-                        {item.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                {section.items.map((sub) => (
+                  <Link
+                    key={sub.href + sub.label}
+                    href={sub.href}
+                    className="block rounded-lg px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900"
+                  >
+                    {sub.label}
+                  </Link>
+                ))}
               </div>
             ))}
           </div>

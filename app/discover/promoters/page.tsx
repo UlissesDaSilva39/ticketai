@@ -54,7 +54,7 @@ export default function PromotersPage() {
               city: p.city || '',
               description: p.bio || '',
               verified: !!p.verified,
-              events: p.event_count || 0,
+              events: (typeof p.event_count === 'number' ? p.event_count : (Array.isArray(p.events) ? p.events.length : 0)),
               ticketsSold: p.tickets_sold || 0,
               rating: 0,
               reviews: 0,
@@ -151,7 +151,7 @@ export default function PromotersPage() {
                   <p style={{ fontSize: 14, color: '#4b5563', margin: 0 }}>{p.description}</p>
 
                   <div style={{ display: 'flex', gap: 16, fontSize: 13, color: '#374151' }}>
-                    <span>ðŸ“… {p.events} events</span>
+                    <span>ðŸ“… {typeof p.events === 'number' ? p.events : (Array.isArray(p.events) ? p.events.length : 0)} events</span>
                     <span>â­ {p.rating} ({p.reviews})</span>
                   </div>
 
@@ -188,3 +188,4 @@ export default function PromotersPage() {
     </div>
   );
 }
+
