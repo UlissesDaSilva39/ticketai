@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 const TRUST = ["DJ Poxy","Basement 44","Voice Records","Pompeii Odyssey","Ulisses Booking","Demo Ticket"];
 
@@ -178,7 +178,184 @@ export default function Home() {
         </blockquote>
         <p className="text-gray-500 text-sm tracking-widest">- DJ POXY, LONDON</p>
       </section>
-      <section className="bg-black text-white py-32 md:py-48">
+      <section className="bg-gray-50 border-y border-gray-200 py-20">
+<div className="max-w-6xl mx-auto px-6">
+<div className="text-center mb-12">
+<h2 className="text-4xl font-bold mb-3">See it in action</h2>
+<p className="text-gray-600">Real pages from GRID - click any to explore.</p>
+</div>
+<div className="mb-12">
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-1">Artist Pages</div>
+<h3 className="text-2xl font-bold">Your career, one URL</h3>
+</div>
+<a href="/artists" className="text-sm font-medium text-violet-600 hover:text-violet-700">Browse artists</a>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+{[
+{ name: 'DJ Poxy', role: 'DJ - House', city: 'London', followers: '150k', initials: 'DP', slug: 'dj-poxy' },
+{ name: 'Paper Lions', role: 'Band - Jazz Fusion', city: 'Paris', followers: '45k', initials: 'PL', slug: 'paper-lions' },
+{ name: 'Basement Collective', role: 'Band - Techno', city: 'London', followers: '12k', initials: 'BC', slug: 'basement-collective' },
+].map((a) => (
+<a key={a.name} href={'/artists/' + a.slug} className="rounded-2xl border border-gray-200 bg-white p-6 hover:shadow-md hover:border-violet-300 transition">
+<div className="flex items-start gap-4 mb-4">
+<div className="w-14 h-14 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 text-white flex items-center justify-center font-bold">{a.initials}</div>
+<div>
+<div className="font-semibold flex items-center gap-1">{a.name}<span className="text-green-500 text-xs">V</span></div>
+<div className="text-sm text-gray-500">{a.role} - {a.city}</div>
+</div>
+</div>
+<div className="flex items-center justify-between text-sm">
+<span className="text-gray-500">{a.followers} followers</span>
+<span className="text-violet-600 font-medium">View profile</span>
+</div>
+</a>
+))}
+</div>
+</div>
+<div>
+<div className="flex items-center justify-between mb-4">
+<div>
+<div className="text-xs font-bold uppercase tracking-wider text-violet-600 mb-1">Event Pages</div>
+<h3 className="text-2xl font-bold">Sell tickets your way</h3>
+</div>
+<a href="/discover/events" className="text-sm font-medium text-violet-600 hover:text-violet-700">Browse events</a>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+{[
+{ title: 'Paper Lions Jazz Night', venue: 'The Blue Note - London', date: 'Tue, 3 Nov - 19:16', price: '25', sold: '87%', tag: 'Selling fast' },
+{ title: 'Basement Collective Presents', venue: 'Basement 44 - London', date: 'Mon, 2 Nov - 17:16', price: '20', sold: '93%', tag: 'Selling fast' },
+{ title: 'Analog Dreams Live', venue: 'Fabric - London', date: 'Sat, 24 Oct - 18:16', price: '16', sold: '93%', tag: 'Last tickets' },
+].map((e) => (
+<a key={e.title} href="/discover/events" className="rounded-2xl border border-gray-200 bg-white overflow-hidden hover:shadow-md hover:border-violet-300 transition">
+<div className="h-32 bg-gradient-to-br from-violet-200 to-pink-200 relative">
+<div className="absolute bottom-3 right-3 rounded-full bg-red-500 text-white text-xs px-2 py-1 font-medium">{e.tag}</div>
+</div>
+<div className="p-4">
+<h4 className="font-semibold mb-1">{e.title}</h4>
+<div className="text-xs text-gray-500 mb-3">{e.venue}<br/>{e.date}</div>
+<div className="flex items-center justify-between pt-3 border-t border-gray-100">
+<div><div className="text-xs text-gray-500">From</div><div className="font-bold">{e.price}</div></div>
+<div className="text-xs text-gray-500">{e.sold} sold</div>
+</div>
+</div>
+</a>
+))}
+</div>
+</div>
+</div>
+</section>
+<section className="max-w-6xl mx-auto px-6 py-20">
+<div className="text-center mb-12">
+<h2 className="text-4xl font-bold mb-3">Why not just use...?</h2>
+<p className="text-gray-600">RA, Dice, Eventbrite and Bandcamp each solve one piece. GRID solves all of them.</p>
+</div>
+<div className="overflow-x-auto">
+<table className="w-full text-sm">
+<thead>
+<tr className="border-b-2 border-gray-200">
+<th className="text-left py-4 pr-4 font-semibold">Feature</th>
+<th className="px-3 py-4 font-semibold text-violet-600">GRID</th>
+<th className="px-3 py-4 font-semibold text-gray-400">RA</th>
+<th className="px-3 py-4 font-semibold text-gray-400">Dice</th>
+<th className="px-3 py-4 font-semibold text-gray-400">Eventbrite</th>
+<th className="px-3 py-4 font-semibold text-gray-400">Bandcamp</th>
+</tr>
+</thead>
+<tbody>
+{[
+{ f: 'Artist page with music + booking', grid: 'V', ra: '-', dice: '-', eb: '-', bc: '~' },
+{ f: 'Direct booking (accept/decline)', grid: 'V', ra: '-', dice: '-', eb: '-', bc: '-' },
+{ f: 'Sell tickets on your own page', grid: 'V', ra: '-', dice: '~', eb: 'V', bc: 'V' },
+{ f: 'Face-value resale', grid: 'V', ra: 'V', dice: 'V', eb: '-', bc: '-' },
+{ f: '2-click payment', grid: 'V', ra: 'V', dice: 'V', eb: '-', bc: '-' },
+{ f: 'Promoter discovery', grid: 'V', ra: 'V', dice: '~', eb: '-', bc: '-' },
+{ f: 'Venue listing + booking', grid: 'V', ra: '~', dice: '-', eb: '-', bc: '-' },
+{ f: 'Analytics dashboard', grid: 'V', ra: '~', dice: 'V', eb: 'V', bc: '~' },
+{ f: 'Social network (follow + DM)', grid: 'V', ra: '-', dice: '-', eb: '-', bc: '-' },
+{ f: 'Industry marketplace', grid: 'V', ra: '-', dice: '-', eb: '-', bc: '-' },
+{ f: 'Rider system', grid: 'V', ra: '-', dice: '-', eb: '-', bc: '-' },
+{ f: 'Free to join', grid: 'V', ra: '-', dice: '-', eb: 'V', bc: 'V' },
+].map((row) => (
+<tr key={row.f} className="border-b border-gray-100">
+<td className="py-3 pr-4 text-gray-700">{row.f}</td>
+<td className="text-center px-3 py-3 font-bold text-green-600">{row.grid}</td>
+<td className="text-center px-3 py-3 text-gray-400">{row.ra}</td>
+<td className="text-center px-3 py-3 text-gray-400">{row.dice}</td>
+<td className="text-center px-3 py-3 text-gray-400">{row.eb}</td>
+<td className="text-center px-3 py-3 text-gray-400">{row.bc}</td>
+</tr>
+))}
+</tbody>
+</table>
+</div>
+<p className="text-xs text-gray-400 mt-4 text-center">V Full support - ~ Partial - - Not available</p>
+</section>
+<section className="bg-gray-50 border-y border-gray-200 py-16">
+<div className="max-w-6xl mx-auto px-6">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+{[
+{ label: 'Artists', value: '45,000+' },
+{ label: 'Promoters', value: '12,000+' },
+{ label: 'Venues', value: '8,000+' },
+{ label: 'Events', value: '120,000+' },
+].map((s) => (
+<div key={s.label}>
+<div className="text-3xl font-bold text-violet-600">{s.value}</div>
+<div className="text-sm text-gray-500 mt-1">{s.label}</div>
+</div>
+))}
+</div>
+</div>
+</section>
+<section className="max-w-6xl mx-auto px-6 py-20">
+<div className="text-center mb-12">
+<h2 className="text-4xl font-bold mb-3">Everything you need, on GRID</h2>
+<p className="text-gray-600">Built from research on RA, Dice, Spotify, Sony Music and Universal.</p>
+</div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+{[
+{ title: 'Face-Value Resale', desc: 'List tickets at face value or below. Anti-tout protection. Waitlists for sold-out shows.', who: 'RA, Dice standard' },
+{ title: '2-Click Payment', desc: 'One-tap checkout with saved cards, Apple Pay and Google Pay. 33% higher conversion.', who: 'RA model' },
+{ title: 'Music on Your Profile', desc: 'Embed Spotify, SoundCloud and Bandcamp. Show top tracks. Separate Events and Listen tabs.', who: 'Bandcamp, Spotify standard' },
+{ title: 'Structured Pitching', desc: 'Artists pitch to verified bookers. Platform matches by genre, market and experience.', who: 'BandPitch model' },
+{ title: 'Earnings Dashboard', desc: 'Real-time view of ticket sales, bookings, marketplace services and payouts. Export CSV.', who: 'Sony, UMG standard' },
+{ title: 'Industry Marketplace', desc: 'Hire producers, engineers, designers, photographers. Escrow, references and riders built in.', who: 'GRID unique' },
+].map((f) => (
+<div key={f.title} className="rounded-2xl border border-gray-200 bg-white p-6 hover:shadow-md hover:border-violet-300 transition">
+<h3 className="text-xl font-bold mb-2">{f.title}</h3>
+<p className="text-sm text-gray-600 mb-3">{f.desc}</p>
+<div className="text-xs font-medium uppercase tracking-wider text-violet-600">{f.who}</div>
+</div>
+))}
+</div>
+</section>
+<section className="bg-gray-50 border-y border-gray-200 py-20">
+<div className="max-w-3xl mx-auto px-6">
+<h2 className="text-4xl font-bold mb-12 text-center">Questions</h2>
+<div className="space-y-4">
+{[
+{ q: 'Is GRID free?', a: 'Yes. Free forever. No card needed. Only pay when you sell tickets (5% fee).' },
+{ q: 'How is this different from Resident Advisor?', a: 'RA is a listings site. GRID is a full career platform - booking, ticketing, resale, analytics, marketplace, riders and a social network, all in one place.' },
+{ q: 'How is this different from Dice?', a: 'Dice is fan-focused. GRID is built for the entire industry - artists, promoters, venues and every role behind the scenes. Like Dice, we do face-value resale and 2-click payment.' },
+{ q: 'Can I keep my Bandcamp?', a: 'Yes. GRID does not own your music. Keep selling on Bandcamp. Use GRID for booking, live shows and analytics.' },
+{ q: 'Do you charge for resale?', a: 'GRID takes 5% on resale - paid by the buyer. Original seller always gets face value back. Anti-tout protections lock tickets until 24h before the event.' },
+{ q: 'What is the marketplace?', a: 'Hire producers, engineers, designers, photographers and every role in live music - with escrow, references and riders. Like Fiverr, but for live music.' },
+].map((item) => (
+<details key={item.q} className="rounded-lg border border-gray-200 bg-white p-5 group">
+<summary className="font-semibold cursor-pointer list-none flex justify-between items-center">
+{item.q}
+<span className="text-gray-400 group-open:rotate-45 transition">+</span>
+</summary>
+<p className="text-sm text-gray-600 mt-3">{item.a}</p>
+</details>
+))}
+</div>
+</div>
+</section>
+
+<section className="bg-black text-white py-32 md:py-48">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-5xl md:text-7xl font-bold mb-10 tracking-tight" style={{ fontFamily: "var(--font-antonio)" }}>
             READY TO MOVE THE SCENE?
@@ -192,3 +369,4 @@ export default function Home() {
     </main>
   );
 }
+
