@@ -7,32 +7,11 @@ import { supabase } from '@/lib/supabase';
 
 type SignupRole = 'fan' | 'artist' | 'promoter' | 'venue';
 
-type ArtistSubtype =
-  | 'producer'
-  | 'dj'
-  | 'vocalist'
-  | 'band'
-  | 'record_company'
-  | 'a_and_r'
-  | 'manager'
-  | 'other';
-
-const ROLE_OPTIONS: { value: SignupRole; label: string; description: string }[] = [
-  { value: 'fan',      label: 'Fan',      description: 'Follow artists, buy tickets, discover new music' },
-  { value: 'artist',   label: 'Artist',   description: 'DJ, producer, vocalist, band, A&R, record company' },
-  { value: 'promoter', label: 'Promoter', description: 'Run events, book artists, sell tickets' },
-  { value: 'venue',    label: 'Venue',    description: 'List your space and get discovered' },
-];
-
-const ARTIST_SUBTYPES: { value: ArtistSubtype; label: string; description: string }[] = [
-  { value: 'producer',       label: 'Producer',        description: 'Beatmaker, engineer, mixer' },
-  { value: 'dj',             label: 'DJ',              description: 'House, techno, hip-hop, DnB, garage' },
-  { value: 'vocalist',       label: 'Vocalist',        description: 'Singer, MC, rapper' },
-  { value: 'band',           label: 'Band',            description: 'Group of 2+ musicians' },
-  { value: 'record_company', label: 'Record Company',  description: 'Label, imprint, or music publisher' },
-  { value: 'a_and_r',        label: 'A&R',             description: 'Talent scout for label or publisher' },
-  { value: 'manager',        label: 'Manager',         description: 'Artist manager, booking agent' },
-  { value: 'other',          label: 'Other',           description: 'Composer, session musician, etc.' },
+const ROLE_OPTIONS: { value: SignupRole; label: string; description: string; icon: string }[] = [
+  { value: 'fan',      label: 'Fan',      description: 'Follow artists, buy tickets, discover new music', icon: '🎧' },
+  { value: 'artist',   label: 'Artist',   description: 'DJ, producer, vocalist, band, A&R, record company', icon: '🎤' },
+  { value: 'promoter', label: 'Promoter', description: 'Run events, book artists, sell tickets', icon: '📅' },
+  { value: 'venue',    label: 'Venue',    description: 'List your space and get discovered', icon: '🏛️' },
 ];
 
 export default function SignupPage() {
@@ -42,7 +21,6 @@ export default function SignupPage() {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [role, setRole] = useState<SignupRole>('fan');
-  const [artistType, setArtistType] = useState<ArtistSubtype>('producer');
   const [city, setCity] = useState('London');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,13 +35,7 @@ export default function SignupPage() {
         email,
         password,
         options: {
-          data: {
-            full_name: fullName,
-            username,
-            role,
-            artist_type: role === 'artist' ? artistType : null,
-            city,
-          },
+          data: { full_name: fullName, username, role, city },
         },
       });
 
@@ -76,7 +48,6 @@ export default function SignupPage() {
           full_name: fullName,
           username,
           role,
-          artist_type: role === 'artist' ? artistType : null,
           city,
           club_tier: 'free',
         });
@@ -149,53 +120,44 @@ export default function SignupPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">I am a...</label>
-            <div className="space-y-2">
-              {ROLE_OPTIONS.map((r) => (
-                <label
-                  key={r.value}
-                  className={
-                    'flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition ' +
-                    (role === r.value
-                      ? 'border-violet-600 bg-violet-50'
-                      : 'border-gray-300 hover:border-gray-400')
-                  }
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value={r.value}
-                    checked={role === r.value}
-                    onChange={() => setRole(r.value)}
-                    className="mt-1"
-                  />
-                  <div>
-                    <div className="font-medium">{r.label}</div>
-                    <div className="text-xs text-gray-500">{r.description}</div>
-                  </div>
-                </label>
-              ))}
+            <div className="grid grid-cols-2 gap-3">
+              {ROLE_OPTIONS.map((r) => {
+                const selected = role === r.value;
+                return (
+                  <button
+                    key={r.value}
+                    type="button"
+                    onClick={() => setRole(r.value)}
+                    className={
+                      'text-left rounded-xl border-2 p-4 transition ' +
+                      (selected
+                        ? 'border-violet-600 bg-violet-50 ring-2 ring-violet-100'
+                        : 'border-gray-200 bg-white hover:border-gray-300')
+                    }
+                  >
+                    <div className="text-2xl mb-2">{r.icon}</div>
+                    <div className={
+                      'font-semibold text-sm mb-1 ' +
+                      (selected ? 'text-violet-700' : 'text-gray-900')
+                    }>
+                      {r.label}
+                    </div>
+                    <div className={
+                      'text-xs leading-tight ' +
+                      (selected ? 'text-violet-600' : 'text-gray-500')
+                    }>
+                      {r.description}
+                    </div>
+                    {selected && (
+                      <div className="mt-2 flex items-center gap-1 text-xs font-medium text-violet-600">
+                        <span>✓</span> Selected
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
-
-          {role === 'artist' && (
-            <div>
-              <label className="block text-sm font-medium mb-1">Artist type</label>
-              <select
-                value={artistType}
-                onChange={(e) => setArtistType(e.target.value as ArtistSubtype)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 bg-white"
-              >
-                {ARTIST_SUBTYPES.map((s) => (
-                  <option key={s.value} value={s.value}>
-                    {s.label} — {s.description}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-gray-500 mt-1">
-                Helps fans discover you and powers your dashboard.
-              </p>
-            </div>
-          )}
 
           <div>
             <label className="block text-sm font-medium mb-1">City</label>
