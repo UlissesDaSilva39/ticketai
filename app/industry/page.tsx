@@ -1,5 +1,17 @@
 ﻿import Link from 'next/link';
 import { INDUSTRY_NAV_COLUMNS } from '@/config/industryNav';
+import {
+  IconIndustry,
+  IconTrending,
+  IconShield,
+  IconRider,
+  IconStar,
+  IconSearch,
+  IconArrow,
+  IconBrief,
+  IconMessage,
+  IconCheck,
+} from '@/lib/industryIcons';
 
 const TRENDING_SERVICES = [
   {
@@ -11,6 +23,7 @@ const TRENDING_SERVICES = [
     seller: 'Alex Morgan',
     city: 'London',
     category: 'producer',
+    categoryLabel: 'Producer',
   },
   {
     title: 'Full event poster + social media kit',
@@ -21,6 +34,7 @@ const TRENDING_SERVICES = [
     seller: 'Design Atelier',
     city: 'Manchester',
     category: 'graphic-designer',
+    categoryLabel: 'Graphic Design',
   },
   {
     title: '90-minute DJ set — house/techno',
@@ -31,31 +45,32 @@ const TRENDING_SERVICES = [
     seller: 'DJ Poxy',
     city: 'London',
     category: 'dj',
+    categoryLabel: 'DJ',
   },
 ];
 
 const WHY_GRID = [
   {
-    icon: '🔒',
+    Icon: IconShield,
     title: 'Escrow payments',
     desc: 'Money held safely until delivery is approved. No more "I never got paid" emails.',
   },
   {
-    icon: '📝',
+    Icon: IconRider,
     title: 'Rider system',
     desc: 'Technical, hospitality, and backstage — one link. Share with every promoter.',
   },
   {
-    icon: '⭐',
+    Icon: IconStar,
     title: 'Verified references',
     desc: 'Every hire becomes a public reference. Build reputation with proof.',
   },
 ];
 
 const STEPS = [
-  { n: '01', title: 'Post a brief', desc: 'What do you need? When? Budget?' },
-  { n: '02', title: 'Get proposals', desc: 'Vetted pros reply with quotes and timelines.' },
-  { n: '03', title: 'Hire + pay', desc: 'Escrow protects both sides. Deliver. Done.' },
+  { n: '01', Icon: IconBrief,   title: 'Post a brief',   desc: 'What do you need? When? Budget?' },
+  { n: '02', Icon: IconMessage, title: 'Get proposals',  desc: 'Vetted pros reply with quotes and timelines.' },
+  { n: '03', Icon: IconCheck,   title: 'Hire + pay',     desc: 'Escrow protects both sides. Deliver. Done.' },
 ];
 
 export default function IndustryPage() {
@@ -65,8 +80,9 @@ export default function IndustryPage() {
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-16">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-block rounded-full bg-violet-100 text-violet-700 px-4 py-1 text-sm font-semibold mb-4">
-              🎛️ GRID Industry Marketplace
+            <div className="inline-flex items-center gap-2 rounded-full bg-violet-100 text-violet-700 px-4 py-1.5 text-sm font-semibold mb-4">
+              <IconIndustry size={16} />
+              GRID Industry Marketplace
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
               Hire anyone in live music.
@@ -78,9 +94,7 @@ export default function IndustryPage() {
 
             {/* SEARCH BAR */}
             <div className="flex items-center gap-2 bg-white border-2 border-gray-300 rounded-full px-4 py-3 mb-6 max-w-2xl mx-auto focus-within:border-violet-600 transition">
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              <IconSearch size={20} className="text-gray-400" />
               <input
                 type="text"
                 placeholder="Search producers, engineers, venues, riders..."
@@ -96,10 +110,17 @@ export default function IndustryPage() {
 
             {/* CTA BUTTONS */}
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link href="/industry/post-job" className="rounded-full bg-black text-white px-8 py-3.5 font-semibold hover:bg-neutral-800 transition">
-                Post a job →
+              <Link
+                href="/industry/post-job"
+                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-8 py-3.5 font-semibold hover:bg-neutral-800 transition"
+              >
+                Post a job
+                <IconArrow size={16} />
               </Link>
-              <Link href="/rider" className="rounded-full border border-gray-300 text-gray-900 px-8 py-3.5 font-semibold hover:bg-gray-50 transition">
+              <Link
+                href="/rider"
+                className="inline-flex items-center gap-2 rounded-full border border-gray-300 text-gray-900 px-8 py-3.5 font-semibold hover:bg-gray-50 transition"
+              >
                 Build a rider
               </Link>
             </div>
@@ -123,11 +144,18 @@ export default function IndustryPage() {
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold">🔥 Trending services</h2>
+            <h2 className="text-3xl font-bold inline-flex items-center gap-2">
+              <IconTrending size={28} className="text-violet-600" />
+              Trending services
+            </h2>
             <p className="text-gray-500 mt-1">Booked this week by promoters and venues</p>
           </div>
-          <Link href="/industry/artists/producer" className="text-sm font-medium text-violet-600 hover:text-violet-700">
-            View all →
+          <Link
+            href="/industry/artists/producer"
+            className="inline-flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-700"
+          >
+            View all
+            <IconArrow size={14} />
           </Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -138,8 +166,8 @@ export default function IndustryPage() {
               className="rounded-2xl border border-gray-200 bg-white overflow-hidden hover:shadow-lg hover:border-violet-300 transition group"
             >
               <div className="h-40 bg-gradient-to-br from-violet-200 to-pink-200 relative">
-                <div className="absolute top-3 left-3 rounded-full bg-black/80 text-white text-xs px-2 py-1">
-                  {svc.category}
+                <div className="absolute top-3 left-3 rounded-full bg-black/80 text-white text-xs px-2.5 py-1 font-medium">
+                  {svc.categoryLabel}
                 </div>
               </div>
               <div className="p-5">
@@ -147,7 +175,8 @@ export default function IndustryPage() {
                   {svc.title}
                 </h3>
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                  <span className="text-yellow-500">★ {svc.rating}</span>
+                  <IconStar size={14} className="text-yellow-500 fill-yellow-500" />
+                  <span className="font-medium text-gray-900">{svc.rating}</span>
                   <span>({svc.reviews} reviews)</span>
                 </div>
                 <div className="text-sm text-gray-600 mb-4">
@@ -208,7 +237,9 @@ export default function IndustryPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {WHY_GRID.map((item) => (
             <div key={item.title} className="text-center">
-              <div className="text-5xl mb-4">{item.icon}</div>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-100 text-violet-600 mb-4">
+                <item.Icon size={28} />
+              </div>
               <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
               <p className="text-sm text-gray-600">{item.desc}</p>
             </div>
@@ -223,7 +254,12 @@ export default function IndustryPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {STEPS.map((step) => (
               <div key={step.n} className="text-center">
-                <div className="text-5xl font-bold text-violet-200 mb-3">{step.n}</div>
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-violet-50 text-violet-600 mb-4 relative">
+                  <step.Icon size={32} />
+                  <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-7 h-7 rounded-full bg-black text-white text-xs font-bold">
+                    {step.n}
+                  </span>
+                </div>
                 <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
                 <p className="text-sm text-gray-600">{step.desc}</p>
               </div>
@@ -237,10 +273,17 @@ export default function IndustryPage() {
         <h2 className="text-3xl font-bold mb-4">Ready to hire or get hired?</h2>
         <p className="text-gray-600 mb-8">Free to join. Free to browse. Only pay when you hire.</p>
         <div className="flex flex-wrap gap-3 justify-center">
-          <Link href="/signup" className="rounded-full bg-black text-white px-8 py-3.5 font-semibold hover:bg-neutral-800 transition">
-            Create free account →
+          <Link
+            href="/signup"
+            className="inline-flex items-center gap-2 rounded-full bg-black text-white px-8 py-3.5 font-semibold hover:bg-neutral-800 transition"
+          >
+            Create free account
+            <IconArrow size={16} />
           </Link>
-          <Link href="/industry/post-job" className="rounded-full border border-gray-300 text-gray-900 px-8 py-3.5 font-semibold hover:bg-gray-50 transition">
+          <Link
+            href="/industry/post-job"
+            className="inline-flex items-center gap-2 rounded-full border border-gray-300 text-gray-900 px-8 py-3.5 font-semibold hover:bg-gray-50 transition"
+          >
             Post a job
           </Link>
         </div>
