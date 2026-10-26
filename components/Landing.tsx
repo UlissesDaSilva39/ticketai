@@ -490,12 +490,12 @@ export default function Home() {
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
-        { name: 'DJ Poxy', role: 'DJ - House', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop' },
-        { name: 'Ultra Nate', role: 'Vocalist', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
-        { name: 'Honey Dijon', role: 'DJ - Techno', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=300&h=300&fit=crop' },
-        { name: 'Floating Points', role: 'Producer', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=300&h=300&fit=crop' },
-        { name: 'Peggy Gou', role: 'DJ - House', city: 'Berlin', img: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop' },
-        { name: 'Four Tet', role: 'Producer', city: 'London', img: 'https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=300&h=300&fit=crop' },
+        { name: 'DJ Poxy', role: 'DJ - House', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
+        { name: 'Ultra Nate', role: 'Vocalist', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
+        { name: 'Honey Dijon', role: 'DJ - Techno', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=400&h=400&fit=crop' },
+        { name: 'Floating Points', role: 'Producer', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
+        { name: 'Peggy Gou', role: 'DJ - House', city: 'Berlin', img: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=400&fit=crop' },
+        { name: 'Four Tet', role: 'Producer', city: 'London', img: 'https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=400&h=400&fit=crop' },
       ].map((a) => (
         <div key={a.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition group cursor-pointer">
           <img src={a.img} alt={a.name} className="w-full aspect-square object-cover group-hover:scale-105 transition duration-300" />
@@ -515,12 +515,12 @@ export default function Home() {
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
-        { name: 'Fabric', city: 'London', cap: '1,600 cap', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=300&fit=crop' },
-        { name: 'Berghain', city: 'Berlin', cap: '1,500 cap', img: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=300&h=300&fit=crop' },
-        { name: 'The Warehouse', city: 'Amsterdam', cap: '2,000 cap', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&h=300&fit=crop' },
-        { name: 'Basement 44', city: 'London', cap: '300 cap', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop' },
-        { name: 'Blue Note', city: 'Paris', cap: '500 cap', img: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=300&h=300&fit=crop' },
-        { name: 'Village Underground', city: 'London', cap: '700 cap', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
+        { name: 'Fabric', city: 'London', cap: '1,600 cap', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop' },
+        { name: 'Berghain', city: 'Berlin', cap: '1,500 cap', img: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=400&h=400&fit=crop' },
+        { name: 'The Warehouse', city: 'Amsterdam', cap: '2,000 cap', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=400&fit=crop' },
+        { name: 'Basement 44', city: 'London', cap: '300 cap', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop' },
+        { name: 'Blue Note', city: 'Paris', cap: '500 cap', img: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=400&h=400&fit=crop' },
+        { name: 'Village Underground', city: 'London', cap: '700 cap', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
       ].map((v) => (
         <div key={v.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition group cursor-pointer">
           <img src={v.img} alt={v.name} className="w-full aspect-square object-cover group-hover:scale-105 transition duration-300" />
@@ -540,12 +540,12 @@ export default function Home() {
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
-        { name: 'Nightshift Presents', city: 'London', events: '24 events', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop' },
-        { name: 'Techno Nation', city: 'London', events: '31 events', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=300&fit=crop' },
-        { name: 'Electronic Europe', city: 'Amsterdam', events: '19 events', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
-        { name: 'East End Promotions', city: 'London', events: '22 events', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop' },
-        { name: 'Bristol Underground', city: 'Bristol', events: '15 events', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&h=300&fit=crop' },
-        { name: 'DnB Nation', city: 'London', events: '28 events', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=300&h=300&fit=crop' },
+        { name: 'Nightshift Presents', city: 'London', events: '24 events', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
+        { name: 'Techno Nation', city: 'London', events: '31 events', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop' },
+        { name: 'Electronic Europe', city: 'Amsterdam', events: '19 events', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
+        { name: 'East End Promotions', city: 'London', events: '22 events', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop' },
+        { name: 'Bristol Underground', city: 'Bristol', events: '15 events', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=400&fit=crop' },
+        { name: 'DnB Nation', city: 'London', events: '28 events', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
       ].map((p) => (
         <div key={p.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition group cursor-pointer">
           <img src={p.img} alt={p.name} className="w-full aspect-square object-cover group-hover:scale-105 transition duration-300" />
@@ -570,12 +570,12 @@ export default function Home() {
     <h3 className="text-xl font-bold mb-4">Artists</h3>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
-        { name: 'DJ Poxy', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop' },
-        { name: 'Ultra Nate', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
-        { name: 'Honey Dijon', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=300&h=300&fit=crop' },
-        { name: 'Floating Points', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=300&h=300&fit=crop' },
-        { name: 'Peggy Gou', city: 'Berlin', img: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop' },
-        { name: 'Four Tet', city: 'London', img: 'https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=300&h=300&fit=crop' },
+        { name: 'DJ Poxy', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
+        { name: 'Ultra Nate', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
+        { name: 'Honey Dijon', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=400&h=400&fit=crop' },
+        { name: 'Floating Points', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
+        { name: 'Peggy Gou', city: 'Berlin', img: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=400&fit=crop' },
+        { name: 'Four Tet', city: 'London', img: 'https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=400&h=400&fit=crop' },
       ].map((a) => (
         <div key={a.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition">
           <img src={a.img} alt={a.name} className="w-full aspect-square object-cover" />
@@ -592,12 +592,12 @@ export default function Home() {
     <h3 className="text-xl font-bold mb-4">Venues</h3>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
-        { name: 'Fabric', city: 'London', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=300&fit=crop' },
-        { name: 'Berghain', city: 'Berlin', img: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=300&h=300&fit=crop' },
-        { name: 'The Warehouse', city: 'Amsterdam', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&h=300&fit=crop' },
-        { name: 'Basement 44', city: 'London', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop' },
-        { name: 'Blue Note', city: 'Paris', img: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=300&h=300&fit=crop' },
-        { name: 'Village Underground', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
+        { name: 'Fabric', city: 'London', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop' },
+        { name: 'Berghain', city: 'Berlin', img: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=400&h=400&fit=crop' },
+        { name: 'The Warehouse', city: 'Amsterdam', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=400&fit=crop' },
+        { name: 'Basement 44', city: 'London', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop' },
+        { name: 'Blue Note', city: 'Paris', img: 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=400&h=400&fit=crop' },
+        { name: 'Village Underground', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
       ].map((v) => (
         <div key={v.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition">
           <img src={v.img} alt={v.name} className="w-full aspect-square object-cover" />
@@ -614,12 +614,12 @@ export default function Home() {
     <h3 className="text-xl font-bold mb-4">Promoters</h3>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
-        { name: 'Nightshift Presents', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop' },
-        { name: 'Techno Nation', city: 'London', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=300&fit=crop' },
-        { name: 'Electronic Europe', city: 'Amsterdam', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop' },
-        { name: 'East End Promotions', city: 'London', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop' },
-        { name: 'Bristol Underground', city: 'Bristol', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=300&h=300&fit=crop' },
-        { name: 'DnB Nation', city: 'London', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=300&h=300&fit=crop' },
+        { name: 'Nightshift Presents', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
+        { name: 'Techno Nation', city: 'London', img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&h=400&fit=crop' },
+        { name: 'Electronic Europe', city: 'Amsterdam', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
+        { name: 'East End Promotions', city: 'London', img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop' },
+        { name: 'Bristol Underground', city: 'Bristol', img: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=400&fit=crop' },
+        { name: 'DnB Nation', city: 'London', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
       ].map((p) => (
         <div key={p.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition">
           <img src={p.img} alt={p.name} className="w-full aspect-square object-cover" />
@@ -755,6 +755,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 
