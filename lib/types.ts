@@ -205,3 +205,52 @@ export type SavedSearch = {
 
 
 
+
+// ============================================================
+// Rider templates (technical + hospitality + backstage)
+// ============================================================
+export type TechnicalRider = {
+  pa_system?: string;
+  monitor_setup?: string;
+  console_requirements?: string;
+  backline?: string;
+  stage_plot_url?: string;
+  input_list_url?: string;
+  power_requirements?: string;
+  load_in_time?: string;
+  soundcheck_time?: string;
+  notes?: string;
+};
+
+export type HospitalityRider = {
+  catering?: string;
+  dietary_requirements?: string;
+  dressing_room?: string;
+  transport?: string;
+  accommodation?: string;
+  guest_list_count?: number;
+  merch_commission_pct?: number;
+  settlement_terms?: string;
+  notes?: string;
+};
+
+export type BackstageInfo = {
+  venue_map_url?: string;
+  door_access_levels?: string;
+  loading_bay?: string;
+  storage_available?: string;
+  parking?: string;
+  curfew_time?: string;
+  notes?: string;
+};
+
+export type Rider = {
+  id: string;
+  owner_id: string;
+  owner_type: 'artist' | 'promoter' | 'venue';
+  technical?: TechnicalRider;
+  hospitality?: HospitalityRider;
+  backstage?: BackstageInfo;
+  created_at: string;
+  updated_at: string;
+};
