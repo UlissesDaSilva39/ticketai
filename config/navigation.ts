@@ -21,7 +21,7 @@ export const PRIMARY_NAV: NavItem[] = [
   { key: 'artists',       label: 'Artists',       href: '/artists',       dropdown: 'artists' },
   { key: 'social',        label: 'Social',        href: '/feed',          dropdown: 'social' },
   { key: 'network',       label: 'Network',       href: '/network',       dropdown: 'network' },
-  { key: 'opportunities', label: 'Opportunities', href: '/opportunities' },
+  { key: 'opportunities', label: 'Opportunities', href: '/opportunities', auth: ['artist', 'promoter', 'venue'] },
 ];
 
 export const DROPDOWN_MAP = {
@@ -105,3 +105,4 @@ export function navForRole(role: NavRole): NavItem[] {
 export const NAV_LINKS  = PRIMARY_NAV;
 export const NAV_ITEMS  = PRIMARY_NAV;
 export const NAV_CONFIG = { primary: PRIMARY_NAV, dropdowns: DROPDOWN_MAP, profile: PROFILE_MENU };
+
