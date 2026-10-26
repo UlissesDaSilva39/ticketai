@@ -493,10 +493,10 @@ export default function Home() {
       {[
         { name: 'DJ Poxy', role: 'DJ - House', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
         { name: 'Ultra Nate', role: 'Vocalist', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
-        { name: 'Honey Dijon', role: 'DJ - Techno', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=400&h=400&fit=crop' },
+        { name: 'Honey Dijon', role: 'DJ - Techno', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
         { name: 'Floating Points', role: 'Producer', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
-        { name: 'Peggy Gou', role: 'DJ - House', city: 'Berlin', img: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=400&fit=crop' },
-        { name: 'Four Tet', role: 'Producer', city: 'London', img: 'https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=400&h=400&fit=crop' },
+        { name: 'Peggy Gou', role: 'DJ - House', city: 'Berlin', img: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=400&fit=crop' },
+        { name: 'Four Tet', role: 'Producer', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
       ].map((a) => (
         <div key={a.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition group cursor-pointer">
           <img src={a.img} alt={a.name} className="w-full aspect-square object-cover group-hover:scale-105 transition duration-300" />
@@ -573,10 +573,10 @@ export default function Home() {
       {[
         { name: 'DJ Poxy', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
         { name: 'Ultra Nate', city: 'London', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop' },
-        { name: 'Honey Dijon', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=400&h=400&fit=crop' },
+        { name: 'Honey Dijon', city: 'Chicago', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
         { name: 'Floating Points', city: 'Manchester', img: 'https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=400&h=400&fit=crop' },
-        { name: 'Peggy Gou', city: 'Berlin', img: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=400&fit=crop' },
-        { name: 'Four Tet', city: 'London', img: 'https://images.unsplash.com/photo-1524650359799-842906ca1c06?w=400&h=400&fit=crop' },
+        { name: 'Peggy Gou', city: 'Berlin', img: 'https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=400&h=400&fit=crop' },
+        { name: 'Four Tet', city: 'London', img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop' },
       ].map((a) => (
         <div key={a.name} className="rounded-2xl overflow-hidden border border-gray-200 bg-white hover:shadow-md hover:border-violet-300 transition">
           <img src={a.img} alt={a.name} className="w-full aspect-square object-cover" />
@@ -790,6 +790,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 
