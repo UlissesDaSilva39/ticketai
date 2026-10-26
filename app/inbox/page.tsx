@@ -1,4 +1,3 @@
-﻿import { Sidebar } from '@/components/sidebar/Sidebar';
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -89,7 +88,7 @@ export default async function InboxPage() {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-6 max-w-7xl mx-auto px-6 py-8"><nav aria-label="Your library" className="col-span-12 lg:col-span-3"><Sidebar /></nav><main className="bg-gray-50 min-h-screen" class="col-span-12 lg:col-span-9">
+    <div className="bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 py-10">
         <div className="mb-6 flex items-baseline justify-between flex-wrap gap-2">
           <div>
@@ -107,6 +106,6 @@ export default async function InboxPage() {
 
         <InboxList messages={out} counts={counts} />
       </div>
-    </main></div></div>
+    </div>
   );
 }

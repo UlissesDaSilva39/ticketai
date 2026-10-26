@@ -1,4 +1,3 @@
-﻿import { Sidebar } from '@/components/sidebar/Sidebar';
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -32,7 +31,7 @@ export default async function FriendsPage() {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-6 max-w-7xl mx-auto px-6 py-8"><nav aria-label="Your library" className="col-span-12 lg:col-span-3"><Sidebar /></nav><main className="max-w-3xl mx-auto px-6 py-12" class="col-span-12 lg:col-span-9">
+    <div className="max-w-3xl mx-auto px-6 py-12">
       <div className="flex items-center justify-between mb-8">
         <h1
           className="text-5xl font-bold uppercase"
@@ -45,7 +44,7 @@ export default async function FriendsPage() {
             href="/people"
             className="text-sm text-gray-600 hover:text-black"
           >
-            Find more people â†’
+            Find more people →
           </Link>
         )}
       </div>
@@ -99,6 +98,6 @@ export default async function FriendsPage() {
           })}
         </ul>
       )}
-    </main></div></div>
+    </div>
   );
 }
