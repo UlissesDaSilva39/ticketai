@@ -104,14 +104,29 @@ export function Navbar({ user }: { user?: NavUser }) {
     }
   }
 
+  // FIXED LOGOUT FUNCTION
   const handleLogout = async () => {
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-    )
-    await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
+    try {
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+      )
+      
+      // 1. Sign out of Supabase
+      await supabase.auth.signOut()
+      
+      // 2. Clear local state
+      setIsAuthenticated(false)
+      setCurrentUser(null)
+      setShowUserMenu(false)
+      
+      // 3. Force redirect to landing page with full reload
+      window.location.href = '/'
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Even if Supabase fails, force redirect
+      window.location.href = '/'
+    }
   }
 
   return (
