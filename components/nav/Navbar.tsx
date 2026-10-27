@@ -1,74 +1,214 @@
-﻿'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { PRIMARY_NAV } from '@/config/navigation';
-import { NavLink } from './NavLink';
-import { NavDropdown } from './NavDropdown';
-import { IndustryDropdown } from './IndustryDropdown';
-import { ProfileMenu } from './ProfileMenu';
-import { NotificationBell } from './NotificationBell';
-import { Logo } from './Logo';
-import type { UserWithRole, Role } from '@/lib/roles';
-import { getUserRole } from '@/lib/roles';
+'use client'
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { createBrowserClient } from '@supabase/ssr'
 
-export type NavbarUser = UserWithRole;
-
-/** Filter nav items by the user's role */
-function visibleNavForRole(role: Role) {
-  return PRIMARY_NAV.filter((item) => {
-    if (!item.auth || item.auth.length === 0) return true;
-    return item.auth.includes(role as any);
-  });
+type NavItem = {
+  label: string
+  href?: string
+  dropdown?: { label: string; href: string }[]
 }
 
-export function Navbar({ user }: { user: NavbarUser }) {
-  const pathname = usePathname() || '/';
-  const role = getUserRole(user);
-  const visibleNav = visibleNavForRole(role);
+const NAV_ITEMS: NavItem[] = [
+  { label: 'Home', href: '/' },
+  {
+    label: 'Discover',
+    dropdown: [
+      { label: 'Overview', href: '/discover' },
+      { label: 'Artists', href: '/discover/artists' },
+      { label: 'Venues', href: '/discover/venues' },
+      { label: 'Events', href: '/discover/events' },
+      { label: 'Promoters', href: '/discover/promoters' },
+      { label: 'Festivals', href: '/discover/festivals' },
+      { label: 'Labels', href: '/discover/labels' },
+    ],
+  },
+  { label: 'Search', href: '/search' },
+  {
+    label: 'Artists',
+    dropdown: [
+      { label: 'All Artists', href: '/artists' },
+      { label: 'DJs', href: '/artists?type=dj' },
+      { label: 'Producers', href: '/artists?type=producer' },
+      { label: 'Vocalists', href: '/artists?type=vocalist' },
+      { label: 'Bands', href: '/artists?type=band' },
+    ],
+  },
+  {
+    label: 'Social',
+    dropdown: [
+      { label: 'Feed', href: '/feed' },
+      { label: 'People', href: '/people' },
+      { label: 'Messages', href: '/messages' },
+      { label: 'Following', href: '/following' },
+    ],
+  },
+  {
+    label: 'Network',
+    dropdown: [
+      { label: 'People', href: '/network' },
+      { label: 'Venues', href: '/network?tab=venues' },
+      { label: 'Promoters', href: '/network?tab=promoters' },
+    ],
+  },
+  { label: 'Industry', href: '/industry' },
+]
+
+type NavUser = {
+  id?: string
+  email?: string
+  name?: string
+  role?: string | null
+} | null
+
+export function Navbar({ user }: { user?: NavUser }) {
+  const pathname = usePathname()
+  const router = useRouter()
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [currentUser, setCurrentUser] = useState<NavUser>(user || null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
+
+  useEffect(() => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+    )
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (data.user) {
+        setIsAuthenticated(true)
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username, display_name, role')
+          .eq('id', data.user.id)
+          .single()
+        setCurrentUser({
+          id: data.user.id,
+          email: data.user.email,
+          name: profile?.display_name || profile?.username || data.user.email?.split('@')[0],
+          role: profile?.role || 'fan',
+        })
+      } else {
+        setIsAuthenticated(false)
+        setCurrentUser(null)
+      }
+    })
+  }, [])
+
+  const handleProtectedClick = (e: React.MouseEvent, href?: string) => {
+    if (href === '/' || href === '#') return
+    if (!isAuthenticated) {
+      e.preventDefault()
+      router.push('/login')
+    }
+  }
+
+  const handleLogout = async () => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+    )
+    await supabase.auth.signOut()
+    router.push('/')
+    router.refresh()
+  }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
-      <nav className="mx-auto flex h-16 max-w-[1400px] items-center gap-2 px-6">
-        <Logo />
-        <ul className="flex flex-1 items-center gap-1 ml-6">
-          {visibleNav.map((item) =>
-            item.dropdown ? (
-              <li key={item.key}>
-                <NavDropdown item={item} pathname={pathname} />
-              </li>
-            ) : (
-              <li key={item.key}>
-                <NavLink href={item.href}>{item.label}</NavLink>
-              </li>
-            )
-          )}
-        </ul>
-        <div className="flex items-center gap-2">
-          {user ? (
-            <>
-              <NotificationBell />
-              <ProfileMenu user={user} />
-            </>
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-6">
+          <Link href="/" className="font-bold text-2xl tracking-tight">GRID</Link>
+          <nav className="hidden md:flex items-center gap-1">
+            {NAV_ITEMS.map((item) => {
+              if (item.dropdown) {
+                return (
+                  <div
+                    key={item.label}
+                    className="relative"
+                    onMouseEnter={() => setOpenDropdown(item.label)}
+                    onMouseLeave={() => setOpenDropdown(null)}
+                  >
+                    <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-black flex items-center gap-1">
+                      {item.label}
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {openDropdown === item.label && (
+                      <div className="absolute top-full left-0 mt-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[200px] z-50">
+                        {item.dropdown.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            onClick={(e) => handleProtectedClick(e, sub.href)}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              }
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href || '#'}
+                  onClick={(e) => handleProtectedClick(e, item.href)}
+                  className={`px-3 py-2 text-sm font-medium hover:text-black ${
+                    pathname === item.href ? 'text-black font-semibold' : 'text-gray-700'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {currentUser ? (
+            <div className="relative">
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="flex items-center gap-2 hover:opacity-80"
+              >
+                <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center font-bold">
+                  {currentUser.name?.[0]?.toUpperCase() || 'U'}
+                </div>
+                <div className="hidden md:block text-left">
+                  <p className="text-sm font-semibold text-gray-900">{currentUser.name}</p>
+                  <p className="text-xs text-gray-500 capitalize">{currentUser.role}</p>
+                </div>
+              </button>
+              {showUserMenu && (
+                <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[200px] z-50">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-sm font-semibold text-gray-900">{currentUser.name}</p>
+                    <p className="text-xs text-gray-500">{currentUser.email}</p>
+                  </div>
+                  <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Profile</Link>
+                  <Link href="/tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
+                  <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Settings</Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 border-t border-gray-100"
+                  >
+                    Log out
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <>
-              <Link
-                href="/login"
-                className="rounded-full px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/signup"
-                className="rounded-full bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-800"
-              >
-                Sign up
-              </Link>
+              <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-black px-3 py-2">Log in</Link>
+              <Link href="/signup" className="text-sm font-semibold bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">Sign up</Link>
             </>
           )}
         </div>
-      </nav>
+      </div>
     </header>
-  );
+  )
 }
-
-
