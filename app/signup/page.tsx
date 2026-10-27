@@ -2,19 +2,17 @@
 import { useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function SignupPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [role, setRole] = useState('fan')
+  const [username, setUsername] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-  )
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,18 +21,36 @@ export default function SignupPage() {
     setMessage('')
 
     try {
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+      )
+
       const { data, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: { role, username },
+        },
       })
 
       if (authError) throw authError
 
+      if (data.user) {
+        // Insert profile with role
+        await supabase.from('profiles').insert({
+          id: data.user.id,
+          username,
+          display_name: username,
+          role,
+        })
+      }
+
       if (data.session) {
-        router.push('/discover')
+        router.push(role === 'artist' ? '/artist/dashboard' : role === 'promoter' ? '/promoter/dashboard' : role === 'venue' ? '/venue/dashboard' : '/feed')
         router.refresh()
       } else {
-        setMessage('Account created! Please check your email to confirm before logging in.')
+        setMessage('Account created! Check your email to confirm.')
       }
     } catch (err: any) {
       setError(err.message || 'Failed to sign up')
@@ -54,20 +70,60 @@ export default function SignupPage() {
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
+              required
+            />
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black" required />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
+              required
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black" required />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
+              required
+            />
           </div>
-          <button type="submit" disabled={loading} className="w-full bg-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition-colors disabled:opacity-50 mt-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">I am a...</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
+            >
+              <option value="fan">Fan</option>
+              <option value="artist">Artist</option>
+              <option value="promoter">Promoter</option>
+              <option value="venue">Venue</option>
+              <option value="label">Label</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition-colors disabled:opacity-50 mt-4"
+          >
             {loading ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account? <a href="/login" className="font-semibold text-black hover:underline">Log in</a>
+          Already have an account? <Link href="/login" className="font-semibold text-black hover:underline">Log in</Link>
         </p>
       </div>
     </div>
