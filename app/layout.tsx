@@ -9,17 +9,27 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GRID | The Network for Live Music",
+  description: "Artists get booked. Promoters fill rooms. Venues get discovered.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll() {},
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {}
+        },
       },
     }
   );
@@ -29,17 +39,26 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let profile = null;
   if (user) {
     const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
+      .from("profiles")
+      .select("username, display_name, role")
+      .eq("id", user.id)
+      .maybeSingle();
     profile = data;
   }
+
+  const navUser = user
+    ? {
+        id: user.id,
+        email: user.email,
+        name: profile?.display_name || profile?.username || user.email?.split("@")[0] || "User",
+        role: profile?.role || "fan",
+      }
+    : null;
 
   return (
     <html lang="en">
       <body className={`${inter.className} font-sans antialiased bg-white text-black`}>
-        <Navbar user={user ? { id: user.id, email: user.email, name: profile?.display_name || profile?.username || user.email, role: profile?.role } : null} />
+        <Navbar user={navUser} />
         <main className="min-h-screen">{children}</main>
       </body>
     </html>

@@ -62,39 +62,47 @@ type NavUser = {
   role?: string | null
 } | null
 
-export function Navbar({ user }: { user?: NavUser }) {
+export function Navbar({ user: initialUser }: { user?: NavUser }) {
   const pathname = usePathname()
   const router = useRouter()
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [currentUser, setCurrentUser] = useState<NavUser>(user || null)
+  const [currentUser, setCurrentUser] = useState<NavUser>(initialUser || null)
   const [showUserMenu, setShowUserMenu] = useState(false)
+
+  useEffect(() => {
+    if (initialUser) {
+      setCurrentUser(initialUser)
+    }
+  }, [initialUser])
 
   useEffect(() => {
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
     )
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (data.user) {
-        setIsAuthenticated(true)
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setCurrentUser(null)
+      } else if (session?.user) {
         const { data: profile } = await supabase
           .from('profiles')
           .select('username, display_name, role')
-          .eq('id', data.user.id)
-          .single()
+          .eq('id', session.user.id)
+          .maybeSingle()
         setCurrentUser({
-          id: data.user.id,
-          email: data.user.email,
-          name: profile?.display_name || profile?.username || data.user.email?.split('@')[0],
+          id: session.user.id,
+          email: session.user.email,
+          name: profile?.display_name || profile?.username || session.user.email?.split('@')[0] || 'User',
           role: profile?.role || 'fan',
         })
-      } else {
-        setIsAuthenticated(false)
-        setCurrentUser(null)
       }
     })
+
+    return () => authListener.subscription.unsubscribe()
   }, [])
+
+  const isAuthenticated = !!currentUser
 
   const handleProtectedClick = (e: React.MouseEvent, href?: string) => {
     if (href === '/' || href === '#') return
@@ -104,27 +112,18 @@ export function Navbar({ user }: { user?: NavUser }) {
     }
   }
 
-  // FIXED LOGOUT FUNCTION
   const handleLogout = async () => {
     try {
       const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
       )
-      
-      // 1. Sign out of Supabase
       await supabase.auth.signOut()
-      
-      // 2. Clear local state
-      setIsAuthenticated(false)
       setCurrentUser(null)
       setShowUserMenu(false)
-      
-      // 3. Force redirect to landing page with full reload
       window.location.href = '/'
-    } catch (error) {
-      console.error('Logout error:', error)
-      // Even if Supabase fails, force redirect
+    } catch (err) {
+      console.error('Logout error:', err)
       window.location.href = '/'
     }
   }
@@ -198,21 +197,51 @@ export function Navbar({ user }: { user?: NavUser }) {
                   <p className="text-xs text-gray-500 capitalize">{currentUser.role}</p>
                 </div>
               </button>
+
               {showUserMenu && (
-                <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[200px] z-50">
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-sm font-semibold text-gray-900">{currentUser.name}</p>
-                    <p className="text-xs text-gray-500">{currentUser.email}</p>
+                <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl py-2 w-64 z-50">
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">
+                        {currentUser.name?.[0]?.toUpperCase() || 'U'}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-gray-900 truncate">{currentUser.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{currentUser.email}</p>
+                        <p className="text-xs text-blue-600 font-medium capitalize mt-0.5">{currentUser.role}</p>
+                      </div>
+                    </div>
                   </div>
-                  <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Profile</Link>
-                  <Link href="/tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
-                  <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Settings</Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 border-t border-gray-100"
-                  >
-                    Log out
-                  </button>
+
+                  <div className="py-1">
+                    <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Profile</Link>
+                    <Link href="/tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
+                  </div>
+
+                  {currentUser.role === 'fan' && (
+                    <div className="border-t border-gray-100 py-1">
+                      <p className="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Upgrade</p>
+                      <Link href="/artist/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
+                        Become an Artist <span className="text-gray-400">→</span>
+                      </Link>
+                      <Link href="/promoter/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
+                        Become a Promoter <span className="text-gray-400">→</span>
+                      </Link>
+                      <Link href="/venue/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
+                        Become a Venue <span className="text-gray-400">→</span>
+                      </Link>
+                    </div>
+                  )}
+
+                  <div className="border-t border-gray-100 py-1">
+                    <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Settings</Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium"
+                    >
+                      Log out
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
