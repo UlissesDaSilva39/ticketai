@@ -211,6 +211,11 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                   <Link href="/my-tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
                   <Link href="/wallet" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Wallet</Link>
                   <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Settings</Link>
+                  {currentUser.role === 'admin' && (
+                    <Link href="/admin/featured" className="block px-4 py-2 text-sm font-semibold text-purple-700 hover:bg-purple-50" onClick={() => setShowUserMenu(false)}>
+                      Admin · Featured placements
+                    </Link>
+                  )}
                   <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium">Log out</button>
                 </div>
               )}
