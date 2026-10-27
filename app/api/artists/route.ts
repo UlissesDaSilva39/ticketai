@@ -1,78 +1,134 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+
+let cachedToken: string | null = null;
+let tokenExpiry: number = 0;
+
+async function getSpotifyToken() {
+  if (cachedToken && Date.now() < tokenExpiry) return cachedToken;
+  const id = process.env.SPOTIFY_CLIENT_ID;
+  const secret = process.env.SPOTIFY_CLIENT_SECRET;
+  if (!id || !secret) return null;
+  try {
+    const auth = Buffer.from(id + ":" + secret).toString("base64");
+    const res = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: { "Authorization": "Basic " + auth, "Content-Type": "application/x-www-form-urlencoded" },
+      body: "grant_type=client_credentials",
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    cachedToken = data.access_token;
+    tokenExpiry = Date.now() + (data.expires_in - 100) * 1000;
+    return cachedToken;
+  } catch { return null; }
+}
+
+async function findSpotifyId(name: string, token: string) {
+  try {
+    const url = "https://api.spotify.com/v1/search?q=" + encodeURIComponent(name) + "&type=artist&limit=1";
+    const res = await fetch(url, { headers: { "Authorization": "Bearer " + token } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const artist = data.artists?.items?.[0];
+    if (!artist) return null;
+    return {
+      id: artist.id,
+      image: artist.images?.[0]?.url || null,
+      followers: artist.followers?.total || 0,
+      spotifyUrl: artist.external_urls?.spotify || null,
+    };
+  } catch { return null; }
+}
+
+function extractArtistName(eventName: string): string | null {
+  if (!eventName) return null;
+  let name = eventName.trim();
+  const seps = [" - ", " | ", " Live at ", " at The ", " at "];
+  for (const sep of seps) { if (name.includes(sep)) name = name.split(sep)[0].trim(); }
+  if (name.includes("-")) {
+    const parts = name.split("-");
+    if (parts.length > 1 && parts[0].trim().length >= 2) name = parts[0].trim();
+  }
+  const ci = name.indexOf(":");
+  if (ci > 0 && ci < 40) name = name.substring(0, ci).trim();
+  name = name.replace(/\s+(19|20)\d{2}\s*$/, "").trim();
+  if (name.length < 2) return null;
+  return name;
+}
+
+function isLikelyMusicArtist(name: string, genre: string): boolean {
+  if (!name) return false;
+  const lower = name.toLowerCase();
+  const genreLower = (genre || "").toLowerCase();
+  const exclude = ["tribute", "experience", "the show", "starring", "voyage", "parade", "symphonic", "family", "pantomime", "circus", "magic", "comedy", "season ticket", "entry", "dungeon", "tussauds", "wicked", "cirque", "strictly", "glastonbury", "an evening with", "festival", "country to country", "romeo", "juliet", "shakespeare", "the holiday", "premium ticket", "official ticket", "vip ticket", "children"];
+  if (exclude.some((p) => lower.includes(p))) return false;
+  if (genreLower.includes("children") || genreLower.includes("kids")) return false;
+  return true;
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  const keyword = searchParams.get('keyword') || 'London';
-  
-  const API_KEY = process.env.TICKETMASTER_API_KEY || 'YOUR_API_KEY_HERE'; 
+  const city = searchParams.get("keyword") || searchParams.get("city") || "London";
+  const API_KEY = process.env.TICKETMASTER_API_KEY;
+  if (!API_KEY) return NextResponse.json({ error: "Ticketmaster key missing" }, { status: 401 });
 
-  if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
-      console.error("MISSING API KEY: Please add TICKETMASTER_API_KEY to your .env.local file");
-      return NextResponse.json({ error: 'API Key missing' }, { status: 401 });
-  }
+  const tmToken = await getSpotifyToken();
 
   try {
-    let url = '';
-    if (id) {
-      url = `https://app.ticketmaster.com/discovery/v2/attractions/${id}.json?apikey=${API_KEY}`;
-    } else {
-      url = `https://app.ticketmaster.com/discovery/v2/attractions.json?apikey=${API_KEY}&keyword=${keyword}&classificationName=music&size=24`;
-    }
-
+    const url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=" + API_KEY
+      + "&city=" + encodeURIComponent(city) + "&classificationName=music&size=50&sort=relevance,desc";
     const res = await fetch(url, { next: { revalidate: 3600 } });
-    
-    // Log the status to the terminal so we can see it
-    console.log(`Ticketmaster API Response: ${res.status} for URL: ${url}`);
-
-    if (!res.ok) {
-        const errText = await res.text();
-        console.error("Ticketmaster API Error:", errText);
-        throw new Error(`Ticketmaster API failed with status ${res.status}`);
-    }
+    if (!res.ok) throw new Error("Ticketmaster failed");
 
     const data = await res.json();
+    const events = data._embedded?.events || [];
+    const seen = new Set<string>();
+    const base = [];
 
-    if (id) {
-      if (!data || !data.name) {
-          console.error("Ticketmaster returned no data for ID:", id);
-          throw new Error("Artist data empty");
-      }
+    for (const event of events) {
+      const name = extractArtistName(event.name || "");
+      const genre = event.classifications?.[0]?.genre?.name || "Music";
+      if (!name || !isLikelyMusicArtist(name, genre)) continue;
+      if (seen.has(name.toLowerCase())) continue;
+      seen.add(name.toLowerCase());
 
-      const artist = data;
-      const image = artist.images?.find((img: any) => img.ratio === '16_9' && img.width > 800)?.url 
-                 || artist.images?.[0]?.url 
-                 || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80';
+      const tmImage = event.images?.find((img: any) => img.ratio === "16_9" && img.width > 500)?.url || event.images?.[0]?.url || "";
+      const venue = event._embedded?.venues?.[0];
+      const eventDate = event.dates?.start?.localDate || "";
+      const dateObj = eventDate ? new Date(eventDate) : null;
+      const formattedDate = dateObj ? dateObj.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "TBA";
+      const priceRange = event.priceRanges?.[0];
 
-      return NextResponse.json({
-        id: artist.id,
-        name: artist.name,
-        genre: artist.classifications?.[0]?.genre?.name || 'Music',
-        bio: artist.info || artist.pleaseNote || `Upcoming shows and tours for ${artist.name}.`,
-        image: image,
-        tmUrl: artist.url || `https://www.ticketmaster.com/artist/${artist.id}`,
-        verified: true
+      base.push({
+        id: event.id,
+        name,
+        genre,
+        ticketImage: tmImage,
+        nextGig: { date: formattedDate, venue: venue?.name || "TBA", city: venue?.city?.name || city },
+        priceMin: priceRange?.min ?? null,
+        priceCurrency: priceRange?.currency || "GBP",
+        ticketUrl: event.url || null,
       });
-    } else {
-      const attractions = data._embedded?.attractions || [];
-      const formattedArtists = attractions.map((artist: any) => {
-        const image = artist.images?.find((img: any) => img.ratio === '16_9' && img.width > 500)?.url 
-                   || artist.images?.[0]?.url 
-                   || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80';
 
-        return {
-          id: artist.id,
-          name: artist.name,
-          genre: artist.classifications?.[0]?.genre?.name || 'Music',
-          followers: Math.floor(Math.random() * 50000) + 1000, 
-          image: image,
-          verified: true, 
-        };
-      });
-      return NextResponse.json({ artists: formattedArtists });
+      if (base.length >= 12) break;
     }
+
+    const enriched = [];
+    for (const artist of base) {
+      let spotify = null;
+      if (tmToken) spotify = await findSpotifyId(artist.name, tmToken);
+      enriched.push({
+        ...artist,
+        image: spotify?.image || artist.ticketImage,
+        spotifyId: spotify?.id || null,
+        spotifyUrl: spotify?.spotifyUrl || ("https://open.spotify.com/search/" + encodeURIComponent(artist.name)),
+        followers: spotify?.followers || 0,
+        hasSpotifyEmbed: !!spotify?.id,
+      });
+    }
+
+    return NextResponse.json({ artists: enriched, location: city, count: enriched.length });
   } catch (error: any) {
-    console.error("API Route Catch Block Error:", error.message);
-    return NextResponse.json({ error: error.message || 'Failed to fetch' }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Failed" }, { status: 500 });
   }
 }

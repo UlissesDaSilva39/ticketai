@@ -16,9 +16,8 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Discover',
     dropdown: [
       { label: 'Overview', href: '/discover' },
-      { label: 'Artists', href: '/discover/artists' },
-      { label: 'Venues', href: '/discover/venues' },
       { label: 'Events', href: '/discover/events' },
+      { label: 'Venues', href: '/discover/venues' },
       { label: 'Promoters', href: '/discover/promoters' },
       { label: 'Festivals', href: '/discover/festivals' },
       { label: 'Labels', href: '/discover/labels' },
@@ -35,6 +34,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: 'Bands', href: '/artists?type=band' },
     ],
   },
+  { label: 'Music', href: '/music' },
   {
     label: 'Social',
     dropdown: [
@@ -70,15 +70,14 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
   const [currentUser, setCurrentUser] = useState<NavUser>(initialUser || null)
   const [showUserMenu, setShowUserMenu] = useState(false)
 
-  useEffect(() => { setShowUserMenu(false); }, [pathname])
-
-  const [showMobileMenu, setShowMobileMenu] = useState(false)
+  useEffect(() => {
+    if (initialUser) setCurrentUser(initialUser)
+  }, [initialUser])
 
   useEffect(() => {
-    if (initialUser) {
-      setCurrentUser(initialUser)
-    }
-  }, [initialUser])
+    setShowUserMenu(false)
+    setOpenDropdown(null)
+  }, [pathname])
 
   useEffect(() => {
     const supabase = createBrowserClient(
@@ -90,17 +89,22 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
       if (event === 'SIGNED_OUT') {
         setCurrentUser(null)
       } else if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('username, display_name, role')
-          .eq('id', session.user.id)
-          .maybeSingle()
-        setCurrentUser({
-          id: session.user.id,
-          email: session.user.email,
-          name: profile?.display_name || profile?.username || session.user.email?.split('@')[0] || 'User',
-          role: profile?.role || 'fan',
-        })
+        try {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('username, full_name, role')
+            .eq('id', session.user.id)
+            .maybeSingle()
+
+          setCurrentUser({
+            id: session.user.id,
+            email: session.user.email,
+            name: profile?.full_name || profile?.username || session.user.email?.split('@')[0] || 'User',
+            role: profile?.role || 'fan',
+          })
+        } catch (e) {
+          console.error('Profile fetch failed', e)
+        }
       }
     })
 
@@ -110,8 +114,8 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
   const isAuthenticated = !!currentUser
 
   const handleProtectedClick = (e: React.MouseEvent, href?: string) => {
-    if (href === '/' || href === '#') return
-    if (!isAuthenticated) {
+    if (!href || href === '/' || href === '#') return
+    if (!isAuthenticated && !href.startsWith('/discover') && href !== '/artists' && href !== '/music' && href !== '/search') {
       e.preventDefault()
       router.push('/login')
     }
@@ -128,13 +132,12 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
       setShowUserMenu(false)
       window.location.href = '/'
     } catch (err) {
-      console.error('Logout error:', err)
       window.location.href = '/'
     }
   }
 
   return (
-    <header className="relative sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="font-bold text-2xl tracking-tight">GRID</Link>
@@ -158,7 +161,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                       <div className="absolute top-full left-0 mt-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[200px] z-50">
                         {item.dropdown.map((sub) => (
                           <Link
-                            key={sub.href}
+                            key={sub.label}
                             href={sub.href}
                             onClick={(e) => handleProtectedClick(e, sub.href)}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -176,9 +179,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                   key={item.label}
                   href={item.href || '#'}
                   onClick={(e) => handleProtectedClick(e, item.href)}
-                  className={`px-3 py-2 text-sm font-medium hover:text-black ${
-                    pathname === item.href ? 'text-black font-semibold' : 'text-gray-700'
-                  }`}
+                  className="px-3 py-2 text-sm font-medium hover:text-black text-gray-700"
                 >
                   {item.label}
                 </Link>
@@ -190,10 +191,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
         <div className="flex items-center gap-3">
           {currentUser ? (
             <div className="relative">
-              <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center gap-2 hover:opacity-80"
-              >
+              <button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center gap-2 hover:opacity-80">
                 <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center font-bold">
                   {currentUser.name?.[0]?.toUpperCase() || 'U'}
                 </div>
@@ -206,114 +204,25 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
               {showUserMenu && (
                 <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl py-2 w-64 z-50">
                   <div className="px-4 py-3 border-b border-gray-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">
-                        {currentUser.name?.[0]?.toUpperCase() || 'U'}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-gray-900 truncate">{currentUser.name}</p>
-                        <p className="text-xs text-gray-500 truncate">{currentUser.email}</p>
-                        <p className="text-xs text-blue-600 font-medium capitalize mt-0.5">{currentUser.role}</p>
-                      </div>
-                    </div>
+                    <p className="text-sm font-semibold text-gray-900">{currentUser.name}</p>
+                    <p className="text-xs text-gray-500">{currentUser.email}</p>
                   </div>
-
-                  <div className="py-1">
-                    <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Profile</Link>
-                    <Link href="/tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
-                  </div>
-
-                  {currentUser.role === 'fan' && (
-                    <div className="border-t border-gray-100 py-1">
-                      <p className="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Upgrade</p>
-                      <Link href="/artist/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become an Artist <span className="text-gray-400">Ã¢→ →</span>
-                      </Link>
-                      <Link href="/promoter/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become a Promoter <span className="text-gray-400">Ã¢→ →</span>
-                      </Link>
-                      <Link href="/venue/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become a Venue <span className="text-gray-400">Ã¢→ →</span>
-                      </Link>
-                        <Link href="/business" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Business tools</Link>
-                    </div>
-                  )}
-
-                  <div className="border-t border-gray-100 py-1">
-                    <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Settings</Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium"
-                    >
-                      Log out
-                    </button>
-                  </div>
+                  <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Profile</Link>
+                  <Link href="/my-tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
+                  <Link href="/wallet" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Wallet</Link>
+                  <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Settings</Link>
+                  <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium">Log out</button>
                 </div>
               )}
             </div>
           ) : (
             <>
               <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-black px-3 py-2">Log in</Link>
-              <Link href="/signup" className="text-sm font-semibold bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">Sign up</Link>
+              <Link href="/signup" className="text-sm font-semibold bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800">Sign up</Link>
             </>
           )}
         </div>
       </div>
-
-        {/* Mobile menu */}
-        <button
-          type="button"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-          className="md:hidden p-2 -ml-2"
-          aria-label="Toggle menu"
-        >
-          {showMobileMenu ? (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
-
-        {showMobileMenu && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50">
-            <nav className="flex flex-col py-2">
-              {NAV_ITEMS.map((item) =>
-                item.href ? (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setShowMobileMenu(false)}
-                    className={`px-4 py-3 text-sm border-b border-gray-100 ${
-                      pathname === item.href ? 'font-semibold text-black' : 'text-gray-700'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <div key={item.label} className="px-4 py-3 border-b border-gray-100">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
-                      {item.label}
-                    </p>
-                    {item.dropdown?.map((sub) => (
-                      <Link
-                        key={sub.href}
-                        href={sub.href}
-                        onClick={() => setShowMobileMenu(false)}
-                        className="block py-1 text-sm text-gray-700"
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
-                )
-              )}
-            </nav>
-          </div>
-        )}
     </header>
   )
 }
