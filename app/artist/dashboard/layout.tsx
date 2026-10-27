@@ -2,8 +2,9 @@ import { redirect } from 'next/navigation';
 import { createServerSupabase } from "@/lib/supabase/server";
 import { supabase } from '@/lib/supabase';
 
-export default async function artist  const supabase = await createServerSupabase();: { children: React.ReactNode }) {
-  const supabase = supabase;
+export default async function artistDashboardLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createServerSupabase();
+
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 

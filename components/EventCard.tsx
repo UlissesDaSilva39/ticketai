@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Event } from "@/lib/types";
 import EventCardActions from "./EventCardActions";
 import { Bell, MapPin, Users } from "lucide-react";
+import { CardSaveButton } from "@/components/wallet/CardSaveButton";
 
 type EventArtist = { slug: string; name: string };
 type EventVenue = { slug: string; name: string; city?: string };
@@ -46,6 +47,7 @@ export function EventCard({
 
   return (
     <div className="group block relative">
+      <CardSaveButton eventId={event.id} />
       <Link href={"/event/" + event.id} className="block">
         <div className="aspect-[4/5] bg-gray-100 overflow-hidden mb-3 relative">
           {event.hero_image ? (
@@ -111,7 +113,7 @@ export function EventCard({
 
       {firstTicket && (
         <p className={"text-xs uppercase tracking-widest " + (dark ? "text-gray-400" : "text-gray-500")}>
-          From £{Number(firstTicket.price).toFixed(2)}
+          From Â£{Number(firstTicket.price).toFixed(2)}
         </p>
       )}
 
@@ -146,7 +148,7 @@ export function EventCard({
           </div>
           <p className={"text-xs mt-1.5 " + (dark ? "text-gray-400" : "text-gray-500")}>
             {isSoldOut
-              ? "Sold out · " + soldCount + " tickets sold"
+              ? "Sold out Â· " + soldCount + " tickets sold"
               : remaining <= 10
                 ? "Only " + remaining + " left"
                 : remaining + " of " + capacity + " left"}

@@ -16,6 +16,7 @@ import ShareSheet from "@/components/ShareSheet";
 
 import EventArtists from "@/components/event/EventArtists";
 import EventArtistMerch from "@/components/event/EventArtistMerch";
+import { SaveButton } from "@/components/wallet/SaveButton";
 export const dynamic = "force-dynamic";
 
 const SITE_URL =
@@ -442,12 +443,13 @@ export default async function EventPage({
                   href={`/event/${e.id}/attendees`}
                   className="inline-block mt-3 text-sm text-white/70 underline hover:text-white"
                 >
-                  See all {goingCount} attendees · {attendingCount} going
+                  See all {goingCount} attendees Â· {goingCount} going
                 </a>
+                <SaveButton eventId={event.id} />
               </div>
             )}
             <p className="text-sm text-white/70 mt-3">
-                  {interestedCount} interested · {goingCount} going
+                  {interestedCount} interested Â· {goingCount} going
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 mt-6">
@@ -516,7 +518,7 @@ export default async function EventPage({
                   >
                     {e.venues.name}
                   </Link>
-                  {e.venues.city ? " · " : ""}{e.venues.city}
+                  {e.venues.city ? " Â· " : ""}{e.venues.city}
                 </span>
               )}
             </div>
@@ -633,7 +635,7 @@ export default async function EventPage({
                   <p className="font-medium">{t.name}</p>
 
                   <p className="font-bold">
-                    £{Number(t.price || 0).toFixed(2)}
+                    Â£{Number(t.price || 0).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -654,7 +656,7 @@ export default async function EventPage({
                       fontFamily: "var(--font-antonio)",
                     }}
                   >
-                    £{lowestPrice.toFixed(2)}
+                    Â£{lowestPrice.toFixed(2)}
                   </p>
 
                   <CheckoutLink

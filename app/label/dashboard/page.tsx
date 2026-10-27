@@ -1,7 +1,10 @@
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from "@/lib/supabase/server";
-import { supabase } from '@/lib/su  const supabase = await createServerSupabase();nc function LabelDashboardPage() {
-  const supabase = supabase;
+import { supabase } from '@/lib/supabase';
+
+export default async function LabelDashboardPage() {
+  const supabase = await createServerSupabase();
+
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login?next=/label/dashboard');
 

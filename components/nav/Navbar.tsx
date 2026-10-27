@@ -53,6 +53,7 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   { label: 'Industry', href: '/industry' },
+  { label: 'Business', href: '/business' },
 ]
 
 type NavUser = {
@@ -68,6 +69,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [currentUser, setCurrentUser] = useState<NavUser>(initialUser || null)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   useEffect(() => {
     if (initialUser) {
@@ -129,7 +131,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header className="relative sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="font-bold text-2xl tracking-tight">GRID</Link>
@@ -222,14 +224,15 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                     <div className="border-t border-gray-100 py-1">
                       <p className="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Upgrade</p>
                       <Link href="/artist/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become an Artist <span className="text-gray-400">→</span>
+                        Become an Artist <span className="text-gray-400">Ã¢â€ â€™</span>
                       </Link>
                       <Link href="/promoter/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become a Promoter <span className="text-gray-400">→</span>
+                        Become a Promoter <span className="text-gray-400">Ã¢â€ â€™</span>
                       </Link>
                       <Link href="/venue/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become a Venue <span className="text-gray-400">→</span>
+                        Become a Venue <span className="text-gray-400">Ã¢â€ â€™</span>
                       </Link>
+                        <Link href="/business" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Business tools</Link>
                     </div>
                   )}
 
@@ -253,6 +256,61 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
           )}
         </div>
       </div>
+
+        {/* Mobile menu */}
+        <button
+          type="button"
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+          className="md:hidden p-2 -ml-2"
+          aria-label="Toggle menu"
+        >
+          {showMobileMenu ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+
+        {showMobileMenu && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50">
+            <nav className="flex flex-col py-2">
+              {NAV_ITEMS.map((item) =>
+                item.href ? (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setShowMobileMenu(false)}
+                    className={`px-4 py-3 text-sm border-b border-gray-100 ${
+                      pathname === item.href ? 'font-semibold text-black' : 'text-gray-700'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <div key={item.label} className="px-4 py-3 border-b border-gray-100">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+                      {item.label}
+                    </p>
+                    {item.dropdown?.map((sub) => (
+                      <Link
+                        key={sub.href}
+                        href={sub.href}
+                        onClick={() => setShowMobileMenu(false)}
+                        className="block py-1 text-sm text-gray-700"
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                )
+              )}
+            </nav>
+          </div>
+        )}
     </header>
   )
 }

@@ -1,0 +1,80 @@
+﻿app/(search)/overview/page.tsx(1,28): error TS2307: Cannot find module '../../components/SearchOverview' or its corresponding type declarations.
+app/api/messages/route.ts(25,30): error TS2339: Property 'promoter' does not exist on type '{ from: (_: string) => { select: (_q?: string | undefined) => Promise<{ data: never[]; error: null; }>; insert: (_v: any) => Promise<{ data: null; error: null; }>; update: (_v: any) => Promise<...>; delete: () => Promise<...>; eq: () => { ...; }; }; }'.
+app/api/messages/route.ts(36,27): error TS2339: Property 'messageThread' does not exist on type '{ from: (_: string) => { select: (_q?: string | undefined) => Promise<{ data: never[]; error: null; }>; insert: (_v: any) => Promise<{ data: null; error: null; }>; update: (_v: any) => Promise<...>; delete: () => Promise<...>; eq: () => { ...; }; }; }'.
+app/api/messages/route.ts(50,12): error TS2339: Property 'message' does not exist on type '{ from: (_: string) => { select: (_q?: string | undefined) => Promise<{ data: never[]; error: null; }>; insert: (_v: any) => Promise<{ data: null; error: null; }>; update: (_v: any) => Promise<...>; delete: () => Promise<...>; eq: () => { ...; }; }; }'.
+app/api/messages/route.ts(60,12): error TS2339: Property 'notification' does not exist on type '{ from: (_: string) => { select: (_q?: string | undefined) => Promise<{ data: never[]; error: null; }>; insert: (_v: any) => Promise<{ data: null; error: null; }>; update: (_v: any) => Promise<...>; delete: () => Promise<...>; eq: () => { ...; }; }; }'.
+app/artist/[slug]/page.tsx(38,9): error TS2322: Type '{ name: any; genre: any; city: any; headerImage: any; }' is not assignable to type 'IntrinsicAttributes & { imageUrl: string; name: string; subtitle?: string | undefined; onFollow?: (() => void) | undefined; }'.
+  Property 'genre' does not exist on type 'IntrinsicAttributes & { imageUrl: string; name: string; subtitle?: string | undefined; onFollow?: (() => void) | undefined; }'.
+app/artist/register/page.tsx(46,9): error TS2322: Type '{ defaultName: any; defaultHandle: any; defaultEmail: string; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'defaultName' does not exist on type 'IntrinsicAttributes'.
+app/event/[id]/page.tsx(445,53): error TS2304: Cannot find name 'attendingCount'.
+app/genre/[genre]/page.tsx(89,23): error TS7006: Parameter 'w' implicitly has an 'any' type.
+app/organizers/[id]/page.tsx(174,15): error TS2322: Type '{ id: string; slug: string; name: string; city: string | null; membership_url?: string | null | undefined; } | null' is not assignable to type 'EventVenue | null | undefined'.
+  Type '{ id: string; slug: string; name: string; city: string | null; membership_url?: string | null | undefined; }' is not assignable to type 'EventVenue'.
+    Types of property 'city' are incompatible.
+      Type 'string | null' is not assignable to type 'string | undefined'.
+        Type 'null' is not assignable to type 'string | undefined'.
+app/organizers/[id]/page.tsx(175,31): error TS2551: Property 'organizer' does not exist on type 'Event'. Did you mean 'organizer_id'?
+app/organizers/[id]/page.tsx(175,57): error TS2551: Property 'organizer' does not exist on type 'Event'. Did you mean 'organizer_id'?
+app/organizers/[id]/page.tsx(175,91): error TS2551: Property 'organizer' does not exist on type 'Event'. Did you mean 'organizer_id'?
+app/u/[username]/page.tsx(139,24): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(139,30): error TS2339: Property 'artists' does not exist on type 'Event'.
+app/u/[username]/page.tsx(140,22): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(140,28): error TS2339: Property 'venue' does not exist on type 'Event'.
+app/u/[username]/page.tsx(141,25): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(141,31): error TS2339: Property 'organizer' does not exist on type 'Event'.
+app/u/[username]/page.tsx(141,51): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(141,57): error TS2339: Property 'organizer' does not exist on type 'Event'.
+app/u/[username]/page.tsx(141,85): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(141,91): error TS2339: Property 'organizer' does not exist on type 'Event'.
+app/u/[username]/page.tsx(162,24): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(162,30): error TS2339: Property 'artists' does not exist on type 'Event'.
+app/u/[username]/page.tsx(163,22): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(163,28): error TS2339: Property 'venue' does not exist on type 'Event'.
+app/u/[username]/page.tsx(164,25): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(164,31): error TS2339: Property 'organizer' does not exist on type 'Event'.
+app/u/[username]/page.tsx(164,51): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(164,57): error TS2339: Property 'organizer' does not exist on type 'Event'.
+app/u/[username]/page.tsx(164,85): error TS18048: 'event' is possibly 'undefined'.
+app/u/[username]/page.tsx(164,91): error TS2339: Property 'organizer' does not exist on type 'Event'.
+app/venue/[slug]/page.tsx(280,15): error TS2322: Type '{ id: string; slug: string; name: string; city: string | null; membership_url?: string | null | undefined; } | null' is not assignable to type 'EventVenue | null | undefined'.
+  Type '{ id: string; slug: string; name: string; city: string | null; membership_url?: string | null | undefined; }' is not assignable to type 'EventVenue'.
+    Types of property 'city' are incompatible.
+      Type 'string | null' is not assignable to type 'string | undefined'.
+        Type 'null' is not assignable to type 'string | undefined'.
+app/venue/[slug]/page.tsx(281,31): error TS2551: Property 'organizer' does not exist on type 'Event'. Did you mean 'organizer_id'?
+app/venue/[slug]/page.tsx(281,57): error TS2551: Property 'organizer' does not exist on type 'Event'. Did you mean 'organizer_id'?
+app/venue/[slug]/page.tsx(281,91): error TS2551: Property 'organizer' does not exist on type 'Event'. Did you mean 'organizer_id'?
+backups/nav-20261023-163524/app_layout.tsx(133,19): error TS2322: Type '{ email: string | null; username: string | null; role: string | null; artistSlug: string | null; displayName: string | null; pendingRequestCount: number; } | null' is not assignable to type 'NavUser | undefined'.
+  Object literal may only specify known properties, and 'username' does not exist in type '{ id?: string | undefined; email?: string | undefined; name?: string | undefined; role?: string | null | undefined; }'.
+components/CityPage.tsx(84,24): error TS18048: 'event' is possibly 'undefined'.
+components/CityPage.tsx(84,30): error TS2339: Property 'artists' does not exist on type 'Event'.
+components/CityPage.tsx(85,22): error TS18048: 'event' is possibly 'undefined'.
+components/CityPage.tsx(85,28): error TS2339: Property 'venue' does not exist on type 'Event'.
+components/CityPage.tsx(86,25): error TS18048: 'event' is possibly 'undefined'.
+components/CityPage.tsx(86,31): error TS2339: Property 'organizer' does not exist on type 'Event'.
+components/CityPage.tsx(86,51): error TS18048: 'event' is possibly 'undefined'.
+components/CityPage.tsx(86,57): error TS2339: Property 'organizer' does not exist on type 'Event'.
+components/CityPage.tsx(86,85): error TS18048: 'event' is possibly 'undefined'.
+components/CityPage.tsx(86,91): error TS2339: Property 'organizer' does not exist on type 'Event'.
+components/djs/DjCard.tsx(41,75): error TS2339: Property 'price' does not exist on type '{ date: string; venue: string; city: string; setTime: string; ticketUrl: string; }'.
+components/GenrePage.tsx(88,24): error TS18048: 'event' is possibly 'undefined'.
+components/GenrePage.tsx(88,30): error TS2339: Property 'artists' does not exist on type 'Event'.
+components/GenrePage.tsx(89,22): error TS18048: 'event' is possibly 'undefined'.
+components/GenrePage.tsx(89,28): error TS2339: Property 'venue' does not exist on type 'Event'.
+components/GenrePage.tsx(90,25): error TS18048: 'event' is possibly 'undefined'.
+components/GenrePage.tsx(90,31): error TS2339: Property 'organizer' does not exist on type 'Event'.
+components/GenrePage.tsx(90,51): error TS18048: 'event' is possibly 'undefined'.
+components/GenrePage.tsx(90,57): error TS2339: Property 'organizer' does not exist on type 'Event'.
+components/GenrePage.tsx(90,85): error TS18048: 'event' is possibly 'undefined'.
+components/GenrePage.tsx(90,91): error TS2339: Property 'organizer' does not exist on type 'Event'.
+components/promoters/PromoterCard.tsx(70,45): error TS7006: Parameter 'src' implicitly has an 'any' type.
+components/promoters/PromoterCard.tsx(70,50): error TS7006: Parameter 'i' implicitly has an 'any' type.
+lib/artists.ts(249,5): error TS2741: Property 'social' is missing in type '{ id: any; userId: any; slug: any; name: any; city: any; bio: string; verified: false; role: any; genres: any[]; key: string; bookingCount: number; placements: number; photos: any[]; trackCount: number; playCount: number; ... 8 more ...; earnedTotal: string; }' but required in type 'Artist'.
+lib/supabase.ts(2,10): error TS2300: Duplicate identifier 'supabase'.
+lib/supabase.ts(3,10): error TS2305: Module '"./supabase/client"' has no exported member 'default'.
+lib/supabase.ts(3,21): error TS2300: Duplicate identifier 'supabase'.
+lib/supabase.ts(4,10): error TS2305: Module '"./supabase/client"' has no exported member 'default'.
+scripts/test-rss.ts(1,30): error TS2307: Cannot find module './lib/ingestion/sources/rss' or its corresponding type declarations.
+scripts/test-rss.ts(2,54): error TS7006: Parameter 'items' implicitly has an 'any' type.
+
