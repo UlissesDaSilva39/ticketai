@@ -1,0 +1,30 @@
+﻿TicketAI final fix report - 20261027-110548
+
+[1] lib\supabase.ts — align re-export with client.ts
+       client.ts: exportsDefault=False namedSupabase=False namedClient=False
+  MANUAL lib\supabase\client.ts has no 'supabase', no default, and no 'client' export — can't derive one automatically
+
+[2] lib\types.ts — remove duplicate Event members
+       found 1 Event-related declaration(s)
+  SKIP  no duplicate top-level members found across 1 Event block(s)
+
+[3] app\api\messages\route.ts — report only
+  MANUAL app\api\messages\route.ts uses Prisma API calls that don't exist on a Supabase client:
+  MANUAL     - db.promoter.findUnique  (Prisma-style)
+  MANUAL     - db.messageThread.upsert (Prisma-style)
+  MANUAL     - db.message.create        (Prisma-style)
+  MANUAL     - db.notification.create   (Prisma-style)
+  MANUAL This file needs a manual rewrite. It is not edited.
+
+[4] Running tsc --noEmit
+       tsc reported 11 error(s). Full output saved to: .backup-final-20261027-110548\tsc-output.txt
+       Summary of files still showing errors:
+         - app/artist/dashboard/layout.tsx
+         - app/label/dashboard/page.tsx
+         - app/promoter/dashboard/layout.tsx
+         - app/venue/dashboard/layout.tsx
+
+[DONE]
+Backup folder: .backup-final-20261027-110548
+Report: .backup-final-20261027-110548\REPORT.txt
+Typecheck output: .backup-final-20261027-110548\tsc-output.txt

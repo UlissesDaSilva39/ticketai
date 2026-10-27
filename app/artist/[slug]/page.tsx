@@ -1,5 +1,6 @@
-﻿import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import { ClaimButton } from '@/components/claims/ClaimButton';
+import { FullBleedHeader } from '@/components/artists/FullBleedHeader';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +33,12 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
   return (
     <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '32px 24px' }}>
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-        <div style={{ background: 'white', borderRadius: 16, padding: 32, border: '1px solid #e5e7eb' }}>
+              <FullBleedHeader
+        name={artist.name}
+        genre={artist.genre}
+        city={artist.city}
+        headerImage={artist.cover_image ?? null}
+      />      <div style={{ background: 'white', borderRadius: 16, padding: 32, border: '1px solid #e5e7eb' }}>
           <h1 style={{ fontSize: 36, fontWeight: 800, color: '#111827', margin: '0 0 8px' }}>{artist.name}</h1>
           <p style={{ fontSize: 16, color: '#6b7280', margin: '0 0 16px' }}>
             {[artist.artist_type, artist.genre, artist.city].filter(Boolean).join('  -  ')}

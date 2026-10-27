@@ -1,0 +1,29 @@
+TicketAI fix report - 20261027-110503
+
+[1] app\search\page.tsx - missing showFilters state
+  OK    backed up: app\search\page.tsx -> .backup-fixall-20261027-110503\app_search_page.tsx
+  OK    inserted showFilters state before the return that uses it
+
+[2] lib\types.ts - duplicate Event members
+  SKIP  no duplicate keys found across 1 Event block(s)
+
+[3] lib\supabase.ts - missing supabase export
+  OK    backed up: lib\supabase.ts -> .backup-fixall-20261027-110503\lib_supabase.ts
+  OK    rewrote re-export lines in lib\supabase.ts (check the target file actually exports 'supabase')
+
+[4] app\artist\[slug]\page.tsx - padding typo
+  SKIP  no '12px24px' typo found
+
+[5] app\api\messages\route.ts - REPORT ONLY (not edited)
+  MANUAL app\api\messages\route.ts calls Prisma methods on a Supabase client:
+  MANUAL   - db.promoter.findUnique (Prisma-style, not Supabase)
+  MANUAL   - db.messageThread.upsert (Prisma-style)
+  MANUAL   - db.message.create (Prisma-style)
+  MANUAL   - db.notification.create (Prisma-style)
+  MANUAL This file needs a rewrite, not a patch. It is not edited.
+
+[DONE]
+Backup folder: .backup-fixall-20261027-110503
+Report: .backup-fixall-20261027-110503\REPORT.txt
+
+Next: run 'npx tsc --noEmit' and compare against this report.

@@ -1,7 +1,8 @@
-﻿import { redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
+import { createServerSupabase } from "@/lib/supabase/server";
 import { supabase } from '@/lib/supabase';
 
-export default async function promoterDashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function promoter  const supabase = await createServerSupabase();: { children: React.ReactNode }) {
   const supabase = supabase;
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');

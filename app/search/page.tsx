@@ -1,3 +1,5 @@
+const [showFilters, setShowFilters] = useState(false);
+
 'use client';
 
 import { useState, useEffect } from 'react';
