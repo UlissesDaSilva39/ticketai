@@ -1,49 +1,77 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const keyword = searchParams.get('keyword') || 'Festival';
-  
-  const API_KEY = process.env.TICKETMASTER_API_KEY || 'YOUR_API_KEY_HERE'; 
+  const keyword = searchParams.get("keyword") || "Festival";
+  const API_KEY = process.env.TICKETMASTER_API_KEY;
+
+  if (!API_KEY) {
+    return NextResponse.json({ error: "API Key missing" }, { status: 401 });
+  }
 
   try {
-    // We query events but explicitly search for "Festival" to get festival data
-    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${API_KEY}&keyword=${keyword}&classificationName=music&size=24&sort=date,asc`;
-    
+    const url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=" + API_KEY
+      + "&keyword=" + encodeURIComponent(keyword)
+      + "&classificationName=music"
+      + "&countryCode=GB"
+      + "&segmentName=Music"
+      + "&size=40"
+      + "&sort=date,asc";
+
     const res = await fetch(url, { next: { revalidate: 3600 } });
-    if (!res.ok) throw new Error('Ticketmaster API failed');
-    
+    if (!res.ok) throw new Error("Ticketmaster API failed: " + res.status);
+
     const data = await res.json();
     const events = data._embedded?.events || [];
 
-    const formatted = events.map((e: any) => {
-      // 1. Get the best image
-      const image = e.images?.find((img: any) => img.ratio === '16_9' && img.width > 500)?.url 
-                 || e.images?.[0]?.url 
-                 || 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80';
+    const seen = new Set<string>();
+    const formatted = [];
 
-      // 2. Safely format the date and time
-      let dateString = 'Date TBA';
-      if (e.dates?.start?.localDate) {
-        const dateObj = new Date(e.dates.start.localDate);
-        dateString = dateObj.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-      }
+    for (const event of events) {
+      const name = (event.name || "").trim();
+      if (!name) continue;
 
-      return {
-        id: e.id,
-        name: e.name,
-        date: dateString,
-        venue: e._embedded?.venues?.[0]?.name || 'Location TBA',
-        city: e._embedded?.venues?.[0]?.city?.name || 'City TBA',
+      const date = event.dates?.start?.localDate || "";
+      const key = name.toLowerCase() + "|" + date;
+      if (seen.has(key)) continue;
+      seen.add(key);
+
+      const image = event.images?.find((img: any) => img.ratio === "16_9" && img.width > 500)?.url
+        || event.images?.[0]?.url
+        || "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=80";
+
+      const venue = event._embedded?.venues?.[0];
+      const venueName = venue?.name || "Location TBA";
+      const city = venue?.city?.name || "UK";
+
+      const priceRange = event.priceRanges?.[0];
+      const priceMin = priceRange?.min ?? null;
+      const currency = priceRange?.currency || "GBP";
+
+      const dateObj = date ? new Date(date) : null;
+      const formattedDate = dateObj
+        ? dateObj.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })
+        : "TBA";
+
+      formatted.push({
+        id: event.id,
+        name: name,
+        date: formattedDate,
+        rawDate: date,
+        venue: venueName,
+        city: city,
         image: image,
-        tmUrl: e.url, 
-        priceMin: e.priceRanges?.[0]?.min || null,
-      };
-    });
+        priceMin: priceMin,
+        currency: currency,
+        ticketUrl: event.url || null,
+      });
 
-    return NextResponse.json({ festivals: formatted });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Failed to fetch festivals' }, { status: 500 });
+      if (formatted.length >= 12) break;
+    }
+
+    return NextResponse.json({ data: formatted, count: formatted.length });
+  } catch (error: any) {
+    console.error("Festivals API Error:", error.message);
+    return NextResponse.json({ error: error.message || "Failed" }, { status: 500 });
   }
 }

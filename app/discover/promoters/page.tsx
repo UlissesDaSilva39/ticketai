@@ -12,7 +12,7 @@ export default function DiscoverPromotersPage() {
     try {
       const res = await fetch(`/api/promoters?keyword=${query}`)
       const data = await res.json()
-      setPromoters(data.promoters || [])
+      setPromoters(data.data || [])
     } catch (e) {
       console.error("Failed to load promoters", e)
     } finally {

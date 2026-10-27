@@ -8,7 +8,6 @@ type Artist = {
   image: string;
   spotifyId: string | null;
   spotifyUrl: string;
-  followers: number;
   hasSpotifyEmbed: boolean;
   nextGig?: { date: string; venue: string; city: string };
   priceMin?: number | null;
@@ -16,11 +15,26 @@ type Artist = {
   ticketUrl?: string | null;
 };
 
+const SAVED_KEY = "grid.saved_artists";
+const EMAIL_KEY = "grid.captured_email";
+const CLICK_COUNT_KEY = "grid.ticket_clicks";
+
 export default function MusicPage() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [search, setSearch] = useState("London");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
+  const [pendingTicketUrl, setPendingTicketUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
+      if (Array.isArray(saved)) setSavedIds(saved);
+    } catch {}
+  }, []);
 
   const fetchArtists = async (query: string) => {
     setLoading(true);
@@ -37,6 +51,36 @@ export default function MusicPage() {
   };
 
   useEffect(() => { fetchArtists("London"); }, []);
+
+  const saveArtist = (id: string) => {
+    if (savedIds.includes(id)) return;
+    const next = [...savedIds, id];
+    setSavedIds(next);
+    try { localStorage.setItem(SAVED_KEY, JSON.stringify(next)); } catch {}
+  };
+
+  const handleTicketClick = (e: React.MouseEvent, artist: Artist) => {
+    saveArtist(artist.id);
+    try {
+      const clicks = parseInt(localStorage.getItem(CLICK_COUNT_KEY) || "0", 10) + 1;
+      localStorage.setItem(CLICK_COUNT_KEY, String(clicks));
+      const captured = localStorage.getItem(EMAIL_KEY);
+      if (!captured && clicks === 1) {
+        e.preventDefault();
+        setPendingTicketUrl(artist.ticketUrl || null);
+        setEmailModalOpen(true);
+      }
+    } catch {}
+  };
+
+  const submitEmail = () => {
+    if (!emailInput.includes("@")) return;
+    try { localStorage.setItem(EMAIL_KEY, emailInput); } catch {}
+    setEmailModalOpen(false);
+    if (pendingTicketUrl) window.open(pendingTicketUrl, "_blank");
+    setPendingTicketUrl(null);
+    setEmailInput("");
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
@@ -70,43 +114,33 @@ export default function MusicPage() {
           <p className="text-xs text-gray-500 mb-3">{artists.length} artists playing in {search}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {artists.map((artist) => (
-              <div key={artist.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all flex flex-col">
+              <div key={artist.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all flex flex-col relative">
+                {savedIds.includes(artist.id) && (
+                  <span className="absolute top-2 right-2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded-full z-10">Saved</span>
+                )}
                 <div className="h-40 bg-gray-100 relative shrink-0">
                   <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
-                  {artist.priceMin != null && (
-                    <span className="absolute bottom-2 left-2 bg-white/95 text-black text-xs font-bold px-2 py-1 rounded shadow">
-                      From {artist.priceCurrency} {artist.priceMin}
-                    </span>
-                  )}
                 </div>
-
                 <div className="p-3 flex flex-col flex-1">
                   <h3 className="text-sm font-bold text-gray-900 line-clamp-1">{artist.name}</h3>
                   <p className="text-xs text-gray-500 line-clamp-1">{artist.genre} - {artist.nextGig?.city || search}</p>
-
                   {artist.nextGig?.date && artist.nextGig.date !== "TBA" && (
                     <p className="text-xs font-semibold text-blue-600 mt-1 line-clamp-1">{artist.nextGig.date} - {artist.nextGig.venue}</p>
                   )}
-
                   {artist.hasSpotifyEmbed ? (
                     <div className="mt-2">
                       <iframe
                         src={"https://open.spotify.com/embed/artist/" + artist.spotifyId + "?utm_source=generator&theme=0"}
                         width="100%"
-                        height="152"
+                        height="80"
                         frameBorder="0"
                         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                         loading="lazy"
                         className="rounded-lg"
                       />
                     </div>
-                  ) : (
-                    <div className="mt-2 h-[152px] bg-gray-50 rounded-lg flex items-center justify-center border border-gray-100">
-                      <span className="text-gray-400 text-xs">No Spotify preview</span>
-                    </div>
-                  )}
-
-                  <div className="mt-auto pt-2 flex flex-col gap-2">
+                  ) : null}
+                  <div className="mt-auto pt-3 flex flex-col gap-2">
                     {artist.spotifyUrl && (
                       <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer"
                         className="w-full text-xs font-semibold text-center py-2 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition">
@@ -115,6 +149,7 @@ export default function MusicPage() {
                     )}
                     {artist.ticketUrl && (
                       <a href={artist.ticketUrl} target="_blank" rel="noopener noreferrer"
+                        onClick={(e) => handleTicketClick(e, artist)}
                         className="w-full text-xs font-semibold text-center py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition">
                         Get Tickets →
                       </a>
@@ -125,6 +160,23 @@ export default function MusicPage() {
             ))}
           </div>
         </>
+      )}
+
+      {emailModalOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <h3 className="text-lg font-bold mb-2">Get notified about these artists</h3>
+            <p className="text-sm text-gray-600 mb-4">We will email you when new events go on sale for the artists you clicked.</p>
+            <input type="email" value={emailInput} onChange={(e) => setEmailInput(e.target.value)}
+              placeholder="your@email.com"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3" />
+            <div className="flex gap-2">
+              <button onClick={submitEmail} className="flex-1 bg-black text-white py-2 rounded-lg font-semibold">Continue to tickets</button>
+              <button onClick={() => { setEmailModalOpen(false); if (pendingTicketUrl) window.open(pendingTicketUrl, "_blank"); }}
+                className="px-4 py-2 text-sm text-gray-600">Skip</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
