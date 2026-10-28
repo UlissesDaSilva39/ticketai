@@ -1,0 +1,59 @@
+﻿.card {
+  background: #181818;
+  border-radius: 8px;
+  padding: 16px;
+  transition: background 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.card:hover {
+  background: #282828;
+  border-color: #333;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.genre {
+  font-size: 13px;
+  color: #b3b3b3;
+  margin: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.fans {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b3b3b3;
+  background: rgba(255,255,255,0.06);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.view {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1db954;
+  text-decoration: none;
+}
+
+.view:hover {
+  color: #1ed760;
+  text-decoration: underline;
+}

@@ -1,0 +1,42 @@
+/* app/artists/page.module.css */
+
+.page {
+  min-height: 100vh;
+  background: #121212;
+  color: #fff;
+  padding: 32px 40px 80px;
+  font-family: "Circular", "Helvetica Neue", Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 16px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.subtitle { color: #b3b3b3; font-size: 14px; margin-top: 4px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.empty { color: #b3b3b3; text-align: center; padding: 40px 0; }
+
+@media (max-width: 640px) {
+  .page { padding: 20px 16px 60px; }
+  .header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .title { font-size: 24px; }
+  .grid { grid-template-columns: 1fr; }
+}

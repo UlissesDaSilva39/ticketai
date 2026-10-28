@@ -1,5 +1,3 @@
-const [showFilters, setShowFilters] = useState(false);
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -31,6 +29,7 @@ const ARTISTS = [
 const SUGGESTIONS = ['Fabric', 'Paper Lions', 'Nightshift Presents', 'Techno London', 'Free Tonight'];
 
 export default function SearchPage() {
+  const [showFilters, setShowFilters] = useState(false);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -150,11 +149,11 @@ export default function SearchPage() {
                       </div>
                       <div style={{ padding: 16, flex: 1, display: 'flex', flexDirection: 'column' }}>
                         <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>{e.title}</h3>
-                        <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 4px' }}>{e.date} · {e.venue}</p>
+                        <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 4px' }}>{e.date} Ã‚Â· {e.venue}</p>
                         <p style={{ fontSize: 12, color: '#7c5cff', fontWeight: 600, margin: '0 0 12px' }}>{e.promoter}</p>
                         
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', marginBottom: 8 }}>
-                          <span style={{ fontSize: 14, fontWeight: 700 }}>From £{e.price.toFixed(2)}</span>
+                          <span style={{ fontSize: 14, fontWeight: 700 }}>From Ã‚Â£{e.price.toFixed(2)}</span>
                           <button onClick={() => router.push('/events/' + e.id)} style={{ padding: '8px 16px', borderRadius: 6, background: '#111827', color: 'white', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Tickets</button>
                         </div>
 
@@ -191,7 +190,7 @@ export default function SearchPage() {
                   <div>
                     <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>{a.name}</h3>
                     <p style={{ fontSize: 12, color: '#6b7280', margin: '2px 0 0', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <IconLocation /> {a.genre} · {a.city}
+                      <IconLocation /> {a.genre} Ã‚Â· {a.city}
                     </p>
                   </div>
                 </div>

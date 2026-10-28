@@ -16,27 +16,15 @@ export function BusinessCard({
   return (
     <Link
       href={href}
-      className="group flex flex-col h-full overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-md"
+      className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:shadow-lg"
     >
-      {/* Top color bar */}
-      <div className={`h-1.5 w-full bg-gradient-to-r ${accent} shrink-0`} />
-      
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-3 sm:p-5">
-        <h3 className="text-sm sm:text-lg font-semibold leading-tight">{title}</h3>
-        
-        {/* Hide description on very small screens to prevent overlap */}
-        <p className="mt-1 hidden text-xs text-neutral-500 sm:block sm:text-sm sm:text-neutral-600 flex-1">
-          {description}
+      <div className={`h-2 w-full bg-gradient-to-r ${accent}`} />
+      <div className="p-5">
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="mt-1 text-sm text-neutral-600">{description}</p>
+        <p className="mt-3 text-sm font-medium text-neutral-900 group-hover:underline">
+          Open dashboard &rarr;
         </p>
-        
-        {/* Action text pinned to bottom */}
-        <div className="mt-3 flex items-center text-[11px] sm:text-sm font-medium text-neutral-900 group-hover:underline">
-          Open dashboard
-          <svg className="ml-1 h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </div>
       </div>
     </Link>
   );

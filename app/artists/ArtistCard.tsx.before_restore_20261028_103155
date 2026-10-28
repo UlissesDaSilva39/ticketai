@@ -1,0 +1,28 @@
+﻿"use client";
+
+import Link from "next/link";
+import type { Artist } from "@/lib/artistData";
+import { formatFollowers } from "@/lib/artistData";
+import styles from "./ArtistCard.module.css";
+
+type Props = { artist: Artist };
+
+export default function ArtistCard({ artist }: Props) {
+  return (
+    <article className={styles.card}>
+      <div className={styles.body}>
+        <h3 className={styles.name}>{artist.name}</h3>
+        <p className={styles.genre}>{artist.genre ?? "—"}</p>
+
+        <div className={styles.meta}>
+          <span className={styles.fans}>
+            {formatFollowers(artist.followers)} fans
+          </span>
+          <Link href={`/artists/${artist.id}`} className={styles.view}>
+            View {"\u2192"}
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
