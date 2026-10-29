@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -12,6 +12,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
+  { label: 'Distribution', href: '/distribution' },
   {
     label: 'Discover',
     dropdown: [
@@ -227,13 +228,13 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                     <div className="border-t border-gray-100 py-1">
                       <p className="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Upgrade</p>
                       <Link href="/artist/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become an Artist <span className="text-gray-400">Ã¢→ →</span>
+                        Become an Artist <span className="text-gray-400">ÃƒÂ¢â†’Â â†’</span>
                       </Link>
                       <Link href="/promoter/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become a Promoter <span className="text-gray-400">Ã¢→ →</span>
+                        Become a Promoter <span className="text-gray-400">ÃƒÂ¢â†’Â â†’</span>
                       </Link>
                       <Link href="/venue/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
-                        Become a Venue <span className="text-gray-400">Ã¢→ →</span>
+                        Become a Venue <span className="text-gray-400">ÃƒÂ¢â†’Â â†’</span>
                       </Link>
                         <Link href="/business" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Business tools</Link>
                     </div>
