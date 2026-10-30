@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -69,11 +69,11 @@ export default function NotificationPreferencesForm({
         return (
           <div
             key={key}
-            className="flex items-center justify-between py-4 border-b border-gray-100"
+            className="flex items-center justify-between py-4 border-b border-gray-100 dark:border-gray-800"
           >
             <div className="pr-4">
               <p className="font-medium text-sm">{label}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{hint}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{hint}</p>
             </div>
             <button
               type="button"
@@ -88,7 +88,7 @@ export default function NotificationPreferencesForm({
             >
               <span
                 className={
-                  "absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform " +
+                  "absolute top-0.5 left-0.5 w-5 h-5 bg-white dark:bg-gray-900 rounded-full shadow transition-transform " +
                   (on ? "translate-x-5" : "")
                 }
               />
@@ -102,17 +102,17 @@ export default function NotificationPreferencesForm({
           type="button"
           onClick={reset}
           disabled={saving}
-          className="text-sm text-gray-500 hover:text-black"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
         >
           Reset to defaults
         </button>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-500 dark:text-gray-400">
           {error ? (
             <span className="text-red-600">{error}</span>
           ) : savedAt ? (
             "Saved " + savedAt
           ) : saving ? (
-            "Saving…"
+            "Savingâ€¦"
           ) : null}
         </p>
       </div>

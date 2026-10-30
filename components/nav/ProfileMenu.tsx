@@ -28,34 +28,34 @@ export function ProfileMenu({ user }: { user: UserWithRole }) {
 
       {open && (
         <div className="absolute right-0 top-full pt-2 z-50">
-          <div className="min-w-[240px] rounded-2xl border border-gray-200 bg-white p-2 shadow-lg">
+          <div className="min-w-[240px] rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-2 shadow-lg">
             {user && (
-              <div className="px-3 py-2 border-b border-gray-100 mb-1">
-                <div className="font-semibold text-sm text-gray-900">{user.name}</div>
-                <div className="text-xs text-gray-500">
+              <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-800 mb-1">
+                <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">{user.name}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
                   {ROLE_LABELS[role]}
                   {club && <span className="ml-1 text-violet-600">· Club member</span>}
                 </div>
               </div>
             )}
 
-            <Link href="/profile" className="block rounded-lg px-3 py-2 text-sm text-gray-900 hover:bg-gray-100">
+            <Link href="/profile" className="block rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
               Profile
             </Link>
 
             {dashboard && (
-              <Link href={dashboard} className="block rounded-lg px-3 py-2 text-sm text-gray-900 hover:bg-gray-100">
+              <Link href={dashboard} className="block rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
                 My {ROLE_LABELS[role].toLowerCase()} page
               </Link>
             )}
 
-            <Link href="/my-tickets" className="block rounded-lg px-3 py-2 text-sm text-gray-900 hover:bg-gray-100">
+            <Link href="/my-tickets" className="block rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
               My Tickets
             </Link>
 
             {/* Role upgrade CTA - show for fans */}
             {fan && (
-              <div className="border-t border-gray-100 mt-1 pt-1">
+              <div className="border-t border-gray-100 dark:border-gray-800 mt-1 pt-1">
                 <Link href="/artist/register" className="block rounded-lg px-3 py-2 text-sm font-medium text-violet-700 hover:bg-violet-50">
                   Become an artist →
                 </Link>
@@ -70,7 +70,7 @@ export function ProfileMenu({ user }: { user: UserWithRole }) {
 
             {/* Club upgrade CTA - show for role users not in club */}
             {!fan && !club && (
-              <div className="border-t border-gray-100 mt-1 pt-1">
+              <div className="border-t border-gray-100 dark:border-gray-800 mt-1 pt-1">
                 <Link href={CLUB_UPGRADE_URL} className="block rounded-lg px-3 py-2 text-sm font-semibold text-violet-700 bg-violet-50 hover:bg-violet-100">
                   ⭐ Upgrade to Club →
                 </Link>
@@ -79,18 +79,18 @@ export function ProfileMenu({ user }: { user: UserWithRole }) {
 
             {/* Club manage - show for club members */}
             {!fan && club && (
-              <div className="border-t border-gray-100 mt-1 pt-1">
+              <div className="border-t border-gray-100 dark:border-gray-800 mt-1 pt-1">
                 <Link href={CLUB_MANAGE_URL} className="block rounded-lg px-3 py-2 text-sm text-violet-700 hover:bg-violet-50">
                   Manage Club membership
                 </Link>
               </div>
             )}
 
-            <div className="border-t border-gray-100 mt-1 pt-1">
-              <Link href="/settings" className="block rounded-lg px-3 py-2 text-sm text-gray-900 hover:bg-gray-100">
+            <div className="border-t border-gray-100 dark:border-gray-800 mt-1 pt-1">
+              <Link href="/settings" className="block rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
                 Settings
               </Link>
-              <Link href="/auth/signout" className="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <Link href="/auth/signout" className="block rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
                 Log out
               </Link>
             </div>
@@ -100,3 +100,4 @@ export function ProfileMenu({ user }: { user: UserWithRole }) {
     </div>
   );
 }
+

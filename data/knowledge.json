@@ -1,0 +1,82 @@
+﻿[
+  {
+    "id": "kb-001",
+    "category": "ticket_fees",
+    "question": "Why was I charged extra fees at checkout that weren't in the advertised price?",
+    "answer": "Ticketing platforms add booking, processing, fulfilment, and sometimes venue fees on top of the face value. Ticketmaster states that clients (artists, venues, promoters) set prices, and fees cover payment processing, fan support, site security, and ticketing technology. See Tickets charges a per-order transaction fee rather than per-ticket. If the final total differs from what you expected, check the fee breakdown shown before payment. If you believe a fee was added without disclosure, contact the platform's customer service and request an itemised breakdown.",
+    "source": "Ticketmaster UK help article; See Tickets booking page",
+    "verified": true
+  },
+  {
+    "id": "kb-002",
+    "category": "ticket_fees",
+    "question": "What is a venue facility fee?",
+    "answer": "A venue facility fee is a charge added to some tickets that goes directly to the venue, not to the ticketing platform. Ticketmaster explicitly states it does not keep this fee. It helps fund venue improvements. This fee should be shown in the price breakdown before you pay.",
+    "source": "Ticketmaster UK help article",
+    "verified": true
+  },
+  {
+    "id": "kb-003",
+    "category": "dynamic_pricing",
+    "question": "Why did ticket prices change while I was in the queue?",
+    "answer": "Some platforms use dynamic or platinum pricing, where prices adjust based on demand. During high-demand sales, platinum tickets have sold for roughly 2.5 times the standard price without clearly explaining the additional benefits. If you believe you were charged a different price than was displayed, contact customer service with your order reference.",
+    "source": "Reported Oasis sale coverage; Ticketmaster UK help article",
+    "verified": true
+  },
+  {
+    "id": "kb-004",
+    "category": "merch_quality",
+    "question": "The merchandise I received looks different from the website photos. What can I do?",
+    "answer": "Website images are often renders, and actual products can differ in texture, colour, or shape. If your item differs significantly from the description, contact the store's customer service with photos and your order number. Ask specifically for a replacement or full refund under their quality guarantee.",
+    "source": "Business Insider report on merch quality; UMG spokesperson statement",
+    "verified": true
+  },
+  {
+    "id": "kb-005",
+    "category": "merch_delays",
+    "question": "My merchandise order is months late. What are my options?",
+    "answer": "If your order is significantly delayed, contact the store with your order number and ask for: (1) a delivery estimate, (2) a full refund if the item is still available elsewhere, or (3) a store credit. If the store does not respond, escalate through your payment provider.",
+    "source": "UMG/Bravado statement via Business Insider",
+    "verified": true
+  },
+  {
+    "id": "kb-006",
+    "category": "merch_refunds",
+    "question": "What is the standard return policy for artist merchandise?",
+    "answer": "Policies vary by artist and store. Many stores require returns within 30 days of delivery, items must be in original condition with tags attached, and international customers pay return shipping. Refunds typically take 2-3 business days to appear after processing. Check the specific artist's store help page for their exact policy before returning.",
+    "source": "Noah Kahan official website returns page",
+    "verified": true
+  },
+  {
+    "id": "kb-007",
+    "category": "international_shipping",
+    "question": "I was charged customs or import tax on my merchandise. Is that normal?",
+    "answer": "Yes, for international orders. When buying from overseas stores, customs duties and import taxes are typically paid by the recipient upon delivery. These charges are separate from the product price and are set by your country's customs authority, not the store. Check your country's import thresholds before ordering.",
+    "source": "User report on international purchase",
+    "verified": true
+  },
+  {
+    "id": "kb-008",
+    "category": "resale",
+    "question": "Can I get a refund if I can no longer attend and resell my ticket?",
+    "answer": "Most primary ticketing platforms do not offer refunds for change of circumstance. Resale rules depend on the platform and the event. Some platforms offer official resale or fan-to-fan exchange. If you resell through an unofficial channel, you risk the buyer being denied entry. Check the event's specific terms before reselling.",
+    "source": "General ticketing platform terms",
+    "verified": true
+  },
+  {
+    "id": "kb-009",
+    "category": "account_access",
+    "question": "I can't access my tickets because I lost access to my email or phone.",
+    "answer": "Contact the platform's customer service immediately with your order reference number and proof of purchase. Most platforms can verify your identity through payment details and restore account access. Do this before the event date.",
+    "source": "Standard ticketing platform support guidance",
+    "verified": true
+  },
+  {
+    "id": "kb-010",
+    "category": "escalation",
+    "question": "Customer service isn't responding to my complaint. What can I do?",
+    "answer": "If the platform's support has not resolved your issue: (1) Send a formal complaint email with your order number, a clear timeline, and your requested resolution. (2) In the UK, you can report unresolved ticketing issues to Citizens Advice. (3) For merchandise, if the store does not respond within a reasonable time, contact your payment provider to dispute the charge. Keep all correspondence and screenshots.",
+    "source": "UK consumer guidance; payment provider dispute processes",
+    "verified": true
+  }
+]

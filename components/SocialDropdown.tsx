@@ -60,14 +60,14 @@ export default function SocialDropdown({ signedIn, unreadMessageCount }: Props) 
       {open && (
         <div
           role="menu"
-          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 min-w-[200px] bg-white border border-gray-200 rounded-xl shadow-lg p-1.5 z-50"
+          className="absolute left-1/2 -translate-x-1/2 top-full mt-2 min-w-[200px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg p-1.5 z-50"
         >
           {visibleLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
               role="menuitem"
-              className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100"
+              className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               style={{
                 fontWeight: pathname === l.href ? 600 : 500,
                 color: pathname === l.href ? "#000" : undefined,
@@ -86,3 +86,4 @@ export default function SocialDropdown({ signedIn, unreadMessageCount }: Props) 
     </div>
   );
 }
+

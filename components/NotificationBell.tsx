@@ -5,7 +5,7 @@ export default function NotificationBell({ count = 0 }: { count?: number }) {
     <button
       type="button"
       aria-label={"Notifications (" + count + ")"}
-      className="relative inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100"
+      className="relative inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
     >
       <span aria-hidden="true" className="text-lg">🔔</span>
       {count > 0 ? (
@@ -16,3 +16,4 @@ export default function NotificationBell({ count = 0 }: { count?: number }) {
     </button>
   );
 }
+

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export function PromoterHero() {
   return (
@@ -12,7 +12,7 @@ export function PromoterHero() {
       </h1>
 
       <p className="mt-6 max-w-2xl text-lg text-neutral-700">
-        Discover the promoters behind the UK&apos;s best nights out — or run
+        Discover the promoters behind the UK&apos;s best nights out â€” or run
         your own, end to end.
       </p>
       <p className="mt-2 max-w-2xl text-base text-neutral-500">
@@ -27,15 +27,15 @@ export function PromoterHero() {
           className="inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800"
         >
           Browse events by promoter
-          <span aria-hidden>→</span>
+          <span aria-hidden>â†’</span>
         </Link>
 
         <Link
           href="/promoters/apply"
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 transition hover:border-neutral-900"
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 transition hover:border-neutral-900"
         >
           Run a night on GRID
-          <span aria-hidden>→</span>
+          <span aria-hidden>â†’</span>
         </Link>
       </div>
     </section>

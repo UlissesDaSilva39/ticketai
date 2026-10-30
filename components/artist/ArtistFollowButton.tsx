@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -62,21 +62,22 @@ export default function ArtistFollowButton({
       className={
         "inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full transition disabled:opacity-50 " +
         (following
-          ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+          ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200"
           : "bg-black text-white hover:bg-gray-800")
       }
     >
       {following ? (
         <>
           <UserCheck className="h-4 w-4" />
-          Following · {count}
+          Following Â· {count}
         </>
       ) : (
         <>
           <UserPlus className="h-4 w-4" />
-          Follow · {count}
+          Follow Â· {count}
         </>
       )}
     </button>
   );
 }
+

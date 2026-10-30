@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export function VocalistHero() {
   return (
@@ -10,12 +10,12 @@ export function VocalistHero() {
         VOCALISTS
       </h1>
       <p className="mt-6 max-w-2xl text-lg text-neutral-700">
-        Discover the voices behind the records you love — or book sessions,
+        Discover the voices behind the records you love â€” or book sessions,
         sell features, and get paid the same day.
       </p>
       <p className="mt-2 max-w-2xl text-base text-neutral-500">
         From session singers in Manchester to chart-topping topliners in
-        Berlin. Stream previews, book sessions directly, and license vocals —
+        Berlin. Stream previews, book sessions directly, and license vocals â€”
         or use GRID to reach producers, sell features, and get paid on every
         booking.
       </p>
@@ -23,12 +23,12 @@ export function VocalistHero() {
         <Link href="#vocalists"
           className="inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800">
           Browse vocalists
-          <span aria-hidden>→</span>
+          <span aria-hidden>â†’</span>
         </Link>
         <Link href="/vocalists/apply"
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 transition hover:border-neutral-900">
+          className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 transition hover:border-neutral-900">
           Get booked on GRID
-          <span aria-hidden>→</span>
+          <span aria-hidden>â†’</span>
         </Link>
       </div>
     </section>

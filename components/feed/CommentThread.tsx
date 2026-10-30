@@ -34,7 +34,7 @@ export default function CommentThread({ comments }: { comments: Comment[] }) {
   const visible = expanded ? comments : preview;
 
   return (
-    <div className="bg-gray-50 border-t border-gray-100 px-4 py-3 space-y-2">
+    <div className="bg-gray-50 dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 px-4 py-3 space-y-2">
       {visible.map((c) => (
         <div key={c.id} className="flex items-start gap-2">
           {c.authorAvatar ? (
@@ -48,11 +48,11 @@ export default function CommentThread({ comments }: { comments: Comment[] }) {
             <div className="w-6 h-6 rounded-full bg-gray-300 shrink-0 mt-0.5" />
           )}
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-gray-700">
+            <p className="text-xs text-gray-700 dark:text-gray-300">
               <span className="font-medium">{c.authorName}</span>{" "}
               <span className="text-gray-400">{relTime(c.createdAt)}</span>
             </p>
-            <p className="text-xs text-gray-700 mt-0.5 whitespace-pre-wrap">{c.body}</p>
+            <p className="text-xs text-gray-700 dark:text-gray-300 mt-0.5 whitespace-pre-wrap">{c.body}</p>
           </div>
         </div>
       ))}
@@ -62,7 +62,7 @@ export default function CommentThread({ comments }: { comments: Comment[] }) {
           type="button"
           onClick={() => setExpanded(true)}
           aria-label={"View all " + comments.length + " comments"}
-          className="text-xs text-gray-500 hover:text-black font-medium"
+          className="text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white font-medium"
         >
           View all {comments.length} comments
         </button>
@@ -73,7 +73,7 @@ export default function CommentThread({ comments }: { comments: Comment[] }) {
           type="button"
           onClick={() => setExpanded(false)}
           aria-label="Collapse comments"
-          className="text-xs text-gray-500 hover:text-black font-medium"
+          className="text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white font-medium"
         >
           Hide comments
         </button>
@@ -81,3 +81,4 @@ export default function CommentThread({ comments }: { comments: Comment[] }) {
     </div>
   );
 }
+

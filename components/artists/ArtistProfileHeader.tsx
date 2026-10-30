@@ -158,7 +158,7 @@ export function ArtistProfileHeader({
             className={
               'rounded-full px-5 py-3 text-sm font-semibold transition ' +
               (following
-                ? 'border border-neutral-300 bg-white text-neutral-900'
+                ? 'border border-neutral-300 bg-white dark:bg-gray-900 text-neutral-900'
                 : 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200')
             }
           >
@@ -178,7 +178,7 @@ export function ArtistProfileHeader({
           {supportUrl && (
             <Link
               href={supportUrl}
-              className="rounded-full border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-900 transition hover:border-neutral-900"
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-5 py-3 text-sm font-semibold text-neutral-900 transition hover:border-neutral-900"
             >
               â™¥ Support
             </Link>

@@ -32,7 +32,7 @@ export default async function ConnectionsPage() {
   const list = following || [];
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -43,15 +43,15 @@ export default async function ConnectionsPage() {
             <h1 className="text-4xl font-bold uppercase mb-2" style={{ fontFamily: "var(--font-antonio)" }}>
               Connections
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               You are following {list.length} account{list.length === 1 ? "" : "s"}.
             </p>
           </header>
 
           {list.length === 0 ? (
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-600 mb-4">You have not followed anyone yet.</p>
-              <Link href="/artists" className="text-sm underline hover:text-black">Browse artists</Link>
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">You have not followed anyone yet.</p>
+              <Link href="/artists" className="text-sm underline hover:text-black dark:hover:text-white">Browse artists</Link>
             </div>
           ) : (
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -65,7 +65,7 @@ export default async function ConnectionsPage() {
                   <li key={p.id + "-" + i}>
                     <Link
                       href={href}
-                      className="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md transition"
+                      className="flex items-center gap-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:shadow-md transition"
                     >
                       {p.avatar_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -75,7 +75,7 @@ export default async function ConnectionsPage() {
                       )}
                       <div className="min-w-0 flex-1">
                         <p className="font-medium text-sm truncate">{name}</p>
-                        <p className="text-xs text-gray-500 truncate">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                           {p.role ? p.role.charAt(0).toUpperCase() + p.role.slice(1) : "Profile"}
                           {p.city ? " · " + p.city : ""}
                         </p>
@@ -91,3 +91,4 @@ export default async function ConnectionsPage() {
     </div>
   );
 }
+

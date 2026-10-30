@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 
@@ -83,16 +83,16 @@ export default function AudioUploader({
           <p className="text-sm font-medium">
             {uploading ? "Uploading..." : "Upload an MP3 preview"}
           </p>
-          <p className="text-xs text-gray-500 mt-1">
-            MP3, WAV, or OGG · Max 50MB
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            MP3, WAV, or OGG Â· Max 50MB
           </p>
         </button>
       ) : (
-        <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-950 rounded-lg">
           <button
             type="button"
             onClick={togglePlay}
-            className={"w-10 h-10 rounded-full flex items-center justify-center " + (playing ? "bg-[#00FF87] text-black" : "bg-black text-white")}
+            className={"w-10 h-10 rounded-full flex items-center justify-center " + (playing ? "bg-[#00FF87] text-black dark:text-white" : "bg-black text-white")}
           >
             {playing ? (
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -107,7 +107,7 @@ export default function AudioUploader({
           </button>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium">Preview uploaded</p>
-            <p className="text-xs text-gray-500 truncate">{value}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{value}</p>
           </div>
           <button
             type="button"
@@ -122,3 +122,4 @@ export default function AudioUploader({
     </div>
   );
 }
+

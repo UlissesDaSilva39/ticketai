@@ -1,0 +1,114 @@
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
+
+const TIER_2_PREFIXES = [
+  "/wallet",
+  "/my-tickets",
+  "/messages",
+  "/feed",
+  "/people",
+  "/following",
+  "/network",
+  "/connections",
+  "/friends",
+  "/profile",
+  "/settings",
+  "/business",
+  "/admin",
+  "/organizer",
+  "/promoter",
+  "/venue",
+  "/label",
+  "/artist/dashboard",
+  "/dashboard",
+];
+
+function isTier2(pathname: string): boolean {
+  return TIER_2_PREFIXES.some(p => pathname === p || pathname.startsWith(p + "/"));
+}
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  const isPublic =
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/waitlist" ||
+    pathname === "/join" ||
+    pathname.startsWith("/discover") ||
+    pathname.startsWith("/search") ||
+    pathname.startsWith("/music") ||
+    (pathname.startsWith("/artist/") && !pathname.startsWith("/artist/dashboard")) ||
+    pathname.startsWith("/artists") ||
+    pathname.startsWith("/venues") ||
+    pathname.startsWith("/events") ||
+    pathname.startsWith("/event/") ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/favicon") ||
+    pathname.includes(".");
+
+  if (isPublic) {
+    return NextResponse.next();
+  }
+
+  const response = NextResponse.next();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      cookies: {
+        getAll() { return request.cookies.getAll(); },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            );
+          } catch {}
+        },
+      },
+    }
+  );
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("next", pathname);
+    return NextResponse.redirect(url);
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profile?.role === "admin") return response;
+
+  const { data: entry } = await supabase
+    .from("waitlist")
+    .select("status")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const status = entry?.status || "pending";
+
+  if (status === "approved") return response;
+
+  if (isTier2(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/waitlist";
+    return NextResponse.redirect(url);
+  }
+
+  return response;
+}
+
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+};

@@ -35,14 +35,14 @@ export default function TrackList({ tracks }: { tracks: Row[] }) {
 
   if (tracks.length === 0) {
     return (
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center text-sm text-gray-500">
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center text-sm text-gray-500 dark:text-gray-400">
         You have not published any tracks yet.
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden divide-y divide-gray-100">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
       {tracks.map((t) => (
         <div key={t.id} className="flex items-center gap-3 p-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-700 to-gray-900 shrink-0 flex items-center justify-center text-white overflow-hidden">
@@ -57,7 +57,7 @@ export default function TrackList({ tracks }: { tracks: Row[] }) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold truncate">{t.title}</p>
-            <p className="text-xs text-gray-500 truncate">
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
               {t.kind || "song"}
               {t.duration_seconds ? " - " + t.duration_seconds + "s" : ""}
             </p>
@@ -76,4 +76,5 @@ export default function TrackList({ tracks }: { tracks: Row[] }) {
     </div>
   );
 }
+
 

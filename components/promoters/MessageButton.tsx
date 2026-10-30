@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { MessageModal } from './MessageModal';
@@ -27,8 +27,8 @@ export function MessageButton({
     variant === 'primary'
       ? 'bg-black text-white hover:bg-neutral-800'
       : variant === 'secondary'
-      ? 'border border-neutral-300 bg-white text-neutral-900 hover:border-neutral-900'
-      : 'text-neutral-700 hover:text-black';
+      ? 'border border-neutral-300 bg-white dark:bg-gray-900 text-neutral-900 hover:border-neutral-900'
+      : 'text-neutral-700 hover:text-black dark:hover:text-white';
 
   const dims = size === 'sm' ? 'px-4 py-2 text-xs' : 'px-6 py-3 text-sm';
 

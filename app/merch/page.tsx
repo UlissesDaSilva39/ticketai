@@ -1,10 +1,10 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { CartProvider } from '@/components/merch/CartProvider';
 import { MerchCard }    from '@/components/merch/MerchCard';
 import { getArtists }   from '@/lib/artists';
 
 export const metadata = {
-  title: 'Merch — GRID',
+  title: 'Merch â€” GRID',
   description: 'Shop merch directly from artists. No middlemen.',
 };
 
@@ -47,8 +47,8 @@ export default async function AllMerchPage() {
         )}
 
         <div className="mt-12 text-center">
-          <Link href="/artists" className="text-sm font-semibold text-neutral-600 hover:text-black">
-            ← Back to artists
+          <Link href="/artists" className="text-sm font-semibold text-neutral-600 hover:text-black dark:hover:text-white">
+            â† Back to artists
           </Link>
         </div>
       </div>

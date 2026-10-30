@@ -56,7 +56,7 @@ export default function ReplyOnGridButton({ email, name }: Props) {
         </div>
         <a
           href={`mailto:${email}`}
-          className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium hover:bg-gray-50 transition"
+          className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition"
         >
           <Mail className="h-3.5 w-3.5" />
           Reply via email
@@ -70,7 +70,7 @@ export default function ReplyOnGridButton({ email, name }: Props) {
       <button
         onClick={startConversation}
         disabled={busy}
-        className="inline-flex items-center gap-1.5 rounded-full border border-gray-900 bg-white text-gray-900 px-4 py-1.5 text-xs font-medium hover:bg-gray-900 hover:text-white disabled:opacity-50 transition"
+        className="inline-flex items-center gap-1.5 rounded-full border border-gray-900 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 py-1.5 text-xs font-medium hover:bg-gray-900 hover:text-white disabled:opacity-50 transition"
       >
         <MessageCircle className="h-3.5 w-3.5" />
         {busy ? "Opening…" : "Reply on GRID"}
@@ -81,3 +81,4 @@ export default function ReplyOnGridButton({ email, name }: Props) {
     </div>
   );
 }
+

@@ -38,7 +38,7 @@ export function NavDropdown({ item, pathname }: { item: NavItem; pathname?: stri
 
       {open && (
         <div className="absolute left-0 top-full pt-2 z-50">
-          <div className="min-w-[220px] rounded-2xl border border-gray-200 bg-white p-2 shadow-lg">
+          <div className="min-w-[220px] rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-2 shadow-lg">
             {dropdown.sections.map((section) => (
               <div key={section.title} className="py-1">
                 <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
@@ -61,3 +61,4 @@ export function NavDropdown({ item, pathname }: { item: NavItem; pathname?: stri
     </div>
   );
 }
+

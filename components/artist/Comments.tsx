@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -60,16 +60,16 @@ export default function Comments({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800">
         <h2 className="text-lg font-bold">Comments</h2>
       </div>
 
       <div className="px-6 py-4 space-y-4 max-h-96 overflow-y-auto">
         {loading ? (
-          <p className="text-sm text-gray-500 text-center py-4">Loading...</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">Loading...</p>
         ) : comments.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
             No comments yet. Say something nice.
           </p>
         ) : (
@@ -97,11 +97,11 @@ export default function Comments({
                     >
                       {name}
                     </Link>
-                    <span className="text-[10px] text-gray-500">
+                    <span className="text-[10px] text-gray-500 dark:text-gray-400">
                       {timeAgo(c.created_at)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-700 mt-1 whitespace-pre-wrap break-words">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 whitespace-pre-wrap break-words">
                     {c.body}
                   </p>
                 </div>
@@ -112,7 +112,7 @@ export default function Comments({
       </div>
 
       {currentUserId ? (
-        <div className="border-t border-gray-100 px-4 py-3 flex items-center gap-3 bg-gray-50">
+        <div className="border-t border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center gap-3 bg-gray-50 dark:bg-gray-950">
           <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-[11px] font-bold shrink-0">
             {currentUserInitials}
           </div>
@@ -123,7 +123,7 @@ export default function Comments({
               if (e.key === "Enter") submit();
             }}
             placeholder="Write a comment..."
-            className="flex-1 text-sm px-4 py-2.5 bg-white border border-gray-300 rounded-full outline-none focus:border-black"
+            className="flex-1 text-sm px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-300 rounded-full outline-none focus:border-black"
             disabled={busy}
           />
           <button
@@ -135,10 +135,10 @@ export default function Comments({
           </button>
         </div>
       ) : (
-        <div className="border-t border-gray-100 px-6 py-4 text-center bg-gray-50">
+        <div className="border-t border-gray-100 dark:border-gray-800 px-6 py-4 text-center bg-gray-50 dark:bg-gray-950">
           <Link
             href="/login"
-            className="text-sm text-gray-600 hover:text-black underline"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline"
           >
             Sign in to comment
           </Link>

@@ -53,7 +53,7 @@ export default function SignupForm() {
           type="email"
           required
           autoComplete="email"
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
         />
       </div>
 
@@ -66,9 +66,9 @@ export default function SignupForm() {
           required
           minLength={8}
           autoComplete="new-password"
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
         />
-        <p className="text-xs text-gray-500 mt-1">At least 8 characters</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">At least 8 characters</p>
       </div>
 
       <div>
@@ -79,7 +79,7 @@ export default function SignupForm() {
           type="text"
           required
           autoComplete="name"
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
         />
       </div>
 
@@ -93,10 +93,10 @@ export default function SignupForm() {
           pattern="[A-Za-z0-9_.\\-]+"
           maxLength={30}
           autoComplete="username"
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
           placeholder="yourname"
         />
-        <p className="text-xs text-gray-500 mt-1">Letters, numbers, dot, dash, underscore</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Letters, numbers, dot, dash, underscore</p>
       </div>
 
       <fieldset>
@@ -112,7 +112,7 @@ export default function SignupForm() {
                 "px-4 py-2 rounded-xl text-sm font-medium transition border " +
                 (role === r.value
                   ? "bg-black text-white border-black"
-                  : "bg-white text-gray-700 border-gray-200 hover:border-gray-400")
+                  : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-400")
               }
             >
               {r.label}
@@ -127,7 +127,7 @@ export default function SignupForm() {
           id="city"
           name="city"
           type="text"
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
           placeholder="London"
         />
       </div>
@@ -142,10 +142,11 @@ export default function SignupForm() {
         {isPending ? "Creating account..." : "Create account"}
       </button>
 
-      <p className="text-xs text-gray-500 text-center">
+      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
         Already have an account?{" "}
-        <Link href="/login" className="underline hover:text-black">Sign in</Link>
+        <Link href="/login" className="underline hover:text-black dark:hover:text-white">Sign in</Link>
       </p>
     </form>
   );
 }
+

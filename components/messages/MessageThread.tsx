@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -136,7 +136,7 @@ export default function MessageThread({
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-12rem)] bg-white rounded-2xl border border-gray-200">
+    <div className="flex flex-col h-[calc(100vh-12rem)] bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
       <div className="flex-1 overflow-y-auto p-4" ref={scrollRef} data-testid="message-list">
         {messages.length === 0 ? (
           <div className="text-center text-sm text-gray-400 mt-8">
@@ -158,14 +158,14 @@ export default function MessageThread({
                       "max-w-[75%] rounded-2xl px-3.5 py-2 text-sm whitespace-pre-line break-words " +
                       (mine
                         ? "bg-black text-white"
-                        : "bg-gray-100 text-gray-900")
+                        : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100")
                     }
                   >
                     {m.body}
                     <div
                       className={
                         "text-[10px] mt-1 " +
-                        (mine ? "text-gray-300" : "text-gray-500")
+                        (mine ? "text-gray-300" : "text-gray-500 dark:text-gray-400")
                       }
                     >
                       {timeShort(m.created_at)}
@@ -186,16 +186,16 @@ export default function MessageThread({
 
       <form
         onSubmit={submit}
-        className="border-t border-gray-200 p-3 flex gap-2 items-center"
+        className="border-t border-gray-200 dark:border-gray-800 p-3 flex gap-2 items-center"
       >
         <input
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Write a message…"
+          placeholder="Write a messageâ€¦"
           maxLength={4000}
           disabled={busy}
-          className="flex-1 rounded-full border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:border-gray-400 disabled:opacity-50"
+          className="flex-1 rounded-full border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm focus:outline-none focus:border-gray-400 disabled:opacity-50"
           data-testid="message-input"
         />
         <button
@@ -211,3 +211,4 @@ export default function MessageThread({
     </div>
   );
 }
+

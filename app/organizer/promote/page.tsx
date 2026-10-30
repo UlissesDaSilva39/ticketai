@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -100,12 +100,12 @@ export default function PromotePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">
-          ← Back to Dashboard
+        <Link href="/organizer" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+          â† Back to Dashboard
         </Link>
       </div>
       <h1 className="text-5xl font-bold mb-2" style={{ fontFamily: "var(--font-antonio)" }}>PROMOTE</h1>
-      <p className="text-gray-500 mb-10">Create social media posts with AI-generated captions.</p>
+      <p className="text-gray-500 dark:text-gray-400 mb-10">Create social media posts with AI-generated captions.</p>
       <div className="space-y-8">
         <section>
           <label className="block text-sm font-medium mb-2">1. Pick an Event</label>
@@ -140,7 +140,7 @@ export default function PromotePage() {
         {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
         {success && <p className="text-sm text-green-700 bg-green-50 p-3 rounded-lg">{success}</p>}
         <div className="flex gap-3">
-          <button type="button" onClick={() => savePromotion("draft")} disabled={saving} className="flex-1 py-4 border-2 border-black font-medium rounded-full hover:bg-gray-50 disabled:opacity-50">
+          <button type="button" onClick={() => savePromotion("draft")} disabled={saving} className="flex-1 py-4 border-2 border-black font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50">
             {saving ? "Saving..." : "Save as Draft"}
           </button>
           <button type="button" onClick={() => savePromotion("scheduled")} disabled={saving} className="flex-1 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800 disabled:opacity-50">
@@ -151,3 +151,4 @@ export default function PromotePage() {
     </div>
   );
 }
+

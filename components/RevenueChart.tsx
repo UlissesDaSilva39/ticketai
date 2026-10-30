@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   LineChart,
@@ -24,7 +24,7 @@ export default function RevenueChart({
 }) {
   return (
     <div className="space-y-8">
-      <div className="border border-gray-200 rounded-2xl p-6">
+      <div className="border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
         <h3
           className="text-2xl font-bold uppercase mb-4"
           style={{ fontFamily: "var(--font-antonio)" }}
@@ -32,7 +32,7 @@ export default function RevenueChart({
           Revenue over time
         </h3>
         {dailyData.length === 0 ? (
-          <p className="text-sm text-gray-500">No sales data yet.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">No sales data yet.</p>
         ) : (
           <div style={{ width: "100%", height: 280 }}>
             <ResponsiveContainer>
@@ -42,7 +42,7 @@ export default function RevenueChart({
                 <YAxis fontSize={12} stroke="#888" />
                 <Tooltip
                   contentStyle={{ borderRadius: 8, border: "1px solid #eee" }}
-                  formatter={(v: any) => "£" + Number(v).toFixed(2)}
+                  formatter={(v: any) => "Â£" + Number(v).toFixed(2)}
                 />
                 <Line
                   type="monotone"
@@ -57,7 +57,7 @@ export default function RevenueChart({
         )}
       </div>
 
-      <div className="border border-gray-200 rounded-2xl p-6">
+      <div className="border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
         <h3
           className="text-2xl font-bold uppercase mb-4"
           style={{ fontFamily: "var(--font-antonio)" }}
@@ -65,7 +65,7 @@ export default function RevenueChart({
           Tickets sold over time
         </h3>
         {dailyData.length === 0 ? (
-          <p className="text-sm text-gray-500">No sales data yet.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">No sales data yet.</p>
         ) : (
           <div style={{ width: "100%", height: 280 }}>
             <ResponsiveContainer>
@@ -89,7 +89,7 @@ export default function RevenueChart({
         )}
       </div>
 
-      <div className="border border-gray-200 rounded-2xl p-6">
+      <div className="border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
         <h3
           className="text-2xl font-bold uppercase mb-4"
           style={{ fontFamily: "var(--font-antonio)" }}
@@ -97,7 +97,7 @@ export default function RevenueChart({
           Top events by revenue
         </h3>
         {topEvents.length === 0 ? (
-          <p className="text-sm text-gray-500">No events with sales yet.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">No events with sales yet.</p>
         ) : (
           <div style={{ width: "100%", height: Math.max(220, topEvents.length * 48) }}>
             <ResponsiveContainer>
@@ -113,7 +113,7 @@ export default function RevenueChart({
                 />
                 <Tooltip
                   contentStyle={{ borderRadius: 8, border: "1px solid #eee" }}
-                  formatter={(v: any) => "£" + Number(v).toFixed(2)}
+                  formatter={(v: any) => "Â£" + Number(v).toFixed(2)}
                 />
                 <Bar dataKey="revenue" fill="#000000" radius={[0, 6, 6, 0]} />
               </BarChart>

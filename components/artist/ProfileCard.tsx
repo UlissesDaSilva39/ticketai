@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 type Props = {
   artist: {
@@ -27,26 +27,26 @@ export default function ProfileCard({ artist, stats }: Props) {
     .toUpperCase();
 
   const links: Array<{ label: string; url: string; glyph: string }> = [];
-  if (artist.website) links.push({ label: "Website", url: artist.website, glyph: "◉" });
+  if (artist.website) links.push({ label: "Website", url: artist.website, glyph: "â—‰" });
   if (artist.instagram)
     links.push({
       label: "Instagram",
       url: "https://instagram.com/" + artist.instagram.replace("@", ""),
-      glyph: "◎",
+      glyph: "â—Ž",
     });
   if (artist.twitter)
     links.push({
       label: "Twitter / X",
       url: "https://twitter.com/" + artist.twitter.replace("@", ""),
-      glyph: "✕",
+      glyph: "âœ•",
     });
-  if (artist.spotify) links.push({ label: "Spotify", url: artist.spotify, glyph: "♫" });
-  if (artist.youtube) links.push({ label: "YouTube", url: artist.youtube, glyph: "▷" });
+  if (artist.spotify) links.push({ label: "Spotify", url: artist.spotify, glyph: "â™«" });
+  if (artist.youtube) links.push({ label: "YouTube", url: artist.youtube, glyph: "â–·" });
   if (artist.soundcloud)
-    links.push({ label: "SoundCloud", url: artist.soundcloud, glyph: "☁" });
+    links.push({ label: "SoundCloud", url: artist.soundcloud, glyph: "â˜" });
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-5">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 space-y-5">
       <div className="text-center">
         <div className="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center font-bold text-2xl mx-auto overflow-hidden">
           {artist.avatar_url ? (
@@ -62,26 +62,26 @@ export default function ProfileCard({ artist, stats }: Props) {
           {name}
         </Link>
         {artist.username ? (
-          <p className="text-xs text-gray-500 mt-0.5">@{artist.username}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">@{artist.username}</p>
         ) : null}
       </div>
 
-      <div className="grid grid-cols-3 text-center border-y border-gray-100 py-4">
+      <div className="grid grid-cols-3 text-center border-y border-gray-100 dark:border-gray-800 py-4">
         <div>
           <p className="font-bold text-lg">{stats.events}</p>
-          <p className="text-[10px] uppercase tracking-wider text-gray-500 mt-0.5">
+          <p className="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400 mt-0.5">
             Events
           </p>
         </div>
-        <div className="border-l border-r border-gray-100">
+        <div className="border-l border-r border-gray-100 dark:border-gray-800">
           <p className="font-bold text-lg">{stats.friends}</p>
-          <p className="text-[10px] uppercase tracking-wider text-gray-500 mt-0.5">
+          <p className="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400 mt-0.5">
             Friends
           </p>
         </div>
         <div>
           <p className="font-bold text-lg">{stats.followers}</p>
-          <p className="text-[10px] uppercase tracking-wider text-gray-500 mt-0.5">
+          <p className="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400 mt-0.5">
             Followers
           </p>
         </div>
@@ -89,10 +89,10 @@ export default function ProfileCard({ artist, stats }: Props) {
 
       {artist.bio ? (
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
             About
           </p>
-          <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+          <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
             {artist.bio}
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function ProfileCard({ artist, stats }: Props) {
 
       {links.length > 0 ? (
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
             Links
           </p>
           <ul className="space-y-1.5">
@@ -110,7 +110,7 @@ export default function ProfileCard({ artist, stats }: Props) {
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-black"
+                  className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white"
                 >
                   <span className="text-base w-4 text-center">{l.glyph}</span>
                   <span>{l.label}</span>
@@ -123,10 +123,10 @@ export default function ProfileCard({ artist, stats }: Props) {
 
       {artist.label ? (
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
             Label
           </p>
-          <p className="text-sm text-gray-700">{artist.label}</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">{artist.label}</p>
         </div>
       ) : null}
     </div>

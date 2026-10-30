@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -60,9 +60,9 @@ export default function ProfileDropdown({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-100">
-            <p className="text-xs text-gray-500 uppercase tracking-wide">Signed in as</p>
+        <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl z-50 overflow-hidden">
+          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+            <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Signed in as</p>
             <p className="text-sm font-medium truncate">@{username || "you"}</p>
           </div>
 
@@ -71,7 +71,7 @@ export default function ProfileDropdown({
               <Link
                 href="/profile"
                 onClick={() => setOpen(false)}
-                className="block px-4 py-2 text-sm hover:bg-gray-50"
+                className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 My Profile
               </Link>
@@ -79,7 +79,7 @@ export default function ProfileDropdown({
             <Link
               href="/notifications"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-50"
+              className="flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               <span>Notifications</span>
               {pendingRequestCount > 0 && (
@@ -91,66 +91,66 @@ export default function ProfileDropdown({
             <Link
               href="/friends"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm hover:bg-gray-50"
+              className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Friends
             </Link>
           </div>
 
           {(isPromoter || isVenue || isAdmin) && (
-            <div className="py-2 border-t border-gray-100">
+            <div className="py-2 border-t border-gray-100 dark:border-gray-800">
               <p className="px-4 py-1 texl-xs uppercase tracking-wide text-gray-400">For Business</p>
               {isPromoter && (
                 <>
-                  <Link href="/organizer" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50">
+                  <Link href="/organizer" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
                     Dashboard
                   </Link>
-                  <Link href="/organizer/analytics" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50">
+                  <Link href="/organizer/analytics" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
                     Analytics
                   </Link>
-                  <Link href="/promoter/dashboard" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50">
+                  <Link href="/promoter/dashboard" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
                     Promoter Dashboard
                   </Link>
-                  <Link href="/organizer/campaigns" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50">
+                  <Link href="/organizer/campaigns" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
                     AI Campaign Builder
                   </Link>
                 </>
               )}
               {isVenue && (
-                <Link href="/venue/dashboard" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50">
+                <Link href="/venue/dashboard" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
                   Venue Dashboard
                 </Link>
               )}
               {isAdmin && (
-                <Link href="/admin" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50">
+                <Link href="/admin" onClick={() => setOpen(false)} className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800">
                   Admin
                 </Link>
               )}
             </div>
           )}
 
-          <div className="py-2 border-t border-gray-100">
+          <div className="py-2 border-t border-gray-100 dark:border-gray-800">
             <Link
               href="/settings"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm hover:bg-gray-50"
+              className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Settings
             </Link>
             <Link
               href="/settings/notifications"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm hover:bg-gray-50"
+              className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Notification preferences
             </Link>
           </div>
 
-          <div className="py-2 border-t border-gray-100">
+          <div className="py-2 border-t border-gray-100 dark:border-gray-800">
             <form action="/auth/signout" method="post">
               <button
                 type="submit"
-                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 text-red-600"
+                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 text-red-600"
               >
                 Sign out
               </button>
@@ -161,3 +161,4 @@ export default function ProfileDropdown({
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
@@ -7,7 +7,7 @@ const CITIES  = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const CAPS    = ['All capacities', '<200', '200-500', '500-1000', '1000+'];
 const DEALS   = ['All deals', 'Flat fee', 'Bar split', 'Door split'];
 const TECH    = ['All tech', 'Full PA', 'Lights', 'Backline', 'Engineer'];
-const PRICE   = ['All prices', 'Under £500', '£500-£1500', '£1500+'];
+const PRICE   = ['All prices', 'Under Â£500', 'Â£500-Â£1500', 'Â£1500+'];
 
 export function VenueFilters() {
   const [type, setType]   = useState('All types');
@@ -59,7 +59,7 @@ function Chip({
         'rounded-full border px-4 py-1.5 text-sm font-medium transition ' +
         (active
           ? 'border-black bg-black text-white'
-          : 'border-neutral-300 bg-white text-neutral-800 hover:border-neutral-900')
+          : 'border-neutral-300 bg-white dark:bg-gray-900 text-neutral-800 hover:border-neutral-900')
       }>
       {children}
     </button>

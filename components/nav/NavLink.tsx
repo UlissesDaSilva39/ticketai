@@ -17,10 +17,11 @@ export function NavLink({
       href={href}
       className={[
         'px-3 py-2 text-sm font-medium transition-colors',
-        active ? 'text-black' : 'text-gray-700 hover:text-black',
+        active ? 'text-black dark:text-white' : 'text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white',
       ].join(' ')}
     >
       {children}
     </a>
   );
 }
+

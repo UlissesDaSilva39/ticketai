@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
@@ -105,7 +105,7 @@ export default async function FeedPage({
     for (const l of userLikes || []) likedSet.add(l.post_id);
   }
 
-  // Following filter — only applies when tab=following
+  // Following filter â€” only applies when tab=following
   let followIds: Set<string> = new Set();
   if (tab === "following") {
     const { data: followRows } = await supabase
@@ -161,7 +161,7 @@ export default async function FeedPage({
   const fmtTime = (iso: string) => relativeTime(iso);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -180,8 +180,8 @@ export default async function FeedPage({
           <PostComposer userId={user.id} />
 
           {visiblePosts.length === 0 ? (
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-600 mb-4">
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 {tab === "following"
                   ? "You are not following anyone yet, or they have not posted."
                   : "No posts yet. Be the first to post!"}
@@ -192,7 +192,7 @@ export default async function FeedPage({
               {groupOrder.map((label) => (
                 <section key={label} className="mb-8">
                   <h2
-                    className="text-xl font-bold uppercase mb-3 text-gray-500"
+                    className="text-xl font-bold uppercase mb-3 text-gray-500 dark:text-gray-400"
                     style={{ fontFamily: "var(--font-antonio)" }}
                   >
                     {label}
@@ -232,7 +232,7 @@ export default async function FeedPage({
                     Load more
                   </Link>
                 ) : (
-                  <p className="text-xs text-gray-400">— End of feed —</p>
+                  <p className="text-xs text-gray-400">â€” End of feed â€”</p>
                 )}
               </div>
 
@@ -253,5 +253,6 @@ export default async function FeedPage({
     </div>
   );
 }
+
 
 

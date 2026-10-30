@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
@@ -32,8 +32,8 @@ export default function DiscoverPromotersPage() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2 text-gray-900">Discover promoters</h1>
-        <p className="text-gray-600">The people who fill rooms. Search for promoters and organizers.</p>
+        <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-gray-100">Discover promoters</h1>
+        <p className="text-gray-600 dark:text-gray-400">The people who fill rooms. Search for promoters and organizers.</p>
       </div>
 
       <form onSubmit={handleSearch} className="mb-8 flex gap-2 max-w-md">
@@ -56,14 +56,14 @@ export default function DiscoverPromotersPage() {
           ))}
         </div>
       ) : promoters.length === 0 ? (
-        <div className="text-center py-20 text-gray-500">
+        <div className="text-center py-20 text-gray-500 dark:text-gray-400">
           No promoters found for "{search}". Try "Live Nation" or "Festival".
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {promoters.map((p: any) => (
-            <Link key={p.id} href={`/promoters/${p.id}`} className="group border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all bg-white">
-              <div className="h-48 bg-gray-100 relative">
+            <Link key={p.id} href={`/promoters/${p.id}`} className="group border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-lg transition-all bg-white dark:bg-gray-900">
+              <div className="h-48 bg-gray-100 dark:bg-gray-800 relative">
                 <img 
                   src={p.image} 
                   alt={p.name} 
@@ -71,11 +71,11 @@ export default function DiscoverPromotersPage() {
                 />
               </div>
               <div className="p-5">
-                <h3 className="text-lg font-bold text-gray-900 group-hover:underline line-clamp-1">{p.name}</h3>
-                <p className="text-sm text-gray-600 mb-3">{p.city}</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:underline line-clamp-1">{p.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{p.city}</p>
                 <div className="flex items-center justify-between mt-4">
-                  <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded">{p.eventsHosted} events</span>
-                  <span className="text-sm font-semibold text-black">View →</span>
+                  <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">{p.eventsHosted} events</span>
+                  <span className="text-sm font-semibold text-black dark:text-white">View â†’</span>
                 </div>
               </div>
             </Link>

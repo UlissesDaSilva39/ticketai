@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
@@ -52,14 +52,14 @@ export default function AskGRID() {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg text-black">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 md:p-8 shadow-lg text-black dark:text-white">
       <h2
         className="text-3xl font-bold uppercase mb-2"
         style={{ fontFamily: "var(--font-antonio)" }}
       >
         Ask GRID
       </h2>
-      <p className="text-gray-500 mb-4">
+      <p className="text-gray-500 dark:text-gray-400 mb-4">
         Tell me what kind of event you&apos;re looking for.
       </p>
 
@@ -67,10 +67,10 @@ export default function AskGRID() {
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Example: House music events in London this weekend under £30"
+          placeholder="Example: House music events in London this weekend under Â£30"
           rows={3}
           disabled={loading}
-          className="w-full p-4 border border-gray-200 rounded-lg text-base resize-y"
+          className="w-full p-4 border border-gray-200 dark:border-gray-800 rounded-lg text-base resize-y"
         />
         <button
           type="submit"
@@ -88,7 +88,7 @@ export default function AskGRID() {
       )}
 
       {response && (
-        <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+        <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
           <p className="whitespace-pre-wrap leading-relaxed">{response}</p>
         </div>
       )}
@@ -99,7 +99,7 @@ export default function AskGRID() {
             <Link
               key={e.id}
               href={"/event/" + e.id}
-              className="flex gap-3 border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+              className="flex gap-3 border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
             >
               <div className="w-24 h-24 bg-gray-200 shrink-0">
                 {e.image && (
@@ -108,20 +108,20 @@ export default function AskGRID() {
               </div>
               <div className="py-2 pr-2 min-w-0">
                 <p className="font-bold truncate">{e.title}</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(e.date).toLocaleDateString("en-GB", {
                     weekday: "short",
                     day: "numeric",
                     month: "short",
                   })}
-                  {e.venue ? " Ãƒâ€š· " + e.venue : ""}
+                  {e.venue ? " ÃƒÆ’Ã¢â‚¬Å¡Â· " + e.venue : ""}
                 </p>
                 <p className="text-sm font-medium">
                   {e.lowest_price === null
                     ? "Tickets available"
                     : e.lowest_price === 0
                     ? "Free"
-                    : "From £" + e.lowest_price.toFixed(2)}
+                    : "From Â£" + e.lowest_price.toFixed(2)}
                 </p>
               </div>
             </Link>
@@ -131,3 +131,4 @@ export default function AskGRID() {
     </div>
   );
 }
+

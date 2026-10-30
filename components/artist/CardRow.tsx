@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef } from "react";
 import Link from "next/link";
@@ -29,7 +29,7 @@ export default function CardRow({ title, seeAllHref, children }: Props) {
           {seeAllHref ? (
             <Link
               href={seeAllHref}
-              className="text-xs uppercase tracking-wider text-gray-500 hover:text-black font-semibold"
+              className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white font-semibold"
             >
               Show all
             </Link>
@@ -38,17 +38,17 @@ export default function CardRow({ title, seeAllHref, children }: Props) {
             type="button"
             onClick={() => scroll("left")}
             aria-label="Scroll left"
-            className="w-9 h-9 rounded-full bg-white border border-gray-300 hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-base font-bold transition-colors"
+            className="w-9 h-9 rounded-full bg-white dark:bg-gray-900 border border-gray-300 hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-base font-bold transition-colors"
           >
-            ‹
+            â€¹
           </button>
           <button
             type="button"
             onClick={() => scroll("right")}
             aria-label="Scroll right"
-            className="w-9 h-9 rounded-full bg-white border border-gray-300 hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-base font-bold transition-colors"
+            className="w-9 h-9 rounded-full bg-white dark:bg-gray-900 border border-gray-300 hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-base font-bold transition-colors"
           >
-            ›
+            â€º
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -91,8 +91,8 @@ export default function NewEventPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">
-          ← Back to Dashboard
+        <Link href="/organizer" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+          â† Back to Dashboard
         </Link>
       </div>
 
@@ -103,7 +103,7 @@ export default function NewEventPage() {
       <div className="space-y-8">
         <section>
           <label className="block text-sm font-medium mb-2">Event Title *</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="e.g. Midnight Waves — Live" />
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" placeholder="e.g. Midnight Waves â€” Live" />
         </section>
 
         <section>
@@ -133,12 +133,12 @@ export default function NewEventPage() {
             {venues.map((v) => (
               <option key={v.id} value={v.id}>
                 {v.name}
-                {v.city ? " — " + v.city : ""}
+                {v.city ? " â€” " + v.city : ""}
                 {" (" + v.revenue_share_percent + "% venue share)"}
               </option>
             ))}
           </select>
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
             Pick a venue to credit them with their revenue share on every ticket sold.
           </p>
         </section>
@@ -146,7 +146,7 @@ export default function NewEventPage() {
         <section>
           <label className="block text-sm font-medium mb-2">Music Preview (optional)</label>
           <AudioUploader value={previewAudio} onChange={setPreviewAudio} />
-          <p className="text-xs text-gray-500 mt-2">Upload a 30-second MP3 preview.</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Upload a 30-second MP3 preview.</p>
         </section>
 
         <section>
@@ -159,7 +159,7 @@ export default function NewEventPage() {
             />
             <span className="text-sm font-medium">Enable Seat Map (reserved seating)</span>
           </label>
-          <p className="text-xs text-gray-500 mt-2">Let fans pick their exact seat at checkout.</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Let fans pick their exact seat at checkout.</p>
           {hasSeatmap && (
             <div className="mt-4">
               <SeatMapEditor value={seatmapConfig} onChange={setSeatmapConfig} />
@@ -175,13 +175,13 @@ export default function NewEventPage() {
         <section>
           <div className="flex items-center justify-between mb-4">
             <label className="block text-sm font-medium">Ticket Types</label>
-            <button type="button" onClick={addTicket} className="text-sm font-medium px-4 py-2 border border-black rounded-full hover:bg-gray-50">
+            <button type="button" onClick={addTicket} className="text-sm font-medium px-4 py-2 border border-black rounded-full hover:bg-gray-50 dark:hover:bg-gray-800">
               + Add Ticket Type
             </button>
           </div>
           <div className="space-y-3">
             {ticketTypes.map((t, i) => (
-              <div key={i} className="grid grid-cols-12 gap-3 items-start p-4 border border-gray-200 rounded-lg">
+              <div key={i} className="grid grid-cols-12 gap-3 items-start p-4 border border-gray-200 dark:border-gray-800 rounded-lg">
                 <div className="col-span-12 md:col-span-5">
                   <input type="text" value={t.name} onChange={(e) => updateTicket(i, "name", e.target.value)} placeholder="Name" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-black focus:outline-none text-sm" />
                 </div>
@@ -193,8 +193,8 @@ export default function NewEventPage() {
                 </div>
                 <div className="col-span-2 md:col-span-1 flex justify-end">
                   {ticketTypes.length > 1 && (
-                    <button type="button" onClick={() => removeTicket(i)} className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-red-600 border border-gray-200 rounded-full">
-                      ×
+                    <button type="button" onClick={() => removeTicket(i)} className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-red-600 border border-gray-200 dark:border-gray-800 rounded-full">
+                      Ã—
                     </button>
                   )}
                 </div>
@@ -206,7 +206,7 @@ export default function NewEventPage() {
         {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
 
         <div className="flex gap-3">
-          <button type="button" onClick={() => save("draft")} disabled={saving} className="flex-1 py-4 border-2 border-black font-medium rounded-full hover:bg-gray-50 disabled:opacity-50">
+          <button type="button" onClick={() => save("draft")} disabled={saving} className="flex-1 py-4 border-2 border-black font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50">
             {saving ? "Saving..." : "Save as Draft"}
           </button>
           <button type="button" onClick={() => save("published")} disabled={saving} className="flex-1 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800 disabled:opacity-50">
@@ -217,3 +217,4 @@ export default function NewEventPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import PostActions from "./PostActions";
+﻿import PostActions from "./PostActions";
 import CommentThread from "./CommentThread";
 import PostAudioBar from "./PostAudioBar";
 
@@ -46,7 +46,7 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
   }));
 
   return (
-    <article data-testid="post-card" className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <article data-testid="post-card" className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
       <div className="p-4">
         <div className="flex items-center gap-3 mb-3">
           {author?.avatar ? (
@@ -57,18 +57,18 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
               className="w-10 h-10 rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-medium text-gray-700 shrink-0">
+            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-300 shrink-0">
               {initials}
             </div>
           )}
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium truncate">{name}</p>
-            <p className="text-xs text-gray-500" title={post.created_at}>{fmtTime(post.created_at)}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400" title={post.created_at}>{fmtTime(post.created_at)}</p>
           </div>
         </div>
 
         {post.body ? (
-          <p className="text-sm text-gray-900 whitespace-pre-wrap">{post.body}</p>
+          <p className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{post.body}</p>
         ) : null}
 
         {post.image_url ? (
@@ -114,3 +114,4 @@ export default function PostCard({ post, author, liked, comments, fmtTime }: Pos
     </article>
   );
 }
+

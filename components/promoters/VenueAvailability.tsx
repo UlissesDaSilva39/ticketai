@@ -1,9 +1,9 @@
-const SAMPLE = [
-  { venue: 'The Dome',  city: 'London',     cap: 800,  price: '£1,200', status: 'open' },
-  { venue: 'Fabric',    city: 'London',     cap: 1600, price: '£4,500', status: 'open' },
-  { venue: 'Kraftwerk', city: 'Berlin',     cap: 1200, price: '€2,800', status: 'open' },
-  { venue: 'Hidden',    city: 'Manchester', cap: 600,  price: '£900',   status: 'waitlist' },
-  { venue: 'Motion',    city: 'Bristol',    cap: 3000, price: '£3,200', status: 'open' },
+﻿const SAMPLE = [
+  { venue: 'The Dome',  city: 'London',     cap: 800,  price: 'Â£1,200', status: 'open' },
+  { venue: 'Fabric',    city: 'London',     cap: 1600, price: 'Â£4,500', status: 'open' },
+  { venue: 'Kraftwerk', city: 'Berlin',     cap: 1200, price: 'â‚¬2,800', status: 'open' },
+  { venue: 'Hidden',    city: 'Manchester', cap: 600,  price: 'Â£900',   status: 'waitlist' },
+  { venue: 'Motion',    city: 'Bristol',    cap: 3000, price: 'Â£3,200', status: 'open' },
 ];
 
 export function VenueAvailability() {
@@ -24,16 +24,16 @@ export function VenueAvailability() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/venues"
               className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-              Search venues →
+              Search venues â†’
             </a>
             <a href="/venues/list"
-              className="rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
-              List your venue →
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+              List your venue â†’
             </a>
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
               <tr>
@@ -63,7 +63,7 @@ export function VenueAvailability() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Data refreshed 4 minutes ago · Powered by GRID Venues
+            Data refreshed 4 minutes ago Â· Powered by GRID Venues
           </div>
         </div>
       </div>

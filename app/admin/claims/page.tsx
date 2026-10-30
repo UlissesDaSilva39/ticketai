@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/admin';
+﻿import { createAdminClient } from '@/lib/supabase/admin';
 import { ClaimActions } from './ClaimActions';
 
 export const dynamic = 'force-dynamic';
@@ -16,36 +16,36 @@ export default async function AdminClaimsPage() {
   const reviewed = (claims ?? []).filter(c => c.status !== 'pending');
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
       <div className="mx-auto max-w-6xl px-6 py-10">
         <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: 'var(--font-antonio)' }}>
           Profile Claims
         </h1>
-        <p className="text-gray-600 mb-8">
-          {pending.length} pending · {reviewed.length} reviewed
+        <p className="text-gray-600 dark:text-gray-400 mb-8">
+          {pending.length} pending Â· {reviewed.length} reviewed
         </p>
 
         <h2 className="text-xl font-bold mb-4">Pending review</h2>
         {pending.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-white p-8 text-center text-gray-500">
+          <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 text-center text-gray-500 dark:text-gray-400">
             No pending claims.
           </div>
         ) : (
           <div className="space-y-3 mb-10">
             {pending.map(c => (
-              <div key={c.id} className="rounded-xl border border-gray-200 bg-white p-4">
+              <div key={c.id} className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
                 <div className="flex justify-between items-start gap-4">
                   <div>
                     <p className="font-semibold">
-                      {c.target_type} · {c.target_id.slice(0, 8)}…
+                      {c.target_type} Â· {c.target_id.slice(0, 8)}â€¦
                     </p>
-                    <p className="text-sm text-gray-600">
-                      Claimant: {c.claimant_id.slice(0, 8)}… · Method: {c.verification_method}
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Claimant: {c.claimant_id.slice(0, 8)}â€¦ Â· Method: {c.verification_method}
                     </p>
                     <p className="text-xs text-gray-400 mt-1">
                       {new Date(c.created_at).toLocaleString('en-GB')}
                     </p>
-                    {c.notes && <p className="text-sm mt-2 text-gray-700">{c.notes}</p>}
+                    {c.notes && <p className="text-sm mt-2 text-gray-700 dark:text-gray-300">{c.notes}</p>}
                   </div>
                   <ClaimActions claimId={c.id} />
                 </div>
@@ -56,14 +56,14 @@ export default async function AdminClaimsPage() {
 
         <h2 className="text-xl font-bold mb-4">Reviewed</h2>
         {reviewed.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-white p-8 text-center text-gray-500">
+          <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 text-center text-gray-500 dark:text-gray-400">
             No reviewed claims yet.
           </div>
         ) : (
           <div className="space-y-2">
             {reviewed.map(c => (
-              <div key={c.id} className="rounded-lg border border-gray-200 bg-white p-3 flex justify-between text-sm">
-                <span>{c.target_type} · {c.target_id.slice(0, 8)}…</span>
+              <div key={c.id} className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 flex justify-between text-sm">
+                <span>{c.target_type} Â· {c.target_id.slice(0, 8)}â€¦</span>
                 <span className={`font-semibold ${c.status === 'approved' ? 'text-green-700' : 'text-red-700'}`}>
                   {c.status}
                 </span>

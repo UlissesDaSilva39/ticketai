@@ -10,7 +10,7 @@ export function ArtistMerchReviews({ reviews }: { reviews?: Review[] }) {
       </h2>
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {reviews.slice(0, 2).map((r, i) => (
-          <figure key={i} className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <figure key={i} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
             <div className="text-sm text-amber-500">{'â˜…'.repeat(r.rating ?? 5)}</div>
             <blockquote className="mt-3 text-sm text-neutral-800">
               &ldquo;{r.quote}&rdquo;

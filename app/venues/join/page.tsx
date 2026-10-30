@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -70,15 +70,15 @@ export default function VenueJoinPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
+        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
       </main>
     );
   }
 
   if (!signedIn) {
     return (
-      <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
         <div className="mx-auto max-w-lg mt-20 text-center">
           <h1
             className="text-5xl font-bold uppercase"
@@ -86,7 +86,7 @@ export default function VenueJoinPage() {
           >
             Sign in first
           </h1>
-          <p className="mt-4 text-gray-600">
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
             You need an account before you can list a venue.
           </p>
           <Link
@@ -101,13 +101,13 @@ export default function VenueJoinPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
       <div className="mx-auto max-w-2xl">
         <Link
           href="/for-venues"
-          className="text-sm text-gray-500 hover:text-black"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
         >
-          ← Back to venue info
+          â† Back to venue info
         </Link>
 
         <div className="mt-6 mb-8">
@@ -117,7 +117,7 @@ export default function VenueJoinPage() {
           >
             List your venue
           </h1>
-          <p className="mt-4 text-gray-600">
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
             Free to list. Get discovered by promoters. Takes 5 minutes.
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function VenueJoinPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <section className="rounded-xl border bg-white p-6">
+          <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-4">Basics</h2>
 
             <div className="space-y-4">
@@ -154,7 +154,7 @@ export default function VenueJoinPage() {
                   <select
                     value={venueType}
                     onChange={(e) => setVenueType(e.target.value)}
-                    className="w-full rounded-lg border px-4 py-3 bg-white outline-none focus:border-black"
+                    className="w-full rounded-lg border px-4 py-3 bg-white dark:bg-gray-900 outline-none focus:border-black"
                   >
                     <option value="pub">Pub</option>
                     <option value="club">Club</option>
@@ -183,7 +183,7 @@ export default function VenueJoinPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-4">Location</h2>
 
             <div className="space-y-4">
@@ -228,7 +228,7 @@ export default function VenueJoinPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-4">
               Description &amp; photos
             </h2>
@@ -257,18 +257,18 @@ export default function VenueJoinPage() {
                   placeholder="https://..."
                   className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   Paste a link to a photo. You can add more later.
                 </p>
               </div>
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-4">
               Contact for promoters
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               Promoters will use this to book your venue. Shown on your public
               venue page.
             </p>
@@ -333,7 +333,7 @@ export default function VenueJoinPage() {
             </button>
           </div>
 
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
             Free forever. No contract. No monthly fee.
           </p>
         </form>

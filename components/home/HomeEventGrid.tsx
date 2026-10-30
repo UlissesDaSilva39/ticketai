@@ -23,12 +23,12 @@ function formatDate(iso: string) {
 export function HomeEventGrid({ events }: { events: Event[] }) {
   if (!events || events.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center">
+      <div className="rounded-2xl border border-dashed border-gray-300 bg-white dark:bg-gray-900 p-8 text-center">
         <Calendar className="mx-auto h-8 w-8 text-gray-400" />
-        <div className="mt-3 text-sm font-medium text-gray-900">
+        <div className="mt-3 text-sm font-medium text-gray-900 dark:text-gray-100">
           Nothing on the calendar yet
         </div>
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
           Follow artists or explore a city to see events here.
         </p>
         <a
@@ -42,12 +42,12 @@ export function HomeEventGrid({ events }: { events: Event[] }) {
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
       <div className="mb-3 flex items-center justify-between">
-        <div className="text-xs font-semibold tracking-wider text-gray-500">
+        <div className="text-xs font-semibold tracking-wider text-gray-500 dark:text-gray-400">
           HAPPENING THIS WEEK
         </div>
-        <a href="/events" className="text-xs font-medium text-black hover:underline">
+        <a href="/events" className="text-xs font-medium text-black dark:text-white hover:underline">
           See all
         </a>
       </div>
@@ -57,18 +57,18 @@ export function HomeEventGrid({ events }: { events: Event[] }) {
           <a
             key={e.id}
             href={`/event/${e.id}`}
-            className="group flex gap-3 rounded-xl border border-gray-100 p-3 hover:border-black transition"
+            className="group flex gap-3 rounded-xl border border-gray-100 dark:border-gray-800 p-3 hover:border-black transition"
           >
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-semibold text-gray-900 truncate">
+              <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
                 {e.title}
               </div>
-              <div className="mt-1 flex items-center gap-1 text-xs text-gray-500">
+              <div className="mt-1 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                 <Calendar className="h-3 w-3" />
                 {formatDate(e.start_date)}
               </div>
               {e.venue_name && (
-                <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-500 truncate">
+                <div className="mt-0.5 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 truncate">
                   <MapPin className="h-3 w-3" />
                   {e.venue_name}
                   {e.city ? `, ${e.city}` : ''}
@@ -90,3 +90,4 @@ export function HomeEventGrid({ events }: { events: Event[] }) {
     </div>
   );
 }
+

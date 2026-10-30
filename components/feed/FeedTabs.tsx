@@ -14,7 +14,7 @@ export default function FeedTabs() {
   ];
 
   return (
-    <div role="tablist" className="flex gap-2 border-b border-gray-200 mb-6">
+    <div role="tablist" className="flex gap-2 border-b border-gray-200 dark:border-gray-800 mb-6">
       {tabs.map((t) => {
         const active = t.key === tab;
         return (
@@ -26,8 +26,8 @@ export default function FeedTabs() {
             className={
               "px-4 py-3 text-sm font-medium -mb-px border-b-2 transition-colors " +
               (active
-                ? "border-black text-black"
-                : "border-transparent text-gray-500 hover:text-black")
+                ? "border-black text-black dark:text-white"
+                : "border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white")
             }
           >
             {t.label}
@@ -37,3 +37,4 @@ export default function FeedTabs() {
     </div>
   );
 }
+

@@ -73,7 +73,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
           <div className="mx-auto max-w-[1400px] px-6 py-3 flex items-center gap-4">
             <button
               onClick={toggle}
-              className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center text-sm"
+              className="w-10 h-10 rounded-full bg-white dark:bg-gray-900 text-black dark:text-white flex items-center justify-center text-sm"
               aria-label={playing ? "Pause" : "Play"}
             >
               {playing ? "II" : "\u25B6"}
@@ -102,3 +102,4 @@ export function usePlayer() {
   if (!c) throw new Error("usePlayer must be used inside PlayerProvider");
   return c;
 }
+

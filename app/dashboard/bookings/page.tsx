@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createServerSupabase } from '@/lib/supabase/server';
 import { BookingRow } from '@/components/dashboard/BookingRow';
@@ -37,7 +37,7 @@ export default async function BookingsDashboardPage({ searchParams }: SearchPara
           href="/artists/apply"
           className="mt-6 inline-flex rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
         >
-          Create your artist profile →
+          Create your artist profile â†’
         </Link>
       </div>
     );
@@ -92,8 +92,8 @@ export default async function BookingsDashboardPage({ searchParams }: SearchPara
             className={
               'border-b-2 px-4 py-3 text-sm font-semibold capitalize transition ' +
               (tab === t
-                ? 'border-black text-black'
-                : 'border-transparent text-neutral-500 hover:text-black')
+                ? 'border-black text-black dark:text-white'
+                : 'border-transparent text-neutral-500 hover:text-black dark:hover:text-white')
             }
           >
             {t} <span className="ml-1 text-neutral-400">({counts[t] ?? 0})</span>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -45,7 +45,7 @@ export default function SeatMap({
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-6">
+    <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
       <div className="text-center mb-6">
         <div className="inline-block px-8 py-2 bg-black text-white text-xs uppercase tracking-widest rounded-b-lg">
           STAGE
@@ -55,7 +55,7 @@ export default function SeatMap({
       <div className="space-y-3">
         {config.rows.map((row) => (
           <div key={row.label} className="flex items-center gap-3">
-            <div className="w-8 text-xs font-bold text-center text-gray-500">
+            <div className="w-8 text-xs font-bold text-center text-gray-500 dark:text-gray-400">
               {row.label}
             </div>
             <div className="flex flex-wrap gap-1 flex-1">
@@ -71,28 +71,28 @@ export default function SeatMap({
                     className={
                       "w-8 h-8 rounded text-xs font-medium transition-colors " +
                       (isReserved
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        ? "bg-gray-300 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                         : isSelected
-                          ? "bg-[#00FF87] text-black border-2 border-black"
-                          : "bg-white border border-gray-300 hover:border-black")
+                          ? "bg-[#00FF87] text-black dark:text-white border-2 border-black"
+                          : "bg-white dark:bg-gray-900 border border-gray-300 hover:border-black")
                     }
-                    title={seat + " - £" + row.price}
+                    title={seat + " - Â£" + row.price}
                   >
                     {seat.replace(row.label, "")}
                   </button>
                 );
               })}
             </div>
-            <div className="w-16 text-xs text-right text-gray-500 font-medium">
-              £{row.price}
+            <div className="w-16 text-xs text-right text-gray-500 dark:text-gray-400 font-medium">
+              Â£{row.price}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mt-6 pt-4 border-t border-gray-200 text-xs">
+      <div className="flex flex-wrap items-center gap-4 mt-6 pt-4 border-t border-gray-200 dark:border-gray-800 text-xs">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-white border border-gray-300 rounded"></div>
+          <div className="w-4 h-4 bg-white dark:bg-gray-900 border border-gray-300 rounded"></div>
           <span>Available</span>
         </div>
         <div className="flex items-center gap-2">
@@ -110,3 +110,4 @@ export default function SeatMap({
     </div>
   );
 }
+

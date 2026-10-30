@@ -1,11 +1,11 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { Vocalist } from '@/lib/vocalists';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
 export function VocalistCard({ vocalist }: { vocalist: Vocalist }) {
   const demo = vocalist.featuredDemo;
   return (
-    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition hover:border-neutral-900">
+    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5 transition hover:border-neutral-900">
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-lg font-semibold">{vocalist.name}</h3>
@@ -37,13 +37,13 @@ export function VocalistCard({ vocalist }: { vocalist: Vocalist }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{demo.title}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {demo.key} · {demo.range} · {demo.genre}
+            {demo.key} Â· {demo.range} Â· {demo.genre}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <button type="button"
-              className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-900 hover:border-neutral-900"
+              className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-3 py-1.5 text-xs font-semibold text-neutral-900 hover:border-neutral-900"
               aria-label={`Preview ${demo.title}`}>
-              ▶ Preview
+              â–¶ Preview
             </button>
             <span className="text-sm font-semibold text-neutral-900">{demo.rate}</span>
             <Link href={`/vocalists/${vocalist.slug}/book`}
@@ -54,7 +54,7 @@ export function VocalistCard({ vocalist }: { vocalist: Vocalist }) {
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-500">
-          No demos listed yet —{' '}
+          No demos listed yet â€”{' '}
           <Link href={`/vocalists/${vocalist.slug}`} className="underline">
             follow to be notified
           </Link>
@@ -88,8 +88,8 @@ export function VocalistCard({ vocalist }: { vocalist: Vocalist }) {
           size="sm"
         />
         <Link href={`/vocalists/${vocalist.slug}`}
-          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black hover:underline">
-          View profile →
+          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black dark:hover:text-white hover:underline">
+          View profile â†’
         </Link>
       </div>
 

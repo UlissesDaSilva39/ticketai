@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -48,7 +48,7 @@ export function DjMixesList({ mixes }: { mixes?: DjMix[] }) {
       <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
         Mixes
       </h2>
-      <ul className="mt-4 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white">
+      <ul className="mt-4 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
         {mixes.map((m) => {
           const isPlaying = playing === m.id;
           const pct = Math.round((progress[m.id] ?? 0) * 100);
@@ -61,12 +61,12 @@ export function DjMixesList({ mixes }: { mixes?: DjMix[] }) {
                   onClick={() => toggle(m)}
                   className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white hover:bg-neutral-800"
                 >
-                  {isPlaying ? '❚❚' : '▶'}
+                  {isPlaying ? 'âšâš' : 'â–¶'}
                 </button>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{m.title}</p>
                   <p className="text-xs text-neutral-500">
-                    {m.duration} · {m.plays.toLocaleString()} plays
+                    {m.duration} Â· {m.plays.toLocaleString()} plays
                   </p>
                 </div>
                 {m.price && (

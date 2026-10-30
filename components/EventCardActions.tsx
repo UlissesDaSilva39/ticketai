@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 
@@ -113,10 +113,10 @@ export default function EventCardActions({
         onClick={togglePlay}
         className={"inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors " +
           (playing
-            ? "bg-[#00FF87] border-[#00FF87] text-black"
+            ? "bg-[#00FF87] border-[#00FF87] text-black dark:text-white"
             : audioUrl
-              ? "bg-white border-gray-300 text-gray-700 hover:border-black"
-              : "bg-gray-50 border-gray-200 text-gray-400 hover:border-gray-300")}
+              ? "bg-white dark:bg-gray-900 border-gray-300 text-gray-700 dark:text-gray-300 hover:border-black"
+              : "bg-gray-50 dark:bg-gray-950 border-gray-200 dark:border-gray-800 text-gray-400 hover:border-gray-300")}
       >
         {playing ? (
           <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
@@ -133,7 +133,7 @@ export default function EventCardActions({
 
       <button
         onClick={toggleLike}
-        className={"inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors " + (liked ? "bg-[#00FF87] border-[#00FF87] text-black" : "bg-white border-gray-300 text-gray-700 hover:border-black")}
+        className={"inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors " + (liked ? "bg-[#00FF87] border-[#00FF87] text-black dark:text-white" : "bg-white dark:bg-gray-900 border-gray-300 text-gray-700 dark:text-gray-300 hover:border-black")}
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -143,7 +143,7 @@ export default function EventCardActions({
 
       <button
         onClick={toggleFollow}
-        className={"inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors " + (following ? "bg-black border-black text-white" : "bg-white border-gray-300 text-gray-700 hover:border-black")}
+        className={"inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors " + (following ? "bg-black border-black text-white" : "bg-white dark:bg-gray-900 border-gray-300 text-gray-700 dark:text-gray-300 hover:border-black")}
       >
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           {following ? (
@@ -156,8 +156,9 @@ export default function EventCardActions({
           )}
         </svg>
         {following ? "Following" : "Follow"}
-        {followerCount > 0 && <span className="opacity-70">· {followerCount}</span>}
+        {followerCount > 0 && <span className="opacity-70">Â· {followerCount}</span>}
       </button>
     </div>
   );
 }
+

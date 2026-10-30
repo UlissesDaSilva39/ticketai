@@ -95,7 +95,7 @@ export default function TrackUploadForm({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5">
       <h3 className="text-lg font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>
         Upload a track
       </h3>
@@ -104,19 +104,19 @@ export default function TrackUploadForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Track title"
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
+          className="w-full rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2 text-sm outline-none focus:border-black"
         />
         <div className="grid grid-cols-2 gap-3">
           <input
             value={artistName}
             onChange={(e) => setArtistName(e.target.value)}
             placeholder="Artist name"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black"
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2 text-sm outline-none focus:border-black"
           />
           <select
             value={kind}
             onChange={(e) => setKind(e.target.value as Kind)}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black bg-white"
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2 text-sm outline-none focus:border-black bg-white dark:bg-gray-900"
           >
             {KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
           </select>
@@ -127,7 +127,7 @@ export default function TrackUploadForm({
           <button type="button" onClick={() => audioInputRef.current?.click()}
             className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
               audioFile ? "border-green-500 bg-green-50 text-green-700"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                        : "border-gray-300 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-gray-400"
             }`}>
             Audio: {audioFile ? `ready${duration ? " (" + duration + "s)" : ""}` : "choose"}
           </button>
@@ -136,7 +136,7 @@ export default function TrackUploadForm({
           <button type="button" onClick={() => coverInputRef.current?.click()}
             className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
               coverFile ? "border-green-500 bg-green-50 text-green-700"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                        : "border-gray-300 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-gray-400"
             }`}>
             Cover: {coverFile ? "ready" : "choose"}
           </button>
@@ -150,4 +150,5 @@ export default function TrackUploadForm({
     </div>
   );
 }
+
 

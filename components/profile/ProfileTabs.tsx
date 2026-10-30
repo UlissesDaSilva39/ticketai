@@ -12,7 +12,7 @@ export default function ProfileTabs({ tabs }: { tabs: Tab[] }) {
 
   return (
     <div>
-      <div role="tablist" className="flex gap-2 border-b border-gray-200 mb-6">
+      <div role="tablist" className="flex gap-2 border-b border-gray-200 dark:border-gray-800 mb-6">
         {tabs.map((t) => (
           <button
             key={t.key}
@@ -22,8 +22,8 @@ export default function ProfileTabs({ tabs }: { tabs: Tab[] }) {
             className={
               "px-4 py-3 text-sm font-medium -mb-px border-b-2 transition-colors " +
               (current.key === t.key
-                ? "border-black text-black"
-                : "border-transparent text-gray-500 hover:text-black")
+                ? "border-black text-black dark:text-white"
+                : "border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white")
             }
           >
             {t.label}
@@ -34,3 +34,4 @@ export default function ProfileTabs({ tabs }: { tabs: Tab[] }) {
     </div>
   );
 }
+

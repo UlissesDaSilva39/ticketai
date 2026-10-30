@@ -1,4 +1,4 @@
- "use client";
+﻿ "use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -296,7 +296,7 @@ export default function CampaignDetailPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 p-8">
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8">
         <div className="mx-auto max-w-6xl">
           Loading campaign...
         </div>
@@ -306,9 +306,9 @@ export default function CampaignDetailPage() {
 
   if (!campaign) {
     return (
-      <main className="min-h-screen bg-gray-50 p-8">
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8">
         <div className="mx-auto max-w-6xl">
-          <div className="rounded-xl border bg-white p-8">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-8">
             Campaign not found.
           </div>
         </div>
@@ -317,12 +317,12 @@ export default function CampaignDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-6">
           <Link
             href="/organizer/campaigns"
-            className="text-sm text-gray-500 hover:text-black"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
           >
             Back to Campaigns
           </Link>
@@ -330,7 +330,7 @@ export default function CampaignDetailPage() {
 
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-start">
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Campaign
             </p>
 
@@ -338,7 +338,7 @@ export default function CampaignDetailPage() {
               {campaign.name}
             </h1>
 
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
               {campaign.event?.title ||
                 campaign.event?.name ||
                 "Event"}
@@ -370,8 +370,8 @@ export default function CampaignDetailPage() {
         )}
 
         <div className="mb-8 grid gap-4 md:grid-cols-4">
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Budget
             </p>
 
@@ -382,8 +382,8 @@ export default function CampaignDetailPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Clicks
             </p>
 
@@ -392,8 +392,8 @@ export default function CampaignDetailPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Conversions
             </p>
 
@@ -402,8 +402,8 @@ export default function CampaignDetailPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Revenue
             </p>
 
@@ -417,7 +417,7 @@ export default function CampaignDetailPage() {
 
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
-            <section className="rounded-xl border bg-white p-6">
+            <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
               <h2 className="text-lg font-semibold">
                 Campaign Settings
               </h2>
@@ -448,7 +448,7 @@ export default function CampaignDetailPage() {
                       onChange={(e) =>
                         setObjective(e.target.value)
                       }
-                      className="w-full rounded-lg border bg-white px-4 py-3"
+                      className="w-full rounded-lg border bg-white dark:bg-gray-900 px-4 py-3"
                     >
                       <option value="ticket_sales">
                         Ticket Sales
@@ -478,7 +478,7 @@ export default function CampaignDetailPage() {
                       onChange={(e) =>
                         setStatus(e.target.value)
                       }
-                      className="w-full rounded-lg border bg-white px-4 py-3"
+                      className="w-full rounded-lg border bg-white dark:bg-gray-900 px-4 py-3"
                     >
                       <option value="draft">
                         Draft
@@ -541,7 +541,7 @@ export default function CampaignDetailPage() {
               </div>
             </section>
 
-            <section className="rounded-xl border bg-white p-6">
+            <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
               <h2 className="text-lg font-semibold">
                 Audience
               </h2>
@@ -609,7 +609,7 @@ export default function CampaignDetailPage() {
               </div>
             </section>
 
-            <section className="rounded-xl border bg-white p-6">
+            <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
               <h2 className="text-lg font-semibold">
                 Channels
               </h2>
@@ -636,7 +636,7 @@ export default function CampaignDetailPage() {
               </div>
             </section>
 
-            <section className="rounded-xl border bg-white p-6">
+            <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
               <h2 className="text-lg font-semibold">
                 Schedule
               </h2>
@@ -676,42 +676,42 @@ export default function CampaignDetailPage() {
           </div>
 
           <div className="space-y-6">
-            <section className="rounded-xl border bg-white p-6">
+            <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
               <h2 className="text-lg font-semibold">
                 Campaign Tracking
               </h2>
 
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 Unique campaign code:
               </p>
 
-              <div className="mt-2 rounded-lg bg-gray-100 p-3 font-mono text-sm break-all">
+              <div className="mt-2 rounded-lg bg-gray-100 dark:bg-gray-800 p-3 font-mono text-sm break-all">
                 {campaign.tracking_code}
               </div>
 
-              <p className="mt-4 text-sm text-gray-500">
+              <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 Campaign URL:
               </p>
 
-              <div className="mt-2 rounded-lg bg-gray-100 p-3 text-xs break-all">
+              <div className="mt-2 rounded-lg bg-gray-100 dark:bg-gray-800 p-3 text-xs break-all">
                 {campaignUrl || "-"}
               </div>
 
-              <p className="mt-3 text-xs text-gray-500">
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
                 This campaign parameter provides the
                 foundation for future click and conversion
                 attribution.
               </p>
             </section>
 
-            <section className="rounded-xl border bg-white p-6">
+            <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
               <h2 className="text-lg font-semibold">
                 Campaign Dates
               </h2>
 
               <div className="mt-4 space-y-3 text-sm">
                 <div>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500 dark:text-gray-400">
                     Start
                   </p>
 
@@ -721,7 +721,7 @@ export default function CampaignDetailPage() {
                 </div>
 
                 <div>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500 dark:text-gray-400">
                     End
                   </p>
 
@@ -732,12 +732,12 @@ export default function CampaignDetailPage() {
               </div>
             </section>
 
-            <section className="rounded-xl border border-red-200 bg-white p-6">
+            <section className="rounded-xl border border-red-200 bg-white dark:bg-gray-900 p-6">
               <h2 className="font-semibold text-red-700">
                 Danger Zone
               </h2>
 
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 Deleting a campaign permanently removes
                 its campaign configuration.
               </p>

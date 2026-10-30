@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -63,9 +63,9 @@ export default function PromoterBookingSection({ promoterId, promoterName }: Pro
   };
 
   return (
-    <section className="bg-white border border-gray-200 rounded-2xl p-6">
+    <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
       <h2 className="text-lg font-semibold mb-1">Book this promoter</h2>
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
         Pick a date and send a booking enquiry to {promoterName}.
       </p>
 
@@ -76,7 +76,7 @@ export default function PromoterBookingSection({ promoterId, promoterName }: Pro
           disabled={!canGoBack}
           className="px-3 py-1 text-sm border border-gray-300 rounded-lg disabled:opacity-40"
         >
-          ‹
+          â€¹
         </button>
         <div className="text-sm font-medium">
           {month.toLocaleDateString("en-GB", { month: "long", year: "numeric" })}
@@ -86,11 +86,11 @@ export default function PromoterBookingSection({ promoterId, promoterName }: Pro
           onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
           className="px-3 py-1 text-sm border border-gray-300 rounded-lg"
         >
-          ›
+          â€º
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-2">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 dark:text-gray-400 mb-2">
         {["Mo","Tu","We","Th","Fr","Sa","Su"].map(d => <div key={d}>{d}</div>)}
       </div>
       <div className="grid grid-cols-7 gap-1 mb-4">
@@ -110,7 +110,7 @@ export default function PromoterBookingSection({ promoterId, promoterName }: Pro
                   ? "bg-black text-white"
                   : isPast
                   ? "text-gray-300"
-                  : "hover:bg-gray-100")
+                  : "hover:bg-gray-100 dark:hover:bg-gray-800")
               }
             >
               {c.getDate()}
@@ -121,7 +121,7 @@ export default function PromoterBookingSection({ promoterId, promoterName }: Pro
 
       {selected && (
         <form onSubmit={submit} className="space-y-3 border-t pt-4">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             Selected: {selected.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}
           </p>
           <input

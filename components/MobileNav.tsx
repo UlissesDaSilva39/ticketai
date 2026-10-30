@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -83,7 +83,7 @@ export default function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-center justify-around h-14">
         {items.map((it) => {
           const active = it.href === "/" ? pathname === "/" : pathname?.startsWith(it.href);
@@ -93,10 +93,10 @@ export default function MobileNav({ isSignedIn }: { isSignedIn: boolean }) {
               href={it.href}
               className={
                 "flex flex-col items-center justify-center flex-1 h-full text-[10px] font-medium " +
-                (active ? "text-black" : "text-gray-500")
+                (active ? "text-black dark:text-white" : "text-gray-500 dark:text-gray-400")
               }
             >
-              <span className={active ? "text-black" : "text-gray-500"}>{it.icon}</span>
+              <span className={active ? "text-black dark:text-white" : "text-gray-500 dark:text-gray-400"}>{it.icon}</span>
               <span className="mt-0.5">{it.label}</span>
             </Link>
           );

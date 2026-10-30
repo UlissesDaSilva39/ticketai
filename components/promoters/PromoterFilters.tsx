@@ -1,10 +1,10 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
 const CITIES = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const GENRES = ['All genres', 'House', 'Techno', 'Jazz', 'DnB'];
-const WHEN   = ['This weekend', 'Under £20', 'Free'];
+const WHEN   = ['This weekend', 'Under Â£20', 'Free'];
 
 export function PromoterFilters() {
   const [city, setCity]   = useState('All cities');
@@ -41,7 +41,7 @@ function Chip({
         'rounded-full border px-4 py-1.5 text-sm font-medium transition ' +
         (active
           ? 'border-black bg-black text-white'
-          : 'border-neutral-300 bg-white text-neutral-800 hover:border-neutral-900')
+          : 'border-neutral-300 bg-white dark:bg-gray-900 text-neutral-800 hover:border-neutral-900')
       }>
       {children}
     </button>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
@@ -57,14 +57,14 @@ export default async function OrganizerDashboard() {
           >
             ORGANIZER
           </h1>
-          <p className="text-gray-500 mt-2">Signed in as {user.email}</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">Signed in as {user.email}</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
             href="/organizer/promote"
-            className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50"
+            className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
           >
-            📣 Promote
+            ðŸ“£ Promote
           </Link>
           <Link
             href="/organizer/events/new"
@@ -76,8 +76,8 @@ export default async function OrganizerDashboard() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">
             Events
           </p>
           <p
@@ -87,8 +87,8 @@ export default async function OrganizerDashboard() {
             {eventList.length}
           </p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">
             Tickets Sold
           </p>
           <p
@@ -98,8 +98,8 @@ export default async function OrganizerDashboard() {
             {totalTicketsSold}
           </p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">
             Orders
           </p>
           <p
@@ -109,15 +109,15 @@ export default async function OrganizerDashboard() {
             {orderCount}
           </p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">
             Revenue
           </p>
           <p
             className="text-4xl font-bold"
             style={{ fontFamily: "var(--font-antonio)" }}
           >
-            £{totalRevenue.toFixed(2)}
+            Â£{totalRevenue.toFixed(2)}
           </p>
         </div>
       </div>
@@ -130,8 +130,8 @@ export default async function OrganizerDashboard() {
       </h2>
 
       {eventList.length === 0 ? (
-        <div className="bg-gray-50 rounded-lg p-12 text-center">
-          <p className="text-lg text-gray-500 mb-6">
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-12 text-center">
+          <p className="text-lg text-gray-500 dark:text-gray-400 mb-6">
             You have not created any events yet.
           </p>
           <Link
@@ -146,17 +146,17 @@ export default async function OrganizerDashboard() {
           {eventList.map((event) => (
             <div
               key={event.id}
-              className="flex items-center justify-between p-5 border border-gray-200 rounded-lg"
+              className="flex items-center justify-between p-5 border border-gray-200 dark:border-gray-800 rounded-lg"
             >
               <div className="flex-1">
                 <h3 className="font-bold text-lg mb-1">{event.title}</h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(event.start_date).toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "short",
                     year: "numeric",
                   })}{" "}
-                  · {event.status}
+                  Â· {event.status}
                 </p>
               </div>
               <div className="flex gap-2">

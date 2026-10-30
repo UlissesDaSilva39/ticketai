@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -33,7 +33,7 @@ export function ModeToggle() {
         onClick={() => choose("fan")}
         className={
           "rounded-full px-3 py-1 transition " +
-          (mode === "fan" ? "bg-white font-semibold shadow-sm" : "text-neutral-600")
+          (mode === "fan" ? "bg-white dark:bg-gray-900 font-semibold shadow-sm" : "text-neutral-600")
         }
       >
         Fan view
@@ -43,7 +43,7 @@ export function ModeToggle() {
         onClick={() => choose("business")}
         className={
           "rounded-full px-3 py-1 transition " +
-          (mode === "business" ? "bg-white font-semibold shadow-sm" : "text-neutral-600")
+          (mode === "business" ? "bg-white dark:bg-gray-900 font-semibold shadow-sm" : "text-neutral-600")
         }
       >
         Business view

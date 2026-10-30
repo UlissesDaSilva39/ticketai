@@ -21,7 +21,7 @@ export default function ArtistMusicSection({ spotifyUrl, artistName }: Props) {
   })();
 
   return (
-    <section className="bg-white border border-gray-200 rounded-2xl p-6">
+    <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
       <div className="flex items-baseline justify-between mb-4">
         <h2 className="text-lg font-semibold">Music</h2>
         {spotifyUrl && (
@@ -29,7 +29,7 @@ export default function ArtistMusicSection({ spotifyUrl, artistName }: Props) {
             href={spotifyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-gray-500 hover:text-black"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
           >
             Open in Spotify ↗
           </a>
@@ -48,8 +48,8 @@ export default function ArtistMusicSection({ spotifyUrl, artistName }: Props) {
           className="rounded-xl"
         />
       ) : (
-        <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
-          <p className="text-sm text-gray-500 mb-4">No playlist available yet.</p>
+        <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 dark:bg-gray-950 p-8 text-center">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">No playlist available yet.</p>
           <a
             href={"https://open.spotify.com/search/" + encodeURIComponent(artistName)}
             target="_blank"
@@ -63,3 +63,4 @@ export default function ArtistMusicSection({ spotifyUrl, artistName }: Props) {
     </section>
   );
 }
+

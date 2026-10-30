@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -58,8 +58,8 @@ export default function MiniInterestButtons({
         className={
           "px-3 py-1.5 rounded-full text-xs font-medium transition-colors " +
           (status === "interested"
-            ? "bg-[#00FF87] text-black"
-            : "border border-black text-black hover:bg-black hover:text-white")
+            ? "bg-[#00FF87] text-black dark:text-white"
+            : "border border-black text-black dark:text-white hover:bg-black hover:text-white")
         }
       >
         {status === "interested" ? "Interested" : "I am Interested"}
@@ -76,7 +76,7 @@ export default function MiniInterestButtons({
           "px-3 py-1.5 rounded-full text-xs font-medium transition-colors " +
           (status === "going"
             ? "bg-black text-white"
-            : "border border-black text-black hover:bg-black hover:text-white")
+            : "border border-black text-black dark:text-white hover:bg-black hover:text-white")
         }
       >
         {status === "going" ? "Going" : "I am Going"}

@@ -6,7 +6,7 @@ export default function ClubUpgradePage() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-3">Upgrade to GRID Club</h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 dark:text-gray-400 text-lg">
             Unlock analytics, priority placement, and a verified badge.
           </p>
         </div>
@@ -16,10 +16,10 @@ export default function ClubUpgradePage() {
             <div
               key={plan.tier}
               className={
-                'rounded-2xl border bg-white p-6 flex flex-col ' +
+                'rounded-2xl border bg-white dark:bg-gray-900 p-6 flex flex-col ' +
                 (plan.tier === 'pro'
                   ? 'border-violet-600 shadow-lg ring-2 ring-violet-100'
-                  : 'border-gray-200')
+                  : 'border-gray-200 dark:border-gray-800')
               }
             >
               {plan.tier === 'pro' && (
@@ -30,9 +30,9 @@ export default function ClubUpgradePage() {
               <h2 className="text-2xl font-bold mb-1">{plan.name}</h2>
               <div className="text-3xl font-bold mb-4">
                 £{plan.monthlyPriceGbp}
-                <span className="text-sm font-normal text-gray-500">/mo</span>
+                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/mo</span>
               </div>
-              <ul className="space-y-2 text-sm text-gray-700 mb-6 flex-1">
+              <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300 mb-6 flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <span className="text-green-500 font-bold">✓</span>
@@ -45,7 +45,7 @@ export default function ClubUpgradePage() {
                 className={
                   'w-full rounded-full py-2.5 font-semibold transition ' +
                   (plan.tier === 'free'
-                    ? 'bg-gray-100 text-gray-700 cursor-default'
+                    ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-default'
                     : 'bg-gradient-to-r from-violet-600 to-pink-500 text-white hover:opacity-90')
                 }
                 disabled={plan.tier === 'free'}
@@ -56,10 +56,11 @@ export default function ClubUpgradePage() {
           ))}
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-8">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
           Stripe Checkout not wired yet — this page shows the tiers.
         </p>
       </div>
     </div>
   );
 }
+

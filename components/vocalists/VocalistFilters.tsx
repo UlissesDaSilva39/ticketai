@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
@@ -7,7 +7,7 @@ const GENRES = ['All genres', 'Hip-Hop', 'House', 'R&B', 'Pop', 'Soul'];
 const CITIES = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const RANGES = ['All ranges', 'Alto', 'Soprano', 'Tenor', 'Baritone'];
 const KEYS   = ['All keys', 'Am', 'Cm', 'F', 'G', 'Dm'];
-const PRICE  = ['All rates', 'Under £200', '£200-£400', '£400+'];
+const PRICE  = ['All rates', 'Under Â£200', 'Â£200-Â£400', 'Â£400+'];
 
 export function VocalistFilters() {
   const [type, setType]     = useState('All types');
@@ -59,7 +59,7 @@ function Chip({
         'rounded-full border px-4 py-1.5 text-sm font-medium transition ' +
         (active
           ? 'border-black bg-black text-white'
-          : 'border-neutral-300 bg-white text-neutral-800 hover:border-neutral-900')
+          : 'border-neutral-300 bg-white dark:bg-gray-900 text-neutral-800 hover:border-neutral-900')
       }>
       {children}
     </button>

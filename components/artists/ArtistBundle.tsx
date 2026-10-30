@@ -5,7 +5,7 @@ export function ArtistBundle({ bundle }: { bundle?: Bundle }) {
   if (!bundle) return null;
 
   return (
-    <section className="rounded-3xl border border-neutral-200 bg-white p-6 md:p-8">
+    <section className="rounded-3xl border border-neutral-200 bg-white dark:bg-gray-900 p-6 md:p-8">
       <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
         Bundle
       </p>

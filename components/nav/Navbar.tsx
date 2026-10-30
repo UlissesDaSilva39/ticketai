@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 type NavItem = {
   label: string
@@ -54,6 +55,8 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   { label: 'Industry', href: '/industry' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Royalties', href: '/royalties' },
   { label: 'Business', href: '/business' },
 ]
 
@@ -135,7 +138,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
   }
 
   return (
-    <header className="relative sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header className="relative sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="font-bold text-2xl tracking-tight">GRID</Link>
@@ -149,7 +152,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                     onMouseEnter={() => setOpenDropdown(item.label)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
-                    <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-black flex items-center gap-1">
+                    <button className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white flex items-center gap-1">
                       {item.label}
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
@@ -162,7 +165,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                             key={sub.href}
                             href={sub.href}
                             onClick={(e) => handleProtectedClick(e, sub.href)}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                           >
                             {sub.label}
                           </Link>
@@ -177,8 +180,8 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                   key={item.label}
                   href={item.href || '#'}
                   onClick={(e) => handleProtectedClick(e, item.href)}
-                  className={`px-3 py-2 text-sm font-medium hover:text-black ${
-                    pathname === item.href ? 'text-black font-semibold' : 'text-gray-700'
+                  className={`px-3 py-2 text-sm font-medium hover:text-black dark:hover:text-white ${
+                    pathname === item.href ? 'text-black dark:text-white font-semibold' : 'text-gray-700 dark:text-gray-300'
                   }`}
                 >
                   {item.label}
@@ -189,6 +192,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
         </div>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           {currentUser ? (
             <div className="relative">
               <button
@@ -199,49 +203,50 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                   {currentUser.name?.[0]?.toUpperCase() || 'U'}
                 </div>
                 <div className="hidden md:block text-left">
-                  <p className="text-sm font-semibold text-gray-900">{currentUser.name}</p>
-                  <p className="text-xs text-gray-500 capitalize">{currentUser.role}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{currentUser.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{currentUser.role}</p>
                 </div>
               </button>
 
               {showUserMenu && (
                 <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl py-2 w-64 z-50">
-                  <div className="px-4 py-3 border-b border-gray-100">
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                     <div className="flex items-center gap-3">
+          <ThemeToggle />
                       <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">
                         {currentUser.name?.[0]?.toUpperCase() || 'U'}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-gray-900 truncate">{currentUser.name}</p>
-                        <p className="text-xs text-gray-500 truncate">{currentUser.email}</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{currentUser.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{currentUser.email}</p>
                         <p className="text-xs text-blue-600 font-medium capitalize mt-0.5">{currentUser.role}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="py-1">
-                    <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Profile</Link>
-                    <Link href="/tickets" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
+                    <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>Profile</Link>
+                    <Link href="/tickets" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>My Tickets</Link>
                   </div>
 
                   {currentUser.role === 'fan' && (
-                    <div className="border-t border-gray-100 py-1">
+                    <div className="border-t border-gray-100 dark:border-gray-800 py-1">
                       <p className="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Upgrade</p>
-                      <Link href="/artist/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
+                      <Link href="/artist/register" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>
                         Become an Artist <span className="text-gray-400">ÃƒÂ¢â†’Â â†’</span>
                       </Link>
-                      <Link href="/promoter/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
+                      <Link href="/promoter/register" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>
                         Become a Promoter <span className="text-gray-400">ÃƒÂ¢â†’Â â†’</span>
                       </Link>
-                      <Link href="/venue/register" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>
+                      <Link href="/venue/register" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>
                         Become a Venue <span className="text-gray-400">ÃƒÂ¢â†’Â â†’</span>
                       </Link>
-                        <Link href="/business" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Business tools</Link>
+                        <Link href="/business" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>Business tools</Link>
                     </div>
                   )}
 
-                  <div className="border-t border-gray-100 py-1">
-                    <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={() => setShowUserMenu(false)}>Settings</Link>
+                  <div className="border-t border-gray-100 dark:border-gray-800 py-1">
+                    <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={() => setShowUserMenu(false)}>Settings</Link>
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium"
@@ -254,7 +259,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
             </div>
           ) : (
             <>
-              <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-black px-3 py-2">Log in</Link>
+              <Link href="/login" className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white px-3 py-2">Log in</Link>
               <Link href="/signup" className="text-sm font-semibold bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">Sign up</Link>
             </>
           )}
@@ -280,7 +285,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
         </button>
 
         {showMobileMenu && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-50">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-lg z-50">
             <nav className="flex flex-col py-2">
               {NAV_ITEMS.map((item) =>
                 item.href ? (
@@ -288,14 +293,14 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                     key={item.label}
                     href={item.href}
                     onClick={() => setShowMobileMenu(false)}
-                    className={`px-4 py-3 text-sm border-b border-gray-100 ${
-                      pathname === item.href ? 'font-semibold text-black' : 'text-gray-700'
+                    className={`px-4 py-3 text-sm border-b border-gray-100 dark:border-gray-800 ${
+                      pathname === item.href ? 'font-semibold text-black dark:text-white' : 'text-gray-700 dark:text-gray-300'
                     }`}
                   >
                     {item.label}
                   </Link>
                 ) : (
-                  <div key={item.label} className="px-4 py-3 border-b border-gray-100">
+                  <div key={item.label} className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                     <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
                       {item.label}
                     </p>
@@ -304,7 +309,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                         key={sub.href}
                         href={sub.href}
                         onClick={() => setShowMobileMenu(false)}
-                        className="block py-1 text-sm text-gray-700"
+                        className="block py-1 text-sm text-gray-700 dark:text-gray-300"
                       >
                         {sub.label}
                       </Link>
@@ -318,3 +323,8 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
     </header>
   )
 }
+
+
+
+
+

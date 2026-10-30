@@ -38,10 +38,10 @@ const urlRx = /^https?:\/\/.+/i;
 const handleRx = /^[a-zA-Z0-9._-]{3,}$/;
 
 const inputBase =
-  "w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-black placeholder-gray-400 outline-none transition focus:border-black focus:bg-white";
+  "w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl text-sm text-black dark:text-white placeholder-gray-400 outline-none transition focus:border-black focus:bg-white";
 const inputError =
   "border-red-400 bg-red-50 focus:border-red-500";
-const labelBase = "block text-sm font-medium text-gray-900 mb-1.5";
+const labelBase = "block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1.5";
 
 export default function ArtistRegisterForm() {
   const [form, setForm] = useState<FormState>(INITIAL);
@@ -153,10 +153,10 @@ export default function ArtistRegisterForm() {
   });
 
   return (
-    <section className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8">
-      <div className="flex items-baseline justify-between mb-6 pb-4 border-b border-gray-200">
+    <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 sm:p-8">
+      <div className="flex items-baseline justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-800">
         <h2 className="text-xl font-semibold">Create your artist profile</h2>
-        <span className="text-xs text-gray-500 px-3 py-1 bg-gray-100 rounded-full border border-gray-200">
+        <span className="text-xs text-gray-500 dark:text-gray-400 px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full border border-gray-200 dark:border-gray-800">
           Step 1 of 1
         </span>
       </div>
@@ -164,7 +164,7 @@ export default function ArtistRegisterForm() {
       <form onSubmit={onSubmit} noValidate className="space-y-8">
         {/* BASIC INFO */}
         <fieldset className="border-0">
-          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">
+          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
             Basic information
           </legend>
 
@@ -187,12 +187,12 @@ export default function ArtistRegisterForm() {
             <div>
               <label htmlFor="handle" className={labelBase}>Handle / Username *</label>
               <div
-                className={`flex items-stretch bg-gray-50 border rounded-xl overflow-hidden transition ${
-                  errors.handle ? "border-red-400 bg-red-50" : "border-gray-200 focus-within:border-black focus-within:bg-white"
+                className={`flex items-stretch bg-gray-50 dark:bg-gray-950 border rounded-xl overflow-hidden transition ${
+                  errors.handle ? "border-red-400 bg-red-50" : "border-gray-200 dark:border-gray-800 focus-within:border-black focus-within:bg-white"
                 }`}
                 data-invalid={errors.handle ? "true" : "false"}
               >
-                <span className="grid place-items-center px-3 text-sm text-gray-500 bg-gray-100 border-r border-gray-200">
+                <span className="grid place-items-center px-3 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-800">
                   @
                 </span>
                 <input
@@ -241,8 +241,8 @@ export default function ArtistRegisterForm() {
         </fieldset>
 
         {/* GENRE */}
-        <fieldset className="border-0 pt-6 border-t border-dashed border-gray-200">
-          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">
+        <fieldset className="border-0 pt-6 border-t border-dashed border-gray-200 dark:border-gray-800">
+          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
             Genre &amp; style
           </legend>
 
@@ -297,7 +297,7 @@ export default function ArtistRegisterForm() {
                     className={`px-4 py-2 rounded-full text-sm border transition ${
                       active
                         ? "bg-black text-white border-black"
-                        : "bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-400"
+                        : "bg-gray-50 dark:bg-gray-950 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-800 hover:border-gray-400"
                     }`}
                   >
                     {g}
@@ -309,8 +309,8 @@ export default function ArtistRegisterForm() {
         </fieldset>
 
         {/* LOCATION */}
-        <fieldset className="border-0 pt-6 border-t border-dashed border-gray-200">
-          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">
+        <fieldset className="border-0 pt-6 border-t border-dashed border-gray-200 dark:border-gray-800">
+          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
             Location
           </legend>
 
@@ -360,8 +360,8 @@ export default function ArtistRegisterForm() {
         </fieldset>
 
         {/* PROFILE */}
-        <fieldset className="border-0 pt-6 border-t border-dashed border-gray-200">
-          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">
+        <fieldset className="border-0 pt-6 border-t border-dashed border-gray-200 dark:border-gray-800">
+          <legend className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
             Profile details
           </legend>
 
@@ -377,7 +377,7 @@ export default function ArtistRegisterForm() {
               className={`${inputBase} resize-y min-h-[100px] ${errors.bio ? inputError : ""}`}
               data-invalid={errors.bio ? "true" : "false"}
             />
-            <div className="text-right text-xs text-gray-500 mt-1">
+            <div className="text-right text-xs text-gray-500 dark:text-gray-400 mt-1">
               {form.bio.length} / 400
             </div>
             {errors.bio && (
@@ -420,8 +420,8 @@ export default function ArtistRegisterForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="instagram" className={labelBase}>Instagram</label>
-              <div className="flex items-stretch bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:border-black focus-within:bg-white">
-                <span className="grid place-items-center px-3 text-sm text-gray-500 bg-gray-100 border-r border-gray-200">
+              <div className="flex items-stretch bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden focus-within:border-black focus-within:bg-white">
+                <span className="grid place-items-center px-3 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-800">
                   @
                 </span>
                 <input
@@ -454,8 +454,8 @@ export default function ArtistRegisterForm() {
                 }}
                 className={`cursor-pointer border-2 border-dashed rounded-xl p-6 min-h-[110px] grid place-items-center text-center transition ${
                   dragging
-                    ? "border-black bg-gray-100"
-                    : "border-gray-300 hover:border-gray-400 bg-gray-50"
+                    ? "border-black bg-gray-100 dark:bg-gray-800"
+                    : "border-gray-300 hover:border-gray-400 bg-gray-50 dark:bg-gray-950"
                 }`}
               >
                 <input
@@ -472,7 +472,7 @@ export default function ArtistRegisterForm() {
                     className="max-h-32 rounded-lg"
                   />
                 ) : (
-                  <div className="flex flex-col gap-1.5 text-sm text-gray-500">
+                  <div className="flex flex-col gap-1.5 text-sm text-gray-500 dark:text-gray-400">
                     <span className="text-2xl text-gray-400">+</span>
                     <span>Click to upload or drag an image</span>
                   </div>
@@ -483,8 +483,8 @@ export default function ArtistRegisterForm() {
         </fieldset>
 
         {/* TERMS */}
-        <div className="pt-6 border-t border-dashed border-gray-200">
-          <label className="flex items-start gap-3 text-sm text-gray-600 cursor-pointer">
+        <div className="pt-6 border-t border-dashed border-gray-200 dark:border-gray-800">
+          <label className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
             <input
               type="checkbox"
               checked={form.terms}
@@ -492,8 +492,8 @@ export default function ArtistRegisterForm() {
               className="mt-0.5 accent-black"
             />
             <span>
-              I agree to the <a href="/terms" className="text-black font-medium underline">Terms of Service</a> and{" "}
-              <a href="/privacy" className="text-black font-medium underline">Privacy Policy</a>.
+              I agree to the <a href="/terms" className="text-black dark:text-white font-medium underline">Terms of Service</a> and{" "}
+              <a href="/privacy" className="text-black dark:text-white font-medium underline">Privacy Policy</a>.
             </span>
           </label>
           {errors.terms && (
@@ -506,7 +506,7 @@ export default function ArtistRegisterForm() {
           <button
             type="button"
             onClick={reset}
-            className="px-6 py-3 rounded-full border border-gray-300 text-sm font-medium text-gray-600 hover:bg-gray-50 transition"
+            className="px-6 py-3 rounded-full border border-gray-300 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
           >
             Clear
           </button>
@@ -524,3 +524,4 @@ export default function ArtistRegisterForm() {
     </section>
   );
 }
+

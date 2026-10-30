@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
@@ -6,7 +6,7 @@ const GENRES   = ['All genres', 'Rock', 'Indie', 'Punk', 'Electronic', 'Folk'];
 const CITIES   = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const LINEUPS  = ['All lineups', 'Solo', 'Duo', 'Trio', '4-piece', '5-piece+'];
 const DRAWS    = ['All draw', '<100', '100-500', '500-1000', '1000+'];
-const PRICE    = ['All prices', 'Under £20', '£20-£50', '£50+'];
+const PRICE    = ['All prices', 'Under Â£20', 'Â£20-Â£50', 'Â£50+'];
 
 export function BandFilters() {
   const [genre, setGenre]   = useState('All genres');
@@ -52,7 +52,7 @@ function Chip({
         'rounded-full border px-4 py-1.5 text-sm font-medium transition ' +
         (active
           ? 'border-black bg-black text-white'
-          : 'border-neutral-300 bg-white text-neutral-800 hover:border-neutral-900')
+          : 'border-neutral-300 bg-white dark:bg-gray-900 text-neutral-800 hover:border-neutral-900')
       }>
       {children}
     </button>

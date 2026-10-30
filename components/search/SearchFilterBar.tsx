@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
@@ -46,12 +46,12 @@ export function SearchFilterBar() {
 
       {/* Cities */}
       <div className="flex flex-wrap gap-2 text-sm">
-        <span className="text-gray-500 self-center font-medium">Cities:</span>
+        <span className="text-gray-500 dark:text-gray-400 self-center font-medium">Cities:</span>
         {CITIES.map(city => (
           <button 
             key={city}
             onClick={() => updateFilter('city', city)}
-            className={`px-3 py-1 rounded-full transition ${activeCity === city ? 'bg-black text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            className={`px-3 py-1 rounded-full transition ${activeCity === city ? 'bg-black text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200'}`}
           >
             {city}
           </button>
@@ -60,12 +60,12 @@ export function SearchFilterBar() {
 
       {/* Genres */}
       <div className="flex flex-wrap gap-2 text-sm">
-        <span className="text-gray-500 self-center font-medium">Genres:</span>
+        <span className="text-gray-500 dark:text-gray-400 self-center font-medium">Genres:</span>
         {GENRES.map(genre => (
           <button 
             key={genre}
             onClick={() => updateFilter('genre', genre)}
-            className={`px-3 py-1 rounded-full transition ${activeGenre === genre ? 'bg-black text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            className={`px-3 py-1 rounded-full transition ${activeGenre === genre ? 'bg-black text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200'}`}
           >
             {genre}
           </button>

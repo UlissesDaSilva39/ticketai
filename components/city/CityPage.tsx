@@ -79,7 +79,7 @@ export default async function CityPage({ city, slug }: Props) {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -93,7 +93,7 @@ export default async function CityPage({ city, slug }: Props) {
             >
               Events in {city}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Discover live music, venues, and artists in {city}.
             </p>
           </header>
@@ -106,8 +106,8 @@ export default async function CityPage({ city, slug }: Props) {
               Upcoming events
             </h2>
             {events.length === 0 ? (
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center">
-                <p className="text-gray-600">No upcoming events in {city} yet.</p>
+              <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 text-center">
+                <p className="text-gray-600 dark:text-gray-400">No upcoming events in {city} yet.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -115,7 +115,7 @@ export default async function CityPage({ city, slug }: Props) {
                   <Link
                     key={e.id}
                     href={"/event/" + e.id}
-                    className="block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
+                    className="block bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
                   >
                     {e.hero_image ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -124,13 +124,13 @@ export default async function CityPage({ city, slug }: Props) {
                       <div className="w-full h-40 bg-gradient-to-br from-gray-200 to-gray-300" />
                     )}
                     <div className="p-4">
-                      <p className="text-xs text-gray-500 mb-1">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                         {fmtDate(e.start_date)}
                         {e.venues?.name ? " · " + e.venues.name : ""}
                       </p>
                       <p className="font-bold text-sm truncate">{e.title}</p>
                       {priceFrom(e.ticket_types) ? (
-                        <p className="text-xs text-gray-500 mt-1">{priceFrom(e.ticket_types)}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{priceFrom(e.ticket_types)}</p>
                       ) : null}
                     </div>
                   </Link>
@@ -152,7 +152,7 @@ export default async function CityPage({ city, slug }: Props) {
                   <Link
                     key={v.id}
                     href={"/venue/" + v.slug}
-                    className="block bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
+                    className="block bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
                   >
                     {v.hero_image ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -163,7 +163,7 @@ export default async function CityPage({ city, slug }: Props) {
                     <div className="p-3">
                       <p className="font-bold text-sm truncate">{v.name}</p>
                       {v.capacity ? (
-                        <p className="text-xs text-gray-500 mt-0.5">Cap. {v.capacity}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cap. {v.capacity}</p>
                       ) : null}
                     </div>
                   </Link>
@@ -201,7 +201,7 @@ export default async function CityPage({ city, slug }: Props) {
                       {a.full_name || a.username}
                     </p>
                     {a.genre ? (
-                      <p className="text-[10px] text-gray-500 truncate">{a.genre}</p>
+                      <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate">{a.genre}</p>
                     ) : null}
                   </Link>
                 ))}
@@ -211,7 +211,7 @@ export default async function CityPage({ city, slug }: Props) {
 
           <p className="text-xs text-gray-400 text-center pt-4">
             Looking for something else?{" "}
-            <Link href="/search" className="underline hover:text-black">
+            <Link href="/search" className="underline hover:text-black dark:hover:text-white">
               Search all events
             </Link>
           </p>
@@ -220,3 +220,4 @@ export default async function CityPage({ city, slug }: Props) {
     </div>
   );
 }
+

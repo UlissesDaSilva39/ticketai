@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ export default function ShareSheet({ url, title }: { url: string; title: string 
   const targets = [
     {
       label: "WhatsApp",
-      href: "https://wa.me/?text=" + enc(title + " — " + url),
+      href: "https://wa.me/?text=" + enc(title + " â€” " + url),
       bg: "#25D366",
     },
     {
@@ -67,7 +67,7 @@ export default function ShareSheet({ url, title }: { url: string; title: string 
       {open && (
         <>
           <div className="fixed inset-0 z-40 bg-black/50 text-white" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden border border-gray-200">
+          <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl z-50 overflow-hidden border border-gray-200 dark:border-gray-800">
             {targets.map((t) => (
               <a
                 key={t.label}
@@ -75,7 +75,7 @@ export default function ShareSheet({ url, title }: { url: string; title: string 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 text-black"
+                className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 text-black dark:text-white"
               >
                 <span
                   className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
@@ -88,7 +88,7 @@ export default function ShareSheet({ url, title }: { url: string; title: string 
             ))}
             <button
               onClick={copy}
-              className="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 text-black border-t border-gray-100"
+              className="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 text-black dark:text-white border-t border-gray-100 dark:border-gray-800"
             >
               Copy link
             </button>

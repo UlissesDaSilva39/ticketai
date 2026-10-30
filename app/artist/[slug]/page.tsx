@@ -1,6 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
+﻿import { createClient } from '@supabase/supabase-js';
 import { ClaimButton } from '@/components/claims/ClaimButton';
 import Link from 'next/link';
+import { ArtistBioSection } from '@/components/artist/ArtistBioSection'
+import { ArtistTopTracks } from '@/components/artist/ArtistTopTracks'
+import { ArtistUpcomingShows } from '@/components/artist/ArtistUpcomingShows'
+import { ArtistBookingCTA } from '@/components/artist/ArtistBookingCTA'
 
 export const dynamic = 'force-dynamic';
 
@@ -24,9 +28,9 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
 
   if (!artist) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-4">Artist not found</h1>
-        <p className="text-gray-600 mb-8">This profile does not exist yet.</p>
+      <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-4">Artist not found</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-8">This profile does not exist yet.</p>
         <Link href="/discover/artists" className="inline-block px-6 py-3 bg-black text-white font-bold rounded-lg hover:bg-gray-800">
           Back to artists
         </Link>
@@ -43,30 +47,30 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
   const avatarImage = artist.avatar_url || fallbackImage;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
       
       {/* 1. COVER IMAGE (Hero) */}
-      <div className="relative h-48 sm:h-64 w-full bg-gray-900">
+      <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
         <img 
           src={coverImage} 
           alt="" 
           className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+        <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100" />
         
         {/* Back button */}
         <Link href="/discover/artists" className="absolute top-4 left-4 bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/30 transition">
-          ← Back
+          â† Back
         </Link>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
         
         {/* 2. PROFILE PICTURE + ACTION BAR */}
-        <div className="relative -mt-16 sm:-mt-20 mb-8 flex flex-col sm:flex-row items-center sm:items-end justify-between gap-4">
+        <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
           
           {/* Profile Picture */}
-          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-gray-200 shrink-0">
+          <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
             <img 
               src={avatarImage} 
               alt={artist.name} 
@@ -75,47 +79,47 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
           </div>
 
           {/* Stats & Claim */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-2xl shadow-lg sm:mb-4 w-full sm:w-auto">
-            <div className="text-center px-4">
-              <p className="text-2xl font-bold text-gray-900">{followerCount.toLocaleString()}</p>
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Fans</p>
+          <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
+            <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{followerCount.toLocaleString()}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Fans</p>
             </div>
-            <div className="hidden sm:block w-px h-10 bg-gray-200"></div>
-            <div className="text-center px-4">
-              <p className="text-2xl font-bold text-gray-900">{artist.verified ? 'Verified' : 'Listed'}</p>
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Status</p>
+            <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100"></div>
+            <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{artist.verified ? 'Verified' : 'Listed'}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Status</p>
             </div>
-            <div className="w-full sm:w-auto mt-2 sm:mt-0">
+            <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
               <ClaimButton targetType="artist" targetId={artist.id} targetName={artist.name} />
             </div>
           </div>
         </div>
 
         {/* 3. ARTIST DETAILS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
           
           {/* Left Column: Bio & Info */}
-          <div className="md:col-span-2 space-y-6">
+          <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900">{artist.name}</h1>
-              <p className="text-base text-gray-600 mt-1">
-                {[artist.artist_type, artist.genre, artist.city].filter(Boolean).join(' · ')}
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100">{artist.name}</h1>
+              <p className="text-base text-gray-600 dark:text-gray-400 mt-1">
+                {[artist.artist_type, artist.genre, artist.city].filter(Boolean).join(' Â· ')}
               </p>
             </div>
 
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">About</h2>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">About</h2>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                 {artist.bio || `${artist.name} is an artist on GRID.`}
               </p>
             </section>
 
             {/* Links */}
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">Links</h2>
-              <div className="flex flex-wrap gap-3">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">Links</h2>
+              <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
                 {artist.website && (
-                  <a href={artist.website} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gray-100 text-sm font-semibold text-gray-700 rounded-lg hover:bg-gray-200">
+                  <a href={artist.website} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-sm font-semibold text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200">
                     Website
                   </a>
                 )}
@@ -134,11 +138,18 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
           </div>
 
           {/* Right Column: CTAs */}
-          <div className="space-y-4">
+          <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
             {/* Live Shows */}
-            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Live Shows</h3>
-              <p className="text-sm text-gray-600 mb-4">
+            <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Live Shows</h3>
+      {/* --- v2 auto-inserted artist profile sections --- */}
+      <ArtistBioSection bio={artist.bio} name={artist.display_name || artist.username} />
+      <ArtistTopTracks tracks={tracks || []} artistName={artist.display_name || artist.username} />
+      <ArtistUpcomingShows shows={events || []} />
+      <ArtistBookingCTA artistId={artist.id} artistSlug={artist.slug} isLoggedIn={!!user} />
+      {/* --- end auto-inserted --- */}
+
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 Tickets and tour dates are managed by Ticketmaster.
               </p>
               <a 
@@ -147,16 +158,18 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
                 rel="noopener noreferrer"
                 className="block w-full py-3 bg-black text-white text-center font-bold rounded-xl hover:bg-gray-800 transition"
               >
-                View Tickets ↗
+                View Tickets â†—
               </a>
             </div>
 
             {/* Booking */}
-            <div className="bg-purple-50 p-6 rounded-2xl border border-purple-100 shadow-sm">
-              <h3 className="text-lg font-bold text-purple-900 mb-2">Booking</h3>
-              <p className="text-sm text-purple-700 mb-4">
-                Request for your next event. Escrow protected.
-              </p>
+            <div className="max-w-3xl mx-auto px-4 py-20 text-center dark:bg-gray-950 dark:text-gray-100">
+              <div className="space-y-4 mt-6">
+        <ArtistBioSection bio={artist.bio} name={artist.display_name || artist.username} />
+        <ArtistTopTracks tracks={[] || []} artistName={artist.display_name || artist.username} />
+        <ArtistUpcomingShows shows={[] || []} />
+        <ArtistBookingCTA artistId={artist.id} artistSlug={artist.slug} isLoggedIn={!!user} />
+      </div>
               <Link 
                 href={`/book/artist/${artist.slug}`}
                 className="block w-full py-3 bg-purple-600 text-white text-center font-bold rounded-xl hover:bg-purple-700 transition"
@@ -170,3 +183,6 @@ export default async function ArtistPage({ params }: { params: { slug: string } 
     </div>
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
@@ -60,17 +60,17 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">Create an account</h1>
-        <p className="text-gray-500 text-center mb-8">Join GRID to buy tickets and book artists.</p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-800 p-8 max-w-md w-full">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">Create an account</h1>
+        <p className="text-gray-500 dark:text-gray-400 text-center mb-8">Join GRID to buy tickets and book artists.</p>
 
         {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-6">{error}</div>}
         {message && <div className="bg-green-50 text-green-600 p-3 rounded-lg text-sm mb-6">{message}</div>}
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
             <input
               type="text"
               value={username}
@@ -80,7 +80,7 @@ export default function SignupPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
             <input
               type="email"
               value={email}
@@ -90,7 +90,7 @@ export default function SignupPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
             <input
               type="password"
               value={password}
@@ -100,7 +100,7 @@ export default function SignupPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">I am a...</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">I am a...</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
@@ -122,8 +122,8 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account? <Link href="/login" className="font-semibold text-black hover:underline">Log in</Link>
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
+          Already have an account? <Link href="/login" className="font-semibold text-black dark:text-white hover:underline">Log in</Link>
         </p>
       </div>
     </div>

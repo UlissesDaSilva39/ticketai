@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowRight, MapPin, Users, Verified, Flame, Clock, Ticket } from "@/components/icons";
 
 type EventArtist = {
@@ -50,7 +50,7 @@ export function EventCardV2({ event, variant = "default" }: Props) {
 
   return (
     <article
-      className={`group flex flex-col overflow-hidden rounded-2xl border bg-white transition hover:border-neutral-900 ${
+      className={`group flex flex-col overflow-hidden rounded-2xl border bg-white dark:bg-gray-900 transition hover:border-neutral-900 ${
         isFeature ? "border-neutral-300" : "border-neutral-200"
       }`}
     >
@@ -107,13 +107,13 @@ export function EventCardV2({ event, variant = "default" }: Props) {
 
         <p className="mt-2 text-sm text-neutral-600">
           {event.date}
-          {event.time && <span className="text-neutral-400"> · {event.time}</span>}
+          {event.time && <span className="text-neutral-400"> Â· {event.time}</span>}
           {event.venue && (
             <>
-              {" · "}
+              {" Â· "}
               <Link
                 href={`/venue/${event.venue.slug}`}
-                className="inline-flex items-center gap-0.5 hover:text-black hover:underline"
+                className="inline-flex items-center gap-0.5 hover:text-black dark:hover:text-white hover:underline"
               >
                 <MapPin size={11} />
                 {event.venue.name}
@@ -135,7 +135,7 @@ export function EventCardV2({ event, variant = "default" }: Props) {
             Feat.{" "}
             {event.artists.slice(0, 3).map((a, i) => (
               <span key={a.slug}>
-                <Link href={`/artist/${a.slug}`} className="hover:text-black hover:underline">
+                <Link href={`/artist/${a.slug}`} className="hover:text-black dark:hover:text-white hover:underline">
                   {a.name}
                 </Link>
                 {i < Math.min(2, event.artists!.length - 1) ? ", " : ""}
@@ -150,7 +150,7 @@ export function EventCardV2({ event, variant = "default" }: Props) {
         {event.promoter && (
           <p className="mt-1 text-xs text-neutral-500">
             Presented by{" "}
-            <Link href={`/promoters/${event.promoter.slug}`} className="hover:text-black hover:underline">
+            <Link href={`/promoters/${event.promoter.slug}`} className="hover:text-black dark:hover:text-white hover:underline">
               {event.promoter.name}
             </Link>
           </p>
@@ -160,7 +160,7 @@ export function EventCardV2({ event, variant = "default" }: Props) {
           <p className="mt-2 inline-flex items-center gap-1 text-xs text-neutral-500">
             <Users size={11} />
             {event.goingCount ?? 0} going
-            {event.friendsGoing ? ` · ${event.friendsGoing} friends` : ""}
+            {event.friendsGoing ? ` Â· ${event.friendsGoing} friends` : ""}
           </p>
         )}
 
@@ -185,7 +185,7 @@ export function EventCardV2({ event, variant = "default" }: Props) {
               </p>
               {!event.soldOut && event.priceFrom != null && (
                 <p className="text-lg font-black">
-                  {event.currency ?? "£"}
+                  {event.currency ?? "Â£"}
                   {event.priceFrom.toFixed(2)}
                 </p>
               )}

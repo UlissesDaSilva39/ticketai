@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+﻿import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -37,9 +37,9 @@ export default async function FriendRequestsPage() {
         Friend Requests
       </h1>
       {senders.length === 0 ? (
-        <p className="text-gray-500">No pending requests.</p>
+        <p className="text-gray-500 dark:text-gray-400">No pending requests.</p>
       ) : (
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-gray-200 dark:divide-gray-800">
           {senders.map((s) => (
             <li key={s.id} className="py-4 flex items-center justify-between gap-4">
               <Link href={s.username ? `/u/${s.username}` : "#"} className="font-medium hover:underline">

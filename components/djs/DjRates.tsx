@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { DjRate } from '@/lib/djs';
 
 export function DjRates({ rates, slug }: { rates?: DjRate[]; slug: string }) {
@@ -11,7 +11,7 @@ export function DjRates({ rates, slug }: { rates?: DjRate[]; slug: string }) {
       </h2>
       <ul className="mt-4 space-y-3">
         {rates.map((r, i) => (
-          <li key={i} className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <li key={i} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">

@@ -1,12 +1,12 @@
-const LOGOS = ['Village Underground', 'Fabric', 'Motion', 'Hidden', 'YES', 'Brudenell'];
+﻿const LOGOS = ['Village Underground', 'Fabric', 'Motion', 'Hidden', 'YES', 'Brudenell'];
 
 const TESTIMONIALS = [
   { quote: 'Moved our whole calendar to GRID. Cut admin time by 60%.',
-    name: 'Village Underground', role: 'Warehouse · London', stat: '£18k saved in admin' },
+    name: 'Village Underground', role: 'Warehouse Â· London', stat: 'Â£18k saved in admin' },
   { quote: 'Filled 12 off-peak nights in three months. Deposits always collected.',
-    name: 'Hidden', role: 'Club · Manchester', stat: '12 nights filled' },
+    name: 'Hidden', role: 'Club Â· Manchester', stat: '12 nights filled' },
   { quote: 'First season where we actually made money. The bar split auto-calculated.',
-    name: 'Motion', role: 'Club · Bristol', stat: '£24k this season' },
+    name: 'Motion', role: 'Club Â· Bristol', stat: 'Â£24k this season' },
 ];
 
 export function VenueProof() {
@@ -21,7 +21,7 @@ export function VenueProof() {
       <div className="mt-14 grid gap-5 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <figure key={t.name}
-            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-6">
+            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-6">
             <blockquote className="text-base text-neutral-800">&ldquo;{t.quote}&rdquo;</blockquote>
             <figcaption className="mt-6">
               <p className="text-sm font-semibold">{t.name}</p>

@@ -1,9 +1,9 @@
-const SAMPLE = [
-  { dj: 'DJ Proxy',        venue: 'Fabric',     city: 'London',     set: '1:00am',  fee: '£800' },
-  { dj: 'Nightshift Nina', venue: 'Hidden',     city: 'Manchester', set: '12:00am', fee: '£700' },
+﻿const SAMPLE = [
+  { dj: 'DJ Proxy',        venue: 'Fabric',     city: 'London',     set: '1:00am',  fee: 'Â£800' },
+  { dj: 'Nightshift Nina', venue: 'Hidden',     city: 'Manchester', set: '12:00am', fee: 'Â£700' },
   { dj: 'Berlin Bass',     venue: 'Kraftwerk',  city: 'Berlin',     set: '2:00am',  fee: 'EUR 1500' },
-  { dj: 'Selecta Jade',    venue: 'Printworks', city: 'London',     set: '1:30am',  fee: '£900' },
-  { dj: 'Techno Nation',   venue: 'Printworks', city: 'London',     set: '2:00am',  fee: '£1,200' },
+  { dj: 'Selecta Jade',    venue: 'Printworks', city: 'London',     set: '1:30am',  fee: 'Â£900' },
+  { dj: 'Techno Nation',   venue: 'Printworks', city: 'London',     set: '2:00am',  fee: 'Â£1,200' },
 ];
 
 export function LiveSetBoard() {
@@ -24,15 +24,15 @@ export function LiveSetBoard() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/djs/book"
               className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-              Book a DJ →
+              Book a DJ â†’
             </a>
             <a href="/djs/apply"
-              className="rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
-              List yourself →
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+              List yourself â†’
             </a>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
               <tr>
@@ -56,7 +56,7 @@ export function LiveSetBoard() {
                     <button type="button"
                       className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white hover:bg-neutral-800"
                       aria-label={`Book ${d.dj}`}>
-                      ▶
+                      â–¶
                     </button>
                   </td>
                 </tr>
@@ -64,7 +64,7 @@ export function LiveSetBoard() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Board refreshed 3 minutes ago · Powered by GRID DJs
+            Board refreshed 3 minutes ago Â· Powered by GRID DJs
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 type BusinessCardProps = {
   title: string;
@@ -16,7 +16,7 @@ export function BusinessCard({
   return (
     <Link
       href={href}
-      className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:shadow-lg"
+      className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 transition hover:shadow-lg"
     >
       <div className={`h-2 w-full bg-gradient-to-r ${accent}`} />
       <div className="p-5">

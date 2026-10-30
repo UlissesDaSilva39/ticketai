@@ -25,7 +25,7 @@ export default function PostAudioBar({
   };
 
   return (
-    <div className="mt-3 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl p-3">
+    <div className="mt-3 flex items-center gap-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-3">
       <button
         type="button"
         onClick={(e) => {
@@ -51,7 +51,7 @@ export default function PostAudioBar({
 
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium truncate">{title || "Audio post"}</p>
-        <p className="text-xs text-gray-500 truncate">{artist || "Unknown artist"}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{artist || "Unknown artist"}</p>
       </div>
 
       <div className="flex items-end gap-[2px] h-6 shrink-0">
@@ -66,3 +66,4 @@ export default function PostAudioBar({
     </div>
   );
 }
+

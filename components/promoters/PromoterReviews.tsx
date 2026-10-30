@@ -1,4 +1,4 @@
-import type { PromoterReview } from '@/lib/promoters';
+﻿import type { PromoterReview } from '@/lib/promoters';
 
 export function PromoterReviews({ reviews }: { reviews?: PromoterReview[] }) {
   if (!reviews || reviews.length === 0) return null;
@@ -11,10 +11,10 @@ export function PromoterReviews({ reviews }: { reviews?: PromoterReview[] }) {
         Reviews from artists & venues
       </h2>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-neutral-200 bg-white p-5">
+      <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
         <p className="text-3xl font-black tracking-tight">{avg.toFixed(1)}</p>
         <div>
-          <p className="text-sm text-amber-500">{'★'.repeat(Math.round(avg))}</p>
+          <p className="text-sm text-amber-500">{'â˜…'.repeat(Math.round(avg))}</p>
           <p className="text-xs text-neutral-500">
             From {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
           </p>
@@ -23,9 +23,9 @@ export function PromoterReviews({ reviews }: { reviews?: PromoterReview[] }) {
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {reviews.map((r, i) => (
-          <figure key={i} className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <figure key={i} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-amber-500">{'★'.repeat(r.rating ?? 5)}</div>
+              <div className="text-sm text-amber-500">{'â˜…'.repeat(r.rating ?? 5)}</div>
               {r.date && <p className="text-xs text-neutral-400">{r.date}</p>}
             </div>
             <blockquote className="mt-3 text-sm text-neutral-800">

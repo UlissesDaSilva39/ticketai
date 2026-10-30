@@ -36,12 +36,12 @@ export default function TrackCard({ track }: { track: Track }) {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-3 w-44 shrink-0 hover:shadow-md transition">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-3 w-44 shrink-0 hover:shadow-md transition">
       <div className="relative">
         {track.cover_url ? (
           <img src={track.cover_url} alt={track.title} className="w-full h-40 object-cover rounded-xl" />
         ) : (
-          <div className="w-full h-40 bg-gray-100 rounded-xl" />
+          <div className="w-full h-40 bg-gray-100 dark:bg-gray-800 rounded-xl" />
         )}
         <button
           onClick={toggle}
@@ -52,7 +52,7 @@ export default function TrackCard({ track }: { track: Track }) {
         </button>
       </div>
       <p className="text-sm font-medium mt-3 truncate">{track.title}</p>
-      <p className="text-xs text-gray-500 truncate">{track.artist_name}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{track.artist_name}</p>
       <div className="flex items-center justify-between mt-1 text-xs text-gray-400">
         <span>{track.play_count.toLocaleString()} plays</span>
         <span>{mmss(track.duration_seconds)}</span>
@@ -63,3 +63,4 @@ export default function TrackCard({ track }: { track: Track }) {
     </div>
   );
 }
+

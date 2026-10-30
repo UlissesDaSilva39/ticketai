@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { BusinessCard } from "@/components/business/BusinessCard";
 
 export default function BusinessPage() {
@@ -128,7 +128,7 @@ export default function BusinessPage() {
       {/* POSITIONING / PROOF */}
       <section className="mb-6 rounded-2xl bg-neutral-900 p-6 text-center text-white sm:p-8">
         <p className="text-base font-semibold sm:text-lg">
-          Built for the 50–12,000 capacity world.
+          Built for the 50â€“12,000 capacity world.
         </p>
         <p className="mt-2 text-sm text-neutral-300">
           GRID is free to list. Core dashboards are free forever. Advanced insights and featured placement are paid add-ons. Your audience is yours.
@@ -142,7 +142,7 @@ export default function BusinessPage() {
       </p>
 
       {/* SECONDARY CTA */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8">
+      <section className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-6 sm:p-8">
         <h2 className="text-lg font-semibold text-neutral-900">Not listed yet?</h2>
         <p className="mt-1 text-sm text-neutral-600">
           Claim a profile or list your first event. It is free to start.
@@ -169,7 +169,7 @@ export default function BusinessPage() {
         </div>
       </section>
 
-      <p className="mt-8 text-center text-xs text-neutral-500">GRID — the network for live music.  Event data via Ticketmaster Developer API, used under permitted terms.</p>
+      <p className="mt-8 text-center text-xs text-neutral-500">GRID â€” the network for live music.  Event data via Ticketmaster Developer API, used under permitted terms.</p>
     </main>
   );
 }

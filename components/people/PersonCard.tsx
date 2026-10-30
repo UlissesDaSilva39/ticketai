@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -111,11 +111,11 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
     person.city,
     person.genre,
     person.label,
-  ].filter(Boolean).join(" · ");
+  ].filter(Boolean).join(" Â· ");
 
   return (
     <>
-      <article className="bg-white border border-gray-200 rounded-2xl p-5 transition hover:border-black">
+      <article className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 transition hover:border-black">
         <div className="flex items-start gap-4">
           {/* Avatar */}
           <div className="w-14 h-14 rounded-xl bg-black text-white grid place-items-center text-lg font-bold flex-shrink-0">
@@ -125,22 +125,22 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline gap-2 flex-wrap">
-              <h3 className="text-base font-semibold text-gray-900 truncate">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
                 {displayName}
               </h3>
               {person.username && (
-                <span className="text-xs text-gray-500">@{person.username}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">@{person.username}</span>
               )}
             </div>
 
-            <p className="mt-0.5 text-sm text-gray-500 truncate">{roleLine}</p>
+            <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400 truncate">{roleLine}</p>
 
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
               {count} {count === 1 ? "follower" : "followers"}
             </p>
 
             {person.bio && (
-              <p className="mt-2 text-sm text-gray-700 italic line-clamp-2">
+              <p className="mt-2 text-sm text-gray-700 dark:text-gray-300 italic line-clamp-2">
                 {person.bio}
               </p>
             )}
@@ -155,7 +155,7 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
                 className={
                   "inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition disabled:opacity-60 " +
                   (following
-                    ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                    ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200"
                     : "bg-black text-white hover:bg-gray-800")
                 }
               >
@@ -169,7 +169,7 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
               <button
                 type="button"
                 onClick={() => setMsgOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium hover:bg-gray-50"
+                className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 <MessageCircle className="h-3.5 w-3.5" />
                 Message
@@ -178,7 +178,7 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
               {profileHref && (
                 <Link
                   href={profileHref}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium hover:bg-gray-50"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   View profile
                 </Link>
@@ -194,7 +194,7 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
           onClick={() => setMsgOpen(false)}
         >
           <div
-            className="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl"
+            className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -202,10 +202,10 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
               <button
                 type="button"
                 onClick={() => setMsgOpen(false)}
-                className="text-gray-400 hover:text-black text-xl leading-none"
+                className="text-gray-400 hover:text-black dark:hover:text-white text-xl leading-none"
                 aria-label="Close"
               >
-                ×
+                Ã—
               </button>
             </div>
 
@@ -240,7 +240,7 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
                 <button
                   type="button"
                   onClick={() => setMsgOpen(false)}
-                  className="px-5 py-2.5 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50"
+                  className="px-5 py-2.5 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   Cancel
                 </button>

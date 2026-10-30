@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 
 type Artist = {
@@ -38,8 +38,8 @@ export default function DiscoverArtistsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-gray-900">Discover artists</h1>
-        <p className="text-sm sm:text-base text-gray-600">Artists playing in your city.</p>
+        <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-gray-900 dark:text-gray-100">Discover artists</h1>
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Artists playing in your city.</p>
       </div>
 
       <form onSubmit={(e) => { e.preventDefault(); fetchArtists(search); }} className="mb-8 flex gap-2 max-w-md">
@@ -58,28 +58,28 @@ export default function DiscoverArtistsPage() {
           {[1, 2, 3, 4, 5, 6].map((i) => <div key={i} className="h-80 bg-gray-200 rounded-xl animate-pulse" />)}
         </div>
       ) : artists.length === 0 ? (
-        <div className="text-center py-20 text-gray-500">
-          <p className="text-lg font-medium text-gray-700 mb-2">No artists found for &quot;{search}&quot;</p>
+        <div className="text-center py-20 text-gray-500 dark:text-gray-400">
+          <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">No artists found for &quot;{search}&quot;</p>
           <p className="text-sm">Try another city like London, Manchester, or Birmingham.</p>
         </div>
       ) : (
         <>
-          <p className="text-xs text-gray-500 mb-3">{artists.length} artists playing in {search}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{artists.length} artists playing in {search}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {artists.map((artist) => (
-              <div key={artist.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all flex flex-col">
-                <div className="h-40 sm:h-48 bg-gray-100 relative shrink-0">
+              <div key={artist.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-lg transition-all flex flex-col">
+                <div className="h-40 sm:h-48 bg-gray-100 dark:bg-gray-800 relative shrink-0">
                   <img src={artist.image} alt={artist.name} className="w-full h-full object-cover" />
                   {artist.priceMin != null && (
-                    <span className="absolute bottom-2 left-2 bg-white/95 text-black text-xs font-bold px-2 py-1 rounded shadow">
+                    <span className="absolute bottom-2 left-2 bg-white/95 text-black dark:text-white text-xs font-bold px-2 py-1 rounded shadow">
                       From {artist.priceCurrency} {artist.priceMin}
                     </span>
                   )}
                 </div>
 
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-base font-bold text-gray-900 line-clamp-1">{artist.name}</h3>
-                  <p className="text-xs text-gray-500 line-clamp-1">{artist.genre} - {artist.nextGig?.city || search}</p>
+                  <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 line-clamp-1">{artist.name}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">{artist.genre} - {artist.nextGig?.city || search}</p>
 
                   {artist.nextGig?.date && artist.nextGig.date !== "TBA" && (
                     <p className="text-xs font-semibold text-blue-600 mt-2 line-clamp-1">{artist.nextGig.date} - {artist.nextGig.venue}</p>
@@ -95,7 +95,7 @@ export default function DiscoverArtistsPage() {
                     {artist.ticketUrl && (
                       <a href={artist.ticketUrl} target="_blank" rel="noopener noreferrer"
                         className="w-full text-xs font-semibold text-center py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition">
-                        Get Tickets →
+                        Get Tickets â†’
                       </a>
                     )}
                   </div>

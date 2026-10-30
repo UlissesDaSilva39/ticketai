@@ -78,7 +78,7 @@ export default function MessageComposer({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-4">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4">
       <p className="text-sm font-semibold mb-2">
         Send a message to {recipientName}
       </p>
@@ -87,7 +87,7 @@ export default function MessageComposer({
         onChange={(e) => setBody(e.target.value)}
         placeholder={"Write to " + recipientName + "..."}
         rows={3}
-        className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:border-black focus:outline-none resize-none text-sm"
+        className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl focus:border-black focus:outline-none resize-none text-sm"
       />
       {error ? (
         <p className="text-xs text-red-600 mt-2" role="alert">
@@ -107,4 +107,5 @@ export default function MessageComposer({
     </div>
   );
 }
+
 

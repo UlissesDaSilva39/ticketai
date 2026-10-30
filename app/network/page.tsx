@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import PersonCard from "@/components/network/PersonCard";
@@ -64,7 +64,7 @@ export default async function NetworkPage({
 
   if (!userId) {
     return (
-      <div className="bg-gray-50 min-h-screen pb-32 sm:pb-0">
+      <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32 sm:pb-0">
         <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-3">
             <Sidebar />
@@ -76,8 +76,8 @@ export default async function NetworkPage({
             >
               Network
             </h1>
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-900 font-medium mb-3">
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-900 dark:text-gray-100 font-medium mb-3">
                 Log in to see the network
               </p>
               <a
@@ -153,7 +153,7 @@ export default async function NetworkPage({
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32 sm:pb-0">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32 sm:pb-0">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -167,7 +167,7 @@ export default async function NetworkPage({
             >
               Network
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
               Connect with the people building music.
             </p>
           </header>
@@ -175,7 +175,7 @@ export default async function NetworkPage({
           <form
             action="/network"
             method="get"
-            className="mb-6 bg-white border border-gray-200 rounded-2xl p-3 flex items-center gap-2"
+            className="mb-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-3 flex items-center gap-2"
           >
             <input
               type="search"
@@ -209,7 +209,7 @@ export default async function NetworkPage({
                     "text-xs font-medium rounded-full px-3 py-1.5 border transition-colors " +
                     (isActive
                       ? "bg-black text-white border-black"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-400")
+                      : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-400")
                   }
                 >
                   {r.label}
@@ -225,7 +225,7 @@ export default async function NetworkPage({
             </div>
           ) : null}
 
-          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
             {(q || role ? "Results" : "People you may know") +
               " (" +
               people.length +
@@ -233,11 +233,11 @@ export default async function NetworkPage({
           </h2>
 
           {people.length === 0 ? (
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-900 font-medium mb-1">
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-900 dark:text-gray-100 font-medium mb-1">
                 No one to show yet
               </p>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
                 {q || role
                   ? "Try a different search or filter."
                   : "Once more people join, they will appear here."}
@@ -259,3 +259,4 @@ export default async function NetworkPage({
     </div>
   );
 }
+

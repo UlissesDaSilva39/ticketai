@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 
@@ -109,8 +109,8 @@ export default async function FollowingPage() {
       </h1>
 
       {total === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-12 text-center">
-          <p className="text-gray-600 mb-4">You aren&apos;t following anyone yet.</p>
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 p-12 text-center">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">You aren&apos;t following anyone yet.</p>
           <Link
             href="/promoters"
             className="inline-block px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800"
@@ -134,15 +134,15 @@ export default async function FollowingPage() {
                   const name = p.display_name || "Promoter";
                   const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
                   return (
-                    <li key={p.promoter_id} className="rounded-2xl border border-gray-200 p-5">
+                    <li key={p.promoter_id} className="rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
                       <div className="flex items-start gap-4">
                         <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-bold flex-shrink-0">
                           {initials}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium">{name}</p>
-                          {p.city && <p className="text-sm text-gray-500">{p.city}</p>}
-                          {p.bio && <p className="text-sm text-gray-600 mt-1 line-clamp-2">{p.bio}</p>}
+                          {p.city && <p className="text-sm text-gray-500 dark:text-gray-400">{p.city}</p>}
+                          {p.bio && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">{p.bio}</p>}
                         </div>
                         {p.user_id && (
                           <Link
@@ -154,13 +154,13 @@ export default async function FollowingPage() {
                         )}
                       </div>
                       {evs.length > 0 && (
-                        <div className="mt-4 pt-4 border-t border-gray-100">
-                          <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Upcoming events</p>
+                        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                          <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">Upcoming events</p>
                           <ul className="space-y-1">
                             {evs.map((e) => (
                               <li key={e.id}>
                                 <Link href={"/event/" + e.id} className="text-sm hover:underline">
-                                  <span className="text-gray-500">{formatDate(e.start_date)}</span> · {e.title}
+                                  <span className="text-gray-500 dark:text-gray-400">{formatDate(e.start_date)}</span> Â· {e.title}
                                 </Link>
                               </li>
                             ))}
@@ -184,10 +184,10 @@ export default async function FollowingPage() {
               </h2>
               <ul className="space-y-3">
                 {venues.map((v) => (
-                  <li key={v.venue_id} className="rounded-2xl border border-gray-200 p-5 flex items-center justify-between gap-4">
+                  <li key={v.venue_id} className="rounded-2xl border border-gray-200 dark:border-gray-800 p-5 flex items-center justify-between gap-4">
                     <div className="min-w-0">
                       <p className="font-medium">{v.name}</p>
-                      {v.city && <p className="text-sm text-gray-500">{v.city}</p>}
+                      {v.city && <p className="text-sm text-gray-500 dark:text-gray-400">{v.city}</p>}
                     </div>
                     {v.slug && (
                       <Link href={"/venue/" + v.slug} className="text-sm font-medium hover:underline flex-shrink-0">

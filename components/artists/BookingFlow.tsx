@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -11,13 +11,13 @@ type Props = {
 };
 
 function parsePrice(price: string): { amount: number } | null {
-  const m = price.match(/([£€$])?\s*([\d,]+)/);
+  const m = price.match(/([Â£â‚¬$])?\s*([\d,]+)/);
   if (!m) return null;
   return { amount: Number(m[2].replace(/,/g, '')) };
 }
 
 function formatMoney(n: number): string {
-  return `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `Â£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 export function BookingFlow({ artistSlug, artistName, services }: Props) {
@@ -70,7 +70,7 @@ export function BookingFlow({ artistSlug, artistName, services }: Props) {
     return (
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-8 text-center">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xl">
-          ✓
+          âœ“
         </div>
         <p className="mt-4 text-base font-semibold">Booking requested</p>
         <p className="mt-1 text-sm text-neutral-600">
@@ -80,7 +80,7 @@ export function BookingFlow({ artistSlug, artistName, services }: Props) {
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href={`/artists/${artistSlug}`}
-            className="rounded-full border border-neutral-300 bg-white px-6 py-2.5 text-sm font-semibold text-neutral-900 hover:border-neutral-900"
+            className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-2.5 text-sm font-semibold text-neutral-900 hover:border-neutral-900"
           >
             Back to profile
           </Link>
@@ -109,7 +109,7 @@ export function BookingFlow({ artistSlug, artistName, services }: Props) {
                 'flex cursor-pointer items-center justify-between rounded-xl border p-4 transition ' +
                 (service === s.label
                   ? 'border-black bg-neutral-50'
-                  : 'border-neutral-200 bg-white hover:border-neutral-400')
+                  : 'border-neutral-200 bg-white dark:bg-gray-900 hover:border-neutral-400')
               }
             >
               <span className="flex items-center gap-3">
@@ -150,7 +150,7 @@ export function BookingFlow({ artistSlug, artistName, services }: Props) {
           value={details}
           onChange={(e) => setDetails(e.target.value.slice(0, 1000))}
           rows={5}
-          placeholder="Tell the artist what you need — reference tracks, deliverable, timeline, budget, anything relevant."
+          placeholder="Tell the artist what you need â€” reference tracks, deliverable, timeline, budget, anything relevant."
           className="mt-3 w-full resize-none rounded-xl border border-neutral-300 px-4 py-3 text-sm outline-none focus:border-black"
         />
         <p className="mt-1 text-right text-xs text-neutral-400">{details.length} / 1000</p>
@@ -161,7 +161,7 @@ export function BookingFlow({ artistSlug, artistName, services }: Props) {
           <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
             4. Deposit
           </h2>
-          <div className="mt-3 rounded-2xl border border-neutral-200 bg-white p-5">
+          <div className="mt-3 rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
             <dl className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
                 <dt className="text-neutral-600">Total</dt>
@@ -177,9 +177,9 @@ export function BookingFlow({ artistSlug, artistName, services }: Props) {
               </div>
             </dl>
             <div className="mt-5 space-y-2 border-t border-neutral-200 pt-4 text-xs text-neutral-500">
-              <p>🔒 Secure payment via Stripe — funds held until 24h before start</p>
-              <p>📝 Contract auto-generated on confirmation</p>
-              <p>💸 Artist payout lands the morning after completion</p>
+              <p>ðŸ”’ Secure payment via Stripe â€” funds held until 24h before start</p>
+              <p>ðŸ“ Contract auto-generated on confirmation</p>
+              <p>ðŸ’¸ Artist payout lands the morning after completion</p>
             </div>
           </div>
         </section>
@@ -195,11 +195,11 @@ export function BookingFlow({ artistSlug, artistName, services }: Props) {
           disabled={sending}
           className="rounded-full bg-black px-7 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {sending ? 'Sending…' : `Request booking${parsed ? ` — ${formatMoney(deposit)} deposit` : ''}`}
+          {sending ? 'Sendingâ€¦' : `Request booking${parsed ? ` â€” ${formatMoney(deposit)} deposit` : ''}`}
         </button>
         <Link
           href={`/artists/${artistSlug}`}
-          className="text-sm font-medium text-neutral-600 hover:text-black"
+          className="text-sm font-medium text-neutral-600 hover:text-black dark:hover:text-white"
         >
           Cancel
         </Link>

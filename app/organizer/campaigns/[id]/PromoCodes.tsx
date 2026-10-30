@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -92,11 +92,11 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
   function formatDiscount(p: Promo) {
     return p.discount_type === "percent"
       ? p.discount_value + "% off"
-      : "£" + Number(p.discount_value).toFixed(2) + " off";
+      : "Â£" + Number(p.discount_value).toFixed(2) + " off";
   }
 
   return (
-    <section className="rounded-xl border bg-white p-6">
+    <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Promo codes</h2>
         <button
@@ -115,7 +115,7 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
       )}
 
       {showForm && (
-        <form onSubmit={handleCreate} className="mb-6 space-y-4 rounded-lg bg-gray-50 p-4">
+        <form onSubmit={handleCreate} className="mb-6 space-y-4 rounded-lg bg-gray-50 dark:bg-gray-950 p-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label className="block text-sm font-medium mb-1">Code</label>
@@ -132,10 +132,10 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
               <select
                 value={discountType}
                 onChange={(e) => setDiscountType(e.target.value as "percent" | "fixed")}
-                className="w-full rounded-lg border bg-white px-3 py-2 text-sm outline-none focus:border-black"
+                className="w-full rounded-lg border bg-white dark:bg-gray-900 px-3 py-2 text-sm outline-none focus:border-black"
               >
                 <option value="percent">Percent off</option>
-                <option value="fixed">Fixed £ off</option>
+                <option value="fixed">Fixed Â£ off</option>
               </select>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
           <div className="grid gap-4 md:grid-cols-3">
             <div>
               <label className="block text-sm font-medium mb-1">
-                {discountType === "percent" ? "Discount %" : "Discount £"}
+                {discountType === "percent" ? "Discount %" : "Discount Â£"}
               </label>
               <input
                 type="number"
@@ -191,9 +191,9 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
       )}
 
       {loading ? (
-        <p className="text-sm text-gray-500">Loading...</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Loading...</p>
       ) : promos.length === 0 ? (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           No promo codes yet. Create one to offer discounts to your audience.
         </p>
       ) : (
@@ -201,14 +201,14 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
           {promos.map((p) => (
             <div
               key={p.id}
-              className={"flex items-center justify-between rounded-lg border p-4 " + (p.active ? "bg-white" : "bg-gray-50 opacity-60")}
+              className={"flex items-center justify-between rounded-lg border p-4 " + (p.active ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-950 opacity-60")}
             >
               <div>
                 <p className="font-mono font-semibold">{p.code}</p>
-                <p className="text-sm text-gray-600 mt-1">
-                  {formatDiscount(p)} Ã‚· Used {p.times_used}
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {formatDiscount(p)} Ãƒâ€šÂ· Used {p.times_used}
                   {p.max_uses ? "/" + p.max_uses : ""}
-                  {p.expires_at ? " Ã‚· Expires " + new Date(p.expires_at).toLocaleDateString("en-GB") : ""}
+                  {p.expires_at ? " Ãƒâ€šÂ· Expires " + new Date(p.expires_at).toLocaleDateString("en-GB") : ""}
                 </p>
               </div>
               {p.active ? (

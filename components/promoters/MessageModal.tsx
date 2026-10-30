@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -32,7 +32,7 @@ export function MessageModal({
     const parts: string[] = [];
     if (context?.eventTitle) parts.push(`Event: ${context.eventTitle}`);
     if (context?.venueName) parts.push(`Venue: ${context.venueName}`);
-    setSubject(parts.join(' · '));
+    setSubject(parts.join(' Â· '));
     setSent(false);
     setError(null);
     setTimeout(() => textareaRef.current?.focus(), 50);
@@ -84,7 +84,7 @@ export function MessageModal({
       className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 p-0 md:items-center md:p-6 text-white"
       role="dialog" aria-modal="true" aria-labelledby="message-modal-title"
       onClick={onClose}>
-      <div className="w-full max-w-lg rounded-t-2xl bg-white shadow-2xl md:rounded-2xl"
+      <div className="w-full max-w-lg rounded-t-2xl bg-white dark:bg-gray-900 shadow-2xl md:rounded-2xl"
         onClick={(e) => e.stopPropagation()}>
         <header className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
           <div>
@@ -92,7 +92,7 @@ export function MessageModal({
               Message {promoterName}
             </h2>
             <p className="text-xs text-neutral-500">
-              They typically reply within 1–2 days.
+              They typically reply within 1â€“2 days.
             </p>
           </div>
           <button type="button" onClick={onClose} aria-label="Close"
@@ -108,7 +108,7 @@ export function MessageModal({
         {sent ? (
           <div className="px-5 py-10 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
-              ✓
+              âœ“
             </div>
             <p className="mt-4 text-base font-semibold">Message sent</p>
             <p className="mt-1 text-sm text-neutral-500">
@@ -129,7 +129,7 @@ export function MessageModal({
               </label>
               <input id="message-subject" type="text" value={subject}
                 onChange={(e) => setSubject(e.target.value.slice(0, 120))}
-                placeholder={`Booking enquiry · ${promoterName}`}
+                placeholder={`Booking enquiry Â· ${promoterName}`}
                 className="mt-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-black" />
             </div>
 
@@ -141,7 +141,7 @@ export function MessageModal({
               <textarea id="message-body" ref={textareaRef} value={body}
                 onChange={(e) => setBody(e.target.value.slice(0, MAX))}
                 rows={6}
-                placeholder={`Hi ${promoterName.split(' ')[0]}, I wanted to ask about…`}
+                placeholder={`Hi ${promoterName.split(' ')[0]}, I wanted to ask aboutâ€¦`}
                 className="mt-2 w-full resize-none rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-black"
                 required />
               <p className="mt-1 text-right text-xs text-neutral-400">
@@ -155,12 +155,12 @@ export function MessageModal({
 
             <footer className="flex items-center justify-end gap-3 pt-1">
               <button type="button" onClick={onClose}
-                className="rounded-full px-4 py-2 text-sm font-medium text-neutral-600 hover:text-black">
+                className="rounded-full px-4 py-2 text-sm font-medium text-neutral-600 hover:text-black dark:hover:text-white">
                 Cancel
               </button>
               <button type="submit" disabled={sending}
                 className="rounded-full bg-black px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60">
-                {sending ? 'Sending…' : 'Send message'}
+                {sending ? 'Sendingâ€¦' : 'Send message'}
               </button>
             </footer>
           </form>

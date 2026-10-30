@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+﻿import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FriendButton from "@/components/FriendButton";
@@ -77,32 +77,32 @@ export default async function AttendeesPage({
     <div className="max-w-4xl mx-auto px-4 py-12">
       <Link
         href={"/event/" + event.id}
-        className="text-sm text-gray-500 hover:underline"
+        className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
       >
         Back to event
       </Link>
 
       <h1 className="text-4xl font-bold mt-4 mb-2">Who is going</h1>
-      <p className="text-gray-600 mb-8">
+      <p className="text-gray-600 dark:text-gray-400 mb-8">
         {totalGoing} {totalGoing === 1 ? "person is" : "people are"} attending{" "}
-        <span className="font-medium text-gray-900">{event.title}</span>
+        <span className="font-medium text-gray-900 dark:text-gray-100">{event.title}</span>
       </p>
 
       {others.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-12 text-center">
-          <p className="text-gray-900 font-medium mb-1">
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 p-12 text-center">
+          <p className="text-gray-900 dark:text-gray-100 font-medium mb-1">
             {totalGoing === 0
               ? "No one has registered yet"
               : "You are the only one going so far"}
           </p>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
             {totalGoing === 0
               ? "Be the first to grab a ticket."
               : "Invite friends - more will show up soon."}
           </p>
         </div>
       ) : (
-        <ul className="divide-y divide-gray-200 border border-gray-200 rounded-2xl overflow-hidden">
+        <ul className="divide-y divide-gray-200 dark:divide-gray-800 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
           {others.map((p) => {
             const name = p.full_name || p.username || "Someone";
             const initials = name
@@ -113,7 +113,7 @@ export default async function AttendeesPage({
               .toUpperCase();
             const isFriend = friendIds.includes(p.id);
             return (
-              <li key={p.id} className="p-4 flex items-center gap-4 hover:bg-gray-50">
+              <li key={p.id} className="p-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800">
                 <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-bold flex-shrink-0">
                   {initials}
                 </div>
@@ -125,7 +125,7 @@ export default async function AttendeesPage({
                     {name}
                   </Link>
                   {p.username && (
-                    <p className="text-sm text-gray-500">@{p.username}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">@{p.username}</p>
                   )}
                 </div>
                 {user && (
@@ -142,3 +142,4 @@ export default async function AttendeesPage({
     </div>
   );
 }
+

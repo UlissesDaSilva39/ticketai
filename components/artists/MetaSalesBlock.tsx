@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export function MetaSalesBlock({ role }: { role: string }) {
   return (
@@ -16,17 +16,17 @@ export function MetaSalesBlock({ role }: { role: string }) {
         </p>
 
         <ul className="mt-5 grid gap-2 text-sm text-neutral-300 md:grid-cols-2">
-          <li>✓ Rate card — set your hourly, monthly, or project rates</li>
-          <li>✓ Auto contracts — GRID generates the paperwork</li>
-          <li>✓ Same-day payouts — money lands the next morning</li>
-          <li>✓ Client CRM — every booking, every review, in one place</li>
+          <li>âœ“ Rate card â€” set your hourly, monthly, or project rates</li>
+          <li>âœ“ Auto contracts â€” GRID generates the paperwork</li>
+          <li>âœ“ Same-day payouts â€” money lands the next morning</li>
+          <li>âœ“ Client CRM â€” every booking, every review, in one place</li>
         </ul>
 
         <Link
           href="/artists/apply"
-          className="mt-7 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-neutral-100"
+          className="mt-7 inline-flex rounded-full bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-black dark:text-white transition hover:bg-neutral-100"
         >
-          Create your {role} profile →
+          Create your {role} profile â†’
         </Link>
       </div>
     </section>

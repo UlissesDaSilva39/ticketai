@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -24,14 +24,14 @@ export default function MerchGrid({ artistId }: { artistId: string }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800">
         <h2 className="text-lg font-bold">Merch</h2>
       </div>
       <ul className="p-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
         {items.map((m) => (
           <li key={m.id} className="group">
-            <div className="aspect-square bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden">
+            <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center overflow-hidden">
               {m.image_url ? (
                 <img
                   src={m.image_url}
@@ -40,18 +40,18 @@ export default function MerchGrid({ artistId }: { artistId: string }) {
                 />
               ) : (
                 <span className="text-3xl font-bold text-gray-300">
-                  {"£" + (m.price_pence / 100).toFixed(0)}
+                  {"Â£" + (m.price_pence / 100).toFixed(0)}
                 </span>
               )}
             </div>
             <p className="text-sm font-medium mt-3 truncate">{m.title}</p>
             <p className="text-sm font-bold mt-0.5">
-              {"£" + (m.price_pence / 100).toFixed(2)}
+              {"Â£" + (m.price_pence / 100).toFixed(2)}
             </p>
           </li>
         ))}
       </ul>
-      <div className="px-6 py-3 border-t border-gray-100 text-center">
+      <div className="px-6 py-3 border-t border-gray-100 dark:border-gray-800 text-center">
         <p className="text-[10px] uppercase tracking-wider text-gray-400">
           Checkout coming soon
         </p>

@@ -19,16 +19,17 @@ export function ModeToggle({
     <div className="flex rounded-full bg-white/10 p-1 text-sm">
       <button
         onClick={() => set("fan")}
-        className={`rounded-full px-3 py-1 ${mode === "fan" ? "bg-white text-black" : "text-white/70"}`}
+        className={`rounded-full px-3 py-1 ${mode === "fan" ? "bg-white dark:bg-gray-900 text-black dark:text-white" : "text-white/70"}`}
       >
         Fan view
       </button>
       <button
         onClick={() => set("business")}
-        className={`rounded-full px-3 py-1 ${mode === "business" ? "bg-white text-black" : "text-white/70"}`}
+        className={`rounded-full px-3 py-1 ${mode === "business" ? "bg-white dark:bg-gray-900 text-black dark:text-white" : "text-white/70"}`}
       >
         Business view
       </button>
     </div>
   );
 }
+

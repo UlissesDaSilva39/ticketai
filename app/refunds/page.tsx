@@ -1,5 +1,5 @@
-export const metadata = {
-  title: "Refund Policy â€” GRID",
+﻿export const metadata = {
+  title: "Refund Policy Ã¢â‚¬â€ GRID",
   description: "How refunds work on GRID.",
 };
 
@@ -9,11 +9,11 @@ export default function RefundsPage() {
       <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>
         REFUND POLICY
       </h1>
-      <p className="text-sm text-gray-500 mb-10">Last updated: 25 September 2026</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-10">Last updated: 25 September 2026</p>
 
-      <div className="prose prose-gray max-w-none space-y-6 text-gray-700 leading-relaxed">
+      <div className="prose prose-gray max-w-none space-y-6 text-gray-700 dark:text-gray-300 leading-relaxed">
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">1. Overview</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">1. Overview</h2>
           <p>
             This policy explains when you can get a refund for a ticket purchased on GRID.
             The event organizer is responsible for the event. GRID processes refunds on
@@ -22,7 +22,7 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">2. When You Are Entitled to a Refund</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">2. When You Are Entitled to a Refund</h2>
           <p>You are entitled to a full refund if:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>The event is cancelled and not rescheduled.</li>
@@ -34,7 +34,7 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">3. When You Are Not Entitled to a Refund</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">3. When You Are Not Entitled to a Refund</h2>
           <p>Refunds are typically not available if:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>You simply change your mind.</li>
@@ -46,7 +46,7 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">4. Cancelled Events</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">4. Cancelled Events</h2>
           <p>
             If an event is cancelled, you will be refunded the full ticket price including all
             fees. Refunds are processed automatically within 14 days of the cancellation.
@@ -54,7 +54,7 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">5. Postponed Events</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">5. Postponed Events</h2>
           <p>
             If an event is postponed, your ticket remains valid for the new date. If you cannot
             attend the new date, you may request a refund within 14 days of the new date being
@@ -63,11 +63,11 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">6. How to Request a Refund</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">6. How to Request a Refund</h2>
           <p>To request a refund:</p>
           <ol className="list-decimal pl-6 space-y-1">
             <li>Email{" "}
-              <a href="mailto:refunds@GRID.org.uk" className="text-black underline">
+              <a href="mailto:refunds@GRID.org.uk" className="text-black dark:text-white underline">
                 refunds@GRID.org.uk
               </a>
             </li>
@@ -77,15 +77,15 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">7. Refund Method</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">7. Refund Method</h2>
           <p>
             Refunds are issued to the original payment method. Depending on your bank, refunds
-            may take 5â€“10 business days to appear on your statement.
+            may take 5Ã¢â‚¬â€œ10 business days to appear on your statement.
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">8. Fees</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">8. Fees</h2>
           <p>
             Processing fees are refunded when an event is cancelled. In other cases, the
             original processing fee may be retained to cover the cost of the transaction.
@@ -93,16 +93,16 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">9. Chargebacks</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">9. Chargebacks</h2>
           <p>
             If you raise a chargeback with your bank, we may suspend your account pending
-            investigation. Please contact us first â€” we can usually resolve issues faster than
+            investigation. Please contact us first Ã¢â‚¬â€ we can usually resolve issues faster than
             the chargeback process.
           </p>
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">10. Your Statutory Rights</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">10. Your Statutory Rights</h2>
           <p>
             This policy does not affect your statutory rights under the Consumer Rights Act 2015
             or other applicable UK law.
@@ -110,10 +110,10 @@ export default function RefundsPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mt-8 mb-3 text-black">11. Contact</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-3 text-black dark:text-white">11. Contact</h2>
           <p>
             Refund requests:{" "}
-            <a href="mailto:refunds@GRID.org.uk" className="text-black underline">
+            <a href="mailto:refunds@GRID.org.uk" className="text-black dark:text-white underline">
               refunds@GRID.org.uk
             </a>
           </p>
@@ -122,3 +122,4 @@ export default function RefundsPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-export function BandWorkspacePreview() {
+﻿export function BandWorkspacePreview() {
   return (
     <section className="border-t border-neutral-200 py-20">
       <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -9,22 +9,22 @@ export function BandWorkspacePreview() {
           </h2>
           <p className="mt-4 text-lg text-neutral-600">
             Live sales, tier breakdown, door check-in, top cities, merch sales,
-            and payout schedule — updated in real time.
+            and payout schedule â€” updated in real time.
           </p>
           <ul className="mt-6 space-y-3 text-base text-neutral-700">
-            <li>✓ Live sales &amp; door check-in</li>
-            <li>✓ Fan list &amp; repeat-attendee flags</li>
-            <li>✓ Merch sales tracker</li>
-            <li>✓ Split payout manager (band + manager + agent)</li>
-            <li>✓ Post-tour revenue report</li>
-            <li>✓ CSV / PDF export</li>
+            <li>âœ“ Live sales &amp; door check-in</li>
+            <li>âœ“ Fan list &amp; repeat-attendee flags</li>
+            <li>âœ“ Merch sales tracker</li>
+            <li>âœ“ Split payout manager (band + manager + agent)</li>
+            <li>âœ“ Post-tour revenue report</li>
+            <li>âœ“ CSV / PDF export</li>
           </ul>
           <a href="/bands/apply"
             className="mt-8 inline-flex rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-            Open your dashboard →
+            Open your dashboard â†’
           </a>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-3 shadow-xl">
+        <div className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-3 shadow-xl">
           <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-neutral-100">
             <img src="/img/band-dashboard.png"
               alt="GRID band dashboard showing live gig sales, fan map, and payout schedule"

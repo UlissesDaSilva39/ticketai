@@ -1,4 +1,4 @@
- "use client";
+﻿ "use client";
 
 import { useState } from "react";
 
@@ -80,7 +80,7 @@ export default function AIBuilder({
     console.log("APPLY CLICKED");
     console.log("result =", result);
     if (!result) {
-      console.log("No result Ã¢â‚¬â€ bailing out");
+      console.log("No result ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â bailing out");
       return;
     }
     const now = new Date();
@@ -105,12 +105,12 @@ export default function AIBuilder({
   }
 
   return (
-    <section className="rounded-xl border-2 border-black bg-white p-6">
+    <section className="rounded-xl border-2 border-black bg-white dark:bg-gray-900 p-6">
       <div className="mb-4 flex items-center gap-3">
-        <span className="text-2xl">Ã°Å¸Â¤â€“</span>
+        <span className="text-2xl">ÃƒÂ°Ã…Â¸Ã‚Â¤Ã¢â‚¬â€œ</span>
         <div>
           <h2 className="text-lg font-semibold">AI Campaign Builder</h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Describe your goal in plain English. We&apos;ll design the campaign.
           </p>
         </div>
@@ -120,13 +120,13 @@ export default function AIBuilder({
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder={`Examples:\nÃ¢â‚¬Â¢ I need to sell 150 more tickets for my London house night in the next 2 weeks\nÃ¢â‚¬Â¢ Help me fill my venue on a Friday night\nÃ¢â‚¬Â¢ Boost sales for the final weekend`}
+          placeholder={`Examples:\nÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ I need to sell 150 more tickets for my London house night in the next 2 weeks\nÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Help me fill my venue on a Friday night\nÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Boost sales for the final weekend`}
           rows={4}
           className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-black resize-none"
         />
 
         <div className="flex items-center justify-between">
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-gray-500 dark:text-gray-400">
             Powered by Google Gemini
           </div>
           <button
@@ -146,7 +146,7 @@ export default function AIBuilder({
         )}
 
         {result && (
-          <div className="space-y-4 rounded-lg bg-gray-50 p-4">
+          <div className="space-y-4 rounded-lg bg-gray-50 dark:bg-gray-950 p-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold">Recommended campaign</h3>
               <button
@@ -154,55 +154,55 @@ export default function AIBuilder({
                 onClick={apply}
                 className="rounded-full bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-800"
               >
-                Apply to form Ã¢â€ â€™
+                Apply to form ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
               </button>
             </div>
 
             <div className="grid gap-3 md:grid-cols-2">
-              <div className="rounded-lg border bg-white p-4">
-                <p className="text-xs uppercase tracking-wider text-gray-500">Audience</p>
+              <div className="rounded-lg border bg-white dark:bg-gray-900 p-4">
+                <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Audience</p>
                 <p className="mt-1 font-medium">
-                  {result.audience.location || "Ã¢â‚¬â€"} Ã‚· {result.audience.ageMin}Ã¢â‚¬â€œ{result.audience.ageMax}
+                  {result.audience.location || "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"} Ãƒâ€šÂ· {result.audience.ageMin}ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“{result.audience.ageMax}
                 </p>
-                <p className="mt-2 text-sm text-gray-600">
-                  {result.audience.interests.join(" Ã‚· ")}
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  {result.audience.interests.join(" Ãƒâ€šÂ· ")}
                 </p>
               </div>
 
-              <div className="rounded-lg border bg-white p-4">
-                <p className="text-xs uppercase tracking-wider text-gray-500">Budget</p>
+              <div className="rounded-lg border bg-white dark:bg-gray-900 p-4">
+                <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Budget</p>
                 <p className="mt-1 font-medium">
-                  £{result.budget.total} total Ã‚· £{result.budget.daily}/day
+                  Â£{result.budget.total} total Ãƒâ€šÂ· Â£{result.budget.daily}/day
                 </p>
-                <p className="mt-2 text-sm text-gray-600">{result.budget.reasoning}</p>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{result.budget.reasoning}</p>
               </div>
 
-              <div className="rounded-lg border bg-white p-4">
-                <p className="text-xs uppercase tracking-wider text-gray-500">Channels</p>
+              <div className="rounded-lg border bg-white dark:bg-gray-900 p-4">
+                <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Channels</p>
                 <div className="mt-2 flex flex-wrap gap-1">
                   {result.channels.map((c) => (
-                    <span key={c} className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium">
+                    <span key={c} className="rounded-full bg-gray-100 dark:bg-gray-800 px-2 py-1 text-xs font-medium">
                       {c}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="rounded-lg border bg-white p-4">
-                <p className="text-xs uppercase tracking-wider text-gray-500">Forecast</p>
+              <div className="rounded-lg border bg-white dark:bg-gray-900 p-4">
+                <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Forecast</p>
                 <p className="mt-1 font-medium">
-                  {result.duration_days} days Ã‚· {result.expected_conversion_rate}% conv rate
+                  {result.duration_days} days Ãƒâ€šÂ· {result.expected_conversion_rate}% conv rate
                 </p>
               </div>
             </div>
 
             <div>
-              <p className="mb-2 text-xs uppercase tracking-wider text-gray-500">Ad concepts</p>
+              <p className="mb-2 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Ad concepts</p>
               <div className="space-y-3">
                 {result.concepts.map((c, i) => (
-                  <div key={i} className="rounded-lg border bg-white p-4">
+                  <div key={i} className="rounded-lg border bg-white dark:bg-gray-900 p-4">
                     <p className="font-semibold">&ldquo;{c.headline}&rdquo;</p>
-                    <p className="mt-2 text-sm text-gray-600">{c.body}</p>
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{c.body}</p>
                     <p className="mt-2 text-sm font-medium">{c.cta}</p>
                   </div>
                 ))}
@@ -210,10 +210,10 @@ export default function AIBuilder({
             </div>
 
             <div>
-              <p className="mb-2 text-xs uppercase tracking-wider text-gray-500">Social captions</p>
+              <p className="mb-2 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Social captions</p>
               <div className="space-y-2">
                 {result.captions.map((c, i) => (
-                  <div key={i} className="rounded-lg border bg-white p-3 text-sm">
+                  <div key={i} className="rounded-lg border bg-white dark:bg-gray-900 p-3 text-sm">
                     {c}
                   </div>
                 ))}
@@ -230,3 +230,4 @@ export default function AIBuilder({
     </section>
   );
 }
+

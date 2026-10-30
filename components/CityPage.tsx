@@ -1,4 +1,4 @@
- import Link from "next/link";
+﻿ import Link from "next/link";
 import type { Metadata } from "next";
 import { EventCard } from "@/components/EventCard";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -13,7 +13,7 @@ export type CityMeta = {
 
 export function cityMetadata(city: CityMeta): Metadata {
   return {
-    title: `Events in ${city.name} — find your next night out`,
+    title: `Events in ${city.name} â€” find your next night out`,
     description: `${city.blurb} Browse upcoming events in ${city.name}, ${city.region}.`,
     openGraph: {
       title: `Events in ${city.name}`,
@@ -38,10 +38,10 @@ export async function CityEventsPage({ city }: { city: CityMeta }) {
   const list = (events || []) as Event[];
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="border-b border-gray-200 bg-gray-50">
+    <main className="min-h-screen bg-white dark:bg-gray-900">
+      <section className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-6 py-16">
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-4">
+          <p className="text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4">
             {city.region}
           </p>
           <h1
@@ -50,7 +50,7 @@ export async function CityEventsPage({ city }: { city: CityMeta }) {
           >
             Events in {city.name}
           </h1>
-          <p className="mt-6 text-xl text-gray-700 max-w-2xl">
+          <p className="mt-6 text-xl text-gray-700 dark:text-gray-300 max-w-2xl">
             {city.blurb}
           </p>
         </div>
@@ -66,14 +66,14 @@ export async function CityEventsPage({ city }: { city: CityMeta }) {
           </h2>
           <Link
             href={`/search?q=${encodeURIComponent(city.name)}`}
-            className="text-sm font-medium text-gray-500 hover:text-black"
+            className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
           >
-            Search all events →
+            Search all events â†’
           </Link>
         </div>
 
         {list.length === 0 ? (
-          <div className="rounded-xl border bg-gray-50 p-12 text-center text-gray-500">
+          <div className="rounded-xl border bg-gray-50 dark:bg-gray-950 p-12 text-center text-gray-500 dark:text-gray-400">
             No events in {city.name} yet. Check back soon.
           </div>
         ) : (
@@ -90,9 +90,9 @@ export async function CityEventsPage({ city }: { city: CityMeta }) {
         )}
       </section>
 
-      <section className="border-t border-gray-200 bg-gray-50">
+      <section className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-6 py-12">
-          <p className="text-sm text-gray-500 mb-4">Browse other cities</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Browse other cities</p>
           <div className="flex flex-wrap gap-3">
             {[
               { slug: "london", name: "London" },

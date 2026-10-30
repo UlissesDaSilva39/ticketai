@@ -62,7 +62,7 @@ export default function BookingResponseButtons({
 
   if (status === "declined") {
     return (
-      <div className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 text-gray-600 px-3 py-1 text-xs font-medium">
+      <div className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 text-xs font-medium">
         <XCircle className="h-3.5 w-3.5" />
         Declined
       </div>
@@ -89,7 +89,7 @@ export default function BookingResponseButtons({
           type="button"
           onClick={() => respond("declined")}
           disabled={busy}
-          className="inline-flex items-center gap-1 rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium hover:bg-gray-50 disabled:opacity-50 transition"
+          className="inline-flex items-center gap-1 rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 transition"
         >
           <X className="h-3.5 w-3.5" />
           Decline
@@ -107,3 +107,4 @@ export default function BookingResponseButtons({
     </div>
   );
 }
+

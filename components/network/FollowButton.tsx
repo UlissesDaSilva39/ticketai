@@ -56,7 +56,7 @@ export default function FollowButton({
         className={
           "text-xs font-semibold rounded-full px-3 py-1.5 transition-colors disabled:opacity-50 " +
           (following
-            ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            ? "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200"
             : "bg-black text-white hover:bg-gray-800")
         }
       >
@@ -68,3 +68,4 @@ export default function FollowButton({
     </div>
   );
 }
+

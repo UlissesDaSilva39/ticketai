@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -64,11 +64,11 @@ export default function MiniFollowButton({
       className={
         "px-3 py-1.5 rounded-full text-xs font-medium transition-colors " +
         (following
-          ? "bg-gray-100 text-gray-700 border border-gray-300"
-          : "border border-gray-300 text-gray-700 hover:border-black hover:text-black")
+          ? "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300"
+          : "border border-gray-300 text-gray-700 dark:text-gray-300 hover:border-black hover:text-black dark:hover:text-white")
       }
     >
-      {following ? "Following" : "Follow organizer"} · {count}
+      {following ? "Following" : "Follow organizer"} Â· {count}
     </button>
   );
 }

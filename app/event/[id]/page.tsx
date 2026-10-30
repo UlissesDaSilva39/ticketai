@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+﻿import { Suspense } from "react";
 import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -443,13 +443,13 @@ export default async function EventPage({
                   href={`/event/${e.id}/attendees`}
                   className="inline-block mt-3 text-sm text-white/70 underline hover:text-white"
                 >
-                  See all {goingCount} attendees Â· {goingCount} going
+                  See all {goingCount} attendees Ã‚Â· {goingCount} going
                 </a>
                 <SaveButton eventId={event.id} />
               </div>
             )}
             <p className="text-sm text-white/70 mt-3">
-                  {interestedCount} interested Â· {goingCount} going
+                  {interestedCount} interested Ã‚Â· {goingCount} going
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 mt-6">
@@ -468,7 +468,7 @@ export default async function EventPage({
                 href={e.preview_audio_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00FF87] text-black text-sm font-medium rounded-full hover:bg-[#00e67a]"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00FF87] text-black dark:text-white text-sm font-medium rounded-full hover:bg-[#00e67a]"
               >
                 <svg
                   width="14"
@@ -514,11 +514,11 @@ export default async function EventPage({
                   At{" "}
                   <Link
                     href={"/venue/" + e.venues.slug}
-                    className="text-black hover:underline"
+                    className="text-black dark:text-white hover:underline"
                   >
                     {e.venues.name}
                   </Link>
-                  {e.venues.city ? " Â· " : ""}{e.venues.city}
+                  {e.venues.city ? " Ã‚Â· " : ""}{e.venues.city}
                 </span>
               )}
             </div>
@@ -534,7 +534,7 @@ export default async function EventPage({
                   About This Event
                 </h2>
 
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   {e.description || "No description yet."}
                 </p>
               </>
@@ -563,11 +563,11 @@ export default async function EventPage({
                     <div className="flex items-baseline justify-between gap-3">
                       <h3 className="font-bold text-lg">{artist.name}</h3>
                       {artist.time && (
-                        <span className="text-xs text-gray-500 font-mono">{artist.time}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">{artist.time}</span>
                       )}
                     </div>
                     {artist.bio && (
-                      <p className="text-sm text-gray-600 mt-1">{artist.bio}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{artist.bio}</p>
                     )}
                   </div>
                 ))}
@@ -590,28 +590,28 @@ export default async function EventPage({
             </h2>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
               <div>
-                <dt className="font-semibold text-gray-900">Doors open</dt>
-                <dd className="text-gray-600">7:00 PM</dd>
+                <dt className="font-semibold text-gray-900 dark:text-gray-100">Doors open</dt>
+                <dd className="text-gray-600 dark:text-gray-400">7:00 PM</dd>
               </div>
               <div>
-                <dt className="font-semibold text-gray-900">Event ends</dt>
-                <dd className="text-gray-600">11:00 PM</dd>
+                <dt className="font-semibold text-gray-900 dark:text-gray-100">Event ends</dt>
+                <dd className="text-gray-600 dark:text-gray-400">11:00 PM</dd>
               </div>
               <div>
-                <dt className="font-semibold text-gray-900">Venue</dt>
-                <dd className="text-gray-600">{e.venues?.name || "TBC"}{e.venues?.city ? ", " + e.venues.city : ""}</dd>
+                <dt className="font-semibold text-gray-900 dark:text-gray-100">Venue</dt>
+                <dd className="text-gray-600 dark:text-gray-400">{e.venues?.name || "TBC"}{e.venues?.city ? ", " + e.venues.city : ""}</dd>
               </div>
               <div>
-                <dt className="font-semibold text-gray-900">Age restriction</dt>
-                <dd className="text-gray-600">18+ (ID required)</dd>
+                <dt className="font-semibold text-gray-900 dark:text-gray-100">Age restriction</dt>
+                <dd className="text-gray-600 dark:text-gray-400">18+ (ID required)</dd>
               </div>
               <div>
-                <dt className="font-semibold text-gray-900">Transport</dt>
-                <dd className="text-gray-600">Nearest station: TBC - Parking: TBC</dd>
+                <dt className="font-semibold text-gray-900 dark:text-gray-100">Transport</dt>
+                <dd className="text-gray-600 dark:text-gray-400">Nearest station: TBC - Parking: TBC</dd>
               </div>
               <div>
-                <dt className="font-semibold text-gray-900">Accessibility</dt>
-                <dd className="text-gray-600">Step-free access - Companion tickets available</dd>
+                <dt className="font-semibold text-gray-900 dark:text-gray-100">Accessibility</dt>
+                <dd className="text-gray-600 dark:text-gray-400">Step-free access - Companion tickets available</dd>
               </div>
             </dl>
           </div>
@@ -630,12 +630,12 @@ export default async function EventPage({
               {ticketTypes.map((t) => (
                 <div
                   key={t.name}
-                  className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                  className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-800 rounded-lg"
                 >
                   <p className="font-medium">{t.name}</p>
 
                   <p className="font-bold">
-                    Â£{Number(t.price || 0).toFixed(2)}
+                    Ã‚Â£{Number(t.price || 0).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -647,7 +647,7 @@ export default async function EventPage({
               {isSoldOut ? (
                 <WaitlistButton eventId={e.id} />
               ) : (
-                <div className="bg-gray-50 rounded-lg p-8">
+                <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-8">
                   {ticketTypes.length > 1 ? "From" : ""}
 
                   <p
@@ -656,7 +656,7 @@ export default async function EventPage({
                       fontFamily: "var(--font-antonio)",
                     }}
                   >
-                    Â£{lowestPrice.toFixed(2)}
+                    Ã‚Â£{lowestPrice.toFixed(2)}
                   </p>
 
                   <CheckoutLink
@@ -667,7 +667,7 @@ export default async function EventPage({
                   </CheckoutLink>
 
                   {totalCapacity > 0 && (
-                    <p className="text-xs text-gray-500 text-center mt-3">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
                       {remainingTickets} of {totalCapacity} tickets remaining
                     </p>
                   )}

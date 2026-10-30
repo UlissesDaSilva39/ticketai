@@ -40,7 +40,7 @@ export default function ProfileHeader({ profile, isOwnProfile, stats }: ProfileH
   if (profile.soundcloud) socialLinks.push({ label: "SoundCloud", href: profile.soundcloud });
 
   return (
-    <header className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <header className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
       <div className="relative h-40 bg-gradient-to-br from-gray-800 via-gray-900 to-black">
         {profile.cover_image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -51,7 +51,7 @@ export default function ProfileHeader({ profile, isOwnProfile, stats }: ProfileH
         <div className="flex items-end gap-4">
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={profile.avatar_url} alt={name} className="w-24 h-24 rounded-full object-cover border-4 border-white bg-white shrink-0" />
+            <img src={profile.avatar_url} alt={name} className="w-24 h-24 rounded-full object-cover border-4 border-white bg-white dark:bg-gray-900 shrink-0" />
           ) : (
             <div className="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center text-2xl font-bold border-4 border-white shrink-0">
               {initials}
@@ -61,11 +61,11 @@ export default function ProfileHeader({ profile, isOwnProfile, stats }: ProfileH
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-bold truncate">{name}</h1>
               {profile.role ? (
-                <span className="text-[10px] uppercase tracking-wider bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">{profile.role}</span>
+                <span className="text-[10px] uppercase tracking-wider bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full font-medium">{profile.role}</span>
               ) : null}
             </div>
             {profile.username ? (
-              <p className="text-sm text-gray-500">@{profile.username}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">@{profile.username}</p>
             ) : null}
           </div>
           {isOwnProfile ? (
@@ -79,10 +79,10 @@ export default function ProfileHeader({ profile, isOwnProfile, stats }: ProfileH
         </div>
 
         {profile.bio ? (
-          <p className="text-sm text-gray-700 mt-4 whitespace-pre-wrap">{profile.bio}</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300 mt-4 whitespace-pre-wrap">{profile.bio}</p>
         ) : null}
 
-        <div className="flex flex-wrap gap-3 text-xs text-gray-500 mt-4">
+        <div className="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400 mt-4">
           {profile.city ? <span>{profile.city}</span> : null}
           {profile.genre ? <span>· {profile.genre}</span> : null}
         </div>
@@ -95,7 +95,7 @@ export default function ProfileHeader({ profile, isOwnProfile, stats }: ProfileH
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-black underline"
+                className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline"
               >
                 {l.label}
               </a>
@@ -103,25 +103,26 @@ export default function ProfileHeader({ profile, isOwnProfile, stats }: ProfileH
           </div>
         ) : null}
 
-        <dl className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100 text-center">
+        <dl className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
           <div>
             <dd className="text-xl font-bold">{stats.posts}</dd>
-            <dt className="text-xs text-gray-500 uppercase tracking-wide">Posts</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Posts</dt>
           </div>
           <div>
             <dd className="text-xl font-bold">{stats.events}</dd>
-            <dt className="text-xs text-gray-500 uppercase tracking-wide">Events</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Events</dt>
           </div>
           <div>
             <dd className="text-xl font-bold">{stats.followers}</dd>
-            <dt className="text-xs text-gray-500 uppercase tracking-wide">Followers</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Followers</dt>
           </div>
           <div>
             <dd className="text-xl font-bold">{stats.following}</dd>
-            <dt className="text-xs text-gray-500 uppercase tracking-wide">Following</dt>
+            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Following</dt>
           </div>
         </dl>
       </div>
     </header>
   );
 }
+

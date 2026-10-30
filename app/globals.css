@@ -1,4 +1,6 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
@@ -45,7 +47,7 @@ img {
   display: block;
 }
 
-/* ── Dark-background buttons and links ──
+/* â”€â”€ Dark-background buttons and links â”€â”€
    Any element with .text-white must override the global a { color: blue } rule */
 a.text-white,
 a.text-white:link,
@@ -88,3 +90,4 @@ button.text-white:hover {
 }
 
 .hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+

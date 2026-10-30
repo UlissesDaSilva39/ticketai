@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import ProfileForm from "./ProfileForm";
@@ -19,10 +19,10 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">← Back to Dashboard</Link>
+        <Link href="/organizer" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">â† Back to Dashboard</Link>
       </div>
       <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>YOUR PROFILE</h1>
-      <p className="text-gray-500 mb-10">This information appears on your public organizer page.</p>
+      <p className="text-gray-500 dark:text-gray-400 mb-10">This information appears on your public organizer page.</p>
       <ProfileForm
         userId={user.id}
         initial={{
@@ -37,4 +37,5 @@ export default async function ProfilePage() {
     </div>
   );
 }
+
 

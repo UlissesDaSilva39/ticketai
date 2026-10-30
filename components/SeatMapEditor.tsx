@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { SeatmapConfig, SeatRow } from "./SeatMap";
 
@@ -50,10 +50,10 @@ export default function SeatMapEditor({
   return (
     <div className="space-y-3">
       {value.rows.map((row, i) => (
-        <div key={row.label} className="flex flex-wrap items-center gap-3 p-3 border border-gray-200 rounded-lg">
+        <div key={row.label} className="flex flex-wrap items-center gap-3 p-3 border border-gray-200 dark:border-gray-800 rounded-lg">
           <div className="font-bold w-8 text-center">{row.label}</div>
           <div>
-            <label className="text-xs text-gray-500 block">Seats</label>
+            <label className="text-xs text-gray-500 dark:text-gray-400 block">Seats</label>
             <input
               type="number" min="1" max="50"
               value={row.seats.length}
@@ -62,7 +62,7 @@ export default function SeatMapEditor({
             />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block">Price</label>
+            <label className="text-xs text-gray-500 dark:text-gray-400 block">Price</label>
             <input
               type="number" min="0"
               value={row.price}

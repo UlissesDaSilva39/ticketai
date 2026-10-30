@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { X, CheckCircle2 } from "lucide-react";
@@ -70,15 +70,15 @@ export default function BookingRequestModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-2xl bg-white p-6"
+        className="w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between mb-4">
           <div>
             <div className="text-xs font-semibold text-gray-400">Booking request</div>
-            <div className="mt-1 text-lg font-bold text-gray-900">{artist.name}</div>
+            <div className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">{artist.name}</div>
           </div>
-          <button onClick={onClose} className="rounded-full p-1 hover:bg-gray-100">
+          <button onClick={onClose} className="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -101,7 +101,7 @@ export default function BookingRequestModal({
           </div>
         ) : (
           <form onSubmit={submit} className="space-y-3">
-            <div className="rounded-lg bg-gray-50 p-3 text-xs text-gray-600 space-y-1">
+            <div className="rounded-lg bg-gray-50 dark:bg-gray-950 p-3 text-xs text-gray-600 dark:text-gray-400 space-y-1">
               {query.date && <div><strong>Date:</strong> {query.date}</div>}
               {query.genre && <div><strong>Genre:</strong> {query.genre}</div>}
               {query.capacity ? <div><strong>Capacity:</strong> {query.capacity}</div> : null}
@@ -155,3 +155,4 @@ export default function BookingRequestModal({
     </div>
   );
 }
+

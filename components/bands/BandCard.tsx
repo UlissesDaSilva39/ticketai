@@ -1,11 +1,11 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { Band } from '@/lib/bands';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
 export function BandCard({ band }: { band: Band }) {
   const gig = band.nextGig;
   return (
-    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition hover:border-neutral-900">
+    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5 transition hover:border-neutral-900">
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-lg font-semibold">{band.name}</h3>
@@ -35,7 +35,7 @@ export function BandCard({ band }: { band: Band }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{gig.venue}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {gig.date} · Doors {gig.doors} · {gig.city}
+            {gig.date} Â· Doors {gig.doors} Â· {gig.city}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <span className="text-sm font-semibold text-neutral-900">{gig.priceFrom}</span>
@@ -47,7 +47,7 @@ export function BandCard({ band }: { band: Band }) {
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-500">
-          No upcoming gigs yet —{' '}
+          No upcoming gigs yet â€”{' '}
           <Link href={`/bands/${band.slug}`} className="underline">
             follow to be notified
           </Link>
@@ -81,8 +81,8 @@ export function BandCard({ band }: { band: Band }) {
           size="sm"
         />
         <Link href={`/bands/${band.slug}`}
-          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black hover:underline">
-          View profile →
+          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black dark:hover:text-white hover:underline">
+          View profile â†’
         </Link>
       </div>
 

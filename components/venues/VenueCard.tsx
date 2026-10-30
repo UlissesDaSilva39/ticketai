@@ -1,11 +1,11 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { Venue } from '@/lib/venues';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
 export function VenueCard({ venue }: { venue: Venue }) {
   const slot = venue.tonightSlot;
   return (
-    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition hover:border-neutral-900">
+    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5 transition hover:border-neutral-900">
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-lg font-semibold">{venue.name}</h3>
@@ -34,10 +34,10 @@ export function VenueCard({ venue }: { venue: Venue }) {
             Tonight&apos;s slot
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">
-            {slot.date} · {slot.hours}
+            {slot.date} Â· {slot.hours}
           </p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {slot.price} · {slot.techLine}
+            {slot.price} Â· {slot.techLine}
           </p>
           <div className="mt-3 flex items-center justify-end">
             <Link href={`/venues/${venue.slug}/book`}
@@ -48,7 +48,7 @@ export function VenueCard({ venue }: { venue: Venue }) {
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-500">
-          No open slots right now —{' '}
+          No open slots right now â€”{' '}
           <Link href={`/venues/${venue.slug}`} className="underline">
             follow to be notified
           </Link>
@@ -82,8 +82,8 @@ export function VenueCard({ venue }: { venue: Venue }) {
           size="sm"
         />
         <Link href={`/venues/${venue.slug}`}
-          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black hover:underline">
-          View profile →
+          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black dark:hover:text-white hover:underline">
+          View profile â†’
         </Link>
       </div>
 

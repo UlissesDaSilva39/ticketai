@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import InboxList from "@/components/inbox/InboxList";
@@ -88,12 +88,12 @@ export default async function InboxPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 py-10">
         <div className="mb-6 flex items-baseline justify-between flex-wrap gap-2">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Inbox</h1>
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1 text-gray-500 dark:text-gray-400">
               Messages sent to your artist, promoter, and user profiles.
             </p>
           </div>

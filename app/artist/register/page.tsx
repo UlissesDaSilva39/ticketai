@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import ArtistRegisterForm from "@/components/ArtistRegisterForm";
@@ -24,10 +24,10 @@ export default async function ArtistRegisterPage() {
     .maybeSingle();
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-3xl mx-auto px-4 py-12">
         <section className="mb-8">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-3">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 mb-3">
             Join the stage
           </p>
           <h1
@@ -36,7 +36,7 @@ export default async function ArtistRegisterPage() {
           >
             Artist Registration
           </h1>
-          <p className="text-gray-600 max-w-xl">
+          <p className="text-gray-600 dark:text-gray-400 max-w-xl">
             Register as an artist on GRID and add your details. Get discovered
             by promoters, venues, and fans all in one place.
           </p>
@@ -51,3 +51,4 @@ export default async function ArtistRegisterPage() {
     </div>
   );
 }
+

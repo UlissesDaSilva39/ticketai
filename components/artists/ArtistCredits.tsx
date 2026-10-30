@@ -8,7 +8,7 @@ export function ArtistCredits({ credits }: { credits?: Credit[] }) {
       <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
         Credits
       </h2>
-      <ul className="mt-4 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white">
+      <ul className="mt-4 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
         {credits.map((c, i) => (
           <li key={i} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
             <div className="min-w-0">

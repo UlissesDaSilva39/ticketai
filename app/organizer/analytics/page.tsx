@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
@@ -88,39 +88,39 @@ export default async function OrganizerAnalytics() {
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, 8)
     .map((s) => ({
-      name: s.event.title.length > 30 ? s.event.title.slice(0, 30) + "Ã¢â‚¬Â¦" : s.event.title,
+      name: s.event.title.length > 30 ? s.event.title.slice(0, 30) + "ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦" : s.event.title,
       revenue: Number(s.revenue.toFixed(2)),
     }));
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">
-          Ã¢â€ Â Back to Dashboard
+        <Link href="/organizer" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+          ÃƒÂ¢Ã¢â‚¬Â Ã‚Â Back to Dashboard
         </Link>
       </div>
 
       <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>
         ANALYTICS
       </h1>
-      <p className="text-gray-500 mb-10">Performance of your events</p>
+      <p className="text-gray-500 dark:text-gray-400 mb-10">Performance of your events</p>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Total Views</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Total Views</p>
           <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{totalViews}</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Tickets Sold</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Tickets Sold</p>
           <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{totalTickets}</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Conversion</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Conversion</p>
           <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{conversionRate.toFixed(1)}%</p>
         </div>
         <div className="bg-black text-white rounded-lg p-6">
           <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Revenue</p>
-          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{totalRevenue.toFixed(2)}</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>Â£{totalRevenue.toFixed(2)}</p>
         </div>
       </div>
 
@@ -129,40 +129,40 @@ export default async function OrganizerAnalytics() {
       </h2>
 
       {sortedByViews.length === 0 ? (
-        <div className="bg-gray-50 rounded-lg p-12 text-center">
-          <p className="text-gray-500">No events yet.</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400">No events yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {sortedByViews.map((stat) => (
-            <div key={stat.event.id} className="border border-gray-200 rounded-lg p-6">
+            <div key={stat.event.id} className="border border-gray-200 dark:border-gray-800 rounded-lg p-6">
               <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                 <div className="flex-1 min-w-[200px]">
                   <h3 className="font-bold text-lg mb-1">{stat.event.title}</h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(stat.event.start_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                   </p>
                 </div>
                 <div className="flex gap-6 text-right">
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Views</p>
+                    <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Views</p>
                     <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{stat.views}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Sold</p>
+                    <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Sold</p>
                     <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{stat.ticketsSold}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Rate</p>
+                    <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Rate</p>
                     <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{stat.convRate.toFixed(1)}%</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Revenue</p>
-                    <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{stat.revenue.toFixed(2)}</p>
+                    <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Revenue</p>
+                    <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>Â£{stat.revenue.toFixed(2)}</p>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
                 <div
                   className="bg-black h-full rounded-full transition-all text-white"
                   style={{ width: Math.min(stat.convRate * 4, 100) + "%" }}
@@ -181,4 +181,5 @@ export default async function OrganizerAnalytics() {
     </div>
   );
 }
+
 

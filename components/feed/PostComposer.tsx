@@ -37,13 +37,13 @@ export default function PostComposer({ userId }: { userId: string }) {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-6">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 mb-6">
       <textarea
         value={body} onChange={(e) => setBody(e.target.value)}
         placeholder="What is happening?" aria-label="What is happening?" rows={3}
-        className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:border-black focus:outline-none resize-none text-black placeholder-gray-400"
+        className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl focus:border-black focus:outline-none resize-none text-black dark:text-white placeholder-gray-400"
       />
-      <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+      <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
         <MediaUploader kind="image" userId={userId} value={imageUrl} onChange={setImageUrl} label="Photo" />
         <MediaUploader kind="video" userId={userId} value={videoUrl} onChange={setVideoUrl} label="Video" />
         <MediaUploader kind="audio" userId={userId} value={audioUrl} onChange={setAudioUrl} label="Audio" />
@@ -56,13 +56,14 @@ export default function PostComposer({ userId }: { userId: string }) {
         <div className="grid grid-cols-2 gap-2 mt-3">
           <input value={audioTitle} onChange={(e) => setAudioTitle(e.target.value)}
             placeholder="Track title"
-            className="rounded-lg border border-gray-200 px-3 py-2 text-xs outline-none focus:border-gray-400" />
+            className="rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2 text-xs outline-none focus:border-gray-400" />
           <input value={audioArtist} onChange={(e) => setAudioArtist(e.target.value)}
             placeholder="Artist"
-            className="rounded-lg border border-gray-200 px-3 py-2 text-xs outline-none focus:border-gray-400" />
+            className="rounded-lg border border-gray-200 dark:border-gray-800 px-3 py-2 text-xs outline-none focus:border-gray-400" />
         </div>
       ) : null}
       {error ? <p className="text-xs text-red-600 mt-2" role="alert">{error}</p> : null}
     </div>
   );
 }
+

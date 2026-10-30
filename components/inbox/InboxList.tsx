@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
 import MessageRow, { type InboxMessage } from "./MessageRow";
@@ -49,7 +49,7 @@ export default function InboxList({
                 "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition " +
                 (active
                   ? "bg-black text-white"
-                  : "bg-white border border-gray-200 text-gray-700 hover:border-black")
+                  : "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-black")
               }
             >
               {t.label}
@@ -60,9 +60,9 @@ export default function InboxList({
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center">
-          <p className="text-sm font-medium text-gray-900">No messages here yet</p>
-          <p className="mt-1 text-xs text-gray-500">
+        <div className="rounded-2xl border border-dashed border-gray-300 bg-white dark:bg-gray-900 p-12 text-center">
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">No messages here yet</p>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             Messages sent to your artist, promoter, or user profiles appear here.
           </p>
         </div>

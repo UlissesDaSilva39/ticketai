@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -69,8 +69,8 @@ export default function PromoterEventsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/promoter/dashboard" className="text-sm text-gray-500 hover:text-black">
-          ← Back to Dashboard
+        <Link href="/promoter/dashboard" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+          â† Back to Dashboard
         </Link>
       </div>
 
@@ -80,7 +80,7 @@ export default function PromoterEventsPage() {
       >
         FIND EVENTS TO PROMOTE
       </h1>
-      <p className="text-gray-500 mb-10">
+      <p className="text-gray-500 dark:text-gray-400 mb-10">
         Pick events, share your unique referral link, earn commission on every ticket sold.
       </p>
 
@@ -89,8 +89,8 @@ export default function PromoterEventsPage() {
       )}
 
       {events.length === 0 ? (
-        <div className="bg-gray-50 rounded-lg p-12 text-center">
-          <p className="text-gray-500">No events available yet.</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400">No events available yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -99,11 +99,11 @@ export default function PromoterEventsPage() {
             return (
               <div
                 key={event.id}
-                className="flex flex-wrap items-center justify-between gap-4 p-5 border border-gray-200 rounded-lg"
+                className="flex flex-wrap items-center justify-between gap-4 p-5 border border-gray-200 dark:border-gray-800 rounded-lg"
               >
                 <div className="flex-1 min-w-[200px]">
                   <h3 className="font-bold text-lg mb-1">{event.title}</h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(event.start_date).toLocaleDateString("en-GB", {
                       day: "numeric",
                       month: "short",
@@ -113,8 +113,8 @@ export default function PromoterEventsPage() {
                 </div>
                 <div>
                   {isPromoting ? (
-                    <span className="inline-block px-5 py-2 bg-[#00FF87] text-black text-sm font-medium rounded-full">
-                      ✓ Promoting
+                    <span className="inline-block px-5 py-2 bg-[#00FF87] text-black dark:text-white text-sm font-medium rounded-full">
+                      âœ“ Promoting
                     </span>
                   ) : (
                     <button

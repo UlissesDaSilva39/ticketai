@@ -53,7 +53,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="bg-white border border-gray-200 rounded-2xl p-6 space-y-5">
+    <form onSubmit={onSubmit} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 space-y-5">
       <div>
         <label htmlFor="avatar_url" className="block text-sm font-medium mb-1">Avatar URL</label>
         <input
@@ -63,7 +63,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
           defaultValue={profile.avatar_url || ""}
           onChange={(e) => setAvatar(e.target.value)}
           placeholder="https://..."
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
         />
         {avatar ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -80,7 +80,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
           defaultValue={profile.cover_image || ""}
           onChange={(e) => setCover(e.target.value)}
           placeholder="https://..."
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
         />
         {cover ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -97,7 +97,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
             type="text"
             defaultValue={profile.full_name || ""}
             maxLength={80}
-            className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
           />
         </div>
         <div>
@@ -109,7 +109,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
             defaultValue={profile.username || ""}
             maxLength={30}
             pattern="[A-Za-z0-9_.-]+"
-            className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
           />
         </div>
       </div>
@@ -123,7 +123,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
           maxLength={500}
           defaultValue={profile.bio || ""}
           placeholder="Tell people about yourself"
-          className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none resize-none"
+          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none resize-none"
         />
       </div>
 
@@ -136,7 +136,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
             type="text"
             defaultValue={profile.city || ""}
             maxLength={80}
-            className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
           />
         </div>
         <div>
@@ -147,7 +147,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
             type="text"
             defaultValue={profile.genre || ""}
             maxLength={60}
-            className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
           />
         </div>
       </div>
@@ -163,14 +163,14 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
           { name: "soundcloud", label: "SoundCloud", value: profile.soundcloud },
         ].map((l) => (
           <div key={l.name}>
-            <label htmlFor={l.name} className="block text-xs text-gray-500 mb-1">{l.label}</label>
+            <label htmlFor={l.name} className="block text-xs text-gray-500 dark:text-gray-400 mb-1">{l.label}</label>
             <input
               id={l.name}
               name={l.name}
               type="text"
               defaultValue={l.value || ""}
               placeholder={l.label === "Instagram" || l.label === "Twitter / X" ? "@handle" : "https://..."}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
             />
           </div>
         ))}
@@ -218,4 +218,5 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
     </form>
   );
 }
+
 

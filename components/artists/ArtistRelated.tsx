@@ -52,7 +52,7 @@ export function ArtistRelated({ artists }: { artists: Related[] }) {
           <Link
             key={a.slug}
             href={`/artists/${a.slug}`}
-            className="group flex flex-col rounded-2xl border border-neutral-200 bg-white p-4 transition hover:border-neutral-900"
+            className="group flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-4 transition hover:border-neutral-900"
           >
             <Avatar src={a.photo} name={a.name} />
             <p className="mt-3 truncate text-sm font-semibold">{a.name}</p>

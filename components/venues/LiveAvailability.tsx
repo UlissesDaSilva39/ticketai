@@ -1,9 +1,9 @@
-const SAMPLE = [
-  { venue: 'Village Underground', city: 'London',     cap: 700,  deal: '£1,200 flat',         tech: 'Full PA + engineer', status: 'open' },
-  { venue: 'Fabric',              city: 'London',     cap: 1600, deal: '£4,500 + bar split', tech: 'Full spec',          status: 'open' },
-  { venue: 'Hidden',              city: 'Manchester', cap: 600,  deal: '£900 flat',           tech: 'PA + lights',        status: 'open' },
-  { venue: 'Motion',              city: 'Bristol',    cap: 3000, deal: '£3,200 + bar split', tech: 'Full rig',           status: 'open' },
-  { venue: 'YES',                 city: 'Manchester', cap: 500,  deal: '£750 flat',           tech: 'PA + backline',      status: 'waitlist' },
+﻿const SAMPLE = [
+  { venue: 'Village Underground', city: 'London',     cap: 700,  deal: 'Â£1,200 flat',         tech: 'Full PA + engineer', status: 'open' },
+  { venue: 'Fabric',              city: 'London',     cap: 1600, deal: 'Â£4,500 + bar split', tech: 'Full spec',          status: 'open' },
+  { venue: 'Hidden',              city: 'Manchester', cap: 600,  deal: 'Â£900 flat',           tech: 'PA + lights',        status: 'open' },
+  { venue: 'Motion',              city: 'Bristol',    cap: 3000, deal: 'Â£3,200 + bar split', tech: 'Full rig',           status: 'open' },
+  { venue: 'YES',                 city: 'Manchester', cap: 500,  deal: 'Â£750 flat',           tech: 'PA + backline',      status: 'waitlist' },
 ];
 
 export function LiveAvailability() {
@@ -24,15 +24,15 @@ export function LiveAvailability() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/venues/book"
               className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-              Book a venue →
+              Book a venue â†’
             </a>
             <a href="/venues/apply"
-              className="rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
-              List your venue →
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+              List your venue â†’
             </a>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
               <tr>
@@ -64,7 +64,7 @@ export function LiveAvailability() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Availability refreshed 2 minutes ago · Powered by GRID Venues
+            Availability refreshed 2 minutes ago Â· Powered by GRID Venues
           </div>
         </div>
       </div>

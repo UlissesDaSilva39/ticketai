@@ -73,13 +73,13 @@ export default function SharedLinksPanel({ artistSlug }: Props) {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-6">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Shared links</h2>
         <button
           type="button"
           onClick={load}
-          className="text-xs text-gray-500 hover:text-black"
+          className="text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
         >
           Refresh
         </button>
@@ -90,17 +90,17 @@ export default function SharedLinksPanel({ artistSlug }: Props) {
       )}
 
       {loading ? (
-        <p className="text-sm text-gray-500">Loading...</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Loading...</p>
       ) : shares.length === 0 ? (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           No active share links. Click <strong>Share</strong> to create one.
         </p>
       ) : (
-        <ul className="divide-y divide-gray-100">
+        <ul className="divide-y divide-gray-100 dark:divide-gray-800">
           {shares.map((s) => (
             <li key={s.token} className="py-3 flex items-center justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   Created {new Date(s.created_at).toLocaleDateString("en-GB")} · Expires{" "}
                   {new Date(s.expires_at).toLocaleDateString("en-GB")}
                 </p>
@@ -112,7 +112,7 @@ export default function SharedLinksPanel({ artistSlug }: Props) {
                 <button
                   type="button"
                   onClick={() => handleCopy(s.token)}
-                  className="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-300 hover:bg-gray-50"
+                  className="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   {copiedToken === s.token ? "Copied" : "Copy"}
                 </button>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -36,9 +36,9 @@ export default function FriendButton({
 
   const style =
     status === "accepted"
-      ? "bg-white border-2 border-black text-black hover:bg-gray-50"
+      ? "bg-white dark:bg-gray-900 border-2 border-black text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
       : status === "pending"
-      ? "bg-gray-200 border-2 border-gray-400 text-gray-600 cursor-default"
+      ? "bg-gray-200 border-2 border-gray-400 text-gray-600 dark:text-gray-400 cursor-default"
       : "bg-black text-white hover:bg-gray-800";
 
   return (
@@ -48,7 +48,7 @@ export default function FriendButton({
       disabled={busy || status === "pending"}
       className={"px-5 py-2.5 text-sm font-medium rounded-full transition-colors " + style}
     >
-      {busy ? "…" : label}
+      {busy ? "â€¦" : label}
     </button>
   );
 }

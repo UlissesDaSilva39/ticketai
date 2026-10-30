@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -115,7 +115,7 @@ export default function PromoterDashboard() {
 
   const shareOnSocial = (platform: string, eventId: string, code: string, title: string) => {
     const url = buildReferralUrl(eventId, code);
-    const text = "Check out " + title + " Ã¢â‚¬â€ tickets available now";
+    const text = "Check out " + title + " ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â tickets available now";
     let shareUrl = "";
     if (platform === "x") {
       shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url);
@@ -135,14 +135,14 @@ export default function PromoterDashboard() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12">
         <div className="mb-8">
-          <Link href="/promoters" className="text-sm text-gray-500 hover:text-black">
-            Ã¢â€ Â Back to Promoters
+          <Link href="/promoters" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+            ÃƒÂ¢Ã¢â‚¬Â Ã‚Â Back to Promoters
           </Link>
         </div>
         <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>
           BECOME A PROMOTER
         </h1>
-        <p className="text-gray-500 mb-10">
+        <p className="text-gray-500 dark:text-gray-400 mb-10">
           Pick events you love. Share your unique link. Earn commission on every ticket sold.
         </p>
         <div className="space-y-5">
@@ -194,19 +194,19 @@ export default function PromoterDashboard() {
         </Link>
         <div>
           <h1 className="text-5xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>PROMOTER</h1>
-          <p className="text-gray-500 mt-2">{promoter.display_name}</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">{promoter.display_name}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link href="/promoter/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+          <Link href="/promoter/analytics" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800">
             Analytics
           </Link>
         <Link
           href="/promoter/dashboard/sent-bookings"
-          className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50"
+          className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           Sent bookings
         </Link>
-          <Link href="/promoter/payouts" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50">
+          <Link href="/promoter/payouts" className="px-6 py-3 border border-black font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800">
             Payouts
           </Link>
           <Link href="/promoter/events" className="px-6 py-3 bg-black text-white font-medium rounded-full hover:bg-gray-800">
@@ -215,27 +215,27 @@ export default function PromoterDashboard() {
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Promoting</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Promoting</p>
           <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{myEvents.length}</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Clicks</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Clicks</p>
           <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{myEvents.reduce((s, e) => s + (e.clicks || 0), 0)}</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Sales</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Sales</p>
           <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>{myEvents.reduce((s, e) => s + (e.conversions || 0), 0)}</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6">
-          <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">Revenue</p>
-          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{myEvents.reduce((s, e) => s + Number(e.revenue || 0), 0).toFixed(2)}</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+          <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Revenue</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>Â£{myEvents.reduce((s, e) => s + Number(e.revenue || 0), 0).toFixed(2)}</p>
         </div>
       </div>
       <h2 className="text-2xl font-bold mb-6" style={{ fontFamily: "var(--font-antonio)" }}>EVENTS YOU ARE PROMOTING</h2>
       {myEvents.length === 0 ? (
-        <div className="bg-gray-50 rounded-lg p-12 text-center">
-          <p className="text-lg text-gray-500 mb-6">You have not picked any events to promote yet.</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-12 text-center">
+          <p className="text-lg text-gray-500 dark:text-gray-400 mb-6">You have not picked any events to promote yet.</p>
           <Link href="/promoter/events" className="inline-block px-8 py-4 bg-black text-white font-medium rounded-full hover:bg-gray-800">Browse Events</Link>
         </div>
       ) : (
@@ -244,15 +244,15 @@ export default function PromoterDashboard() {
             const title = pe.events?.title || "Event";
             const url = buildReferralUrl(pe.event_id, pe.referral_code);
             return (
-              <div key={pe.id} className="border border-gray-200 rounded-lg p-6">
+              <div key={pe.id} className="border border-gray-200 dark:border-gray-800 rounded-lg p-6">
                 <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                   <div className="flex-1 min-w-[200px]">
                     <h3 className="font-bold text-lg mb-1">{title}</h3>
-                    <p className="text-xs text-gray-500">{pe.conversions} sales Ã‚· £{Number(pe.revenue).toFixed(2)} earned Ã‚· {Number(pe.commission_rate || 0)}% commission</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{pe.conversions} sales Ãƒâ€šÂ· Â£{Number(pe.revenue).toFixed(2)} earned Ãƒâ€šÂ· {Number(pe.commission_rate || 0)}% commission</p>
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3 mb-4">
-                  <p className="text-xs uppercase tracking-widest text-gray-500 mb-1">Your referral link</p>
+                <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-3 mb-4">
+                  <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Your referral link</p>
                   <p className="font-mono text-sm break-all">{url}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -272,3 +272,4 @@ export default function PromoterDashboard() {
     </div>
   );
 }
+

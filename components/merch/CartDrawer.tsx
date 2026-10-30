@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -49,7 +49,7 @@ export function CartDrawer({
       aria-label="Shopping cart"
     >
       <aside
-        className="flex h-full w-full max-w-md flex-col bg-white shadow-xl"
+        className="flex h-full w-full max-w-md flex-col bg-white dark:bg-gray-900 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <header className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
@@ -62,7 +62,7 @@ export function CartDrawer({
             aria-label="Close cart"
             className="rounded-full p-2 text-neutral-500 hover:bg-neutral-100"
           >
-            ✕
+            âœ•
           </button>
         </header>
 
@@ -77,7 +77,7 @@ export function CartDrawer({
               className="mt-6 rounded-full bg-black px-6 py-2.5 text-sm font-semibold text-white hover:bg-neutral-800"
               onClick={onClose}
             >
-              Browse artists →
+              Browse artists â†’
             </Link>
           </div>
         ) : (
@@ -101,7 +101,7 @@ export function CartDrawer({
                         className="h-7 w-7 rounded-full border border-neutral-300 text-sm hover:border-neutral-900"
                         aria-label="Decrease quantity"
                       >
-                        −
+                        âˆ’
                       </button>
                       <span className="w-6 text-center text-sm">{item.quantity}</span>
                       <button
@@ -149,11 +149,11 @@ export function CartDrawer({
                 disabled={checkingOut}
                 className="mt-4 w-full rounded-full bg-black py-3 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:opacity-60"
               >
-                {checkingOut ? 'Redirecting…' : `Checkout — ${formatPence(subtotal)}`}
+                {checkingOut ? 'Redirectingâ€¦' : `Checkout â€” ${formatPence(subtotal)}`}
               </button>
 
               <p className="mt-3 text-center text-xs text-neutral-500">
-                🔒 Secure payment via Stripe
+                ðŸ”’ Secure payment via Stripe
               </p>
             </footer>
           </>

@@ -1,12 +1,12 @@
-const LOGOS = ['Beggars', 'AWAL', 'Ninja Tune', '!K7', 'Secretly', 'Domino'];
+﻿const LOGOS = ['Beggars', 'AWAL', 'Ninja Tune', '!K7', 'Secretly', 'Domino'];
 
 const TESTIMONIALS = [
   { quote: 'Moved my whole catalogue to GRID. Cut my platform fees by 60%.',
-    name: 'Marcus K.', role: 'Producer · London', stat: '£8,400 saved' },
+    name: 'Marcus K.', role: 'Producer Â· London', stat: 'Â£8,400 saved' },
   { quote: 'Two sync briefs came through in the first week. Landed one on a Netflix doc series.',
-    name: 'Ilona B.', role: 'Producer · Berlin', stat: '£12k sync payout' },
-  { quote: 'My first £1k in a month from GRID. No cold DMs, no BeatStars fees, just sales.',
-    name: 'Priya S.', role: 'Producer · Manchester', stat: '£1,200 / month' },
+    name: 'Ilona B.', role: 'Producer Â· Berlin', stat: 'Â£12k sync payout' },
+  { quote: 'My first Â£1k in a month from GRID. No cold DMs, no BeatStars fees, just sales.',
+    name: 'Priya S.', role: 'Producer Â· Manchester', stat: 'Â£1,200 / month' },
 ];
 
 export function ProducerProof() {
@@ -21,7 +21,7 @@ export function ProducerProof() {
       <div className="mt-14 grid gap-5 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <figure key={t.name}
-            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-6">
+            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-6">
             <blockquote className="text-base text-neutral-800">&ldquo;{t.quote}&rdquo;</blockquote>
             <figcaption className="mt-6">
               <p className="text-sm font-semibold">{t.name}</p>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -100,14 +100,14 @@ export default function ReviewsSection({
         <div className="flex items-center gap-3 mb-6">
           <Stars value={Math.round(avg)} size={22} />
           <span className="font-bold text-lg">{avg.toFixed(1)}</span>
-          <span className="text-gray-500 text-sm">
+          <span className="text-gray-500 dark:text-gray-400 text-sm">
             ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
           </span>
         </div>
       )}
 
       {canReview && (
-        <form onSubmit={submit} className="mb-8 p-5 border border-gray-200 rounded-2xl">
+        <form onSubmit={submit} className="mb-8 p-5 border border-gray-200 dark:border-gray-800 rounded-2xl">
           <p className="font-semibold mb-3">{mine ? "Update your review" : "Leave a review"}</p>
           <div className="mb-3">
             <Stars value={rating} size={26} />
@@ -117,7 +117,7 @@ export default function ReviewsSection({
                   key={n}
                   type="button"
                   onClick={() => setRating(n)}
-                  className={"px-2 py-1 text-xs rounded border " + (rating === n ? "bg-black text-white border-black" : "border-gray-300 hover:bg-gray-50")}
+                  className={"px-2 py-1 text-xs rounded border " + (rating === n ? "bg-black text-white border-black" : "border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800")}
                 >
                   {n}{"\u2605"}
                 </button>
@@ -145,7 +145,7 @@ export default function ReviewsSection({
                 type="button"
                 onClick={removeMine}
                 disabled={busy}
-                className="px-5 py-2 border-2 border-black text-sm font-medium rounded-full hover:bg-gray-50"
+                className="px-5 py-2 border-2 border-black text-sm font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 Delete
               </button>
@@ -155,7 +155,7 @@ export default function ReviewsSection({
       )}
 
       {reviews.length === 0 ? (
-        <p className="text-gray-500 text-sm">No reviews yet. Be the first.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">No reviews yet. Be the first.</p>
       ) : (
         <ul className="space-y-5">
           {reviews.map((r) => {
@@ -173,7 +173,7 @@ export default function ReviewsSection({
                     <Stars value={r.rating} />
                     <span className="text-xs text-gray-400">{date}</span>
                   </div>
-                  {r.comment && <p className="text-gray-700 text-sm">{r.comment}</p>}
+                  {r.comment && <p className="text-gray-700 dark:text-gray-300 text-sm">{r.comment}</p>}
                 </div>
               </li>
             );
@@ -183,3 +183,4 @@ export default function ReviewsSection({
     </div>
   );
 }
+

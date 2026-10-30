@@ -9,18 +9,18 @@ export default function RiderPage() {
   const [tab, setTab] = useState<Tab>('technical');
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <Link href="/" className="text-sm text-gray-600 hover:text-black">← Back to home</Link>
+          <Link href="/" className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white">← Back to home</Link>
           <h1 className="text-3xl font-bold mt-4 mb-2">Build your rider</h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             One link for your technical, hospitality, and backstage requirements.
             Share with promoters and venues. No more Word docs.
           </p>
         </div>
 
-        <div className="flex gap-2 mb-6 border-b border-gray-200">
+        <div className="flex gap-2 mb-6 border-b border-gray-200 dark:border-gray-800">
           {(['technical', 'hospitality', 'backstage'] as Tab[]).map((t) => (
             <button
               key={t}
@@ -28,8 +28,8 @@ export default function RiderPage() {
               className={
                 'px-4 py-3 font-medium text-sm capitalize border-b-2 transition ' +
                 (tab === t
-                  ? 'border-black text-black'
-                  : 'border-transparent text-gray-500 hover:text-black')
+                  ? 'border-black text-black dark:text-white'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white')
               }
             >
               {t}
@@ -88,7 +88,7 @@ export default function RiderPage() {
           >
             Save rider
           </button>
-          <p className="text-center text-xs text-gray-500 mt-3">
+          <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-3">
             Your rider is private until you share the link.
           </p>
         </div>
@@ -117,3 +117,4 @@ function Field({ label, placeholder, multiline }: { label: string; placeholder?:
     </div>
   );
 }
+

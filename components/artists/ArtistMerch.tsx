@@ -14,7 +14,7 @@ export function ArtistMerch({ items }: { items?: MerchItem[] }) {
 
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {items.map((m) => (
-          <article key={m.id} className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-4">
+          <article key={m.id} className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-4">
             <div className="aspect-square w-full overflow-hidden rounded-xl bg-neutral-100">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={m.image} alt={m.name} className="h-full w-full object-cover" />
@@ -57,7 +57,7 @@ export function ArtistMerch({ items }: { items?: MerchItem[] }) {
       </div>
 
       <div className="mt-4">
-        <Link href="/merch" className="text-sm font-semibold text-neutral-700 hover:text-black">
+        <Link href="/merch" className="text-sm font-semibold text-neutral-700 hover:text-black dark:hover:text-white">
           View all merch â†’
         </Link>
       </div>

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 type Params = { params: Promise<{ id: string }> };
@@ -9,8 +9,8 @@ export default async function MerchProductPage({ params }: Params) {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <Link href="/merch" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black">
-        ← Back to merch
+      <Link href="/merch" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black dark:hover:text-white">
+        â† Back to merch
       </Link>
 
       <div className="mt-6 grid gap-8 md:grid-cols-2">
@@ -22,7 +22,7 @@ export default async function MerchProductPage({ params }: Params) {
           <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Merch</p>
           <h1 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{id}</h1>
           <p className="mt-3 text-sm text-neutral-600">Limited edition item. Ships worldwide.</p>
-          <p className="mt-5 text-2xl font-black">£5.00</p>
+          <p className="mt-5 text-2xl font-black">Â£5.00</p>
           <div className="mt-6 space-y-3">
             <label htmlFor="size" className="block text-sm font-semibold">Size</label>
             <select id="size" name="size" className="w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm outline-none focus:border-neutral-900">
@@ -33,9 +33,9 @@ export default async function MerchProductPage({ params }: Params) {
             </select>
           </div>
           <button type="button" className="mt-6 w-full rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-            Add to cart · £5.00
+            Add to cart Â· Â£5.00
           </button>
-          <p className="mt-4 text-xs text-neutral-500">Free shipping over £30 · 30-day returns · Secure checkout</p>
+          <p className="mt-4 text-xs text-neutral-500">Free shipping over Â£30 Â· 30-day returns Â· Secure checkout</p>
         </div>
       </div>
     </div>

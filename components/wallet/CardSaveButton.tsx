@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -81,7 +81,7 @@ export function CardSaveButton({ eventId }: { eventId: string }) {
         "absolute right-2 top-2 z-20 flex h-8 w-8 items-center justify-center rounded-full shadow-md transition " +
         (saved
           ? "bg-neutral-900 text-white"
-          : "bg-white/90 text-neutral-900 hover:bg-white") +
+          : "bg-white/90 dark:bg-gray-900/90 text-neutral-900 hover:bg-white") +
         (error ? " ring-2 ring-red-500" : "")
       }
     >

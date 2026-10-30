@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
@@ -52,11 +52,11 @@ export default function PromoterMessageButton({ promoterId, promoterName }: Prop
 
   return (
     <>
-      <section className="bg-white border border-gray-200 rounded-2xl p-6">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+      <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
           Get in touch
         </h3>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Want to collaborate or ask a question? Send a direct message.
         </p>
         <button
@@ -75,7 +75,7 @@ export default function PromoterMessageButton({ promoterId, promoterName }: Prop
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl"
+            className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -83,10 +83,10 @@ export default function PromoterMessageButton({ promoterId, promoterName }: Prop
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="text-gray-400 hover:text-black text-xl leading-none"
+                className="text-gray-400 hover:text-black dark:hover:text-white text-xl leading-none"
                 aria-label="Close"
               >
-                ×
+                Ã—
               </button>
             </div>
 
@@ -127,7 +127,7 @@ export default function PromoterMessageButton({ promoterId, promoterName }: Prop
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-5 py-2.5 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50"
+                  className="px-5 py-2.5 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   Cancel
                 </button>

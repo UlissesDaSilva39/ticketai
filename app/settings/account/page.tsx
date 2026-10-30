@@ -11,7 +11,7 @@ export default async function Page() {
   if (!user) redirect("/login");
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -19,12 +19,13 @@ export default async function Page() {
 
         <main className="col-span-12 lg:col-span-9 space-y-6">
           <h1 className="text-4xl font-bold uppercase mb-2" style={{ fontFamily: "var(--font-antonio)" }}>Account</h1>
-          <Link href="/settings" className="text-sm text-gray-500 hover:text-black">&larr; Back to settings</Link>
-          <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-            <p className="text-gray-600">Coming soon.</p>
+          <Link href="/settings" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">&larr; Back to settings</Link>
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+            <p className="text-gray-600 dark:text-gray-400">Coming soon.</p>
           </div>
         </main>
       </div>
     </div>
   );
 }
+

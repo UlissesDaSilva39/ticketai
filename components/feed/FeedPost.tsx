@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -54,7 +54,7 @@ export default function FeedPost({
   const fromPrice = event ? priceFrom(event.ticket_types) : null;
 
   return (
-    <article className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <article className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
       <header className="flex items-center gap-3 p-4">
         <Link
           href={author?.username ? "/u/" + author.username : "#"}
@@ -69,8 +69,8 @@ export default function FeedPost({
           >
             {name}
           </Link>
-          <p className="text-xs text-gray-500">
-            {post.author_type !== "user" ? "@" + (author?.username || "user") + " Ãƒâ€š· " : ""}
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {post.author_type !== "user" ? "@" + (author?.username || "user") + " ÃƒÆ’Ã¢â‚¬Å¡Â· " : ""}
             {timeAgo(post.created_at)}
           </p>
         </div>
@@ -93,41 +93,42 @@ export default function FeedPost({
       ) : null}
 
       {event ? (
-        <Link href={"/event/" + event.id} className="block mx-4 mb-3 border border-gray-200 rounded-xl overflow-hidden hover:bg-gray-50">
+        <Link href={"/event/" + event.id} className="block mx-4 mb-3 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:bg-gray-50 dark:hover:bg-gray-800">
           {event.hero_image ? (
             <img src={event.hero_image} alt="" className="w-full aspect-[16/9] object-cover" />
           ) : null}
           <div className="p-3">
             <p className="font-semibold text-sm">{event.title}</p>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               {event.start_date ? formatEventDate(event.start_date) : "Date TBC"}
-              {fromPrice !== null ? " Ãƒâ€š· From £" + fromPrice.toFixed(2) : ""}
+              {fromPrice !== null ? " ÃƒÆ’Ã¢â‚¬Å¡Â· From Â£" + fromPrice.toFixed(2) : ""}
             </p>
           </div>
         </Link>
       ) : null}
 
-      <footer className="flex items-center justify-around border-t border-gray-100 py-2 text-sm text-gray-600">
+      <footer className="flex items-center justify-around border-t border-gray-100 dark:border-gray-800 py-2 text-sm text-gray-600 dark:text-gray-400">
         <button
           onClick={like}
           disabled={busy}
-          className={"flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 " + (liked ? "text-red-500" : "")}
+          className={"flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 " + (liked ? "text-red-500" : "")}
         >
           <Heart className={"h-4 w-4 " + (liked ? "fill-red-500" : "")} />
           <span>{likes}</span>
         </button>
-        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100">
+        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
           <MessageCircle className="h-4 w-4" />
           <span>{post.comment_count}</span>
         </button>
-        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100">
-          <span>ÃƒÆ’Ã†’Ãƒâ€šÃ‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬ÂÃƒâ€šÃ‚ ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</span>
+        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+          <span>ÃƒÆ’Ã†â€™Ãƒâ€ â€™ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÂ ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>
           <span>{post.share_count}</span>
         </button>
       </footer>
 </article>
   );
 }
+
 
 
 

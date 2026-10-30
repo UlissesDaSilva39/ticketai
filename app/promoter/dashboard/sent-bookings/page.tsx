@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -51,7 +51,7 @@ function statusBadge(status: string) {
   }
   if (status === "declined") {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 text-gray-600 px-3 py-1 text-xs font-medium">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 text-xs font-medium">
         <XCircle className="h-3.5 w-3.5" />
         Declined
       </span>
@@ -118,41 +118,41 @@ export default async function SentBookingsPage({
   const declined = allBookings.filter((b) => b.status === "declined").length;
 
   return (
-    <main className="bg-gray-50 min-h-screen">
+    <main className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-4xl px-6 py-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Sent booking requests
           </h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Track all the requests you&apos;ve sent to artists.
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="rounded-2xl border border-gray-200 bg-white p-4">
-            <div className="text-xs text-gray-500">Pending</div>
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+            <div className="text-xs text-gray-500 dark:text-gray-400">Pending</div>
             <div className="mt-1 text-2xl font-bold text-amber-600">
               {pending}
             </div>
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white p-4">
-            <div className="text-xs text-gray-500">Accepted</div>
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+            <div className="text-xs text-gray-500 dark:text-gray-400">Accepted</div>
             <div className="mt-1 text-2xl font-bold text-green-600">
               {accepted}
             </div>
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white p-4">
-            <div className="text-xs text-gray-500">Declined</div>
-            <div className="mt-1 text-2xl font-bold text-gray-500">
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+            <div className="text-xs text-gray-500 dark:text-gray-400">Declined</div>
+            <div className="mt-1 text-2xl font-bold text-gray-500 dark:text-gray-400">
               {declined}
             </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-1 flex mb-4">
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-1 flex mb-4">
           {STATUS_TABS.map((t) => (
             <Link
               key={t.key}
@@ -165,7 +165,7 @@ export default async function SentBookingsPage({
                 "flex-1 rounded-xl py-2 text-center text-sm font-medium transition " +
                 (status === t.key
                   ? "bg-black text-white"
-                  : "text-gray-600 hover:bg-gray-50")
+                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800")
               }
             >
               {t.label}
@@ -175,14 +175,14 @@ export default async function SentBookingsPage({
 
         {/* List */}
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center">
+          <div className="rounded-2xl border border-dashed border-gray-300 bg-white dark:bg-gray-900 p-12 text-center">
             <Music className="mx-auto h-8 w-8 text-gray-400" />
-            <div className="mt-3 text-sm font-medium text-gray-900">
+            <div className="mt-3 text-sm font-medium text-gray-900 dark:text-gray-100">
               {status === "all"
                 ? "No booking requests yet"
                 : `No ${status} requests`}
             </div>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               {status === "all"
                 ? "Send your first request from the booking marketplace."
                 : "Try another filter."}
@@ -201,7 +201,7 @@ export default async function SentBookingsPage({
             {filtered.map((b) => (
               <div
                 key={b.id}
-                className="rounded-2xl border border-gray-200 bg-white p-5"
+                className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5"
               >
                 <div className="flex items-start gap-4">
                   {b.artists?.avatar_url ? (
@@ -222,23 +222,23 @@ export default async function SentBookingsPage({
                       <div>
                         <Link
                           href={`/artist/${b.artist_slug}`}
-                          className="text-base font-bold text-gray-900 hover:underline inline-flex items-center gap-1.5"
+                          className="text-base font-bold text-gray-900 dark:text-gray-100 hover:underline inline-flex items-center gap-1.5"
                         >
                           {b.artists?.name || b.artist_slug}
                           <ArrowUpRight className="h-3.5 w-3.5 text-gray-400" />
                         </Link>
                         {b.artists && (
-                          <div className="mt-0.5 text-xs text-gray-500">
+                          <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                             {[b.artists.artist_type, b.artists.genre, b.artists.city]
                               .filter(Boolean)
-                              .join(" · ")}
+                              .join(" Â· ")}
                           </div>
                         )}
                       </div>
                       {statusBadge(b.status)}
                     </div>
 
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                    <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {new Date(b.date).toLocaleDateString("en-GB", {
@@ -257,7 +257,7 @@ export default async function SentBookingsPage({
                     </div>
 
                     {b.message && (
-                      <p className="mt-3 text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+                      <p className="mt-3 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">
                         {b.message}
                       </p>
                     )}
@@ -265,13 +265,13 @@ export default async function SentBookingsPage({
                     <div className="mt-3 flex flex-wrap gap-2 items-center">
                       <Link
                         href={`/artist/${b.artist_slug}`}
-                        className="rounded-full border border-gray-300 px-3 py-1 text-xs font-medium hover:bg-gray-50 transition"
+                        className="rounded-full border border-gray-300 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition"
                       >
                         View artist
                       </Link>
                       <Link
                         href={`/messages`}
-                        className="rounded-full border border-gray-300 px-3 py-1 text-xs font-medium hover:bg-gray-50 transition"
+                        className="rounded-full border border-gray-300 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition"
                       >
                         Message
                       </Link>
@@ -293,3 +293,4 @@ export default async function SentBookingsPage({
     </main>
   );
 }
+

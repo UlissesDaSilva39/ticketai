@@ -1,9 +1,9 @@
-const SAMPLE = [
-  { band: 'The Static Frames', venue: 'Village Underground', city: 'London',     doors: '7:30pm',  price: '£18', status: 'live' },
-  { band: 'Low Tide',          venue: 'Fabric',              city: 'London',     doors: '10:00pm', price: '£22', status: 'live' },
-  { band: 'Ghost Signals',     venue: 'YES',                 city: 'Manchester', doors: '8:00pm',  price: '£16', status: 'live' },
-  { band: 'Northern Lights',   venue: 'Brudenell',           city: 'Leeds',      doors: '8:30pm',  price: '£14', status: 'live' },
-  { band: 'Hard Knocks',       venue: 'O2 Academy',          city: 'Birmingham', doors: '7:00pm',  price: '£20', status: 'live' },
+﻿const SAMPLE = [
+  { band: 'The Static Frames', venue: 'Village Underground', city: 'London',     doors: '7:30pm',  price: 'Â£18', status: 'live' },
+  { band: 'Low Tide',          venue: 'Fabric',              city: 'London',     doors: '10:00pm', price: 'Â£22', status: 'live' },
+  { band: 'Ghost Signals',     venue: 'YES',                 city: 'Manchester', doors: '8:00pm',  price: 'Â£16', status: 'live' },
+  { band: 'Northern Lights',   venue: 'Brudenell',           city: 'Leeds',      doors: '8:30pm',  price: 'Â£14', status: 'live' },
+  { band: 'Hard Knocks',       venue: 'O2 Academy',          city: 'Birmingham', doors: '7:00pm',  price: 'Â£20', status: 'live' },
 ];
 
 export function LiveGigBoard() {
@@ -24,15 +24,15 @@ export function LiveGigBoard() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/gigs"
               className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-              Browse gigs →
+              Browse gigs â†’
             </a>
             <a href="/bands/apply"
-              className="rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
-              List your band →
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+              List your band â†’
             </a>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
               <tr>
@@ -56,7 +56,7 @@ export function LiveGigBoard() {
                     <button type="button"
                       className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white hover:bg-neutral-800"
                       aria-label={`Buy tickets for ${b.band}`}>
-                      ▶
+                      â–¶
                     </button>
                   </td>
                 </tr>
@@ -64,7 +64,7 @@ export function LiveGigBoard() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Board refreshed 3 minutes ago · Powered by GRID Gigs
+            Board refreshed 3 minutes ago Â· Powered by GRID Gigs
           </div>
         </div>
       </div>

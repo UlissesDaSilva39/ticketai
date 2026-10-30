@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -38,7 +38,7 @@ export default function SearchFilters() {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-6 mb-8">
       <div className="flex flex-col md:flex-row gap-3 mb-4">
         <input
           type="text"
@@ -57,7 +57,7 @@ export default function SearchFilters() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="text-xs uppercase tracking-widest text-gray-500 mr-2">Filters</span>
+        <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mr-2">Filters</span>
 
         <select
           value={city}
@@ -116,13 +116,13 @@ export default function SearchFilters() {
 
         <button
           onClick={apply}
-          className="px-5 py-2 text-sm font-medium border-2 border-black rounded-full hover:bg-gray-50"
+          className="px-5 py-2 text-sm font-medium border-2 border-black rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           Apply
         </button>
         <button
           onClick={clear}
-          className="px-5 py-2 text-sm text-gray-500 hover:text-black"
+          className="px-5 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
         >
           Clear
         </button>
@@ -130,3 +130,4 @@ export default function SearchFilters() {
     </div>
   );
 }
+

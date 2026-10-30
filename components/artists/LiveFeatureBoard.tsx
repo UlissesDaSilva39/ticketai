@@ -1,9 +1,9 @@
-const SAMPLE = [
-  { artist: 'Aaliyah J.',       role: 'Singer',    key: 'Am', genre: 'R&B',      rate: '£350', status: 'live' },
-  { artist: 'Marcus K.',        role: 'Rapper',    key: 'Cm', genre: 'Hip-Hop',  rate: '£280', status: 'live' },
-  { artist: 'Nova Rae',         role: 'Topliner',  key: 'F',  genre: 'Pop',      rate: '£450', status: 'live' },
-  { artist: 'Bristol Soul Co.', role: 'Singer',    key: 'G',  genre: 'Soul',     rate: '£220', status: 'live' },
-  { artist: 'Aaliyah J.',       role: 'Topliner',  key: 'Dm', genre: 'R&B',      rate: '£180', status: 'live' },
+﻿const SAMPLE = [
+  { artist: 'Aaliyah J.',       role: 'Singer',    key: 'Am', genre: 'R&B',      rate: 'Â£350', status: 'live' },
+  { artist: 'Marcus K.',        role: 'Rapper',    key: 'Cm', genre: 'Hip-Hop',  rate: 'Â£280', status: 'live' },
+  { artist: 'Nova Rae',         role: 'Topliner',  key: 'F',  genre: 'Pop',      rate: 'Â£450', status: 'live' },
+  { artist: 'Bristol Soul Co.', role: 'Singer',    key: 'G',  genre: 'Soul',     rate: 'Â£220', status: 'live' },
+  { artist: 'Aaliyah J.',       role: 'Topliner',  key: 'Dm', genre: 'R&B',      rate: 'Â£180', status: 'live' },
 ];
 
 export function LiveFeatureBoard() {
@@ -24,15 +24,15 @@ export function LiveFeatureBoard() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/artists/book"
               className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-              Browse artists →
+              Browse artists â†’
             </a>
             <a href="/artists/apply"
-              className="rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
-              List yourself →
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+              List yourself â†’
             </a>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
               <tr>
@@ -56,7 +56,7 @@ export function LiveFeatureBoard() {
                     <button type="button"
                       className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white hover:bg-neutral-800"
                       aria-label={`Preview ${a.artist}`}>
-                      ▶
+                      â–¶
                     </button>
                   </td>
                 </tr>
@@ -64,7 +64,7 @@ export function LiveFeatureBoard() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Board refreshed 2 minutes ago · Powered by GRID Artists
+            Board refreshed 2 minutes ago Â· Powered by GRID Artists
           </div>
         </div>
       </div>

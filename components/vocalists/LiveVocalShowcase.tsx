@@ -1,9 +1,9 @@
-const SAMPLE = [
-  { vocalist: 'Aaliyah J.',       type: 'Topliner',     key: 'Am', range: 'Alto',     rate: '£350', status: 'live' },
-  { vocalist: 'Marcus K.',        type: 'Session',      key: 'Cm', range: 'Tenor',    rate: '£280', status: 'live' },
-  { vocalist: 'Nova Rae',         type: 'Featured Hook',key: 'F',  range: 'Soprano',  rate: '£450', status: 'live' },
-  { vocalist: 'Bristol Soul Co.', type: 'Session',      key: 'G',  range: 'Baritone', rate: '£220', status: 'live' },
-  { vocalist: 'Aaliyah J.',       type: 'Featured Hook',key: 'Dm', range: 'Alto',     rate: '£180', status: 'live' },
+﻿const SAMPLE = [
+  { vocalist: 'Aaliyah J.',       type: 'Topliner',     key: 'Am', range: 'Alto',     rate: 'Â£350', status: 'live' },
+  { vocalist: 'Marcus K.',        type: 'Session',      key: 'Cm', range: 'Tenor',    rate: 'Â£280', status: 'live' },
+  { vocalist: 'Nova Rae',         type: 'Featured Hook',key: 'F',  range: 'Soprano',  rate: 'Â£450', status: 'live' },
+  { vocalist: 'Bristol Soul Co.', type: 'Session',      key: 'G',  range: 'Baritone', rate: 'Â£220', status: 'live' },
+  { vocalist: 'Aaliyah J.',       type: 'Featured Hook',key: 'Dm', range: 'Alto',     rate: 'Â£180', status: 'live' },
 ];
 
 export function LiveVocalShowcase() {
@@ -24,15 +24,15 @@ export function LiveVocalShowcase() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/vocalists/browse"
               className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-              Browse vocalists →
+              Browse vocalists â†’
             </a>
             <a href="/vocalists/apply"
-              className="rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
-              Get booked →
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+              Get booked â†’
             </a>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
               <tr>
@@ -56,7 +56,7 @@ export function LiveVocalShowcase() {
                     <button type="button"
                       className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white hover:bg-neutral-800"
                       aria-label={`Preview ${v.vocalist}`}>
-                      ▶
+                      â–¶
                     </button>
                   </td>
                 </tr>
@@ -64,7 +64,7 @@ export function LiveVocalShowcase() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Showcase refreshed 2 minutes ago · Powered by GRID Vocalists
+            Showcase refreshed 2 minutes ago Â· Powered by GRID Vocalists
           </div>
         </div>
       </div>

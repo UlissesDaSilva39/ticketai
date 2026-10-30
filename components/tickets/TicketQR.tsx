@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useState } from "react";
 
 export default function TicketQR({ value, size = 220 }: { value: string; size?: number }) {
@@ -34,14 +34,14 @@ export default function TicketQR({ value, size = 220 }: { value: string; size?: 
 
   if (!dataUrl) {
     return (
-      <div className="w-[220px] h-[220px] flex items-center justify-center border border-gray-200 bg-gray-50 text-xs text-gray-500 rounded-lg">
-        Generating QR…
+      <div className="w-[220px] h-[220px] flex items-center justify-center border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 text-xs text-gray-500 dark:text-gray-400 rounded-lg">
+        Generating QRâ€¦
       </div>
     );
   }
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={dataUrl} alt="Ticket QR code" className="rounded-lg border border-gray-200" />
+    <img src={dataUrl} alt="Ticket QR code" className="rounded-lg border border-gray-200 dark:border-gray-800" />
   );
 }

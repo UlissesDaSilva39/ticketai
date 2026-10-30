@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -48,7 +48,7 @@ export default async function DashboardPage() {
           <h1 className="text-4xl md:text-5xl font-bold uppercase mb-2" style={{ fontFamily: "var(--font-antonio)" }}>
             Dashboard
           </h1>
-          <p className="text-gray-600 mb-8">Welcome back. Here is what is happening on GRID.</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">Welcome back. Here is what is happening on GRID.</p>
 
           <h2 className="text-lg font-bold mb-3">Platform stats</h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
@@ -56,9 +56,9 @@ export default async function DashboardPage() {
               <Link
                 key={s.label}
                 href={s.href}
-                className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition"
+                className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 hover:border-gray-300 transition"
               >
-                <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">{s.label}</p>
+                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">{s.label}</p>
                 <p className="text-2xl font-bold">{s.value}</p>
               </Link>
             ))}
@@ -66,49 +66,49 @@ export default async function DashboardPage() {
 
           <h2 className="text-lg font-bold mb-3">Your dashboards</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-            <Link href="/organizer" className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition">
+            <Link href="/organizer" className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 hover:border-gray-300 transition">
               <p className="font-semibold mb-1">Organizer dashboard</p>
-              <p className="text-sm text-gray-600">Create events, manage bookings, track analytics.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Create events, manage bookings, track analytics.</p>
             </Link>
-            <Link href="/artist/dashboard" className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition">
+            <Link href="/artist/dashboard" className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 hover:border-gray-300 transition">
               <p className="font-semibold mb-1">Artist dashboard</p>
-              <p className="text-sm text-gray-600">Manage profile, tracks, inbox, and bookings.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage profile, tracks, inbox, and bookings.</p>
             </Link>
-            <Link href="/promoter/dashboard" className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition">
+            <Link href="/promoter/dashboard" className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 hover:border-gray-300 transition">
               <p className="font-semibold mb-1">Promoter dashboard</p>
-              <p className="text-sm text-gray-600">Manage events, bookings, and audience.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage events, bookings, and audience.</p>
             </Link>
-            <Link href="/venue/dashboard" className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition">
+            <Link href="/venue/dashboard" className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 hover:border-gray-300 transition">
               <p className="font-semibold mb-1">Venue dashboard</p>
-              <p className="text-sm text-gray-600">Manage your venue and upcoming events.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage your venue and upcoming events.</p>
             </Link>
-            <Link href="/admin" className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition">
+            <Link href="/admin" className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 hover:border-gray-300 transition">
               <p className="font-semibold mb-1">Admin</p>
-              <p className="text-sm text-gray-600">Platform administration.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Platform administration.</p>
             </Link>
-            <Link href="/admin/ingestion" className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition">
+            <Link href="/admin/ingestion" className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 hover:border-gray-300 transition">
               <p className="font-semibold mb-1">Data ingestion</p>
-              <p className="text-sm text-gray-600">Ticketmaster and RSS sync runs.</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Ticketmaster and RSS sync runs.</p>
             </Link>
           </div>
 
           {recentRuns && recentRuns.length > 0 && (
             <>
               <h2 className="text-lg font-bold mb-3">Recent ingestion runs</h2>
-              <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+              <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 text-left">
+                  <thead className="bg-gray-50 dark:bg-gray-950 text-left">
                     <tr>
-                      <th className="px-4 py-2 font-semibold text-gray-700">Started</th>
-                      <th className="px-4 py-2 font-semibold text-gray-700">Status</th>
-                      <th className="px-4 py-2 font-semibold text-gray-700">Seen</th>
-                      <th className="px-4 py-2 font-semibold text-gray-700">Inserted</th>
+                      <th className="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Started</th>
+                      <th className="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Status</th>
+                      <th className="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Seen</th>
+                      <th className="px-4 py-2 font-semibold text-gray-700 dark:text-gray-300">Inserted</th>
                     </tr>
                   </thead>
                   <tbody>
                     {recentRuns.map((r) => (
-                      <tr key={r.id} className="border-t border-gray-100">
-                        <td className="px-4 py-2 text-gray-600 text-xs">
+                      <tr key={r.id} className="border-t border-gray-100 dark:border-gray-800">
+                        <td className="px-4 py-2 text-gray-600 dark:text-gray-400 text-xs">
                           {r.started_at ? new Date(r.started_at).toLocaleString("en-GB") : "-"}
                         </td>
                         <td className="px-4 py-2">

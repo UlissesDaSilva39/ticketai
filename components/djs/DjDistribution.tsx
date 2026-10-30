@@ -1,8 +1,8 @@
-const CHANNELS = [
-  { icon: '🎧', title: 'Playlists', body: 'Your mixes appear in GRID editorial and streaming partner playlists.',          metric: '46% of GRID gigs' },
-  { icon: '📻', title: 'Radio',     body: 'Auto-pitched to BBC Radio 1, Rinse FM, NTS, and community stations.',          metric: 'Avg. 3 spins/mo' },
-  { icon: '📺', title: 'Sync',      body: 'Sync pitch to supervisors when a brief matches your style.',                   metric: 'Avg. 1 brief/mo' },
-  { icon: '💌', title: 'Fan CRM',   body: 'Export followers, retarget them, turn one gig into a club residency.',         metric: '41% repeat rate' },
+﻿const CHANNELS = [
+  { icon: 'ðŸŽ§', title: 'Playlists', body: 'Your mixes appear in GRID editorial and streaming partner playlists.',          metric: '46% of GRID gigs' },
+  { icon: 'ðŸ“»', title: 'Radio',     body: 'Auto-pitched to BBC Radio 1, Rinse FM, NTS, and community stations.',          metric: 'Avg. 3 spins/mo' },
+  { icon: 'ðŸ“º', title: 'Sync',      body: 'Sync pitch to supervisors when a brief matches your style.',                   metric: 'Avg. 1 brief/mo' },
+  { icon: 'ðŸ’Œ', title: 'Fan CRM',   body: 'Export followers, retarget them, turn one gig into a club residency.',         metric: '41% repeat rate' },
 ];
 
 export function DjDistribution() {
@@ -14,13 +14,13 @@ export function DjDistribution() {
           We don&apos;t just host mixes. We get them heard.
         </h2>
         <p className="mt-4 text-lg text-neutral-600">
-          Every DJ on GRID gets pushed through four channels — playlists,
+          Every DJ on GRID gets pushed through four channels â€” playlists,
           radio, sync, and your own fan list.
         </p>
       </div>
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {CHANNELS.map((c) => (
-          <div key={c.title} className="rounded-2xl border border-neutral-200 bg-white p-6">
+          <div key={c.title} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-6">
             <span className="text-2xl" aria-hidden>{c.icon}</span>
             <h3 className="mt-3 text-lg font-bold">{c.title}</h3>
             <p className="mt-2 text-sm text-neutral-600">{c.body}</p>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -65,15 +65,15 @@ export default function PromoterJoinPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
+        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
       </main>
     );
   }
 
   if (!signedIn) {
     return (
-      <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
         <div className="mx-auto max-w-lg mt-20 text-center">
           <h1
             className="text-5xl font-bold uppercase"
@@ -81,7 +81,7 @@ export default function PromoterJoinPage() {
           >
             Sign in first
           </h1>
-          <p className="mt-4 text-gray-600">
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
             You need an account before you can become a promoter. It takes 30
             seconds.
           </p>
@@ -97,13 +97,13 @@ export default function PromoterJoinPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
       <div className="mx-auto max-w-2xl">
         <Link
           href="/for-promoters"
-          className="text-sm text-gray-500 hover:text-black"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
         >
-          ← Back to promoters info
+          â† Back to promoters info
         </Link>
 
         <div className="mt-6 mb-8">
@@ -113,7 +113,7 @@ export default function PromoterJoinPage() {
           >
             Become a promoter
           </h1>
-          <p className="mt-4 text-gray-600">
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
             Free to use. No commission. No monthly fee. Fill this in and
             you&apos;re ready to sell.
           </p>
@@ -126,7 +126,7 @@ export default function PromoterJoinPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <section className="rounded-xl border bg-white p-6">
+          <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-4">Public profile</h2>
 
             <div className="space-y-4">
@@ -141,7 +141,7 @@ export default function PromoterJoinPage() {
                   required
                   className="w-full rounded-lg border px-4 py-3 outline-none focus:border-black"
                 />
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   This is what attendees see on every event you publish.
                 </p>
               </div>
@@ -169,11 +169,11 @@ export default function PromoterJoinPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-4">
               Social handles (optional)
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               We&apos;ll show these on your promoter profile so attendees can
               follow you.
             </p>
@@ -184,7 +184,7 @@ export default function PromoterJoinPage() {
                   Instagram
                 </label>
                 <div className="flex items-center rounded-lg border overflow-hidden">
-                  <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm">
+                  <span className="px-3 py-3 bg-gray-50 dark:bg-gray-950 text-gray-500 dark:text-gray-400 text-sm">
                     @
                   </span>
                   <input
@@ -199,7 +199,7 @@ export default function PromoterJoinPage() {
               <div>
                 <label className="block text-sm font-medium mb-2">TikTok</label>
                 <div className="flex items-center rounded-lg border overflow-hidden">
-                  <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm">
+                  <span className="px-3 py-3 bg-gray-50 dark:bg-gray-950 text-gray-500 dark:text-gray-400 text-sm">
                     @
                   </span>
                   <input
@@ -216,7 +216,7 @@ export default function PromoterJoinPage() {
                   YouTube
                 </label>
                 <div className="flex items-center rounded-lg border overflow-hidden">
-                  <span className="px-3 py-3 bg-gray-50 text-gray-500 text-sm">
+                  <span className="px-3 py-3 bg-gray-50 dark:bg-gray-950 text-gray-500 dark:text-gray-400 text-sm">
                     @
                   </span>
                   <input
@@ -230,9 +230,9 @@ export default function PromoterJoinPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6">
+          <section className="rounded-xl border bg-white dark:bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-4">Contact details</h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               Shown on your public profile so promoters and attendees can
               reach you. Optional, but recommended.
             </p>
@@ -297,7 +297,7 @@ export default function PromoterJoinPage() {
             </button>
           </div>
 
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
             Free forever. No card required. You only pay if you use premium
             features later.
           </p>

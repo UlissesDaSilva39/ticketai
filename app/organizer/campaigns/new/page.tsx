@@ -1,4 +1,4 @@
- "use client";
+﻿ "use client";
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
@@ -238,11 +238,11 @@ export default function NewCampaignPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
       <div className="mx-auto max-w-4xl">
         <Link
           href="/organizer/campaigns"
-          className="text-sm text-gray-500 hover:text-black"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
         >
           Back to Campaigns
         </Link>
@@ -252,7 +252,7 @@ export default function NewCampaignPage() {
             Create Campaign
           </h1>
 
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
             Build a campaign around one of your GRID
             events.
           </p>
@@ -266,7 +266,7 @@ export default function NewCampaignPage() {
 
         {aiApplied && (
           <div className="mb-6 rounded-lg border-2 border-green-500 bg-green-50 p-4 text-green-800">
-            <p className="font-semibold">âœ“ AI campaign applied</p>
+            <p className="font-semibold">Ã¢Å“â€œ AI campaign applied</p>
             <p className="mt-1 text-sm">
               Your form has been filled in. Review the details below and edit anything you like before creating the campaign.
             </p>
@@ -283,7 +283,7 @@ export default function NewCampaignPage() {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
+          <section className={"rounded-xl border bg-white dark:bg-gray-900 p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Campaign Basics
             </h2>
@@ -315,7 +315,7 @@ export default function NewCampaignPage() {
                     setEventId(e.target.value)
                   }
                   disabled={loadingEvents}
-                  className="w-full rounded-lg border px-4 py-3 bg-white"
+                  className="w-full rounded-lg border px-4 py-3 bg-white dark:bg-gray-900"
                 >
                   <option value="">
                     {loadingEvents
@@ -346,7 +346,7 @@ export default function NewCampaignPage() {
                   onChange={(e) =>
                     setObjective(e.target.value)
                   }
-                  className="w-full rounded-lg border px-4 py-3 bg-white"
+                  className="w-full rounded-lg border px-4 py-3 bg-white dark:bg-gray-900"
                 >
                   <option value="ticket_sales">
                     Ticket Sales
@@ -368,7 +368,7 @@ export default function NewCampaignPage() {
             </div>
           </section>
 
-          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
+          <section className={"rounded-xl border bg-white dark:bg-gray-900 p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Budget
             </h2>
@@ -410,7 +410,7 @@ export default function NewCampaignPage() {
             </div>
           </section>
 
-          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
+          <section className={"rounded-xl border bg-white dark:bg-gray-900 p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Audience</h2>
               <button
@@ -424,7 +424,7 @@ export default function NewCampaignPage() {
             </div>
 
             {suggestionReasoning.length > 0 && (
-              <ul className="mt-4 space-y-1 rounded-lg bg-gray-50 p-4 text-xs text-gray-600">
+              <ul className="mt-4 space-y-1 rounded-lg bg-gray-50 dark:bg-gray-950 p-4 text-xs text-gray-600 dark:text-gray-400">
                 {suggestionReasoning.map((r, i) => (
                   <li key={i}>- {r}</li>
                 ))}
@@ -497,14 +497,14 @@ export default function NewCampaignPage() {
                   className="w-full rounded-lg border px-4 py-3"
                 />
 
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                   Separate interests with commas.
                 </p>
               </div>
             </div>
           </section>
 
-          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
+          <section className={"rounded-xl border bg-white dark:bg-gray-900 p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Channels
             </h2>
@@ -513,7 +513,7 @@ export default function NewCampaignPage() {
               {channelOptions.map((channel) => (
                 <label
                   key={channel}
-                  className="flex cursor-pointer items-center gap-3 rounded-lg border p-4 hover:bg-gray-50"
+                  className="flex cursor-pointer items-center gap-3 rounded-lg border p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   <input
                     type="checkbox"
@@ -531,7 +531,7 @@ export default function NewCampaignPage() {
             </div>
           </section>
 
-          <section className={"rounded-xl border bg-white p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
+          <section className={"rounded-xl border bg-white dark:bg-gray-900 p-6 transition-colors duration-500 " + (aiApplied ? "border-green-500 ring-2 ring-green-200" : "")}>
             <h2 className="text-lg font-semibold">
               Campaign Schedule
             </h2>

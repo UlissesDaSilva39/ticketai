@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPromoterBySlug } from '@/lib/promoters';
 import { getDjBySlug } from '@/lib/djs';
@@ -27,8 +27,8 @@ export default async function BookingRequestPage({ params }: Params) {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <Link href={bookHref} className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black">
-        ← Back to profile
+      <Link href={bookHref} className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black dark:hover:text-white">
+        â† Back to profile
       </Link>
 
       <h1 className="mt-6 text-3xl font-black tracking-tight md:text-4xl">
@@ -38,7 +38,7 @@ export default async function BookingRequestPage({ params }: Params) {
         Requesting a booking with <span className="font-semibold">{displayName}</span>.
       </p>
 
-      <form className="mt-8 space-y-5 rounded-3xl border border-neutral-200 bg-white p-6 md:p-8">
+      <form className="mt-8 space-y-5 rounded-3xl border border-neutral-200 bg-white dark:bg-gray-900 p-6 md:p-8">
         <input type="hidden" name="kind" value={kind} />
         <input type="hidden" name="slug" value={slug} />
 
@@ -92,7 +92,7 @@ export default async function BookingRequestPage({ params }: Params) {
             id="budget"
             name="budget"
             type="text"
-            placeholder="e.g. £800"
+            placeholder="e.g. Â£800"
             className="mt-2 w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm outline-none focus:border-neutral-900"
           />
         </div>

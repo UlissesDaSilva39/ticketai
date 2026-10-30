@@ -1,8 +1,8 @@
-const CHANNELS = [
-  { icon: '🎤', title: 'Promoters',  body: 'Your venue appears to verified promoters already booking your city.',  metric: '38% of GRID bookings' },
-  { icon: '🎸', title: 'Artists',    body: 'Touring acts and bands searching your city and size.',                   metric: '42% of GRID gigs' },
-  { icon: '🎪', title: 'Festivals',  body: 'Festival organizers searching for warm-up venues in your city.',        metric: 'Avg. 2 inquiries' },
-  { icon: '💌', title: 'Fan CRM',    body: 'Export past promoters, retarget them, turn one booking into a season.', metric: '47% repeat rate' },
+﻿const CHANNELS = [
+  { icon: 'ðŸŽ¤', title: 'Promoters',  body: 'Your venue appears to verified promoters already booking your city.',  metric: '38% of GRID bookings' },
+  { icon: 'ðŸŽ¸', title: 'Artists',    body: 'Touring acts and bands searching your city and size.',                   metric: '42% of GRID gigs' },
+  { icon: 'ðŸŽª', title: 'Festivals',  body: 'Festival organizers searching for warm-up venues in your city.',        metric: 'Avg. 2 inquiries' },
+  { icon: 'ðŸ’Œ', title: 'Fan CRM',    body: 'Export past promoters, retarget them, turn one booking into a season.', metric: '47% repeat rate' },
 ];
 
 export function VenueDistribution() {
@@ -14,13 +14,13 @@ export function VenueDistribution() {
           We don&apos;t just list venues. We fill your empty nights.
         </h2>
         <p className="mt-4 text-lg text-neutral-600">
-          Every venue on GRID gets pushed through four channels — promoters,
+          Every venue on GRID gets pushed through four channels â€” promoters,
           artists, festivals, and your own CRM.
         </p>
       </div>
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {CHANNELS.map((c) => (
-          <div key={c.title} className="rounded-2xl border border-neutral-200 bg-white p-6">
+          <div key={c.title} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-6">
             <span className="text-2xl" aria-hidden>{c.icon}</span>
             <h3 className="mt-3 text-lg font-bold">{c.title}</h3>
             <p className="mt-2 text-sm text-neutral-600">{c.body}</p>

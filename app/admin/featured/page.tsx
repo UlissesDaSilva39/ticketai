@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 
 type Placement = {
@@ -61,9 +61,9 @@ export default function FeaturedAdminPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-2">Featured placements</h1>
-      <p className="text-sm text-gray-600 mb-6">Mark an artist as featured. They appear at the top of /music and /discover for the chosen duration.</p>
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">Mark an artist as featured. They appear at the top of /music and /discover for the chosen duration.</p>
 
-      <form onSubmit={handleSubmit} className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6 space-y-3">
+      <form onSubmit={handleSubmit} className="bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-4 mb-6 space-y-3">
         <div>
           <label className="block text-sm font-medium mb-1">Artist name</label>
           <input type="text" value={artistName} onChange={(e) => setArtistName(e.target.value)}
@@ -99,16 +99,16 @@ export default function FeaturedAdminPage() {
       {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">{error}</div>}
 
       <h2 className="text-lg font-semibold mb-3">Active placements</h2>
-      {loading ? <p className="text-gray-500">Loading...</p> :
-       placements.length === 0 ? <p className="text-gray-500">No active placements.</p> :
+      {loading ? <p className="text-gray-500 dark:text-gray-400">Loading...</p> :
+       placements.length === 0 ? <p className="text-gray-500 dark:text-gray-400">No active placements.</p> :
        <div className="space-y-2">
          {placements.map((p) => (
-           <div key={p.id} className="border border-gray-200 rounded-lg p-3 flex justify-between items-center">
+           <div key={p.id} className="border border-gray-200 dark:border-gray-800 rounded-lg p-3 flex justify-between items-center">
              <div>
                <p className="font-semibold">{p.artist_name}</p>
-               <p className="text-xs text-gray-500">{p.placement_type} · until {new Date(p.ends_at).toLocaleDateString()}</p>
+               <p className="text-xs text-gray-500 dark:text-gray-400">{p.placement_type} Â· until {new Date(p.ends_at).toLocaleDateString()}</p>
              </div>
-             <p className="text-sm font-semibold">£{(p.amount_paid_gbp ?? 0).toFixed(2)}</p>
+             <p className="text-sm font-semibold">Â£{(p.amount_paid_gbp ?? 0).toFixed(2)}</p>
            </div>
          ))}
        </div>
@@ -116,3 +116,4 @@ export default function FeaturedAdminPage() {
     </div>
   );
 }
+

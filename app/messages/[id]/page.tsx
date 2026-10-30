@@ -1,4 +1,4 @@
-import { redirect, notFound } from "next/navigation";
+﻿import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -44,15 +44,15 @@ export default async function ConversationPage({ params }: Props) {
     .limit(500);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-6">
           <Link
             href="/messages"
-            className="text-sm text-gray-500 hover:text-black"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
             data-testid="back-to-inbox"
           >
-            ← Inbox
+            â† Inbox
           </Link>
         </div>
         <div className="flex items-center gap-3 mb-6">
@@ -64,7 +64,7 @@ export default async function ConversationPage({ params }: Props) {
               className="h-12 w-12 rounded-full object-cover"
             />
           ) : (
-            <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-lg font-bold text-gray-600">
+            <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center text-lg font-bold text-gray-600 dark:text-gray-400">
               {otherName.slice(0, 1).toUpperCase()}
             </div>
           )}
@@ -76,7 +76,7 @@ export default async function ConversationPage({ params }: Props) {
             >
               {otherName}
             </h1>
-            <p className="text-xs text-gray-500">Direct message</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Direct message</p>
           </div>
         </div>
 
@@ -90,3 +90,4 @@ export default async function ConversationPage({ params }: Props) {
     </div>
   );
 }
+

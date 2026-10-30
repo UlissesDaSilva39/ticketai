@@ -12,7 +12,7 @@ export function ArtistReviews({ reviews }: { reviews?: Review[] }) {
         Reviews from clients
       </h2>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-neutral-200 bg-white p-5">
+      <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
         <p className="text-3xl font-black tracking-tight">{avg.toFixed(1)}</p>
         <div>
           <p className="text-sm text-amber-500">
@@ -27,7 +27,7 @@ export function ArtistReviews({ reviews }: { reviews?: Review[] }) {
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {reviews.map((r, i) => (
-          <figure key={i} className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <figure key={i} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
             <div className="flex items-center justify-between">
               <div className="text-sm text-amber-500">
                 {'â˜…'.repeat(r.rating ?? 5)}

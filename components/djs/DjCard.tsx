@@ -1,11 +1,11 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import type { DJ } from '@/lib/djs';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
 export function DjCard({ dj }: { dj: DJ }) {
   const set = dj.nextSet;
   return (
-    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition hover:border-neutral-900">
+    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5 transition hover:border-neutral-900">
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-lg font-semibold">{dj.name}</h3>
@@ -35,7 +35,7 @@ export function DjCard({ dj }: { dj: DJ }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{set.venue}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {set.date} â€š· Set {set.setTime} â€š· {set.city}
+            {set.date} Ã¢â‚¬Å¡Â· Set {set.setTime} Ã¢â‚¬Å¡Â· {set.city}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <span className="text-sm font-semibold text-neutral-900">{set.price}</span>
@@ -47,7 +47,7 @@ export function DjCard({ dj }: { dj: DJ }) {
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-500">
-          No upcoming sets yet ¢¢â€š¬¢â‚¬{' '}
+          No upcoming sets yet Â¢Â¢Ã¢â‚¬Å¡Â¬Â¢Ã¢â€šÂ¬Â{' '}
           <Link href={`/djs/${dj.slug}`} className="underline">
             follow to be notified
           </Link>
@@ -81,8 +81,8 @@ export function DjCard({ dj }: { dj: DJ }) {
           size="sm"
         />
         <Link href={`/djs/${dj.slug}`}
-          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black hover:underline">
-          View profile ¢¢â‚¬ ¢â‚¬â„¢
+          className="ml-auto text-xs font-semibold text-neutral-700 underline-offset-4 hover:text-black dark:hover:text-white hover:underline">
+          View profile Â¢Â¢Ã¢â€šÂ¬Â Â¢Ã¢â€šÂ¬Ã¢â€žÂ¢
         </Link>
       </div>
 

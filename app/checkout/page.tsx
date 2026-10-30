@@ -127,13 +127,13 @@ function CheckoutContent() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <h1 className="text-5xl font-bold mb-2" style={{ fontFamily: "var(--font-antonio)" }}>CHECKOUT</h1>
-      <p className="text-gray-500 mb-8">{event.title}</p>
+      <p className="text-gray-500 dark:text-gray-400 mb-8">{event.title}</p>
       <div className="space-y-8">
         <section>
           <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>1. SELECT TICKET TYPE</h2>
           <div className="space-y-3">
             {event.ticket_types?.map((t) => (
-              <label key={t.name} className={"flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer " + (selectedTickets[t.name] ? "border-black bg-gray-50" : "border-gray-200")}>
+              <label key={t.name} className={"flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer " + (selectedTickets[t.name] ? "border-black bg-gray-50 dark:bg-gray-950" : "border-gray-200 dark:border-gray-800")}>
                 <div className="flex items-center gap-3">
                   <input type="radio" name="ticketType" checked={!!selectedTickets[t.name]} onChange={() => setSelectedTickets({ [t.name]: 1 })} className="w-5 h-5" />
                   <p className="font-medium">{t.name}</p>
@@ -155,7 +155,7 @@ function CheckoutContent() {
               onChange={setSelectedSeats}
             />
             {selectedSeats.length > 0 && (
-              <p className="text-sm text-gray-600 mt-3">Selected seats: {selectedSeats.map((s) => s.label).join(", ")}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">Selected seats: {selectedSeats.map((s) => s.label).join(", ")}</p>
             )}
           </section>
         )}
@@ -163,13 +163,13 @@ function CheckoutContent() {
         <section>
           <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>2. QUANTITY</h2>
           <div className="flex items-center gap-4">
-            <button onClick={() => { if (currentQty > 1) setSelectedTickets({ ...selectedTickets, [firstName]: currentQty - 1 }); }} className="w-12 h-12 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-black text-xl">-</button>
+            <button onClick={() => { if (currentQty > 1) setSelectedTickets({ ...selectedTickets, [firstName]: currentQty - 1 }); }} className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-800 flex items-center justify-center hover:border-black text-xl">-</button>
             <span className="text-2xl font-bold w-12 text-center">{currentQty}</span>
-            <button onClick={() => setSelectedTickets({ ...selectedTickets, [firstName]: currentQty + 1 })} className="w-12 h-12 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-black text-xl">+</button>
+            <button onClick={() => setSelectedTickets({ ...selectedTickets, [firstName]: currentQty + 1 })} className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-800 flex items-center justify-center hover:border-black text-xl">+</button>
           </div>
         </section>
 
-        <section className="bg-gray-50 rounded-lg p-6">
+        <section className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>ORDER SUMMARY</h2>
           <div className="space-y-3">
             {Object.entries(selectedTickets).filter(([, qty]) => qty > 0).map(([name, qty]) => {
@@ -179,13 +179,13 @@ function CheckoutContent() {
             })}
 
             {!appliedPromo && (
-              <div className="pt-3 border-t border-gray-200">
+              <div className="pt-3 border-t border-gray-200 dark:border-gray-800">
                 <div className="flex gap-2">
                   <input
                     value={promoCode}
                     onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                     placeholder="Promo code"
-                    className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-black"
+                    className="flex-1 rounded-lg border border-gray-300 bg-white dark:bg-gray-900 px-4 py-2 text-sm outline-none focus:border-black"
                   />
                   <button
                     type="button"
@@ -201,13 +201,13 @@ function CheckoutContent() {
             )}
 
             {appliedPromo && (
-              <div className="flex justify-between text-sm text-green-700 pt-3 border-t border-gray-200">
+              <div className="flex justify-between text-sm text-green-700 pt-3 border-t border-gray-200 dark:border-gray-800">
                 <span>Discount ({appliedPromo.code})</span>
                 <span>-£{discountAmount.toFixed(2)}</span>
               </div>
             )}
 
-            <div className="flex justify-between text-sm text-gray-500"><span>Processing fee (2.9%)</span><span>£{processingFee.toFixed(2)}</span></div>
+            <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400"><span>Processing fee (2.9%)</span><span>£{processingFee.toFixed(2)}</span></div>
             <div className="flex justify-between font-bold text-xl pt-3 border-t border-gray-300"><span>Total</span><span>£{total.toFixed(2)}</span></div>
           </div>
         </section>
@@ -227,4 +227,5 @@ export default function CheckoutPage() {
     </Suspense>
   );
 }
+
 

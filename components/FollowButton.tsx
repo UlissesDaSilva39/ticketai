@@ -79,7 +79,7 @@ export default function FollowButton({
         className={
           "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full transition disabled:opacity-50 " +
           (following
-            ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+            ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200"
             : "bg-black text-white hover:bg-gray-800")
         }
       >
@@ -103,7 +103,7 @@ export default function FollowButton({
       className={
         "inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full transition disabled:opacity-50 " +
         (following
-          ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+          ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200"
           : "bg-black text-white hover:bg-gray-800")
       }
     >
@@ -121,3 +121,4 @@ export default function FollowButton({
     </button>
   );
 }
+

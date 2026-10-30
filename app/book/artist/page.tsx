@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -64,17 +64,17 @@ export default function BookArtistPage() {
   }
 
   return (
-    <main className="bg-gray-50 min-h-screen">
+    <main className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-4xl px-6 py-8">
-        <div className="rounded-2xl border border-gray-200 bg-white p-6">
-          <h1 className="text-2xl font-bold text-gray-900">Book an artist</h1>
-          <p className="mt-1 text-sm text-gray-500">
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Book an artist</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Tell us about your event and we will match you with artists.
           </p>
 
           <form onSubmit={findArtists} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 <MapPin className="inline h-3 w-3 mr-1" />
                 Location
               </label>
@@ -88,7 +88,7 @@ export default function BookArtistPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 <Calendar className="inline h-3 w-3 mr-1" />
                 Date
               </label>
@@ -102,7 +102,7 @@ export default function BookArtistPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 <Music className="inline h-3 w-3 mr-1" />
                 Genre
               </label>
@@ -116,7 +116,7 @@ export default function BookArtistPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                 <Users className="inline h-3 w-3 mr-1" />
                 Venue capacity
               </label>
@@ -145,7 +145,7 @@ export default function BookArtistPage() {
           <div className="mt-6">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="h-4 w-4 text-fuchsia-500" />
-              <span className="text-xs font-semibold tracking-wider text-gray-500">
+              <span className="text-xs font-semibold tracking-wider text-gray-500 dark:text-gray-400">
                 AI MATCHES {matches.length > 0 ? `(${matches.length})` : ""}
               </span>
             </div>
@@ -153,16 +153,16 @@ export default function BookArtistPage() {
             {loading ? (
               <div className="space-y-4">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-32 rounded-2xl bg-gray-100 animate-pulse" />
+                  <div key={i} className="h-32 rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse" />
                 ))}
               </div>
             ) : matches.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center">
+              <div className="rounded-2xl border border-dashed border-gray-300 bg-white dark:bg-gray-900 p-12 text-center">
                 <Sparkles className="mx-auto h-8 w-8 text-gray-400" />
-                <div className="mt-3 text-sm font-medium text-gray-900">
+                <div className="mt-3 text-sm font-medium text-gray-900 dark:text-gray-100">
                   No matching artists
                 </div>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   Try broadening the genre or location.
                 </p>
               </div>
@@ -171,7 +171,7 @@ export default function BookArtistPage() {
                 {matches.map((m) => (
                   <div
                     key={m.id}
-                    className="rounded-2xl border border-gray-200 bg-white p-5"
+                    className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5"
                   >
                     <div className="flex items-start gap-4">
                       {m.avatar_url ? (
@@ -191,7 +191,7 @@ export default function BookArtistPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <Link
                             href={`/artist/${m.slug}`}
-                            className="text-base font-bold text-gray-900 hover:underline"
+                            className="text-base font-bold text-gray-900 dark:text-gray-100 hover:underline"
                           >
                             {m.name}
                           </Link>
@@ -202,8 +202,8 @@ export default function BookArtistPage() {
                           )}
                         </div>
 
-                        <div className="mt-1 text-xs text-gray-500">
-                          {[m.artist_type, m.genre, m.city].filter(Boolean).join(" · ")}
+                        <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          {[m.artist_type, m.genre, m.city].filter(Boolean).join(" Â· ")}
                         </div>
 
                         {m.reasons.length > 0 && (
@@ -222,7 +222,7 @@ export default function BookArtistPage() {
                       </div>
 
                       <div className="text-right flex-shrink-0">
-                        <div className="text-lg font-bold text-gray-900">
+                        <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
                           {m.match}%
                         </div>
                         <div className="text-[10px] uppercase tracking-wider text-gray-400">
@@ -234,7 +234,7 @@ export default function BookArtistPage() {
                     <div className="mt-4 flex gap-2">
                       <Link
                         href={`/artist/${m.slug}`}
-                        className="rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium hover:bg-gray-50 transition"
+                        className="rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition"
                       >
                         View Profile
                       </Link>
@@ -267,3 +267,4 @@ export default function BookArtistPage() {
     </main>
   );
 }
+

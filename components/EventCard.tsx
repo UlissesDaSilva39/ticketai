@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Event } from "@/lib/types";
 import EventCardActions from "./EventCardActions";
 import { Bell, MapPin, Users } from "lucide-react";
@@ -49,7 +49,7 @@ export function EventCard({
     <div className="group block relative">
       <CardSaveButton eventId={event.id} />
       <Link href={"/event/" + event.id} className="block">
-        <div className="aspect-[4/5] bg-gray-100 overflow-hidden mb-3 relative">
+        <div className="aspect-[4/5] bg-gray-100 dark:bg-gray-800 overflow-hidden mb-3 relative">
           {event.hero_image ? (
             <img
               src={event.hero_image}
@@ -78,12 +78,12 @@ export function EventCard({
             </div>
           )}
           {isFeatured && !isSoldOut && (
-            <span className="absolute top-4 left-4 px-4 py-2 bg-[#00FF87] text-black text-sm font-bold rounded-full uppercase tracking-wider shadow-lg">
+            <span className="absolute top-4 left-4 px-4 py-2 bg-[#00FF87] text-black dark:text-white text-sm font-bold rounded-full uppercase tracking-wider shadow-lg">
               Featured
             </span>
           )}
           {almostSoldOut && (
-            <span className="absolute top-4 right-4 px-3 py-1.5 bg-yellow-400 text-black text-xs font-bold rounded-full uppercase tracking-wider">
+            <span className="absolute top-4 right-4 px-3 py-1.5 bg-yellow-400 text-black dark:text-white text-xs font-bold rounded-full uppercase tracking-wider">
               Almost Gone
             </span>
           )}
@@ -92,19 +92,19 @@ export function EventCard({
 
       <Link href={"/event/" + event.id} className="block">
         <h3
-          className={"font-bold text-2xl leading-none mb-2 tracking-tight uppercase " + (dark ? "text-white" : "text-black")}
+          className={"font-bold text-2xl leading-none mb-2 tracking-tight uppercase " + (dark ? "text-white" : "text-black dark:text-white")}
           style={{ fontFamily: "var(--font-antonio)" }}
         >
           {event.title}
         </h3>
       </Link>
 
-      <p className={"text-xs uppercase tracking-widest mb-1 " + (dark ? "text-gray-400" : "text-gray-500")}>
+      <p className={"text-xs uppercase tracking-widest mb-1 " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
         {date.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}
       </p>
 
       {venue && (
-        <p className={"text-xs uppercase tracking-widest mb-1 flex items-center gap-1 " + (dark ? "text-gray-400" : "text-gray-500")}>
+        <p className={"text-xs uppercase tracking-widest mb-1 flex items-center gap-1 " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
           <MapPin className="h-3 w-3" />
           <Link href={"/venue/" + venue.slug} className="hover:underline">{venue.name}</Link>
           {venue.city && <span>, {venue.city}</span>}
@@ -112,13 +112,13 @@ export function EventCard({
       )}
 
       {firstTicket && (
-        <p className={"text-xs uppercase tracking-widest " + (dark ? "text-gray-400" : "text-gray-500")}>
-          From Â£{Number(firstTicket.price).toFixed(2)}
+        <p className={"text-xs uppercase tracking-widest " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
+          From Ã‚Â£{Number(firstTicket.price).toFixed(2)}
         </p>
       )}
 
       {artists && artists.length > 0 && (
-        <p className={"text-xs uppercase tracking-widest mt-1 flex flex-wrap items-center gap-1 " + (dark ? "text-gray-400" : "text-gray-500")}>
+        <p className={"text-xs uppercase tracking-widest mt-1 flex flex-wrap items-center gap-1 " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
           <Users className="h-3 w-3" />
           <span>Feat.</span>
           {artists.slice(0, 3).map((a, i) => (
@@ -132,7 +132,7 @@ export function EventCard({
       )}
 
       {promoter && (
-        <p className={"text-xs uppercase tracking-widest mt-1 " + (dark ? "text-gray-400" : "text-gray-500")}>
+        <p className={"text-xs uppercase tracking-widest mt-1 " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
           Presenter:{" "}
           <Link href={"/promoters/" + promoter.slug} className="hover:underline">{promoter.name}</Link>
         </p>
@@ -146,9 +146,9 @@ export function EventCard({
               style={{ width: soldPercent + "%" }}
             />
           </div>
-          <p className={"text-xs mt-1.5 " + (dark ? "text-gray-400" : "text-gray-500")}>
+          <p className={"text-xs mt-1.5 " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
             {isSoldOut
-              ? "Sold out Â· " + soldCount + " tickets sold"
+              ? "Sold out Ã‚Â· " + soldCount + " tickets sold"
               : remaining <= 10
                 ? "Only " + remaining + " left"
                 : remaining + " of " + capacity + " left"}
@@ -168,14 +168,14 @@ export function EventCard({
         <div className="mt-3 flex gap-2">
           <Link
             href={"/event/" + event.id}
-            className={"flex-1 text-center px-4 py-3 text-sm font-medium rounded-full transition-colors " + (dark ? "bg-[#00FF87] text-black hover:bg-[#00e67a]" : "bg-black text-white hover:bg-gray-800")}
+            className={"flex-1 text-center px-4 py-3 text-sm font-medium rounded-full transition-colors " + (dark ? "bg-[#00FF87] text-black dark:text-white hover:bg-[#00e67a]" : "bg-black text-white hover:bg-gray-800")}
           >
             Get Tickets
           </Link>
           {artists && artists.length > 0 && (
             <Link
               href={"/book/artist/" + artists[0].slug}
-              className={"px-4 py-3 text-sm font-medium rounded-full border transition-colors " + (dark ? "border-white/30 text-white hover:border-white" : "border-gray-300 text-black hover:border-black")}
+              className={"px-4 py-3 text-sm font-medium rounded-full border transition-colors " + (dark ? "border-white/30 text-white hover:border-white" : "border-gray-300 text-black dark:text-white hover:border-black")}
             >
               Book artist
             </Link>

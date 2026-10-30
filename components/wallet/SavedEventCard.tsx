@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 type SavedEvent = {
   id: string;
@@ -25,7 +25,7 @@ function formatDate(iso: string): string {
 
 export function SavedEventCard({ event }: { event: SavedEvent }) {
   return (
-    <div className="flex gap-4 rounded-2xl border border-neutral-200 bg-white p-4">
+    <div className="flex gap-4 rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-4">
       <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-neutral-100">
         {event.hero_image ? (
           <img
@@ -46,7 +46,7 @@ export function SavedEventCard({ event }: { event: SavedEvent }) {
         </Link>
         <p className="mt-1 text-sm text-neutral-600">
           {formatDate(event.start_date)}
-          {event.venue_name ? ` · ${event.venue_name}` : ""}
+          {event.venue_name ? ` Â· ${event.venue_name}` : ""}
           {event.city ? `, ${event.city}` : ""}
         </p>
         <div className="mt-3 flex items-center gap-3 text-sm">

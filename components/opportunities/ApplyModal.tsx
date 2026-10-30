@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { X } from 'lucide-react';
@@ -28,17 +28,17 @@ export function ApplyModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-2xl bg-white p-6"
+        className="w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between">
           <div>
             <div className="text-xs font-semibold text-gray-400">{opportunity.org}</div>
-            <div className="mt-1 text-lg font-bold text-gray-900">
+            <div className="mt-1 text-lg font-bold text-gray-900 dark:text-gray-100">
               {opportunity.title}
             </div>
           </div>
-          <button onClick={onClose} className="rounded-full p-1 hover:bg-gray-100">
+          <button onClick={onClose} className="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -80,3 +80,4 @@ export function ApplyModal({
     </div>
   );
 }
+

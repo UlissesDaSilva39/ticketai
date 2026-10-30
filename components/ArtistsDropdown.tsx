@@ -57,14 +57,14 @@ export default function ArtistsDropdown() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 min-w-[200px] bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-50"
+          className="absolute right-0 mt-2 min-w-[200px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg py-1 z-50"
         >
           {LINKS.map((l) => (
             <a
               key={l.href}
               href={l.href}
               role="menuitem"
-              className="block px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50"
+              className="block px-4 py-2.5 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
               onClick={() => setOpen(false)}
             >
               {l.label}
@@ -75,3 +75,4 @@ export default function ArtistsDropdown() {
     </div>
   );
 }
+

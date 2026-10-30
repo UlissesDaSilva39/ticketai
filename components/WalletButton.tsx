@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -40,7 +40,7 @@ export default function WalletButton({ ticketId }: { ticketId: string }) {
           href={urls.google}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-4 py-2 border border-black text-sm rounded-full hover:bg-gray-50"
+          className="px-4 py-2 border border-black text-sm rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           Add to Google Wallet
         </a>
@@ -61,3 +61,4 @@ export default function WalletButton({ ticketId }: { ticketId: string }) {
     </div>
   );
 }
+

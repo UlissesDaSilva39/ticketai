@@ -45,7 +45,7 @@ export default function InstallPrompt() {
 
   return (
     <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 bg-black text-white rounded-2xl shadow-2xl p-4 z-50 flex items-center gap-3">
-      <div className="w-10 h-10 rounded-xl bg-[#00FF87] text-black flex items-center justify-center font-bold flex-shrink-0">
+      <div className="w-10 h-10 rounded-xl bg-[#00FF87] text-black dark:text-white flex items-center justify-center font-bold flex-shrink-0">
         T
       </div>
       <div className="flex-1 min-w-0">
@@ -54,7 +54,7 @@ export default function InstallPrompt() {
       </div>
       <button
         onClick={install}
-        className="px-3 py-2 bg-[#00FF87] text-black text-xs font-semibold rounded-full hover:bg-[#00e67a] flex-shrink-0"
+        className="px-3 py-2 bg-[#00FF87] text-black dark:text-white text-xs font-semibold rounded-full hover:bg-[#00e67a] flex-shrink-0"
       >
         Install
       </button>
@@ -68,3 +68,4 @@ export default function InstallPrompt() {
     </div>
   );
 }
+

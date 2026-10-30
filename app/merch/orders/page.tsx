@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 
@@ -11,13 +11,13 @@ export default async function MerchOrdersPage() {
 
   if (!user) {
     return (
-      <div className="bg-gray-50 min-h-screen pb-32">
+      <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
         <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-3"><Sidebar /></div>
           <main className="col-span-12 lg:col-span-9 min-w-0">
             <h1 className="text-4xl font-bold uppercase mb-6" style={{ fontFamily: "var(--font-antonio)" }}>My orders</h1>
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-900 font-medium mb-3">Log in to see your orders</p>
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-900 dark:text-gray-100 font-medium mb-3">Log in to see your orders</p>
               <Link href="/login?next=/merch/orders" className="inline-block rounded-full bg-black text-white text-sm font-semibold px-6 py-2 hover:bg-gray-800">Log in</Link>
             </div>
           </main>
@@ -46,7 +46,7 @@ export default async function MerchOrdersPage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3"><Sidebar /></div>
         <main className="col-span-12 lg:col-span-9 min-w-0">
@@ -55,18 +55,18 @@ export default async function MerchOrdersPage() {
           </h1>
 
           {rows.length === 0 ? (
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-900 font-medium mb-1">No orders yet</p>
-              <p className="text-gray-600 text-sm">Products you buy will show up here.</p>
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-900 dark:text-gray-100 font-medium mb-1">No orders yet</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Products you buy will show up here.</p>
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-2xl divide-y divide-gray-100">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl divide-y divide-gray-100 dark:divide-gray-800">
               {rows.map((o) => {
                 const p = productMap[o.merch_id];
                 const symbol = o.currency === "USD" ? "$" : o.currency === "EUR" ? "\u20AC" : "\u00A3";
                 return (
                   <div key={o.id} className="flex items-center gap-4 p-4">
-                    <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden shrink-0">
                       {p?.image_url ? (
                         <img src={p.image_url} alt="" className="w-full h-full object-cover" />
                       ) : (
@@ -75,8 +75,8 @@ export default async function MerchOrdersPage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold truncate">{p?.title || "Product"}</p>
-                      <p className="text-xs text-gray-500">
-                        Qty {o.quantity} · {symbol}{(o.amount_pence / 100).toFixed(2)} ·{" "}
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Qty {o.quantity} Â· {symbol}{(o.amount_pence / 100).toFixed(2)} Â·{" "}
                         {new Date(o.created_at).toLocaleDateString("en-GB")}
                       </p>
                     </div>
@@ -88,7 +88,7 @@ export default async function MerchOrdersPage() {
                           : o.status === "pending"
                           ? "bg-amber-100 text-amber-700"
                           : o.status === "refunded"
-                          ? "bg-gray-100 text-gray-600"
+                          ? "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
                           : "bg-red-100 text-red-700")
                       }
                     >

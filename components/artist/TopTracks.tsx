@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -77,21 +77,21 @@ export default function TopTracks({ artistId }: { artistId: string }) {
   if (loading) return null;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
         <h2 className="text-lg font-bold">Top Tracks</h2>
-        <span className="text-[10px] uppercase tracking-wider text-gray-500">
-          {isDemo ? "Demo · Upload to replace" : "Uploaded tracks"}
+        <span className="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
+          {isDemo ? "Demo Â· Upload to replace" : "Uploaded tracks"}
         </span>
       </div>
       <ul>
         {tracks.map((t, i) => (
           <li
             key={t.id}
-            className="group flex items-center gap-4 px-6 py-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors"
+            className="group flex items-center gap-4 px-6 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             <span className="w-5 text-sm text-gray-400 text-right tabular-nums">
-              {playingId === t.id ? <span className="text-black">â–¶</span> : i + 1}
+              {playingId === t.id ? <span className="text-black dark:text-white">Ã¢â€“Â¶</span> : i + 1}
             </span>
             <button
               type="button"
@@ -100,18 +100,18 @@ export default function TopTracks({ artistId }: { artistId: string }) {
               className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-20 shrink-0"
               aria-label={"Play " + t.title}
             >
-              {playingId === t.id ? "âšâš" : "â–¶"}
+              {playingId === t.id ? "Ã¢ÂÅ¡Ã¢ÂÅ¡" : "Ã¢â€“Â¶"}
             </button>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{t.title}</p>
-              <p className="text-xs text-gray-500 truncate">
-                Artist · {t.audio_url ? "Single" : "Demo"}
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                Artist Â· {t.audio_url ? "Single" : "Demo"}
               </p>
             </div>
-            <span className="text-xs text-gray-500 tabular-nums hidden sm:block w-20 text-right">
+            <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums hidden sm:block w-20 text-right">
               {fmtPlays(t.play_count)} plays
             </span>
-            <span className="text-xs text-gray-500 tabular-nums w-12 text-right">
+            <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums w-12 text-right">
               {fmt(t.duration_seconds)}
             </span>
           </li>

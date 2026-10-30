@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -29,7 +29,7 @@ export default function ReturnButton({ ticketId }: { ticketId: string }) {
 
   if (done) {
     return (
-      <span className="inline-block px-5 py-2 bg-[#00FF87] text-black text-sm font-medium rounded-full">
+      <span className="inline-block px-5 py-2 bg-[#00FF87] text-black dark:text-white text-sm font-medium rounded-full">
         Returned to waitlist
       </span>
     );
@@ -40,7 +40,7 @@ export default function ReturnButton({ ticketId }: { ticketId: string }) {
       <button
         onClick={returnTicket}
         disabled={processing}
-        className="px-5 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-full hover:bg-gray-200 disabled:opacity-50"
+        className="px-5 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-full hover:bg-gray-200 disabled:opacity-50"
       >
         {processing ? "Returning..." : "Return to Waitlist"}
       </button>
@@ -48,3 +48,4 @@ export default function ReturnButton({ ticketId }: { ticketId: string }) {
     </div>
   );
 }
+

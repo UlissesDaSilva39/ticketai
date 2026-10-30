@@ -1,12 +1,12 @@
-const LOGOS = ['Fabric', 'Printworks', 'Motion', 'Hidden', 'Kraftwerk', 'Village Underground'];
+﻿const LOGOS = ['Fabric', 'Printworks', 'Motion', 'Hidden', 'Kraftwerk', 'Village Underground'];
 
 const TESTIMONIALS = [
   { quote: 'We moved from Eventbrite and cut our fee by 9%. Paid for our sound rig in one show.',
-    name: 'Marcus D.', role: 'Nightshift Presents · London', stat: '£4,200 saved in 6 months' },
+    name: 'Marcus D.', role: 'Nightshift Presents Â· London', stat: 'Â£4,200 saved in 6 months' },
   { quote: "The affiliate codes turned every DJ on my lineup into a salesperson. We sold 340 more tickets than last year's edition.",
-    name: 'Ilona V.', role: 'Warehouse Sessions · Berlin', stat: '+22% tickets sold' },
+    name: 'Ilona V.', role: 'Warehouse Sessions Â· Berlin', stat: '+22% tickets sold' },
   { quote: 'Booked a venue at 9am, had a full lineup by lunch, sold out in 3 days.',
-    name: 'Priya S.', role: 'Fresh Talent UK · London', stat: 'Sold out in 72 hours' },
+    name: 'Priya S.', role: 'Fresh Talent UK Â· London', stat: 'Sold out in 72 hours' },
 ];
 
 export function Proof() {
@@ -27,7 +27,7 @@ export function Proof() {
       <div className="mt-14 grid gap-5 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <figure key={t.name}
-            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-6">
+            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-6">
             <blockquote className="text-base text-neutral-800">
               &ldquo;{t.quote}&rdquo;
             </blockquote>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import FollowButton from "./FollowButton";
 
 type Person = {
@@ -41,7 +41,7 @@ export default function PersonCard({
   const href = person.username ? "/artists/" + person.username : "#";
 
   return (
-    <div className="relative z-10 bg-white border border-gray-200 rounded-2xl p-4 flex flex-col gap-3">
+    <div className="relative z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 flex flex-col gap-3">
       <Link href={href} className="flex items-start gap-3 group">
         {person.avatar_url ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -60,21 +60,21 @@ export default function PersonCard({
             {name}
           </p>
           {person.username ? (
-            <p className="text-xs text-gray-500 truncate">@{person.username}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">@{person.username}</p>
           ) : null}
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {person.role ? (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 uppercase font-semibold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase font-semibold">
                 {ROLE_LABELS[person.role] ?? person.role}
               </span>
             ) : null}
             {person.genre ? (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                 {person.genre}
               </span>
             ) : null}
             {person.city ? (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                 {person.city}
               </span>
             ) : null}
@@ -83,13 +83,13 @@ export default function PersonCard({
       </Link>
 
       {person.bio ? (
-        <p className="text-xs text-gray-600 line-clamp-2">{person.bio}</p>
+        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{person.bio}</p>
       ) : null}
 
       <div className="mt-auto flex items-center justify-between gap-2">
         <Link
           href={href}
-          className="text-xs text-gray-600 hover:text-black underline"
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline"
         >
           View profile
         </Link>
@@ -98,3 +98,4 @@ export default function PersonCard({
     </div>
   );
 }
+

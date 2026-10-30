@@ -1,4 +1,4 @@
-export function VocalistWorkspacePreview() {
+﻿export function VocalistWorkspacePreview() {
   return (
     <section className="border-t border-neutral-200 py-20">
       <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -9,23 +9,23 @@ export function VocalistWorkspacePreview() {
           </h2>
           <p className="mt-4 text-lg text-neutral-600">
             Live bookings, tier breakdown, top clients, sync pitches, and
-            payout schedule — updated in real time.
+            payout schedule â€” updated in real time.
           </p>
           <ul className="mt-6 space-y-3 text-base text-neutral-700">
-            <li>✓ Live bookings &amp; session tracking</li>
-            <li>✓ Demo analytics (plays, plays-to-book)</li>
-            <li>✓ Client CRM with repeat-booking flags</li>
-            <li>✓ Sync pitch tracker</li>
-            <li>✓ Feature license tracker</li>
-            <li>✓ Post-month revenue report</li>
-            <li>✓ CSV / PDF export</li>
+            <li>âœ“ Live bookings &amp; session tracking</li>
+            <li>âœ“ Demo analytics (plays, plays-to-book)</li>
+            <li>âœ“ Client CRM with repeat-booking flags</li>
+            <li>âœ“ Sync pitch tracker</li>
+            <li>âœ“ Feature license tracker</li>
+            <li>âœ“ Post-month revenue report</li>
+            <li>âœ“ CSV / PDF export</li>
           </ul>
           <a href="/vocalists/apply"
             className="mt-8 inline-flex rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-            Open your dashboard →
+            Open your dashboard â†’
           </a>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-3 shadow-xl">
+        <div className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-3 shadow-xl">
           <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-neutral-100">
             <img src="/img/vocalist-dashboard.png"
               alt="GRID vocalist dashboard showing live bookings, sync pitches, and payout schedule"

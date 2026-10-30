@@ -50,7 +50,7 @@ export default function VenueAvailabilityCalendar({
   });
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6">
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold inline-flex items-center gap-2">
           <Calendar className="h-4 w-4" />
@@ -61,7 +61,7 @@ export default function VenueAvailabilityCalendar({
             onClick={() =>
               setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))
             }
-            className="p-1.5 rounded-lg hover:bg-gray-100"
+            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             aria-label="Previous month"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -71,7 +71,7 @@ export default function VenueAvailabilityCalendar({
             onClick={() =>
               setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))
             }
-            className="p-1.5 rounded-lg hover:bg-gray-100"
+            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             aria-label="Next month"
           >
             <ChevronRight className="h-4 w-4" />
@@ -79,7 +79,7 @@ export default function VenueAvailabilityCalendar({
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-gray-500 mb-2">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
           <div key={d}>{d}</div>
         ))}
@@ -101,10 +101,10 @@ export default function VenueAvailabilityCalendar({
               className={
                 "aspect-square rounded-lg border text-xs font-medium transition flex items-center justify-center " +
                 (isPast
-                  ? "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed"
+                  ? "border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 text-gray-300 cursor-not-allowed"
                   : available
                   ? "border-green-300 bg-green-50 text-green-800 hover:bg-green-100 cursor-pointer"
-                  : "border-gray-200 bg-white text-gray-400 cursor-not-allowed") +
+                  : "border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-400 cursor-not-allowed") +
                 (isToday ? " ring-1 ring-black" : "")
               }
             >
@@ -114,23 +114,23 @@ export default function VenueAvailabilityCalendar({
         })}
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
         <span className="flex items-center gap-1.5">
           <span className="h-3 w-3 rounded border border-green-300 bg-green-50" />
           Available
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded border border-gray-200 bg-white" />
+          <span className="h-3 w-3 rounded border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900" />
           Booked
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded border border-gray-100 bg-gray-50" />
+          <span className="h-3 w-3 rounded border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950" />
           Past
         </span>
       </div>
 
-      <div className="mt-5 pt-5 border-t border-gray-100 text-center">
-        <p className="text-xs text-gray-500 mb-3">
+      <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-800 text-center">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
           Click an available date to send a booking enquiry.
         </p>
         <a
@@ -143,3 +143,4 @@ export default function VenueAvailabilityCalendar({
     </div>
   );
 }
+

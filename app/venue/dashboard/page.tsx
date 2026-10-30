@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+﻿import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -18,14 +18,14 @@ export default async function VenueDashboardPage() {
   const list = venues ?? [];
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold uppercase" style={{ fontFamily: "var(--font-antonio)" }}>
               My Venues
             </h1>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
               Manage the venues you have listed on GRID.
             </p>
           </div>
@@ -38,8 +38,8 @@ export default async function VenueDashboardPage() {
         </div>
 
         {list.length === 0 ? (
-          <div className="rounded-xl border bg-white p-12 text-center">
-            <p className="text-lg text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-12 text-center">
+            <p className="text-lg text-gray-500 dark:text-gray-400">
               You have not listed any venues yet.
             </p>
             <Link
@@ -55,15 +55,15 @@ export default async function VenueDashboardPage() {
               <Link
                 key={v.id}
                 href={"/venue/" + v.slug}
-                className="rounded-xl border bg-white p-6 transition hover:border-black"
+                className="rounded-xl border bg-white dark:bg-gray-900 p-6 transition hover:border-black"
               >
-                <p className="text-sm uppercase tracking-widest text-gray-500">
+                <p className="text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400">
                   {v.venue_type || "Venue"}
                 </p>
                 <h2 className="mt-1 text-2xl font-bold">{v.name}</h2>
-                <p className="mt-1 text-gray-600">{v.city}</p>
+                <p className="mt-1 text-gray-600 dark:text-gray-400">{v.city}</p>
                 {v.capacity ? (
-                  <p className="mt-3 text-sm text-gray-500">
+                  <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
                     Capacity: {v.capacity}
                   </p>
                 ) : null}
@@ -75,3 +75,4 @@ export default async function VenueDashboardPage() {
     </main>
   );
 }
+

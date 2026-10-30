@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useCart, parsePoundsToPence } from '@/lib/cart';
@@ -19,7 +19,7 @@ export function MerchCard({ item, artistSlug }: { item: MerchItem; artistSlug: s
   }
 
   return (
-    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-4">
+    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-4">
       <Link href={item.url} className="group">
         <div className="aspect-square w-full overflow-hidden rounded-xl bg-neutral-100">
           {/* eslint-disable-next-line @next/next/no-img-element */}

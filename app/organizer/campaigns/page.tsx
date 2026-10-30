@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -51,7 +51,7 @@ function statusClass(status: string) {
     case "cancelled":
       return "bg-red-100 text-red-800";
     default:
-      return "bg-gray-100 text-gray-700";
+      return "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300";
   }
 }
 
@@ -116,7 +116,7 @@ export default function CampaignsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 p-8">
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8">
         <div className="mx-auto max-w-7xl">
           Loading campaigns...
         </div>
@@ -125,22 +125,22 @@ export default function CampaignsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
             <Link
               href="/organizer"
-              className="mb-3 inline-block text-sm text-gray-500 hover:text-black"
+              className="mb-3 inline-block text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
             >
               Back to Organizer Dashboard
             </Link>
 
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
               Campaigns
             </h1>
 
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
               Create and manage campaigns for your events.
             </p>
           </div>
@@ -160,8 +160,8 @@ export default function CampaignsPage() {
         )}
 
         <div className="mb-8 grid gap-4 md:grid-cols-4">
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Total Campaigns
             </p>
             <p className="mt-2 text-3xl font-bold">
@@ -169,8 +169,8 @@ export default function CampaignsPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Active
             </p>
             <p className="mt-2 text-3xl font-bold">
@@ -178,8 +178,8 @@ export default function CampaignsPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Drafts
             </p>
             <p className="mt-2 text-3xl font-bold">
@@ -187,8 +187,8 @@ export default function CampaignsPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-5">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Planned Budget
             </p>
             <p className="mt-2 text-3xl font-bold">
@@ -198,12 +198,12 @@ export default function CampaignsPage() {
         </div>
 
         {campaigns.length === 0 ? (
-          <div className="rounded-xl border bg-white p-12 text-center">
+          <div className="rounded-xl border bg-white dark:bg-gray-900 p-12 text-center">
             <h2 className="text-xl font-semibold">
               No campaigns yet
             </h2>
 
-            <p className="mt-2 text-gray-500">
+            <p className="mt-2 text-gray-500 dark:text-gray-400">
               Create your first campaign to start building
               your GRID growth engine.
             </p>
@@ -216,28 +216,28 @@ export default function CampaignsPage() {
             </Link>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-xl border bg-white">
+          <div className="overflow-hidden rounded-xl border bg-white dark:bg-gray-900">
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="border-b bg-gray-50">
+                <thead className="border-b bg-gray-50 dark:bg-gray-950">
                   <tr>
-                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       Campaign
                     </th>
 
-                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       Event
                     </th>
 
-                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       Status
                     </th>
 
-                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       Budget
                     </th>
 
-                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                       Dates
                     </th>
 
@@ -255,17 +255,17 @@ export default function CampaignsPage() {
                     return (
                       <tr
                         key={campaign.id}
-                        className="hover:bg-gray-50"
+                        className="hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
                         <td className="px-5 py-5">
                           <Link
                             href={`/organizer/campaigns/${campaign.id}`}
-                            className="font-semibold text-gray-900 hover:underline"
+                            className="font-semibold text-gray-900 dark:text-gray-100 hover:underline"
                           >
                             {campaign.name}
                           </Link>
 
-                          <p className="mt-1 text-xs text-gray-500">
+                          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                             {String(campaign.objective || "ticket_sales").replace(
                               "_",
                               " "
@@ -273,7 +273,7 @@ export default function CampaignsPage() {
                           </p>
                         </td>
 
-                        <td className="px-5 py-5 text-sm text-gray-700">
+                        <td className="px-5 py-5 text-sm text-gray-700 dark:text-gray-300">
                           {eventName}
                         </td>
 
@@ -293,7 +293,7 @@ export default function CampaignsPage() {
                           )}
                         </td>
 
-                        <td className="px-5 py-5 text-sm text-gray-600">
+                        <td className="px-5 py-5 text-sm text-gray-600 dark:text-gray-400">
                           {formatDate(campaign.start_date)}
                           {" - "}
                           {formatDate(campaign.end_date)}

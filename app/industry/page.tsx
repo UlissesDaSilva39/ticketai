@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { INDUSTRY_NAV_COLUMNS } from '@/config/industryNav';
 import {
   IconIndustry,
@@ -16,7 +16,7 @@ import {
 const TRENDING_SERVICES = [
   {
     title: 'Record a 3-min track, mixed + mastered',
-    price: '£150–£500',
+    price: 'Â£150â€“Â£500',
     delivery: '5 days',
     rating: 4.9,
     reviews: 42,
@@ -27,7 +27,7 @@ const TRENDING_SERVICES = [
   },
   {
     title: 'Full event poster + social media kit',
-    price: '£80–£300',
+    price: 'Â£80â€“Â£300',
     delivery: '3 days',
     rating: 4.8,
     reviews: 67,
@@ -37,8 +37,8 @@ const TRENDING_SERVICES = [
     categoryLabel: 'Graphic Design',
   },
   {
-    title: '90-minute DJ set — house/techno',
-    price: '£300–£3,000',
+    title: '90-minute DJ set â€” house/techno',
+    price: 'Â£300â€“Â£3,000',
     delivery: 'Book date',
     rating: 5.0,
     reviews: 28,
@@ -58,7 +58,7 @@ const WHY_GRID = [
   {
     Icon: IconRider,
     title: 'Rider system',
-    desc: 'Technical, hospitality, and backstage — one link. Share with every promoter.',
+    desc: 'Technical, hospitality, and backstage â€” one link. Share with every promoter.',
   },
   {
     Icon: IconStar,
@@ -75,10 +75,10 @@ const STEPS = [
 
 export default function IndustryPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* HERO */}
-      <section className="bg-white border-b border-gray-200">
-        <p className="text-center text-sm text-gray-500 mb-2">12,000+ verified pros and crews on the platform</p>
+      <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-2">12,000+ verified pros and crews on the platform</p>
         <div className="max-w-6xl mx-auto px-6 py-16">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 rounded-full bg-violet-100 text-violet-700 px-4 py-1.5 text-sm font-semibold mb-4">
@@ -88,18 +88,18 @@ export default function IndustryPage() {
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
               Hire anyone in live music.
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
               From DJs to lighting designers. One marketplace. All vetted,
               all with riders, all with verified references.
             </p>
 
             {/* SEARCH BAR */}
-            <div className="flex items-center gap-2 bg-white border-2 border-gray-300 rounded-full px-4 py-3 mb-6 max-w-2xl mx-auto focus-within:border-violet-600 transition">
+            <div className="flex items-center gap-2 bg-white dark:bg-gray-900 border-2 border-gray-300 rounded-full px-4 py-3 mb-6 max-w-2xl mx-auto focus-within:border-violet-600 transition">
               <IconSearch size={20} className="text-gray-400" />
               <input
                 type="text"
                 placeholder="Search producers, engineers, venues, riders..."
-                className="flex-1 outline-none text-gray-900 placeholder-gray-400"
+                className="flex-1 outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
               />
               <Link
                 href="/industry/artists/producer"
@@ -120,15 +120,15 @@ export default function IndustryPage() {
               </Link>
               <Link
                 href="/rider"
-                className="inline-flex items-center gap-2 rounded-full border border-gray-300 text-gray-900 px-8 py-3.5 font-semibold hover:bg-gray-50 transition"
+                className="inline-flex items-center gap-2 rounded-full border border-gray-300 text-gray-900 dark:text-gray-100 px-8 py-3.5 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition"
               >
                 Build a rider
               </Link>
             </div>
 
             {/* SOCIAL PROOF */}
-            <div className="mt-8 pt-6 border-t border-gray-100">
-              <p className="text-sm text-gray-500 mb-3">Trusted by the scene</p>
+            <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Trusted by the scene</p>
               <div className="flex flex-wrap justify-center gap-6 text-gray-400 text-sm font-medium">
                 <span>DJ Poxy</span>
                 <span>Basement 44</span>
@@ -140,7 +140,7 @@ export default function IndustryPage() {
           </div>
         </div>
       
-        <p className="text-center text-sm text-gray-500 mt-4">Available in London, Manchester, Berlin, Amsterdam, Paris, and 12 more cities.</p></section>
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">Available in London, Manchester, Berlin, Amsterdam, Paris, and 12 more cities.</p></section>
 
       {/* TRENDING SERVICES */}
       <section className="max-w-6xl mx-auto px-6 py-16">
@@ -150,7 +150,7 @@ export default function IndustryPage() {
               <IconTrending size={28} className="text-violet-600" />
               Trending services
             </h2>
-            <p className="text-gray-500 mt-1">Booked this week by promoters and venues</p>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">Booked this week by promoters and venues</p>
           </div>
           <Link
             href="/industry/artists/producer"
@@ -165,7 +165,7 @@ export default function IndustryPage() {
             <Link
               key={i}
               href={`/industry/${svc.category === 'dj' || svc.category === 'producer' ? 'artists' : 'creative'}/${svc.category}`}
-              className="rounded-2xl border border-gray-200 bg-white overflow-hidden hover:shadow-lg hover:border-violet-300 transition group"
+              className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden hover:shadow-lg hover:border-violet-300 transition group"
             >
               <div className="h-40 bg-gradient-to-br from-violet-200 to-pink-200 relative">
                 <div className="absolute top-3 left-3 rounded-full bg-black/80 text-white text-xs px-2.5 py-1 font-medium">
@@ -173,24 +173,24 @@ export default function IndustryPage() {
                 </div>
               </div>
               <div className="p-5">
-                <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-violet-600 transition">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-violet-600 transition">
                   {svc.title}
                 </h3>
-                <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
                   <IconStar size={14} className="text-yellow-500 fill-yellow-500" />
-                  <span className="font-medium text-gray-900">{svc.rating}</span>
+                  <span className="font-medium text-gray-900 dark:text-gray-100">{svc.rating}</span>
                   <span>({svc.reviews} reviews)</span>
                 </div>
-                <div className="text-sm text-gray-600 mb-4">
-                  <strong className="text-gray-900">{svc.seller}</strong> · {svc.city}
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  <strong className="text-gray-900 dark:text-gray-100">{svc.seller}</strong> Â· {svc.city}
                 </div>
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
                   <div>
-                    <div className="text-xs text-gray-500">From</div>
-                    <div className="font-bold text-gray-900">{svc.price}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">From</div>
+                    <div className="font-bold text-gray-900 dark:text-gray-100">{svc.price}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-gray-500">Delivery</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Delivery</div>
                     <div className="text-sm font-medium">{svc.delivery}</div>
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export default function IndustryPage() {
       </section>
 
       {/* CATEGORY GRID */}
-      <section className="bg-white border-y border-gray-200 py-16">
+      <section className="bg-white dark:bg-gray-900 border-y border-gray-200 dark:border-gray-800 py-16">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-8 text-center">Browse by category</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -209,12 +209,12 @@ export default function IndustryPage() {
               <Link
                 key={col.category}
                 href={col.categoryHref}
-                className="rounded-xl border border-gray-200 bg-white p-5 hover:border-violet-300 hover:shadow-md transition group"
+                className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 hover:border-violet-300 hover:shadow-md transition group"
               >
-                <div className="font-semibold text-gray-900 group-hover:text-violet-600 mb-1">
+                <div className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-violet-600 mb-1">
                   {col.label}
                 </div>
-                <div className="text-xs text-gray-500 mb-3">{col.description}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">{col.description}</div>
                 <ul className="space-y-1">
                   {col.links.slice(0, 3).map((link) => (
                     <li key={link.href} className="text-sm text-neutral-600">
@@ -223,7 +223,7 @@ export default function IndustryPage() {
                   ))}
                   {col.links.length > 3 && (
                     <li className="text-xs text-violet-600 font-medium pt-1">
-                      +{col.links.length - 3} more →
+                      +{col.links.length - 3} more â†’
                     </li>
                   )}
                 </ul>
@@ -243,15 +243,15 @@ export default function IndustryPage() {
                 <item.Icon size={28} />
               </div>
               <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-              <p className="text-sm text-gray-600">{item.desc}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{item.desc}</p>
             </div>
           ))}
         </div>
       
-          <p className="text-sm text-gray-500 mt-6 text-center max-w-2xl mx-auto">Every completed hire becomes a public reference page — indexed by search engines, linked from your profile.</p></section>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-6 text-center max-w-2xl mx-auto">Every completed hire becomes a public reference page â€” indexed by search engines, linked from your profile.</p></section>
 
       {/* HOW IT WORKS */}
-      <section className="bg-white border-y border-gray-200 py-16">
+      <section className="bg-white dark:bg-gray-900 border-y border-gray-200 dark:border-gray-800 py-16">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-8 text-center">How it works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -264,33 +264,33 @@ export default function IndustryPage() {
                   </span>
                 </div>
                 <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-600">{step.desc}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
       {/* ============ FREELANCER HOW IT WORKS ============ */}
-      <section className="bg-gray-50 border-y border-gray-100">
+      <section className="bg-gray-50 dark:bg-gray-950 border-y border-gray-100 dark:border-gray-800">
         <div className="max-w-6xl mx-auto px-6 py-20">
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3 text-center">FOR FREELANCERS</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-center text-gray-900">Get booked. Get paid. Build reputation.</h2>
-          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">The other side of the marketplace. Show up, deliver, let your references do the selling.</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-3 text-center">FOR FREELANCERS</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-center text-gray-900 dark:text-gray-100">Get booked. Get paid. Build reputation.</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-center mb-12 max-w-2xl mx-auto">The other side of the marketplace. Show up, deliver, let your references do the selling.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <p className="text-5xl font-bold text-gray-300 mb-3">01</p>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Build your profile</h3>
-              <p className="text-gray-600">Add services, rates, past clients, and your rider. Verified badge after first hire.</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Build your profile</h3>
+              <p className="text-gray-600 dark:text-gray-400">Add services, rates, past clients, and your rider. Verified badge after first hire.</p>
             </div>
             <div>
               <p className="text-5xl font-bold text-gray-300 mb-3">02</p>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Get matched to briefs</h3>
-              <p className="text-gray-600">Promoters post briefs. GRID surfaces yours based on genre, city, and availability.</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Get matched to briefs</h3>
+              <p className="text-gray-600 dark:text-gray-400">Promoters post briefs. GRID surfaces yours based on genre, city, and availability.</p>
             </div>
             <div>
               <p className="text-5xl font-bold text-gray-300 mb-3">03</p>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Deliver and get paid</h3>
-              <p className="text-gray-600">Escrow releases on approval. Weekly payouts via Stripe. Reference published publicly.</p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Deliver and get paid</h3>
+              <p className="text-gray-600 dark:text-gray-400">Escrow releases on approval. Weekly payouts via Stripe. Reference published publicly.</p>
             </div>
           </div>
         </div>
@@ -299,7 +299,7 @@ export default function IndustryPage() {
       {/* FINAL CTA */}
       <section className="max-w-4xl mx-auto px-6 py-16 text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to hire or get hired?</h2>
-        <p className="text-gray-600 mb-8">Free to join. Free to browse. Only pay when you hire.</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-8">Free to join. Free to browse. Only pay when you hire.</p>
         <div className="flex flex-wrap gap-3 justify-center">
           <Link
             href="/signup"
@@ -310,7 +310,7 @@ export default function IndustryPage() {
           </Link>
           <Link
             href="/industry/post-job"
-            className="inline-flex items-center gap-2 rounded-full border border-gray-300 text-gray-900 px-8 py-3.5 font-semibold hover:bg-gray-50 transition"
+            className="inline-flex items-center gap-2 rounded-full border border-gray-300 text-gray-900 dark:text-gray-100 px-8 py-3.5 font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition"
           >
             Post a job
           </Link>
@@ -319,3 +319,4 @@ export default function IndustryPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
@@ -32,8 +32,8 @@ export default function DiscoverLabelsPage() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2 text-gray-900">Discover labels</h1>
-        <p className="text-gray-600">Explore the record labels shaping the sound of the underground.</p>
+        <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-gray-100">Discover labels</h1>
+        <p className="text-gray-600 dark:text-gray-400">Explore the record labels shaping the sound of the underground.</p>
       </div>
 
       <form onSubmit={handleSearch} className="mb-8 flex gap-2 max-w-md">
@@ -56,15 +56,15 @@ export default function DiscoverLabelsPage() {
           ))}
         </div>
       ) : labels.length === 0 ? (
-        <div className="text-center py-20 text-gray-500">
+        <div className="text-center py-20 text-gray-500 dark:text-gray-400">
           No labels found for "{search}". Try "Records" or "Music".
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {labels.map((label: any) => (
-            <Link key={label.id} href={`/labels/${label.id}`} className="group border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all bg-white flex flex-col">
+            <Link key={label.id} href={`/labels/${label.id}`} className="group border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-lg transition-all bg-white dark:bg-gray-900 flex flex-col">
               
-              <div className="h-40 bg-gray-100 relative">
+              <div className="h-40 bg-gray-100 dark:bg-gray-800 relative">
                 <img 
                   src={label.image} 
                   alt={label.name} 
@@ -77,13 +77,13 @@ export default function DiscoverLabelsPage() {
                   <span className="inline-block text-[10px] font-bold tracking-wider text-blue-600 bg-blue-50 px-2 py-1 rounded mb-2 w-max">VERIFIED</span>
                 )}
                 
-                <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:underline line-clamp-1">{label.name}</h3>
-                <p className="text-sm text-gray-500 mb-3">{label.city}</p>
-                <p className="text-sm text-gray-700 line-clamp-2 mb-4">{label.bio}</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-1 group-hover:underline line-clamp-1">{label.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{label.city}</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 mb-4">{label.bio}</p>
                 
                 <div className="mt-auto flex flex-wrap gap-2">
                   {label.tags.map((tag: string) => (
-                    <span key={tag} className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                    <span key={tag} className="text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
                       {tag}
                     </span>
                   ))}

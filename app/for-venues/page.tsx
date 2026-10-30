@@ -1,18 +1,18 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "List your venue free ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â get discovered | GRID",
+  title: "List your venue free ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â get discovered | GRID",
   description:
     "Free to list. Get booked by promoters. Earn a share of every ticket sold at your venue. No monthly fee. No 12-month contract.",
 };
 
 export default function ForVenuesPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-gray-900">
       <section className="max-w-6xl mx-auto px-6 py-20 md:py-28">
         <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-4">
+          <p className="text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4">
             For venues
           </p>
           <h1
@@ -23,7 +23,7 @@ export default function ForVenuesPage() {
             <br />
             Get discovered.
           </h1>
-          <p className="mt-6 text-xl text-gray-700 max-w-2xl">
+          <p className="mt-6 text-xl text-gray-700 dark:text-gray-300 max-w-2xl">
             Free to list. Get booked by promoters. Earn a share of every ticket
             sold at your venue.
           </p>
@@ -32,7 +32,7 @@ export default function ForVenuesPage() {
               href="/venues/join"
               className="rounded-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800"
             >
-              List your venue ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â free
+              List your venue ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â free
             </Link>
             <a
               href="#compare"
@@ -41,13 +41,13 @@ export default function ForVenuesPage() {
               See how it works
             </a>
           </div>
-          <p className="mt-4 text-sm text-gray-500">
+          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
             No contract. No monthly fee. Live in 5 minutes.
           </p>
         </div>
       </section>
 
-      <section className="border-y border-gray-200 bg-gray-50">
+      <section className="border-y border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-6xl mx-auto px-6 py-14 grid gap-8 md:grid-cols-3">
           <div>
             <p
@@ -56,7 +56,7 @@ export default function ForVenuesPage() {
             >
               Free forever
             </p>
-            <p className="mt-3 text-gray-700">
+            <p className="mt-3 text-gray-700 dark:text-gray-300">
               No listing fee. No monthly subscription. No 12-month contract.
               List your venue and start getting inquiries.
             </p>
@@ -68,7 +68,7 @@ export default function ForVenuesPage() {
             >
               Earn on every ticket
             </p>
-            <p className="mt-3 text-gray-700">
+            <p className="mt-3 text-gray-700 dark:text-gray-300">
               You get a share of every ticket sold for events at your venue.
               Paid out 3 days after the event, not 30.
             </p>
@@ -80,9 +80,9 @@ export default function ForVenuesPage() {
             >
               See real numbers
             </p>
-            <p className="mt-3 text-gray-700">
+            <p className="mt-3 text-gray-700 dark:text-gray-300">
               Occupancy, average ticket price, repeat bookings. Analytics
-              venues have never had ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â in real time.
+              venues have never had ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â in real time.
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function ForVenuesPage() {
             </thead>
             <tbody>
               {[
-                ["Listing fee", "Â£100+ / month", "Â£0"],
+                ["Listing fee", "Ã‚Â£100+ / month", "Ã‚Â£0"],
                 ["Contract", "12 months", "None"],
                 ["Revenue share", "Platform keeps it", "You earn it"],
                 ["Direct promoter contact", "No", "Yes"],
@@ -116,10 +116,10 @@ export default function ForVenuesPage() {
                 ["Payout time", "30+ days", "3 days"],
                 ["Cancel anytime", "No", "Yes"],
               ].map((row, i) => (
-                <tr key={i} className="border-b border-gray-200">
-                  <td className="py-3 pr-4 text-gray-600">{row[0]}</td>
+                <tr key={i} className="border-b border-gray-200 dark:border-gray-800">
+                  <td className="py-3 pr-4 text-gray-600 dark:text-gray-400">{row[0]}</td>
                   <td className="py-3 px-4">{row[1]}</td>
-                  <td className="py-3 px-4 font-medium bg-gray-50">
+                  <td className="py-3 px-4 font-medium bg-gray-50 dark:bg-gray-950">
                     {row[2]}
                   </td>
                 </tr>
@@ -129,7 +129,7 @@ export default function ForVenuesPage() {
         </div>
       </section>
 
-      <section className="border-y border-gray-200 bg-gray-50">
+      <section className="border-y border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <h2
             className="text-4xl md:text-5xl font-bold uppercase mb-12"
@@ -168,7 +168,7 @@ export default function ForVenuesPage() {
                   {step.n}
                 </p>
                 <p className="mt-4 text-xl font-semibold">{step.t}</p>
-                <p className="mt-2 text-gray-600">{step.d}</p>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">{step.d}</p>
               </div>
             ))}
           </div>
@@ -189,9 +189,9 @@ export default function ForVenuesPage() {
           <div className="mt-10 flex flex-wrap gap-4 justify-center">
             <Link
               href="/venues/join"
-              className="rounded-full bg-white text-black px-8 py-4 font-medium hover:bg-gray-100"
+              className="rounded-full bg-white dark:bg-gray-900 text-black dark:text-white px-8 py-4 font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              List your venue ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â free
+              List your venue ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â free
             </Link>
           </div>
           <p className="mt-8 text-sm text-white/60">

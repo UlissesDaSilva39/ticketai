@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -50,10 +50,10 @@ export default async function GenrePage({ params }: Props) {
     .order("name", { ascending: true });
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-3">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 mb-3">
             Genre
           </p>
           <h1
@@ -62,15 +62,15 @@ export default async function GenrePage({ params }: Props) {
           >
             {genre}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             {artists?.length ?? 0} {(artists?.length ?? 0) === 1 ? "artist" : "artists"}
           </p>
         </div>
 
         {!artists || artists.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-12 text-center">
             <p className="font-medium">No {genre} artists yet</p>
-            <p className="text-sm text-gray-500 mt-1 mb-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4">
               Be the first to register in this genre.
             </p>
             <Link
@@ -94,7 +94,7 @@ export default async function GenrePage({ params }: Props) {
                 <Link
                   key={a.slug}
                   href={"/artist/" + a.slug}
-                  className="bg-white border border-gray-200 rounded-2xl p-5 hover:border-black transition flex items-start gap-4"
+                  className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 hover:border-black transition flex items-start gap-4"
                 >
 
                   {a.avatar_url ? (
@@ -102,7 +102,7 @@ export default async function GenrePage({ params }: Props) {
                     <img
                       src={a.avatar_url}
                       alt={a.name}
-                      className="w-16 h-16 rounded-full object-cover border border-gray-200 flex-shrink-0"
+                      className="w-16 h-16 rounded-full object-cover border border-gray-200 dark:border-gray-800 flex-shrink-0"
                     />
                   ) : (
                     <div className="w-16 h-16 rounded-full bg-black text-white grid place-items-center text-lg font-bold flex-shrink-0">
@@ -111,9 +111,9 @@ export default async function GenrePage({ params }: Props) {
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-sm truncate">{a.name}</div>
-                    <div className="text-xs text-gray-500 truncate">@{a.handle}</div>
-                    <div className="text-xs text-gray-500 mt-2">
-                      {a.artist_type}{a.city ? " · " + a.city : ""}
+                    <div className="text-xs text-gray-500 dark:text-gray-400 truncate">@{a.handle}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                      {a.artist_type}{a.city ? " Â· " + a.city : ""}
                     </div>
                   </div>
                 </Link>
@@ -125,3 +125,4 @@ export default async function GenrePage({ params }: Props) {
     </div>
   );
 }
+

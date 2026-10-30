@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -74,8 +74,8 @@ export default function TrackUploader() {
   };
 
   return (
-    <div className="border border-gray-200 rounded-2xl p-4 space-y-3">
-      <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+    <div className="border border-gray-200 dark:border-gray-800 rounded-2xl p-4 space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
         Tracks
       </p>
 
@@ -95,10 +95,10 @@ export default function TrackUploader() {
           ))}
         </ul>
       ) : (
-        <p className="text-xs text-gray-500">No tracks yet.</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">No tracks yet.</p>
       )}
 
-      <div className="border-t border-gray-100 pt-3 space-y-2">
+      <div className="border-t border-gray-100 dark:border-gray-800 pt-3 space-y-2">
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -106,7 +106,7 @@ export default function TrackUploader() {
           className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm outline-none focus:border-black"
         />
         <div className="flex items-center gap-2">
-          <label className="px-4 py-2 border border-gray-300 text-xs rounded-full cursor-pointer hover:bg-gray-50">
+          <label className="px-4 py-2 border border-gray-300 text-xs rounded-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
             {uploading ? "Uploading..." : audioUrl ? "Audio ready" : "Choose audio"}
             <input
               type="file"

@@ -75,9 +75,9 @@ export default function ArtistBookingSection({ artistSlug, artistName }: Props) 
   };
 
   return (
-    <section className="bg-white border border-gray-200 rounded-2xl p-6">
+    <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
       <h2 className="text-lg font-semibold mb-1">Book this artist</h2>
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
         Pick a date to send a booking request to {artistName}.
       </p>
 
@@ -86,7 +86,7 @@ export default function ArtistBookingSection({ artistSlug, artistName }: Props) 
           type="button"
           disabled={!canGoBack}
           onClick={() => setMonth(addMonths(month, -1))}
-          className="px-3 py-1.5 rounded-full border border-gray-300 text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+          className="px-3 py-1.5 rounded-full border border-gray-300 text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           ◀
         </button>
@@ -96,7 +96,7 @@ export default function ArtistBookingSection({ artistSlug, artistName }: Props) 
         <button
           type="button"
           onClick={() => setMonth(addMonths(month, 1))}
-          className="px-3 py-1.5 rounded-full border border-gray-300 text-sm hover:bg-gray-50"
+          className="px-3 py-1.5 rounded-full border border-gray-300 text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           ▶
         </button>
@@ -104,7 +104,7 @@ export default function ArtistBookingSection({ artistSlug, artistName }: Props) 
 
       <div className="grid grid-cols-7 gap-1 mb-1">
         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-          <div key={d} className="text-xs font-medium text-gray-500 text-center py-1">
+          <div key={d} className="text-xs font-medium text-gray-500 dark:text-gray-400 text-center py-1">
             {d}
           </div>
         ))}
@@ -127,7 +127,7 @@ export default function ArtistBookingSection({ artistSlug, artistName }: Props) 
                   ? "text-gray-300 cursor-not-allowed"
                   : isSelected
                   ? "bg-black text-white"
-                  : "text-gray-900 hover:border hover:border-black")
+                  : "text-gray-900 dark:text-gray-100 hover:border hover:border-black")
               }
             >
               {d.getDate()}
@@ -137,7 +137,7 @@ export default function ArtistBookingSection({ artistSlug, artistName }: Props) 
       </div>
 
       {selected && (
-        <form onSubmit={submit} className="mt-6 pt-6 border-t border-gray-200 space-y-3">
+        <form onSubmit={submit} className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 space-y-3">
           <p className="text-sm font-medium">
             Request booking for{" "}
             {selected.toLocaleDateString("en-GB", {
@@ -199,3 +199,4 @@ export default function ArtistBookingSection({ artistSlug, artistName }: Props) 
     </section>
   );
 }
+

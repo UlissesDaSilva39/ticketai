@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -40,8 +40,8 @@ export default function WaitlistButton({ eventId }: { eventId: string }) {
   }
 
   return (
-    <div className="bg-gray-50 rounded-lg p-6">
-      <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">
+    <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-6">
+      <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">
         Sold Out
       </p>
       <p className="font-bold text-2xl mb-4" style={{ fontFamily: "var(--font-antonio)" }}>
@@ -65,9 +65,10 @@ export default function WaitlistButton({ eventId }: { eventId: string }) {
       {status === "error" && message && (
         <p className="text-sm text-red-600 mt-3">{message}</p>
       )}
-      <p className="text-xs text-gray-500 mt-3">
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
         We will email you the moment a ticket becomes available.
       </p>
     </div>
   );
 }
+

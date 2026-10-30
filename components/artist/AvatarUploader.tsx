@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 
@@ -65,7 +65,7 @@ export default function AvatarUploader({
 
   return (
     <div>
-      <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">{label}</p>
+      <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">{label}</p>
       <div className="flex items-center gap-4">
         <button
           type="button"
@@ -87,7 +87,7 @@ export default function AvatarUploader({
               className={
                 (isAvatar
                   ? "grid h-full w-full place-items-center rounded-full bg-gradient-to-br from-gray-700 to-gray-900 text-lg font-bold text-white"
-                  : "grid h-full w-full place-items-center text-xs text-gray-500")
+                  : "grid h-full w-full place-items-center text-xs text-gray-500 dark:text-gray-400")
               }
             >
               {isAvatar ? fallbackInitials : "Click to upload"}
@@ -100,11 +100,11 @@ export default function AvatarUploader({
             type="button"
             onClick={pickFile}
             disabled={busy}
-            className="rounded-full border border-gray-300 px-3 py-1.5 font-medium hover:bg-gray-50 disabled:opacity-60"
+            className="rounded-full border border-gray-300 px-3 py-1.5 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-60"
           >
             {busy ? "Uploading..." : url ? "Replace" : "Upload"}
           </button>
-          <p className="mt-2 text-gray-500">JPG, PNG, WebP · max 4 MB</p>
+          <p className="mt-2 text-gray-500 dark:text-gray-400">JPG, PNG, WebP Â· max 4 MB</p>
         </div>
       </div>
 

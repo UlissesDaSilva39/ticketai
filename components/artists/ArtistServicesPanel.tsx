@@ -19,7 +19,7 @@ export function ArtistServicesPanel({
       </h2>
       <ul className="mt-4 space-y-3">
         {services.map((s, i) => (
-          <li key={i} className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <li key={i} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">

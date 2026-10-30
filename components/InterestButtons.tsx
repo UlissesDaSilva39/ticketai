@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -47,7 +47,7 @@ export default function InterestButtons({
         className={
           "px-6 py-3 rounded-full font-medium transition-colors " +
           (status === "interested"
-            ? "bg-[#00FF87] text-black"
+            ? "bg-[#00FF87] text-black dark:text-white"
             : "border-2 border-white text-white hover:bg-white/10")
         }
       >

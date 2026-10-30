@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -251,16 +251,16 @@ export default function MessageThread({
   const typingNames = Object.keys(typingUsers).map(() => otherUserName || "They");
 
   return (
-    <div className="flex flex-col border border-gray-200 rounded-2xl overflow-hidden bg-white">
-      <div className="flex-1 p-4 min-h-[400px] max-h-[60vh] overflow-y-auto bg-gray-50">
+    <div className="flex flex-col border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden bg-white dark:bg-gray-900">
+      <div className="flex-1 p-4 min-h-[400px] max-h-[60vh] overflow-y-auto bg-gray-50 dark:bg-gray-950">
         {messages.length === 0 && (
-          <p className="text-center text-sm text-gray-500 py-8">No messages yet. Say hi.</p>
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 py-8">No messages yet. Say hi.</p>
         )}
 
         {groups.map((group) => (
           <div key={group.day} className="mb-4">
             <div className="text-center my-3">
-              <span className="text-[10px] uppercase tracking-wider bg-white border border-gray-200 rounded-full px-2.5 py-1 text-gray-500">
+              <span className="text-[10px] uppercase tracking-wider bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-full px-2.5 py-1 text-gray-500 dark:text-gray-400">
                 {group.day}
               </span>
             </div>
@@ -295,7 +295,7 @@ export default function MessageThread({
                         "max-w-[75%] px-4 py-2 text-sm " +
                         radius +
                         " " +
-                        (isMine ? "bg-black text-white" : "bg-white border border-gray-200")
+                        (isMine ? "bg-black text-white" : "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800")
                       }
                     >
                       {m.attachment_url ? (
@@ -345,7 +345,7 @@ export default function MessageThread({
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={send} className="border-t border-gray-200 bg-white p-3 flex gap-2 items-end">
+      <form onSubmit={send} className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 flex gap-2 items-end">
         <input
           ref={fileRef}
           type="file"
@@ -357,10 +357,10 @@ export default function MessageThread({
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={uploading || busy}
-          className="w-10 h-10 grid place-items-center rounded-full border border-gray-300 hover:bg-gray-50 disabled:opacity-50"
+          className="w-10 h-10 grid place-items-center rounded-full border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50"
           aria-label="Attach file"
         >
-          {uploading ? "…" : "📎"}
+          {uploading ? "â€¦" : "ðŸ“Ž"}
         </button>
         <textarea
           value={body}

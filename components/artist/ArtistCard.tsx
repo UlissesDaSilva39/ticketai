@@ -88,7 +88,7 @@ export default function ArtistCard({ artist }: Props) {
 
   return (
     <Link href={`/artists/${artist.username || artist.id}`} className="group block">
-      <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition hover:border-neutral-900">
+      <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5 transition hover:border-neutral-900">
         <header className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             {artist.avatar_url ? (

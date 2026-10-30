@@ -25,7 +25,7 @@ export function ArtistMembership({ membership }: { membership?: Membership }) {
           href={membership.url}
           target="_blank"
           rel="noreferrer"
-          className="mt-7 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-neutral-100"
+          className="mt-7 inline-flex rounded-full bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-black dark:text-white hover:bg-neutral-100"
         >
           Join the {membership.tier} â†’
         </Link>

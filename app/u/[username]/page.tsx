@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+﻿import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import FriendButton from "@/components/FriendButton";
 import MessageButton from "@/components/MessageButton";
@@ -87,14 +87,14 @@ export default async function PublicProfilePage({
           >
             {profile.full_name || profile.username}
           </h1>
-          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-4">
+          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 dark:text-gray-400 mb-4">
             {profile.username && <span>@{profile.username}</span>}
             {profile.city && <span>{profile.city}</span>}
             <span>{goingIds.length} going</span>
             <span>{interestedIds.length} interested</span>
           </div>
           {profile.bio && (
-            <p className="text-gray-700 leading-relaxed max-w-2xl mb-6">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed max-w-2xl mb-6">
               {profile.bio}
             </p>
           )}
@@ -114,7 +114,7 @@ export default async function PublicProfilePage({
           {isOwnProfile && (
             <Link
               href="/profile/edit"
-              className="inline-block px-5 py-2.5 border-2 border-black text-sm font-medium rounded-full hover:bg-gray-50"
+              className="inline-block px-5 py-2.5 border-2 border-black text-sm font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Edit Profile
             </Link>
@@ -169,8 +169,8 @@ export default async function PublicProfilePage({
       )}
 
       {events.length === 0 && (
-        <div className="bg-gray-50 rounded-lg p-12 text-center">
-          <p className="text-gray-500">No public activity yet.</p>
+        <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400">No public activity yet.</p>
         </div>
       )}
     </div>

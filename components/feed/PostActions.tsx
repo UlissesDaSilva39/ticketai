@@ -135,8 +135,8 @@ export default function PostActions({
   }
 
   return (
-    <div className="mt-3 pt-3 border-t border-gray-100">
-      <div className="flex items-center gap-6 text-xs text-gray-500">
+    <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+      <div className="flex items-center gap-6 text-xs text-gray-500 dark:text-gray-400">
         <button
           type="button"
           onClick={onLike}
@@ -184,12 +184,12 @@ export default function PostActions({
           {menuOpen ? (
             <div
               role="menu"
-              className="absolute z-20 bottom-full mb-2 left-0 min-w-[160px] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden text-sm"
+              className="absolute z-20 bottom-full mb-2 left-0 min-w-[160px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg overflow-hidden text-sm"
             >
               <button
                 role="menuitem"
                 onClick={copyLink}
-                className="w-full text-left px-3 py-2 hover:bg-gray-50 flex items-center gap-2"
+                className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 flex items-center gap-2"
               >
                 <LinkIcon size={14} aria-hidden="true" />
                 Copy link
@@ -197,21 +197,21 @@ export default function PostActions({
               <button
                 role="menuitem"
                 onClick={() => openShare("twitter")}
-                className="w-full text-left px-3 py-2 hover:bg-gray-50"
+                className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 Share on X
               </button>
               <button
                 role="menuitem"
                 onClick={() => openShare("whatsapp")}
-                className="w-full text-left px-3 py-2 hover:bg-gray-50"
+                className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 WhatsApp
               </button>
               <button
                 role="menuitem"
                 onClick={() => openShare("email")}
-                className="w-full text-left px-3 py-2 hover:bg-gray-50"
+                className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 Email
               </button>
@@ -229,7 +229,7 @@ export default function PostActions({
             aria-label="Write a comment"
             rows={2}
             maxLength={500}
-            className="flex-1 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-black focus:outline-none resize-none text-black placeholder-gray-400"
+            className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none resize-none text-black dark:text-white placeholder-gray-400"
           />
           <button
             type="submit"
@@ -249,3 +249,4 @@ export default function PostActions({
     </div>
   );
 }
+

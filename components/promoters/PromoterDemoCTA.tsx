@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export function PromoterDemoCTA({
   promoterName,
@@ -10,7 +10,7 @@ export function PromoterDemoCTA({
   if (!demoSubmissionUrl) return null;
 
   return (
-    <section className="rounded-3xl border border-neutral-200 bg-white p-8 md:p-10">
+    <section className="rounded-3xl border border-neutral-200 bg-white dark:bg-gray-900 p-8 md:p-10">
       <div className="max-w-2xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
           Submit your demo
@@ -26,7 +26,7 @@ export function PromoterDemoCTA({
           href={demoSubmissionUrl}
           className="mt-6 inline-flex rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
         >
-          Submit demo →
+          Submit demo â†’
         </Link>
       </div>
     </section>

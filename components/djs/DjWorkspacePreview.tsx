@@ -1,4 +1,4 @@
-export function DjWorkspacePreview() {
+﻿export function DjWorkspacePreview() {
   return (
     <section className="border-t border-neutral-200 py-20">
       <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -9,22 +9,22 @@ export function DjWorkspacePreview() {
           </h2>
           <p className="mt-4 text-lg text-neutral-600">
             Live bookings, tier breakdown, door-time calendar, top cities,
-            mix downloads, and payout schedule — updated in real time.
+            mix downloads, and payout schedule â€” updated in real time.
           </p>
           <ul className="mt-6 space-y-3 text-base text-neutral-700">
-            <li>✓ Live bookings &amp; calendar</li>
-            <li>✓ Mix download tracker</li>
-            <li>✓ Fan list &amp; repeat-attendee flags</li>
-            <li>✓ Split payout manager (DJ + agent + manager)</li>
-            <li>✓ Post-tour revenue report</li>
-            <li>✓ CSV / PDF export</li>
+            <li>âœ“ Live bookings &amp; calendar</li>
+            <li>âœ“ Mix download tracker</li>
+            <li>âœ“ Fan list &amp; repeat-attendee flags</li>
+            <li>âœ“ Split payout manager (DJ + agent + manager)</li>
+            <li>âœ“ Post-tour revenue report</li>
+            <li>âœ“ CSV / PDF export</li>
           </ul>
           <a href="/djs/apply"
             className="mt-8 inline-flex rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-            Open your dashboard →
+            Open your dashboard â†’
           </a>
         </div>
-        <div className="rounded-2xl border border-neutral-200 bg-white p-3 shadow-xl">
+        <div className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-3 shadow-xl">
           <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-neutral-100">
             <img src="/img/dj-dashboard.png"
               alt="GRID DJ dashboard showing live bookings, mix downloads, and payout schedule"

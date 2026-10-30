@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -55,8 +55,8 @@ export default function NewVenuePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/venue/dashboard" className="text-sm text-gray-500 hover:text-black">
-          ← Back to Venues
+        <Link href="/venue/dashboard" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+          â† Back to Venues
         </Link>
       </div>
 
@@ -101,7 +101,7 @@ export default function NewVenuePage() {
           <div>
             <label className="block text-sm font-medium mb-2">Revenue Share %</label>
             <input type="number" value={form.revenue_share_percent} onChange={(e) => update("revenue_share_percent", e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-black focus:outline-none" />
-            <p className="text-xs text-gray-500 mt-1">Venue earns this % of every ticket sold</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Venue earns this % of every ticket sold</p>
           </div>
           <div>
             <label className="block text-sm font-medium mb-2">Total Capacity</label>
@@ -143,3 +143,4 @@ export default function NewVenuePage() {
     </div>
   );
 }
+

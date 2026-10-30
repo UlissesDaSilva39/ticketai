@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import type { Track } from '@/lib/artists';
@@ -81,7 +81,7 @@ export function ArtistTracksList({ tracks }: { tracks?: Track[] }) {
           Tracks
         </h2>
         <p className="text-xs text-neutral-500">
-          {tracks.length} tracks Â· Total {totalMinutes}:{String(totalRemaining).padStart(2, '0')}
+          {tracks.length} tracks Ã‚Â· Total {totalMinutes}:{String(totalRemaining).padStart(2, '0')}
         </p>
       </div>
 
@@ -90,10 +90,10 @@ export function ArtistTracksList({ tracks }: { tracks?: Track[] }) {
         onClick={playAll}
         className="mt-3 inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-neutral-800"
       >
-        â–¶ Play all
+        Ã¢â€“Â¶ Play all
       </button>
 
-      <ul className="mt-4 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white">
+      <ul className="mt-4 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
         {tracks.map((t) => {
           const isPlaying = playing === t.id;
           const pct = Math.round((progress[t.id] ?? 0) * 100);
@@ -106,12 +106,12 @@ export function ArtistTracksList({ tracks }: { tracks?: Track[] }) {
                   onClick={() => toggle(t)}
                   className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white transition hover:bg-neutral-800"
                 >
-                  {isPlaying ? 'âšâš' : 'â–¶'}
+                  {isPlaying ? 'Ã¢ÂÅ¡Ã¢ÂÅ¡' : 'Ã¢â€“Â¶'}
                 </button>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{t.title}</p>
                   <p className="text-xs text-neutral-500">
-                    {t.genre} Â· {t.duration} Â· {t.plays} plays
+                    {t.genre} Ã‚Â· {t.duration} Ã‚Â· {t.plays} plays
                   </p>
                 </div>
               </div>

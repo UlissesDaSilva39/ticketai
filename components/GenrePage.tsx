@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 import { EventCard } from "@/components/EventCard";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -13,7 +13,7 @@ export type GenreMeta = {
 
 export function genreMetadata(genre: GenreMeta): Metadata {
   return {
-    title: `${genre.name} events near you — find your next night out`,
+    title: `${genre.name} events near you â€” find your next night out`,
     description: genre.blurb,
     openGraph: {
       title: `${genre.name} events`,
@@ -42,10 +42,10 @@ export async function GenreEventsPage({ genre }: { genre: GenreMeta }) {
   const list = (events || []) as Event[];
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="border-b border-gray-200 bg-gray-50">
+    <main className="min-h-screen bg-white dark:bg-gray-900">
+      <section className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-6 py-16">
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-4">
+          <p className="text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4">
             Events
           </p>
           <h1
@@ -54,7 +54,7 @@ export async function GenreEventsPage({ genre }: { genre: GenreMeta }) {
           >
             {genre.name}
           </h1>
-          <p className="mt-6 text-xl text-gray-700 max-w-2xl">
+          <p className="mt-6 text-xl text-gray-700 dark:text-gray-300 max-w-2xl">
             {genre.blurb}
           </p>
         </div>
@@ -70,14 +70,14 @@ export async function GenreEventsPage({ genre }: { genre: GenreMeta }) {
           </h2>
           <Link
             href={`/search?q=${encodeURIComponent(genre.name)}`}
-            className="text-sm font-medium text-gray-500 hover:text-black"
+            className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
           >
-            Search all events →
+            Search all events â†’
           </Link>
         </div>
 
         {list.length === 0 ? (
-          <div className="rounded-xl border bg-gray-50 p-12 text-center text-gray-500">
+          <div className="rounded-xl border bg-gray-50 dark:bg-gray-950 p-12 text-center text-gray-500 dark:text-gray-400">
             No {genre.name.toLowerCase()} events yet. Check back soon.
           </div>
         ) : (
@@ -94,9 +94,9 @@ export async function GenreEventsPage({ genre }: { genre: GenreMeta }) {
         )}
       </section>
 
-      <section className="border-t border-gray-200 bg-gray-50">
+      <section className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-6 py-12">
-          <p className="text-sm text-gray-500 mb-4">Browse other genres</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Browse other genres</p>
           <div className="flex flex-wrap gap-3">
             {[
               { slug: "house-music", name: "House Music" },

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 type MiniEvent = {
   id: string;
@@ -17,8 +17,8 @@ export default function RightSidebar({ trending, forYou, peopleToFollow }: Props
   return (
     <aside className="space-y-4">
       {trending.length > 0 ? (
-        <div className="bg-white border border-gray-200 rounded-2xl p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
             Trending
           </p>
           <ul className="space-y-2">
@@ -26,7 +26,7 @@ export default function RightSidebar({ trending, forYou, peopleToFollow }: Props
               <li key={t}>
                 <Link
                   href={"/search?q=" + encodeURIComponent(t.replace("#", ""))}
-                  className="text-sm text-gray-800 hover:text-black hover:underline"
+                  className="text-sm text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white hover:underline"
                 >
                   {t}
                 </Link>
@@ -37,15 +37,15 @@ export default function RightSidebar({ trending, forYou, peopleToFollow }: Props
       ) : null}
 
       {forYou.length > 0 ? (
-        <div className="bg-white border border-gray-200 rounded-2xl p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
             For You
           </p>
           <ul className="space-y-3">
             {forYou.map((e) => (
               <li key={e.id}>
                 <Link href={"/event/" + e.id} className="flex gap-2 group">
-                  <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+                  <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 overflow-hidden shrink-0">
                     {e.hero_image ? (
                       <img src={e.hero_image} alt="" className="w-full h-full object-cover" />
                     ) : null}
@@ -54,7 +54,7 @@ export default function RightSidebar({ trending, forYou, peopleToFollow }: Props
                     <p className="text-xs font-medium truncate group-hover:underline">
                       {e.title}
                     </p>
-                    <p className="text-[10px] text-gray-500 mt-0.5">
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
                       {e.start_date
                         ? new Date(e.start_date).toLocaleDateString("en-GB", {
                             day: "numeric",
@@ -67,15 +67,15 @@ export default function RightSidebar({ trending, forYou, peopleToFollow }: Props
               </li>
             ))}
           </ul>
-          <Link href="/search" className="block text-xs text-gray-500 hover:text-black mt-3">
+          <Link href="/search" className="block text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white mt-3">
             See all
           </Link>
         </div>
       ) : null}
 
       {peopleToFollow.length > 0 ? (
-        <div className="bg-white border border-gray-200 rounded-2xl p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
             People to follow
           </p>
           <ul className="space-y-3">

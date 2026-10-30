@@ -48,7 +48,7 @@ export default function MediaUploader({
       <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}
         className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
           value ? "border-green-500 bg-green-50 text-green-700"
-                : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                : "border-gray-300 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-gray-400"
         } ${uploading ? "opacity-50" : ""}`}>
         <span aria-hidden="true">{emoji}</span>
         <span>{uploading ? "Uploading…" : value ? `${shortLabel} ✓` : shortLabel}</span>
@@ -64,3 +64,4 @@ export default function MediaUploader({
     </div>
   );
 }
+

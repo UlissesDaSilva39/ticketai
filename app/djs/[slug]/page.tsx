@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DjMixesList }   from '@/components/djs/DjMixesList';
 import { DjNextSets }    from '@/components/djs/DjNextSets';
@@ -17,13 +17,13 @@ export default async function DjProfilePage({ params }: Params) {
     { label: 'Gigs', value: dj.gigCount },
     { label: 'Mix plays', value: dj.mixPlays.toLocaleString() },
     { label: 'Mixes', value: dj.mixCount },
-    { label: 'Earned', value: dj.earnedTotal ?? '—' },
+    { label: 'Earned', value: dj.earnedTotal ?? 'â€”' },
   ];
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <Link href="/djs" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black">
-        ← Back to DJs
+      <Link href="/djs" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-black dark:hover:text-white">
+        â† Back to DJs
       </Link>
 
       <header className="mt-6">
@@ -37,8 +37,8 @@ export default async function DjProfilePage({ params }: Params) {
         </div>
         <p className="mt-1 text-sm text-neutral-500">@{dj.slug}</p>
         <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-          {dj.city}{dj.timezone ? ` · ${dj.timezone} ` : ''} · DJ
-          {dj.djSince && <> · Since {dj.djSince}</>}
+          {dj.city}{dj.timezone ? ` Â· ${dj.timezone} ` : ''} Â· DJ
+          {dj.djSince && <> Â· Since {dj.djSince}</>}
         </p>
         <p className="mt-3 max-w-2xl text-base text-neutral-700">{dj.bio}</p>
         <div className="mt-3 flex flex-wrap gap-1.5">
@@ -63,7 +63,7 @@ export default async function DjProfilePage({ params }: Params) {
 
       <section className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-2xl border border-neutral-200 bg-white p-4">
+          <div key={s.label} className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-4">
             <p className="text-2xl font-black tracking-tight">{s.value}</p>
             <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-neutral-500">
               {s.label}

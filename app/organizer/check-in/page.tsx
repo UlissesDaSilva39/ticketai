@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -100,15 +100,15 @@ export default function CheckInPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <Link href="/organizer" className="text-sm text-gray-500 hover:text-black">
-          ← Back to Dashboard
+        <Link href="/organizer" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+          â† Back to Dashboard
         </Link>
       </div>
 
       <h1 className="text-5xl font-bold mb-3" style={{ fontFamily: "var(--font-antonio)" }}>
         CHECK-IN
       </h1>
-      <p className="text-gray-500 mb-10">Scan tickets with your camera, or enter QR codes manually.</p>
+      <p className="text-gray-500 dark:text-gray-400 mb-10">Scan tickets with your camera, or enter QR codes manually.</p>
 
       {!scanning ? (
         <button
@@ -122,7 +122,7 @@ export default function CheckInPage() {
           <div id="qr-reader" className="rounded-lg overflow-hidden bg-black min-h-[300px] text-white" />
           <button
             onClick={stopScanning}
-            className="w-full mt-4 py-3 border-2 border-black font-medium rounded-full hover:bg-gray-50"
+            className="w-full mt-4 py-3 border-2 border-black font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             Stop Scanning
           </button>
@@ -159,20 +159,20 @@ export default function CheckInPage() {
           className={
             "rounded-lg p-6 mb-8 " +
             (result.success
-              ? "bg-[#00FF87] text-black"
+              ? "bg-[#00FF87] text-black dark:text-white"
               : "bg-red-50 text-red-800 border border-red-200")
           }
         >
           {result.success ? (
             <>
-              <p className="text-3xl font-bold mb-2" style={{ fontFamily: "var(--font-antonio)" }}>✓ CHECKED IN</p>
+              <p className="text-3xl font-bold mb-2" style={{ fontFamily: "var(--font-antonio)" }}>âœ“ CHECKED IN</p>
               <p className="font-medium">{result.event_title}</p>
               <p className="text-sm">{result.ticket_type}</p>
             </>
           ) : (
             <>
               <p className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-antonio)" }}>
-                ✗ {result.error || "Invalid ticket"}
+                âœ— {result.error || "Invalid ticket"}
               </p>
               {result.checked_in_at && (
                 <p className="text-sm">
@@ -186,18 +186,18 @@ export default function CheckInPage() {
 
       {history.length > 0 && (
         <div>
-          <h2 className="text-sm uppercase tracking-widest text-gray-500 mb-3">Recent Scans</h2>
+          <h2 className="text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-3">Recent Scans</h2>
           <div className="space-y-2">
             {history.map((h, i) => (
               <div
                 key={i}
                 className={
                   "flex items-center justify-between p-3 rounded-lg text-sm " +
-                  (h.success ? "bg-gray-50" : "bg-red-50")
+                  (h.success ? "bg-gray-50 dark:bg-gray-950" : "bg-red-50")
                 }
               >
-                <span>{h.success ? h.ticket_type + " — " + h.event_title : h.error}</span>
-                <span className="text-xs text-gray-500">{h.success ? "✓" : "✗"}</span>
+                <span>{h.success ? h.ticket_type + " â€” " + h.event_title : h.error}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{h.success ? "âœ“" : "âœ—"}</span>
               </div>
             ))}
           </div>
@@ -206,3 +206,4 @@ export default function CheckInPage() {
     </div>
   );
 }
+

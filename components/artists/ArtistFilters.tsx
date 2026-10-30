@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
@@ -6,7 +6,7 @@ const ROLES   = ['All roles', 'Singer', 'Rapper', 'Topliner', 'Instrumentalist']
 const GENRES  = ['All genres', 'R&B', 'Hip-Hop', 'Pop', 'Soul', 'Electronic'];
 const CITIES  = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const KEYS    = ['All keys', 'Am', 'Cm', 'F', 'G', 'Dm'];
-const PRICE   = ['All rates', 'Under £200', '£200-£400', '£400+'];
+const PRICE   = ['All rates', 'Under Â£200', 'Â£200-Â£400', 'Â£400+'];
 
 export function ArtistFilters() {
   const [role, setRole]   = useState('All roles');
@@ -52,7 +52,7 @@ function Chip({
         'rounded-full border px-4 py-1.5 text-sm font-medium transition ' +
         (active
           ? 'border-black bg-black text-white'
-          : 'border-neutral-300 bg-white text-neutral-800 hover:border-neutral-900')
+          : 'border-neutral-300 bg-white dark:bg-gray-900 text-neutral-800 hover:border-neutral-900')
       }>
       {children}
     </button>

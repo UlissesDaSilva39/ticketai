@@ -16,7 +16,7 @@ export function ArtistCard({ artist }: { artist: any }) {
   const demo = artist.featuredDemo || null;
 
   return (
-    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 transition hover:border-neutral-900">
+    <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-5 transition hover:border-neutral-900">
       <header className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           {artist.avatar_url ? (
@@ -52,7 +52,7 @@ export function ArtistCard({ artist }: { artist: any }) {
           <p className="mt-1 text-sm font-semibold text-neutral-900">{demo.title}</p>
           <p className="mt-0.5 text-sm text-neutral-600">{demo.key} · {demo.role} · {demo.genre}</p>
           <div className="mt-3 flex items-center justify-between gap-3">
-            <button type="button" className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-900 hover:border-neutral-900">▶ Preview</button>
+            <button type="button" className="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-3 py-1.5 text-xs font-semibold text-neutral-900 hover:border-neutral-900">▶ Preview</button>
             <span className="text-sm font-semibold text-neutral-900">{demo.rate}</span>
             <Link href={`/artists/${slug}/book`} className="rounded-full bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-neutral-800">BOOK NOW</Link>
           </div>

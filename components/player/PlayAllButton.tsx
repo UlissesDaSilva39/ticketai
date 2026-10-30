@@ -42,7 +42,7 @@ export default function PlayAllButton({ tracks }: { tracks: Row[] }) {
       className={`inline-flex items-center gap-2 rounded-full px-6 py-2 text-sm font-semibold transition-colors ${
         disabled
           ? "bg-white/10 text-white/40 cursor-not-allowed"
-          : "bg-white text-black hover:bg-gray-100"
+          : "bg-white dark:bg-gray-900 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
       }`}
     >
       {isPlaying ? (
@@ -64,3 +64,4 @@ export default function PlayAllButton({ tracks }: { tracks: Row[] }) {
     </button>
   );
 }
+

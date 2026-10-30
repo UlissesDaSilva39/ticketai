@@ -1,9 +1,9 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export function DualCTA() {
   return (
     <section className="mt-20 grid gap-5 md:grid-cols-2">
-      <div className="flex flex-col justify-between rounded-3xl border border-neutral-200 bg-white p-10">
+      <div className="flex flex-col justify-between rounded-3xl border border-neutral-200 bg-white dark:bg-gray-900 p-10">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
             For fans
@@ -13,12 +13,12 @@ export function DualCTA() {
           </h2>
           <p className="mt-3 text-base text-neutral-600">
             Browse 40+ events from verified promoters this weekend.
-            Buy directly — no queue, no booking fee surprises.
+            Buy directly â€” no queue, no booking fee surprises.
           </p>
         </div>
         <Link href="#promoters"
           className="mt-8 inline-flex w-fit rounded-full bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-          Browse events →
+          Browse events â†’
         </Link>
       </div>
 
@@ -36,14 +36,14 @@ export function DualCTA() {
           </p>
 
           <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-neutral-300">
-            <li>✓ 400+ venues</li>
-            <li>✓ Same-day payouts</li>
-            <li>✓ Affiliate codes</li>
+            <li>âœ“ 400+ venues</li>
+            <li>âœ“ Same-day payouts</li>
+            <li>âœ“ Affiliate codes</li>
           </ul>
         </div>
         <Link href="/promoters/apply"
-          className="mt-8 inline-flex w-fit rounded-full bg-white px-7 py-3 text-sm font-semibold text-black hover:bg-neutral-100">
-          Start free →
+          className="mt-8 inline-flex w-fit rounded-full bg-white dark:bg-gray-900 px-7 py-3 text-sm font-semibold text-black dark:text-white hover:bg-neutral-100">
+          Start free â†’
         </Link>
       </div>
     </section>

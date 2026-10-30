@@ -40,7 +40,7 @@ export default async function MessagesPage({
 
   if (!user) {
     return (
-      <div className="bg-gray-50 min-h-screen pb-32">
+      <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
         <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-3">
             <Sidebar />
@@ -52,8 +52,8 @@ export default async function MessagesPage({
             >
               Messages
             </h1>
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-900 font-medium mb-3">
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-900 dark:text-gray-100 font-medium mb-3">
                 Log in to see your messages
               </p>
               <Link
@@ -111,7 +111,7 @@ export default async function MessagesPage({
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -124,7 +124,7 @@ export default async function MessagesPage({
             >
               Messages
             </h1>
-            <p className="text-gray-600 mt-2">Your private conversations.</p>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">Your private conversations.</p>
           </header>
 
           {prefillRecipientId && prefillRecipientName ? (
@@ -137,19 +137,19 @@ export default async function MessagesPage({
             </div>
           ) : null}
 
-          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
             {"Conversations (" + convs.length + ")"}
           </h2>
 
           {convs.length === 0 ? (
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-900 font-medium mb-1">No conversations yet</p>
-              <p className="text-gray-600 text-sm">
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-900 dark:text-gray-100 font-medium mb-1">No conversations yet</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
                 Message someone from their profile to start chatting.
               </p>
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden divide-y divide-gray-100">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
               {convs.map((c) => {
                 const otherId =
                   c.participant_a === user.id ? c.participant_b : c.participant_a;
@@ -159,14 +159,14 @@ export default async function MessagesPage({
                   <Link
                     key={c.id}
                     href={"/messages/" + c.id}
-                    className="flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                   >
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 text-white flex items-center justify-center text-sm font-bold shrink-0">
                       {name.slice(0, 2).toUpperCase()}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold truncate">{name}</p>
-                      <p className="text-xs text-gray-500 truncate">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                         {c.last_message_at
                           ? new Date(c.last_message_at).toLocaleString("en-GB")
                           : "No messages yet"}
@@ -182,4 +182,5 @@ export default async function MessagesPage({
     </div>
   );
 }
+
 

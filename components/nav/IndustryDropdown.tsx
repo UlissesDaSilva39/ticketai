@@ -27,7 +27,7 @@ export function IndustryDropdown({ pathname }: { pathname?: string }) {
 
       {open && (
         <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
-          <div className="w-[900px] max-w-[95vw] rounded-2xl border border-gray-200 bg-white shadow-xl">
+          <div className="w-[900px] max-w-[95vw] rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-xl">
             <div className="grid grid-cols-4 gap-x-6 gap-y-4 p-6">
               {INDUSTRY_NAV_COLUMNS.map((col) => (
                 <div key={col.category}>
@@ -53,7 +53,7 @@ export function IndustryDropdown({ pathname }: { pathname?: string }) {
                 </div>
               ))}
             </div>
-            <div className="border-t border-gray-100 bg-gray-50 rounded-b-2xl px-6 py-3 flex items-center justify-between">
+            <div className="border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 rounded-b-2xl px-6 py-3 flex items-center justify-between">
               <div className="flex gap-4">
                 {INDUSTRY_QUICK_ACTIONS.map((action) => (
                   <Link
@@ -75,3 +75,4 @@ export function IndustryDropdown({ pathname }: { pathname?: string }) {
     </div>
   );
 }
+

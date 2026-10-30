@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -61,7 +61,7 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
       <select
         value={days}
         onChange={(e) => setDays(Number(e.target.value) as 7 | 30 | 90)}
-        className="text-sm text-gray-700 border border-gray-300 rounded-lg px-2 py-1 mr-2"
+        className="text-sm text-gray-700 dark:text-gray-300 border border-gray-300 rounded-lg px-2 py-1 mr-2"
         aria-label="Expiration days"
       >
         <option value={7}>7 days</option>
@@ -72,7 +72,7 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
         type="button"
         onClick={handleShare}
         disabled={loading}
-        className="text-sm text-gray-500 hover:text-black whitespace-nowrap disabled:opacity-50"
+        className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white whitespace-nowrap disabled:opacity-50"
       >
         {loading ? "Loading..." : "Share"}
       </button>
@@ -83,7 +83,7 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-md bg-white rounded-2xl p-6 shadow-xl"
+            className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -91,10 +91,10 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="text-gray-400 hover:text-black text-xl leading-none"
+                className="text-gray-400 hover:text-black dark:hover:text-white text-xl leading-none"
                 aria-label="Close"
               >
-                ✕
+                âœ•
               </button>
             </div>
 
@@ -102,7 +102,7 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
               <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
             ) : (
               <>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Anyone with this link can view a read-only snapshot of your analytics.
                 </p>
 
@@ -112,7 +112,7 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
                       <input
                         readOnly
                         value={shareUrl}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-xs text-gray-700 bg-gray-50"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-xs text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-950"
                       />
                       <button
                         type="button"
@@ -124,7 +124,7 @@ export default function ShareAnalyticsButton({ artistSlug }: Props) {
                     </div>
 
                     {expiresAt && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Expires {new Date(expiresAt).toLocaleDateString("en-GB")}
                       </p>
                     )}

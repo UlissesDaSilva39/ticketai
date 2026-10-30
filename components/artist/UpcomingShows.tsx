@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { priceFrom } from "@/lib/posts";
 
 type Show = {
@@ -12,18 +12,18 @@ type Show = {
 export default function UpcomingShows({ shows }: { shows: Show[] }) {
   if (shows.length === 0) {
     return (
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 text-center">
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center">
         <h2 className="text-lg font-bold mb-2">Upcoming Shows</h2>
-        <p className="text-sm text-gray-500">No upcoming shows scheduled.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">No upcoming shows scheduled.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
         <h2 className="text-lg font-bold">Upcoming Shows</h2>
-        <Link href="/search" className="text-xs text-gray-500 hover:text-black">
+        <Link href="/search" className="text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
           See all
         </Link>
       </div>
@@ -41,18 +41,18 @@ export default function UpcomingShows({ shows }: { shows: Show[] }) {
           return (
             <li
               key={s.id}
-              className="flex items-center gap-4 px-6 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-4 px-6 py-4 border-b border-gray-100 dark:border-gray-800 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <div className="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+              <div className="w-16 h-16 rounded-lg bg-gray-100 dark:bg-gray-800 overflow-hidden shrink-0">
                 {s.hero_image ? (
                   <img src={s.hero_image} alt="" className="w-full h-full object-cover" />
                 ) : null}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold truncate">{s.title}</p>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                   {date}
-                  {from !== null ? " Ã‚· From £" + from.toFixed(2) : ""}
+                  {from !== null ? " Ãƒâ€šÂ· From Â£" + from.toFixed(2) : ""}
                 </p>
               </div>
               <Link

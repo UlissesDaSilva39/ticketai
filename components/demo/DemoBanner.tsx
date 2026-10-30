@@ -20,10 +20,11 @@ export function DemoBanner({ page }: { page: string }) {
           <p className="text-sm font-medium">You're exploring a live demo. Sign up free to book, buy, and save.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/signup" className="rounded-full bg-white text-violet-700 px-4 py-2 text-sm font-semibold hover:bg-gray-100">Sign up free</Link>
+          <Link href="/signup" className="rounded-full bg-white dark:bg-gray-900 text-violet-700 px-4 py-2 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800">Sign up free</Link>
           <button onClick={() => setDismissed(true)} className="text-white/70 hover:text-white text-sm">X</button>
         </div>
       </div>
     </div>
   );
 }
+

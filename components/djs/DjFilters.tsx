@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 
@@ -6,7 +6,7 @@ const STYLES = ['All genres', 'House', 'Techno', 'DnB', 'Disco', 'Hip-Hop'];
 const CITIES = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const TIERS  = ['All tiers', 'Resident', 'Headliner', 'International'];
 const DRAWS  = ['All draw', '<200', '200-500', '500-1500', '1500+'];
-const FEES   = ['All fees', 'Under £500', '£500-£1000', '£1000+'];
+const FEES   = ['All fees', 'Under Â£500', 'Â£500-Â£1000', 'Â£1000+'];
 
 export function DjFilters() {
   const [style, setStyle] = useState('All genres');
@@ -53,7 +53,7 @@ function Chip({
         'rounded-full border px-4 py-1.5 text-sm font-medium transition ' +
         (active
           ? 'border-black bg-black text-white'
-          : 'border-neutral-300 bg-white text-neutral-800 hover:border-neutral-900')
+          : 'border-neutral-300 bg-white dark:bg-gray-900 text-neutral-800 hover:border-neutral-900')
       }>
       {children}
     </button>

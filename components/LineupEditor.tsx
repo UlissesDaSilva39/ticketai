@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -82,13 +82,13 @@ export default function LineupEditor({
   return (
     <div className="space-y-6">
       {artists.length === 0 && (
-        <p className="text-gray-500 text-sm">No artists yet. Add one below.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">No artists yet. Add one below.</p>
       )}
 
       {artists.map((a, i) => (
-        <div key={i} className="border border-gray-200 rounded-2xl p-5 space-y-3">
+        <div key={i} className="border border-gray-200 dark:border-gray-800 rounded-2xl p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-500">Artist {i + 1}</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Artist {i + 1}</span>
             <div className="flex gap-2">
               <button
                 type="button"
@@ -96,7 +96,7 @@ export default function LineupEditor({
                 disabled={i === 0}
                 className="px-2 py-1 text-xs border border-gray-300 rounded disabled:opacity-30"
               >
-                ↑
+                â†‘
               </button>
               <button
                 type="button"
@@ -104,7 +104,7 @@ export default function LineupEditor({
                 disabled={i === artists.length - 1}
                 className="px-2 py-1 text-xs border border-gray-300 rounded disabled:opacity-30"
               >
-                ↓
+                â†“
               </button>
               <button
                 type="button"
@@ -147,7 +147,7 @@ export default function LineupEditor({
             <img
               src={a.photo}
               alt={a.name}
-              className="w-24 h-24 object-cover rounded-lg bg-gray-100"
+              className="w-24 h-24 object-cover rounded-lg bg-gray-100 dark:bg-gray-800"
             />
           )}
         </div>
@@ -157,7 +157,7 @@ export default function LineupEditor({
         <button
           type="button"
           onClick={add}
-          className="px-5 py-2.5 border-2 border-black rounded-full text-sm font-medium hover:bg-gray-50"
+          className="px-5 py-2.5 border-2 border-black rounded-full text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           + Add artist
         </button>
@@ -178,3 +178,4 @@ export default function LineupEditor({
     </div>
   );
 }
+

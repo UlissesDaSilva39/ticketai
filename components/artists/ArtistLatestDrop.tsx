@@ -18,10 +18,10 @@ export function ArtistLatestDrop({ drop }: { drop?: LatestDrop }) {
           <Link href={drop.ctaUrl} className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-neutral-800">
             Listen
           </Link>
-          <button type="button" className="rounded-full border border-neutral-300 bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+          <button type="button" className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-5 py-2.5 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
             Save
           </button>
-          <button type="button" className="rounded-full border border-neutral-300 bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+          <button type="button" className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-5 py-2.5 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
             Share
           </button>
         </div>

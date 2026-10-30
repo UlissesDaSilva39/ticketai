@@ -1,11 +1,11 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { SavedEventCard } from "@/components/wallet/SavedEventCard";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Wallet — GRID",
+  title: "Wallet â€” GRID",
   description: "Your saved events and ticket links, all in one place.",
 };
 
@@ -75,7 +75,7 @@ export default async function WalletPage() {
       </header>
 
       {saved.length === 0 ? (
-        <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center">
+        <div className="rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-8 text-center">
           <p className="text-neutral-700">You have not saved any events yet.</p>
           <Link
             href="/discover"

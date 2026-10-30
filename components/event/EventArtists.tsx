@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { PlayChip } from "@/components/player/PlayChip";
 
 type Artist = {
@@ -52,7 +52,7 @@ export default function EventArtists({
           return (
             <div
               key={artist.id}
-              className="bg-white border border-gray-200 rounded-2xl p-5"
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5"
             >
               <div className="flex items-start gap-4">
                 <Link
@@ -83,12 +83,12 @@ export default function EventArtists({
                         {name}
                       </Link>
                       {artist.username ? (
-                        <p className="text-xs text-gray-500">@{artist.username}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">@{artist.username}</p>
                       ) : null}
                     </div>
                     <Link
                       href={artist.username ? "/artists/" + artist.username : "#"}
-                      className="text-xs font-medium rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5"
+                      className="text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 text-gray-800 dark:text-gray-200 px-3 py-1.5"
                     >
                       View profile
                     </Link>
@@ -96,17 +96,17 @@ export default function EventArtists({
 
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {artist.role ? (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 uppercase font-semibold">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase font-semibold">
                         {artist.role}
                       </span>
                     ) : null}
                     {artist.genre ? (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                         {artist.genre}
                       </span>
                     ) : null}
                     {artist.city ? (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                         {artist.city}
                       </span>
                     ) : null}
@@ -115,9 +115,9 @@ export default function EventArtists({
               </div>
 
               {tracks.length > 0 ? (
-                <div className="mt-4 border-t border-gray-100 pt-4">
-                  <p className="text-xs uppercase tracking-wider text-gray-500 font-bold mb-2">
-                    {"Listen before you buy · " +
+                <div className="mt-4 border-t border-gray-100 dark:border-gray-800 pt-4">
+                  <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-bold mb-2">
+                    {"Listen before you buy Â· " +
                       tracks.length +
                       " track" +
                       (tracks.length === 1 ? "" : "s")}
@@ -126,7 +126,7 @@ export default function EventArtists({
                     {tracks.map((t) => (
                       <li
                         key={t.id}
-                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                       >
                         <div className="relative w-10 h-10 rounded-md bg-gradient-to-br from-gray-700 to-gray-900 shrink-0 flex items-center justify-center text-white overflow-hidden">
                           {t.cover_url ? (
@@ -155,10 +155,10 @@ export default function EventArtists({
                           <p className="text-sm font-semibold truncate">
                             {t.title}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                             {t.artist_name || "Artist"}
                             {t.duration_seconds
-                              ? " · " +
+                              ? " Â· " +
                                 Math.floor(t.duration_seconds / 60) +
                                 ":" +
                                 String(t.duration_seconds % 60).padStart(2, "0")

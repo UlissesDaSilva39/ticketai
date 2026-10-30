@@ -8,7 +8,7 @@ export function NotificationBell({ count = 0 }: { count?: number }) {
     <Link
       href="/notifications"
       aria-label={count > 0 ? count + " unread notifications" : "Notifications"}
-      className="relative inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition"
+      className="relative inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
     >
       <Bell size={20} aria-hidden="true" />
       {count > 0 ? (
@@ -22,3 +22,4 @@ export function NotificationBell({ count = 0 }: { count?: number }) {
     </Link>
   );
 }
+

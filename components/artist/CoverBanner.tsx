@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -31,7 +31,7 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
     .slice(0, 2)
     .toUpperCase();
 
-  const subtitle = [artist.genre, artist.city].filter(Boolean).join(" · ");
+  const subtitle = [artist.genre, artist.city].filter(Boolean).join(" Â· ");
 
   const toggleFollow = async () => {
     if (busy) return;
@@ -83,7 +83,7 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
           </div>
 
           <div className="flex-1 min-w-0 pb-2">
-            <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-2">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 mb-2">
               Artist
             </p>
             <h1
@@ -93,9 +93,9 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
               {name}
             </h1>
             {subtitle ? (
-              <p className="text-gray-600 mt-3 text-sm">{subtitle}</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-3 text-sm">{subtitle}</p>
             ) : null}
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {count.toLocaleString()} follower{count === 1 ? "" : "s"}
             </p>
           </div>
@@ -104,7 +104,7 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
             {isOwner ? (
               <Link
                 href="/profile/edit"
-                className="px-6 py-3 text-sm font-medium rounded-full border-2 border-black hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 text-sm font-medium rounded-full border-2 border-black hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
                 Edit profile
               </Link>
@@ -115,7 +115,7 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
                 className={
                   "px-8 py-3 text-sm font-medium rounded-full transition-all disabled:opacity-50 " +
                   (following
-                    ? "bg-white border-2 border-black text-black hover:bg-gray-50"
+                    ? "bg-white dark:bg-gray-900 border-2 border-black text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
                     : "bg-black text-white hover:bg-gray-800")
                 }
               >

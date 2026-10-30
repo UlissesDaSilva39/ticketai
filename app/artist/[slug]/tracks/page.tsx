@@ -75,7 +75,7 @@ export default async function ArtistTracksPage({ params }: Props) {
   const tracks: TrackRow[] = (tracksRaw as TrackRow[]) || [];
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -89,13 +89,13 @@ export default async function ArtistTracksPage({ params }: Props) {
               >
                 {(artistRow.name || "Artist") + " - Tracks"}
               </h1>
-              <p className="text-gray-600 mt-1 text-sm">
+              <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm">
                 Upload new music and manage what is live.
               </p>
             </div>
             <Link
               href={"/artists/" + (artistRow.slug ?? artistRow.id)}
-              className="text-sm underline text-gray-700 hover:text-black"
+              className="text-sm underline text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white"
             >
               View public profile
             </Link>
@@ -126,3 +126,4 @@ export default async function ArtistTracksPage({ params }: Props) {
     </div>
   );
 }
+

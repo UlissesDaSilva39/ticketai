@@ -1,9 +1,9 @@
-const SAMPLE = [
-  { producer: 'Kaytranada Jr.',   title: 'Motion',        key: 'Am', bpm: 92,  price: '£49', status: 'live' },
-  { producer: 'Ghost Loops',      title: 'Static',        key: 'Cm', bpm: 140, price: '£79', status: 'live' },
-  { producer: 'Neon Frames',      title: 'Afterglow',     key: 'F',  bpm: 128, price: '£39', status: 'live' },
-  { producer: 'Bristol Bass Co.', title: 'Low Tide',      key: 'G',  bpm: 174, price: '£59', status: 'live' },
-  { producer: 'Kaytranada Jr.',   title: 'Reflection',    key: 'Dm', bpm: 88,  price: '£49', status: 'live' },
+﻿const SAMPLE = [
+  { producer: 'Kaytranada Jr.',   title: 'Motion',        key: 'Am', bpm: 92,  price: 'Â£49', status: 'live' },
+  { producer: 'Ghost Loops',      title: 'Static',        key: 'Cm', bpm: 140, price: 'Â£79', status: 'live' },
+  { producer: 'Neon Frames',      title: 'Afterglow',     key: 'F',  bpm: 128, price: 'Â£39', status: 'live' },
+  { producer: 'Bristol Bass Co.', title: 'Low Tide',      key: 'G',  bpm: 174, price: 'Â£59', status: 'live' },
+  { producer: 'Kaytranada Jr.',   title: 'Reflection',    key: 'Dm', bpm: 88,  price: 'Â£49', status: 'live' },
 ];
 
 export function LiveBeatDrops() {
@@ -24,15 +24,15 @@ export function LiveBeatDrops() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/beats"
               className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">
-              Browse beats →
+              Browse beats â†’
             </a>
             <a href="/beats/sell"
-              className="rounded-full border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
-              Sell your beats →
+              className="rounded-full border border-neutral-300 bg-white dark:bg-gray-900 px-6 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900">
+              Sell your beats â†’
             </a>
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-left text-xs uppercase tracking-wider text-neutral-500">
               <tr>
@@ -56,7 +56,7 @@ export function LiveBeatDrops() {
                     <button type="button"
                       className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white hover:bg-neutral-800"
                       aria-label={`Preview ${b.title}`}>
-                      ▶
+                      â–¶
                     </button>
                   </td>
                 </tr>
@@ -64,7 +64,7 @@ export function LiveBeatDrops() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Previews refreshed 2 minutes ago · Powered by GRID Beats
+            Previews refreshed 2 minutes ago Â· Powered by GRID Beats
           </div>
         </div>
       </div>

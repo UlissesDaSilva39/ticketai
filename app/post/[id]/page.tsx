@@ -90,11 +90,11 @@ export default async function PostPage({ params }: Props) {
   }));
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-2xl px-6 py-10">
         <Link
           href="/home"
-          className="text-sm text-gray-500 hover:text-black mb-4 inline-block"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white mb-4 inline-block"
         >
           &larr; Back to feed
         </Link>
@@ -113,3 +113,4 @@ export default async function PostPage({ params }: Props) {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -34,16 +34,16 @@ export default function BoostButtons({ eventId, currentFeatured }: { eventId: st
     <div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {TIERS.map((t) => (
-          <div key={t.id} className={"relative border-2 rounded-lg p-6 " + (t.popular ? "border-black" : "border-gray-200")}>
+          <div key={t.id} className={"relative border-2 rounded-lg p-6 " + (t.popular ? "border-black" : "border-gray-200 dark:border-gray-800")}>
             {t.popular && (
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#00FF87] text-xs font-bold rounded-full">POPULAR</span>
             )}
-            <p className="text-xs uppercase tracking-widest text-gray-500 mb-2">{t.days} days</p>
-            <p className="text-4xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>£{t.price.toFixed(2)}</p>
+            <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">{t.days} days</p>
+            <p className="text-4xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>Â£{t.price.toFixed(2)}</p>
             <button
               onClick={() => boost(t.id)}
               disabled={processing !== null}
-              className={"w-full py-3 rounded-full font-medium " + (t.popular ? "bg-black text-white hover:bg-gray-800" : "border border-black hover:bg-gray-50") + " disabled:opacity-50"}
+              className={"w-full py-3 rounded-full font-medium " + (t.popular ? "bg-black text-white hover:bg-gray-800" : "border border-black hover:bg-gray-50 dark:hover:bg-gray-800") + " disabled:opacity-50"}
             >
               {processing === t.id ? "Redirecting..." : currentFeatured ? "Extend" : "Boost Now"}
             </button>
@@ -51,9 +51,10 @@ export default function BoostButtons({ eventId, currentFeatured }: { eventId: st
         ))}
       </div>
       {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
-      <p className="text-xs text-gray-500 mt-4 text-center">
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 text-center">
         Secure payment via Stripe. Featured status activates immediately after payment.
       </p>
     </div>
   );
 }
+

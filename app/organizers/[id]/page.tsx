@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+﻿import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import FollowButton from "@/components/FollowButton";
 import Link from "next/link";
@@ -77,9 +77,9 @@ export default async function OrganizerProfilePage({
       <div className="mb-8">
         <Link
           href="/"
-          className="text-sm text-gray-500 hover:text-black"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
         >
-          ← Back to Home
+          â† Back to Home
         </Link>
       </div>
 
@@ -97,12 +97,12 @@ export default async function OrganizerProfilePage({
           >
             {profile.full_name || "Organizer"}
           </h1>
-          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-4">
-            {profile.city && <span>📍 {profile.city}</span>}
-            <span>🎟️ {eventList.length} events</span>
+          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 dark:text-gray-400 mb-4">
+            {profile.city && <span>ðŸ“ {profile.city}</span>}
+            <span>ðŸŽŸï¸ {eventList.length} events</span>
           </div>
           {profile.bio && (
-            <p className="text-gray-700 leading-relaxed max-w-2xl mb-6">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed max-w-2xl mb-6">
               {profile.bio}
             </p>
           )}
@@ -150,7 +150,7 @@ export default async function OrganizerProfilePage({
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-12">
+      <div className="border-t border-gray-200 dark:border-gray-800 pt-12">
         <h2
           className="text-4xl md:text-5xl font-bold mb-8 uppercase"
           style={{ fontFamily: "var(--font-antonio)" }}
@@ -158,8 +158,8 @@ export default async function OrganizerProfilePage({
           EVENTS
         </h2>
         {eventList.length === 0 ? (
-          <div className="bg-gray-50 rounded-lg p-12 text-center">
-            <p className="text-gray-500">
+          <div className="bg-gray-50 dark:bg-gray-950 rounded-lg p-12 text-center">
+            <p className="text-gray-500 dark:text-gray-400">
               This organizer has no upcoming events yet.
             </p>
           </div>

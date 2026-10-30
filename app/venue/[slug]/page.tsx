@@ -1,4 +1,4 @@
-import { createServerSupabase } from "@/lib/supabase/server";
+﻿import { createServerSupabase } from "@/lib/supabase/server";
 import { EventCard } from "@/components/EventCard";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -109,7 +109,7 @@ export default async function VenuePage({
     }
   }
 
-  // Fallback availability — next 30 days, weekends only, except days with events
+  // Fallback availability â€” next 30 days, weekends only, except days with events
   const eventDaySet = new Set(
     allEvents.map((e) => new Date(e.start_date).toISOString().slice(0, 10))
   );
@@ -138,11 +138,11 @@ export default async function VenuePage({
   const userFollows: Record<string, boolean> = {};
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* COVER */}
         {v.hero_image && (
-          <div className="mb-6 rounded-2xl overflow-hidden border border-gray-200">
+          <div className="mb-6 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={v.hero_image}
@@ -153,7 +153,7 @@ export default async function VenuePage({
         )}
 
         {/* HEADER */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 mb-6">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 sm:p-8 mb-6">
           <div className="flex flex-col sm:flex-row gap-6 items-start">
             <div className="w-24 h-24 rounded-2xl bg-black text-white grid place-items-center text-2xl font-bold flex-shrink-0">
               {initials}
@@ -167,19 +167,19 @@ export default async function VenuePage({
               {/* Chips */}
               <div className="flex flex-wrap gap-2 mt-3">
                 {v.venue_type && (
-                  <span className="px-3 py-1 text-xs font-medium bg-gray-100 border border-gray-200 rounded-full capitalize">
+                  <span className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-full capitalize">
                     {v.venue_type}
                   </span>
                 )}
                 {v.city && (
-                  <span className="px-3 py-1 text-xs font-medium bg-gray-100 border border-gray-200 rounded-full inline-flex items-center gap-1">
+                  <span className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-full inline-flex items-center gap-1">
                     <MapPin className="h-3 w-3" />
                     {v.city}
                     {v.country ? `, ${v.country}` : ""}
                   </span>
                 )}
                 {v.capacity && (
-                  <span className="px-3 py-1 text-xs font-medium bg-gray-100 border border-gray-200 rounded-full inline-flex items-center gap-1">
+                  <span className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-full inline-flex items-center gap-1">
                     <Users className="h-3 w-3" />
                     {v.capacity.toLocaleString()} capacity
                   </span>
@@ -198,7 +198,7 @@ export default async function VenuePage({
                 {v.contact_email && (
                   <a
                     href={"mailto:" + v.contact_email}
-                    className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition inline-flex items-center gap-2"
+                    className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 transition inline-flex items-center gap-2"
                   >
                     <Mail className="h-4 w-4" />
                     Message
@@ -206,7 +206,7 @@ export default async function VenuePage({
                 )}
                 <a
                   href="#enquire"
-                  className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 transition"
+                  className="px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 transition"
                 >
                   Enquire about booking
                 </a>
@@ -219,21 +219,21 @@ export default async function VenuePage({
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
           <div className="space-y-6">
             {/* ABOUT */}
-            <section className="bg-white border border-gray-200 rounded-2xl p-6">
+            <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
               <h2 className="text-lg font-semibold mb-3">About</h2>
-              <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">
                 {v.description || "No description yet."}
               </p>
             </section>
 
-            {/* AVAILABILITY — NEW */}
+            {/* AVAILABILITY â€” NEW */}
             <VenueAvailabilityCalendar availableDates={availableDates} />
 
-            {/* FACILITIES — NEW */}
+            {/* FACILITIES â€” NEW */}
             <VenueFacilities facilities={null} />
 
             {/* UPCOMING EVENTS */}
-            <section className="bg-white border border-gray-200 rounded-2xl p-6">
+            <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
               <div className="flex items-baseline justify-between mb-4">
                 <h2 className="text-lg font-semibold inline-flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
@@ -242,7 +242,7 @@ export default async function VenuePage({
                 {upcomingEvents.length > 0 && (
                   <a
                     href="/events"
-                    className="text-sm text-gray-500 hover:text-black"
+                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
                   >
                     See all
                   </a>
@@ -250,12 +250,12 @@ export default async function VenuePage({
               </div>
 
               {upcomingEvents.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
+                <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 dark:bg-gray-950 p-6 text-center">
                   <Calendar className="mx-auto h-8 w-8 text-gray-400" />
-                  <div className="mt-3 text-sm font-medium text-gray-900">
+                  <div className="mt-3 text-sm font-medium text-gray-900 dark:text-gray-100">
                     No upcoming events yet
                   </div>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     Follow {v.name} to get notified when new events are announced.
                   </p>
                   <a
@@ -285,14 +285,14 @@ export default async function VenuePage({
               )}
             </section>
 
-            {/* PAST EVENTS — NEW */}
+            {/* PAST EVENTS â€” NEW */}
             {pastEvents.length > 0 && (
-              <section className="bg-white border border-gray-200 rounded-2xl p-6">
+              <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
                 <h2 className="text-lg font-semibold mb-4 inline-flex items-center gap-2">
                   <Music2 className="h-4 w-4" />
                   Past events
                 </h2>
-                <ul className="divide-y divide-gray-100">
+                <ul className="divide-y divide-gray-100 dark:divide-gray-800">
                   {pastEvents.map((event) => (
                     <li key={event.id} className="py-3 flex items-center gap-4">
                       <div className="flex-1 min-w-0">
@@ -302,7 +302,7 @@ export default async function VenuePage({
                         >
                           {event.title}
                         </a>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                           {new Date(event.start_date).toLocaleDateString("en-GB", {
                             weekday: "short",
                             day: "numeric",
@@ -311,7 +311,7 @@ export default async function VenuePage({
                           })}
                         </p>
                       </div>
-                      <span className="text-xs font-medium text-gray-500">
+                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                         {soldMap[event.id] || 0} sold
                       </span>
                     </li>
@@ -323,8 +323,8 @@ export default async function VenuePage({
 
           {/* SIDEBAR */}
           <aside className="space-y-6">
-            <section className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+            <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                 Location
               </h3>
               <p className="text-sm inline-flex items-start gap-1.5">
@@ -340,21 +340,21 @@ export default async function VenuePage({
             </section>
 
             {v.capacity && (
-              <section className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+              <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                   Capacity
                 </h3>
                 <p className="text-sm inline-flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5 text-gray-400" />
                   {v.capacity.toLocaleString()}
                   {v.standing_capacity && (
-                    <span className="text-xs text-gray-500 ml-1">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
                       ({v.standing_capacity.toLocaleString()} standing)
                     </span>
                   )}
                 </p>
                 {v.seated_capacity && (
-                  <p className="text-xs text-gray-500 mt-1 ml-5">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-5">
                     {v.seated_capacity.toLocaleString()} seated
                   </p>
                 )}
@@ -363,8 +363,8 @@ export default async function VenuePage({
 
             {/* CONTACT */}
             {(v.contact_email || v.contact_phone || v.website) && (
-              <section className="bg-white border border-gray-200 rounded-2xl p-6">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+              <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                   Contact
                 </h3>
                 <ul className="space-y-2 text-sm">
@@ -410,12 +410,12 @@ export default async function VenuePage({
             {/* ENQUIRY */}
             <section
               id="enquire"
-              className="bg-white border border-gray-200 rounded-2xl p-6"
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6"
             >
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                 Book this venue
               </h3>
-              <p className="text-xs text-gray-500 mb-3">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
                 Send an enquiry to the venue booking team.
               </p>
               {v.contact_email ? (
@@ -426,33 +426,33 @@ export default async function VenuePage({
                   Send enquiry
                 </a>
               ) : (
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   Contact details not available yet.
                 </p>
               )}
             </section>
 
             {/* DETAILS */}
-            <section className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+            <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
                 Details
               </h3>
               <dl className="text-sm space-y-2">
                 {v.venue_type && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-500">Type</dt>
+                    <dt className="text-gray-500 dark:text-gray-400">Type</dt>
                     <dd className="capitalize">{v.venue_type}</dd>
                   </div>
                 )}
                 {v.city && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-500">City</dt>
+                    <dt className="text-gray-500 dark:text-gray-400">City</dt>
                     <dd>{v.city}</dd>
                   </div>
                 )}
                 {v.capacity && (
                   <div className="flex justify-between">
-                    <dt className="text-gray-500">Capacity</dt>
+                    <dt className="text-gray-500 dark:text-gray-400">Capacity</dt>
                     <dd>{v.capacity.toLocaleString()}</dd>
                   </div>
                 )}
@@ -464,3 +464,4 @@ export default async function VenuePage({
     </div>
   );
 }
+

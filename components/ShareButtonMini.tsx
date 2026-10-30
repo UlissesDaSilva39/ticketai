@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -25,7 +25,7 @@ export default function ShareButtonMini({ url, title }: { url: string; title: st
       type="button"
       onClick={share}
       title={state === "copied" ? "Copied" : "Share"}
-      className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 hover:border-black hover:text-black flex items-center justify-center"
+      className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 dark:text-gray-400 hover:border-black hover:text-black dark:hover:text-white flex items-center justify-center"
     >
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="18" cy="5" r="3" />

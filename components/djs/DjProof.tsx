@@ -1,12 +1,12 @@
-const LOGOS = ['Fabric', 'Printworks', 'Village Underground', 'Motion', 'YES', 'Brudenell'];
+﻿const LOGOS = ['Fabric', 'Printworks', 'Village Underground', 'Motion', 'YES', 'Brudenell'];
 
 const TESTIMONIALS = [
   { quote: 'Sold my last club tour through GRID. No agents, no middlemen.',
-    name: 'DJ Proxy', role: 'House · London', stat: '£42k bookings' },
+    name: 'DJ Proxy', role: 'House Â· London', stat: 'Â£42k bookings' },
   { quote: 'Three festival bookings through GRID. No middlemen.',
-    name: 'Nightshift Nina', role: 'Techno · Manchester', stat: '3 festival slots' },
+    name: 'Nightshift Nina', role: 'Techno Â· Manchester', stat: '3 festival slots' },
   { quote: 'First year where I actually made money. The splits tool saved us.',
-    name: 'Selecta Jade', role: 'DnB · London', stat: '£18k this year' },
+    name: 'Selecta Jade', role: 'DnB Â· London', stat: 'Â£18k this year' },
 ];
 
 export function DjProof() {
@@ -21,7 +21,7 @@ export function DjProof() {
       <div className="mt-14 grid gap-5 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <figure key={t.name}
-            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white p-6">
+            className="flex flex-col justify-between rounded-2xl border border-neutral-200 bg-white dark:bg-gray-900 p-6">
             <blockquote className="text-base text-neutral-800">&ldquo;{t.quote}&rdquo;</blockquote>
             <figcaption className="mt-6">
               <p className="text-sm font-semibold">{t.name}</p>

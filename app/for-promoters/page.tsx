@@ -1,18 +1,18 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sell tickets free ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â no commission | GRID",
+  title: "Sell tickets free ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â no commission | GRID",
   description:
     "Free to use. No monthly fee. No per-ticket commission. Keep 100% of what your fans pay. Built-in campaign tracking and 3-day payouts.",
 };
 
 export default function ForPromotersPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-gray-900">
       <section className="max-w-6xl mx-auto px-6 py-20 md:py-28">
         <div className="max-w-3xl">
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-4">
+          <p className="text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4">
             For promoters
           </p>
           <h1
@@ -23,7 +23,7 @@ export default function ForPromotersPage() {
             <br />
             Pay no commission.
           </h1>
-          <p className="mt-6 text-xl text-gray-700 max-w-2xl">
+          <p className="mt-6 text-xl text-gray-700 dark:text-gray-300 max-w-2xl">
             Free to use. No monthly fee. No per-ticket cut. Keep 100% of what
             your fans pay.
           </p>
@@ -32,7 +32,7 @@ export default function ForPromotersPage() {
               href="/promoters/join"
               className="rounded-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800"
             >
-              Start selling ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â it&apos;s free
+              Start selling ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â it&apos;s free
             </Link>
             <a
               href="#compare"
@@ -41,23 +41,23 @@ export default function ForPromotersPage() {
               See the comparison
             </a>
           </div>
-          <p className="mt-4 text-sm text-gray-500">
+          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
             No credit card. No setup. Takes 5 minutes.
           </p>
         </div>
       </section>
 
-      <section className="border-y border-gray-200 bg-gray-50">
+      <section className="border-y border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-6xl mx-auto px-6 py-14 grid gap-8 md:grid-cols-3">
           <div>
             <p
               className="text-3xl font-bold uppercase"
               style={{ fontFamily: "var(--font-antonio)" }}
             >
-              Â£0 commission
+              Ã‚Â£0 commission
             </p>
-            <p className="mt-3 text-gray-700">
-              Other platforms take 3.5% + 49p per ticket. We take Â£0. You pay
+            <p className="mt-3 text-gray-700 dark:text-gray-300">
+              Other platforms take 3.5% + 49p per ticket. We take Ã‚Â£0. You pay
               only the Stripe processing fee that any payment processor charges.
             </p>
           </div>
@@ -68,7 +68,7 @@ export default function ForPromotersPage() {
             >
               Know what works
             </p>
-            <p className="mt-3 text-gray-700">
+            <p className="mt-3 text-gray-700 dark:text-gray-300">
               Built-in click tracking, conversion attribution, and channel
               analytics. See exactly which Instagram post or email sold your
               tickets.
@@ -81,7 +81,7 @@ export default function ForPromotersPage() {
             >
               Get paid in 3 days
             </p>
-            <p className="mt-3 text-gray-700">
+            <p className="mt-3 text-gray-700 dark:text-gray-300">
               Money in your account 3 days after your event, not 30. No waiting
               around for payouts that should have been yours already.
             </p>
@@ -110,19 +110,19 @@ export default function ForPromotersPage() {
             </thead>
             <tbody>
               {[
-                ["Listing fee", "Â£0", "Â£0", "Â£0"],
-                ["Per-ticket commission", "3.5% + 49p", "~5%", "Â£0"],
-                ["Payout delay", "5ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Å“30 days", "5 days", "3 days"],
+                ["Listing fee", "Ã‚Â£0", "Ã‚Â£0", "Ã‚Â£0"],
+                ["Per-ticket commission", "3.5% + 49p", "~5%", "Ã‚Â£0"],
+                ["Payout delay", "5ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ30 days", "5 days", "3 days"],
                 ["Built-in campaign tracking", "No", "No", "Yes"],
                 ["Click & conversion attribution", "No", "No", "Yes"],
                 ["AI campaign builder", "No", "No", "Coming"],
                 ["Free to start", "Yes", "Yes", "Yes"],
               ].map((row, i) => (
-                <tr key={i} className="border-b border-gray-200">
-                  <td className="py-3 pr-4 text-gray-600">{row[0]}</td>
+                <tr key={i} className="border-b border-gray-200 dark:border-gray-800">
+                  <td className="py-3 pr-4 text-gray-600 dark:text-gray-400">{row[0]}</td>
                   <td className="py-3 px-4">{row[1]}</td>
                   <td className="py-3 px-4">{row[2]}</td>
-                  <td className="py-3 px-4 font-medium bg-gray-50">
+                  <td className="py-3 px-4 font-medium bg-gray-50 dark:bg-gray-950">
                     {row[3]}
                   </td>
                 </tr>
@@ -132,7 +132,7 @@ export default function ForPromotersPage() {
         </div>
       </section>
 
-      <section className="border-y border-gray-200 bg-gray-50">
+      <section className="border-y border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <h2
             className="text-4xl md:text-5xl font-bold uppercase mb-12"
@@ -150,7 +150,7 @@ export default function ForPromotersPage() {
               {
                 n: "2",
                 t: "Share your link",
-                d: "One unique URL. Post it anywhere ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â Instagram, email, WhatsApp.",
+                d: "One unique URL. Post it anywhere ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Instagram, email, WhatsApp.",
               },
               {
                 n: "3",
@@ -171,7 +171,7 @@ export default function ForPromotersPage() {
                   {step.n}
                 </p>
                 <p className="mt-4 text-xl font-semibold">{step.t}</p>
-                <p className="mt-2 text-gray-600">{step.d}</p>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">{step.d}</p>
               </div>
             ))}
           </div>
@@ -185,19 +185,19 @@ export default function ForPromotersPage() {
         >
           Optional extras
         </h2>
-        <p className="text-gray-600 mb-10 max-w-2xl">
+        <p className="text-gray-600 dark:text-gray-400 mb-10 max-w-2xl">
           You only pay if you want them. Core ticketing stays free forever.
         </p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {[
             {
               t: "Featured placement",
-              p: "from Â£19/day",
+              p: "from Ã‚Â£19/day",
               d: "Pin your event to the top of search results in your city.",
             },
             {
               t: "Push to your followers",
-              p: "from Â£9 per blast",
+              p: "from Ã‚Â£9 per blast",
               d: "Notify everyone who follows you on GRID.",
             },
             {
@@ -211,10 +211,10 @@ export default function ForPromotersPage() {
               d: "Your logo, your colours, your domain on every ticket.",
             },
           ].map((x) => (
-            <div key={x.t} className="rounded-xl border border-gray-200 p-6">
+            <div key={x.t} className="rounded-xl border border-gray-200 dark:border-gray-800 p-6">
               <p className="font-semibold">{x.t}</p>
-              <p className="text-sm text-gray-500 mt-1">{x.p}</p>
-              <p className="mt-3 text-gray-700 text-sm">{x.d}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{x.p}</p>
+              <p className="mt-3 text-gray-700 dark:text-gray-300 text-sm">{x.d}</p>
             </div>
           ))}
         </div>
@@ -234,9 +234,9 @@ export default function ForPromotersPage() {
           <div className="mt-10 flex flex-wrap gap-4 justify-center">
             <Link
               href="/promoters/join"
-              className="rounded-full bg-white text-black px-8 py-4 font-medium hover:bg-gray-100"
+              className="rounded-full bg-white dark:bg-gray-900 text-black dark:text-white px-8 py-4 font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              Create your first event ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ¢â€šÂ¬Ãƒâ€šÃ¢â‚¬Â free
+              Create your first event ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â free
             </Link>
           </div>
           <p className="mt-8 text-sm text-white/60">

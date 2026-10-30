@@ -14,7 +14,7 @@ export default function SimilarArtists({ artists }: { artists: SimilarArtist[] }
   if (!artists || artists.length === 0) return null;
 
   return (
-    <section className="bg-white border border-gray-200 rounded-2xl p-6">
+    <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
       <h2 className="text-lg font-semibold mb-4">Fans Also Like</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {artists.map((a) => {
@@ -28,13 +28,13 @@ export default function SimilarArtists({ artists }: { artists: SimilarArtist[] }
             <Link
               key={a.slug}
               href={"/artist/" + a.slug}
-              className="flex flex-col items-center text-center p-3 rounded-xl hover:bg-gray-50 transition"
+              className="flex flex-col items-center text-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition"
             >
               {a.avatar_url ? (
                 <img
                   src={a.avatar_url}
                   alt={a.name}
-                  className="w-16 h-16 rounded-full object-cover border border-gray-200 mb-2"
+                  className="w-16 h-16 rounded-full object-cover border border-gray-200 dark:border-gray-800 mb-2"
                 />
               ) : (
                 <div className="w-16 h-16 rounded-full bg-black text-white grid place-items-center font-bold text-sm mb-2">
@@ -45,7 +45,7 @@ export default function SimilarArtists({ artists }: { artists: SimilarArtist[] }
                 {a.name}
                 {a.verified && <VerifiedBadge size={12} />}
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                 {a.genre} · {a.city}
               </div>
             </Link>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { MapPin, Calendar, Users } from "lucide-react";
 import type { City } from "@/lib/cities";
 
@@ -27,7 +27,7 @@ export default function CityLanding({
   artists: ArtistRow[];
 }) {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       {/* HERO */}
       <section className="bg-black text-white">
         <div className="max-w-6xl mx-auto px-4 py-16 sm:py-24">
@@ -68,14 +68,14 @@ export default function CityLanding({
             </h2>
             <Link
               href={"/events?city=" + city.slug}
-              className="text-sm text-gray-500 hover:text-black whitespace-nowrap"
+              className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white whitespace-nowrap"
             >
-              See all →
+              See all â†’
             </Link>
           </div>
 
           {events.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-2xl p-8 text-center text-gray-500 text-sm">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center text-gray-500 dark:text-gray-400 text-sm">
               No upcoming events in {city.name} yet. Check back soon.
             </div>
           ) : (
@@ -84,7 +84,7 @@ export default function CityLanding({
                 <Link
                   key={e.id}
                   href={"/event/" + e.id}
-                  className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition"
+                  className="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-md transition"
                   data-testid="city-event-card"
                 >
                   <div className="aspect-[16/9] bg-gradient-to-br from-gray-800 to-gray-600 overflow-hidden">
@@ -98,7 +98,7 @@ export default function CityLanding({
                     ) : null}
                   </div>
                   <div className="p-4">
-                    <p className="text-xs text-gray-500 mb-1">{fmtDate(e.start_date)}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{fmtDate(e.start_date)}</p>
                     <h3 className="font-semibold text-sm leading-snug line-clamp-2">
                       {e.title}
                     </h3>
@@ -118,7 +118,7 @@ export default function CityLanding({
             Venues in {city.name}
           </h2>
           {venues.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-2xl p-8 text-center text-gray-500 text-sm">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center text-gray-500 dark:text-gray-400 text-sm">
               No venues listed yet.
             </div>
           ) : (
@@ -127,11 +127,11 @@ export default function CityLanding({
                 <Link
                   key={v.id}
                   href={"/venue/" + v.slug}
-                  className="bg-white border border-gray-200 rounded-xl p-3 hover:shadow transition"
+                  className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 hover:shadow transition"
                   data-testid="city-venue-card"
                 >
                   <div className="text-sm font-medium truncate">{v.name}</div>
-                  <div className="text-xs text-gray-500 truncate">{v.city}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{v.city}</div>
                 </Link>
               ))}
             </div>
@@ -147,7 +147,7 @@ export default function CityLanding({
             Artists in {city.name}
           </h2>
           {artists.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-2xl p-8 text-center text-gray-500 text-sm">
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center text-gray-500 dark:text-gray-400 text-sm">
               No artists listed yet.
             </div>
           ) : (
@@ -156,11 +156,11 @@ export default function CityLanding({
                 <Link
                   key={a.id}
                   href={"/artist/" + a.slug}
-                  className="bg-white border border-gray-200 rounded-xl p-3 hover:shadow transition"
+                  className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-3 hover:shadow transition"
                   data-testid="city-artist-card"
                 >
                   <div className="text-sm font-medium truncate">{a.name}</div>
-                  <div className="text-xs text-gray-500 truncate">{a.genre ?? "Artist"}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{a.genre ?? "Artist"}</div>
                 </Link>
               ))}
             </div>
@@ -170,3 +170,4 @@ export default function CityLanding({
     </div>
   );
 }
+

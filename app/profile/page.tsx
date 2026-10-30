@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -87,9 +87,9 @@ export default async function ProfilePage() {
   const postsTab = (
     <div className="space-y-4">
       {myPosts.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-          <p className="text-gray-600 mb-3">You have not posted yet.</p>
-          <Link href="/home" className="text-sm underline hover:text-black">
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+          <p className="text-gray-600 dark:text-gray-400 mb-3">You have not posted yet.</p>
+          <Link href="/home" className="text-sm underline hover:text-black dark:hover:text-white">
             Go to the feed to post
           </Link>
         </div>
@@ -109,34 +109,34 @@ export default async function ProfilePage() {
   );
 
   const eventsTab = (
-    <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-      <p className="text-gray-600 mb-3">No events yet.</p>
-      <Link href="/organizer/events/new" className="text-sm underline hover:text-black">
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+      <p className="text-gray-600 dark:text-gray-400 mb-3">No events yet.</p>
+      <Link href="/organizer/events/new" className="text-sm underline hover:text-black dark:hover:text-white">
         Create your first event
       </Link>
     </div>
   );
 
   const followingTab = (
-    <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-      <p className="text-gray-600 mb-3">You are following {stats.following} accounts.</p>
-      <Link href="/following" className="text-sm underline hover:text-black">
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+      <p className="text-gray-600 dark:text-gray-400 mb-3">You are following {stats.following} accounts.</p>
+      <Link href="/following" className="text-sm underline hover:text-black dark:hover:text-white">
         View all
       </Link>
     </div>
   );
 
   const aboutTab = (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 space-y-3 text-sm">
-      <div><span className="text-gray-500">Role:</span> {profile.role || "—"}</div>
-      <div><span className="text-gray-500">City:</span> {profile.city || "—"}</div>
-      <div><span className="text-gray-500">Genre:</span> {profile.genre || "—"}</div>
-      <div><span className="text-gray-500">Visibility:</span> {profile.is_public ? "Public" : "Private"}</div>
+    <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 space-y-3 text-sm">
+      <div><span className="text-gray-500 dark:text-gray-400">Role:</span> {profile.role || "â€”"}</div>
+      <div><span className="text-gray-500 dark:text-gray-400">City:</span> {profile.city || "â€”"}</div>
+      <div><span className="text-gray-500 dark:text-gray-400">Genre:</span> {profile.genre || "â€”"}</div>
+      <div><span className="text-gray-500 dark:text-gray-400">Visibility:</span> {profile.is_public ? "Public" : "Private"}</div>
     </div>
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <nav aria-label="Your library" className="col-span-12 lg:col-span-3">
           <Sidebar />
@@ -158,3 +158,4 @@ export default async function ProfilePage() {
     </div>
   );
 }
+

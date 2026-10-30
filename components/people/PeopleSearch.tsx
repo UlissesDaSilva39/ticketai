@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ export default function PeopleSearch({ initial = "" }: { initial?: string }) {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="Search by name, @username, city, or genre..."
-        className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-full text-sm focus:border-black focus:outline-none"
+        className="w-full pl-11 pr-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-full text-sm focus:border-black focus:outline-none"
       />
     </div>
   );

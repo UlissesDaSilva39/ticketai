@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -65,13 +65,13 @@ export default async function TicketDetailPage({ params }: Props) {
   // Only the owner can view
   if (t.user_id !== user.id) {
     return (
-      <div className="bg-gray-50 min-h-screen pb-32">
+      <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
         <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-3"><Sidebar /></div>
           <main className="col-span-12 lg:col-span-9 min-w-0">
-            <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-              <p className="text-gray-900 font-medium mb-1">Not your ticket</p>
-              <p className="text-gray-600 text-sm mb-4">
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-12 text-center">
+              <p className="text-gray-900 dark:text-gray-100 font-medium mb-1">Not your ticket</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                 Only the ticket owner can view this page.
               </p>
               <Link href="/my-tickets" className="inline-block rounded-full bg-black text-white text-sm font-semibold px-6 py-2 hover:bg-gray-800">
@@ -122,18 +122,18 @@ export default async function TicketDetailPage({ params }: Props) {
   const qrValue = "GRID-TICKET:" + t.id + ":" + (t.qr_token || t.id);
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32">
       <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-3"><Sidebar /></div>
 
         <main className="col-span-12 lg:col-span-9 min-w-0">
-          <nav className="mb-4 text-xs text-gray-500">
-            <Link href="/my-tickets" className="hover:text-black">My Tickets</Link>
+          <nav className="mb-4 text-xs text-gray-500 dark:text-gray-400">
+            <Link href="/my-tickets" className="hover:text-black dark:hover:text-white">My Tickets</Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-800">{event?.title || "Ticket"}</span>
+            <span className="text-gray-800 dark:text-gray-200">{event?.title || "Ticket"}</span>
           </nav>
 
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
             {/* Header strip */}
             <div className="bg-gradient-to-br from-gray-900 via-gray-900 to-black text-white p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
@@ -148,11 +148,11 @@ export default async function TicketDetailPage({ params }: Props) {
                     {event?.title || "Event"}
                   </h1>
                   <p className="text-white/70 mt-2 text-sm">
-                    {dateStr}{timeStr ? " · " + timeStr : ""}
+                    {dateStr}{timeStr ? " Â· " + timeStr : ""}
                   </p>
                   {venue ? (
                     <p className="text-white/50 text-sm mt-1">
-                      {venue.name}{venue.city ? " · " + venue.city : ""}
+                      {venue.name}{venue.city ? " Â· " + venue.city : ""}
                     </p>
                   ) : null}
                 </div>
@@ -179,11 +179,11 @@ export default async function TicketDetailPage({ params }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 md:p-8">
               <div className="flex flex-col items-center justify-center">
                 <TicketQR value={qrValue} size={260} />
-                <p className="text-xs text-gray-500 mt-3 text-center max-w-xs">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center max-w-xs">
                   Show this at the door. Each QR is unique to this ticket.
                 </p>
                 <p className="text-[10px] font-mono text-gray-400 mt-1 break-all text-center max-w-xs">
-                  {t.id.slice(0, 8)} · {t.qr_token ? t.qr_token.slice(0, 12) : "no-token"}
+                  {t.id.slice(0, 8)} Â· {t.qr_token ? t.qr_token.slice(0, 12) : "no-token"}
                 </p>
               </div>
 
@@ -195,28 +195,28 @@ export default async function TicketDetailPage({ params }: Props) {
                   Ticket details
                 </h2>
 
-                <dl className="divide-y divide-gray-100 text-sm">
+                <dl className="divide-y divide-gray-100 dark:divide-gray-800 text-sm">
                   <div className="flex justify-between py-2.5">
-                    <dt className="text-gray-500">Event</dt>
-                    <dd className="font-semibold text-right">{event?.title || "â€”"}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400">Event</dt>
+                    <dd className="font-semibold text-right">{event?.title || "Ã¢â‚¬â€"}</dd>
                   </div>
                   <div className="flex justify-between py-2.5">
-                    <dt className="text-gray-500">Date</dt>
-                    <dd className="font-semibold text-right">{dateStr || "â€”"}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400">Date</dt>
+                    <dd className="font-semibold text-right">{dateStr || "Ã¢â‚¬â€"}</dd>
                   </div>
                   <div className="flex justify-between py-2.5">
-                    <dt className="text-gray-500">Time</dt>
-                    <dd className="font-semibold text-right">{timeStr || "â€”"}</dd>
+                    <dt className="text-gray-500 dark:text-gray-400">Time</dt>
+                    <dd className="font-semibold text-right">{timeStr || "Ã¢â‚¬â€"}</dd>
                   </div>
                   {venue ? (
                     <>
                       <div className="flex justify-between py-2.5">
-                        <dt className="text-gray-500">Venue</dt>
-                        <dd className="font-semibold text-right">{venue.name || "â€”"}</dd>
+                        <dt className="text-gray-500 dark:text-gray-400">Venue</dt>
+                        <dd className="font-semibold text-right">{venue.name || "Ã¢â‚¬â€"}</dd>
                       </div>
                       {venue.address ? (
                         <div className="flex justify-between py-2.5">
-                          <dt className="text-gray-500">Address</dt>
+                          <dt className="text-gray-500 dark:text-gray-400">Address</dt>
                           <dd className="font-semibold text-right max-w-[60%]">{venue.address}</dd>
                         </div>
                       ) : null}
@@ -224,26 +224,26 @@ export default async function TicketDetailPage({ params }: Props) {
                   ) : null}
                   {t.tier_name ? (
                     <div className="flex justify-between py-2.5">
-                      <dt className="text-gray-500">Ticket type</dt>
+                      <dt className="text-gray-500 dark:text-gray-400">Ticket type</dt>
                       <dd className="font-semibold text-right">{t.tier_name}</dd>
                     </div>
                   ) : null}
                   {typeof t.price_pence === "number" ? (
                     <div className="flex justify-between py-2.5">
-                      <dt className="text-gray-500">Paid</dt>
+                      <dt className="text-gray-500 dark:text-gray-400">Paid</dt>
                       <dd className="font-semibold text-right">
-                        £{(t.price_pence / 100).toFixed(2)}
+                        Â£{(t.price_pence / 100).toFixed(2)}
                       </dd>
                     </div>
                   ) : null}
                   <div className="flex justify-between py-2.5">
-                    <dt className="text-gray-500">Purchased</dt>
+                    <dt className="text-gray-500 dark:text-gray-400">Purchased</dt>
                     <dd className="font-semibold text-right">
                       {new Date(t.created_at).toLocaleDateString("en-GB")}
                     </dd>
                   </div>
                   <div className="flex justify-between py-2.5">
-                    <dt className="text-gray-500">Ticket ID</dt>
+                    <dt className="text-gray-500 dark:text-gray-400">Ticket ID</dt>
                     <dd className="font-mono text-xs text-right">{t.id.slice(0, 12)}</dd>
                   </div>
                 </dl>
@@ -258,8 +258,8 @@ export default async function TicketDetailPage({ params }: Props) {
                     </a>
                     <button
                       type="button"
-                      className="rounded-full border border-gray-300 text-gray-800 text-sm font-semibold px-5 py-2 hover:border-gray-400"
-                      // download via browser â€” no server action needed
+                      className="rounded-full border border-gray-300 text-gray-800 dark:text-gray-200 text-sm font-semibold px-5 py-2 hover:border-gray-400"
+                      // download via browser Ã¢â‚¬â€ no server action needed
                     >
                       Save as image
                     </button>
@@ -283,8 +283,8 @@ export default async function TicketDetailPage({ params }: Props) {
           </div>
 
           <div className="mt-6 text-center">
-            <Link href="/my-tickets" className="text-sm underline text-gray-600 hover:text-black">
-              â† Back to My Tickets
+            <Link href="/my-tickets" className="text-sm underline text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white">
+              Ã¢â€ Â Back to My Tickets
             </Link>
           </div>
         </main>

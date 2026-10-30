@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -95,14 +95,14 @@ export default function EditProfileForm({ initial }: { initial: Initial }) {
       {/* Cover */}
       {isArtistLike ? (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
             Cover banner
           </p>
           <div className="h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-black via-gray-800 to-gray-900 relative">
             {form.cover_image ? (
               <img src={form.cover_image} alt="" className="w-full h-full object-cover" />
             ) : null}
-            <label className="absolute bottom-3 right-3 px-4 py-2 bg-white/90 text-black text-xs font-medium rounded-full cursor-pointer hover:bg-white">
+            <label className="absolute bottom-3 right-3 px-4 py-2 bg-white/90 dark:bg-gray-900/90 text-black dark:text-white text-xs font-medium rounded-full cursor-pointer hover:bg-white">
               {uploading === "cover" ? "Uploading..." : "Change cover"}
               <input
                 type="file"
@@ -120,7 +120,7 @@ export default function EditProfileForm({ initial }: { initial: Initial }) {
 
       {/* Avatar */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
           Avatar
         </p>
         <div className="flex items-center gap-4">
@@ -131,7 +131,7 @@ export default function EditProfileForm({ initial }: { initial: Initial }) {
               initials
             )}
           </div>
-          <label className="px-4 py-2 border border-gray-300 text-sm rounded-full cursor-pointer hover:bg-gray-50">
+          <label className="px-4 py-2 border border-gray-300 text-sm rounded-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
             {uploading === "avatar" ? "Uploading..." : "Change avatar"}
             <input
               type="file"
@@ -273,7 +273,7 @@ export default function EditProfileForm({ initial }: { initial: Initial }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
+      <label className="block text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">
         {label}
       </label>
       {children}

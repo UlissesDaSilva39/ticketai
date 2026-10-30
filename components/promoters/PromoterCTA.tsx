@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export function PromoterCTA() {
   return (
@@ -13,16 +13,16 @@ export function PromoterCTA() {
             Set up in under five minutes.
           </p>
           <ul className="mt-4 flex flex-wrap gap-4 text-sm text-neutral-300">
-            <li>✓ Own your audience</li>
-            <li>✓ Instant payouts</li>
-            <li>✓ Zero platform fee on the first 100 tickets</li>
+            <li>âœ“ Own your audience</li>
+            <li>âœ“ Instant payouts</li>
+            <li>âœ“ Zero platform fee on the first 100 tickets</li>
           </ul>
         </div>
         <Link
           href="/promoters/apply"
-          className="rounded-full bg-white px-7 py-3 text-sm font-semibold text-black transition hover:bg-neutral-100"
+          className="rounded-full bg-white dark:bg-gray-900 px-7 py-3 text-sm font-semibold text-black dark:text-white transition hover:bg-neutral-100"
         >
-          Start free →
+          Start free â†’
         </Link>
       </div>
     </section>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 
 export default function BuyMerchButton({
@@ -56,13 +56,13 @@ export default function BuyMerchButton({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <label className="text-sm font-medium text-gray-700">Quantity</label>
-        <div className="flex items-center border border-gray-200 rounded-full">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
+        <div className="flex items-center border border-gray-200 dark:border-gray-800 rounded-full">
           <button
             type="button"
             onClick={() => setQty(Math.max(1, qty - 1))}
             disabled={qty <= 1}
-            className="w-9 h-9 flex items-center justify-center text-lg hover:bg-gray-100 rounded-l-full disabled:opacity-40"
+            className="w-9 h-9 flex items-center justify-center text-lg hover:bg-gray-100 dark:hover:bg-gray-800 rounded-l-full disabled:opacity-40"
           >
             -
           </button>
@@ -71,13 +71,13 @@ export default function BuyMerchButton({
             type="button"
             onClick={() => setQty(Math.min(10, qty + 1))}
             disabled={qty >= 10}
-            className="w-9 h-9 flex items-center justify-center text-lg hover:bg-gray-100 rounded-r-full disabled:opacity-40"
+            className="w-9 h-9 flex items-center justify-center text-lg hover:bg-gray-100 dark:hover:bg-gray-800 rounded-r-full disabled:opacity-40"
           >
             +
           </button>
         </div>
-        <span className="text-sm text-gray-500 ml-auto">
-          Total: <span className="font-bold text-black">{symbol}{((pricePence * qty) / 100).toFixed(2)}</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400 ml-auto">
+          Total: <span className="font-bold text-black dark:text-white">{symbol}{((pricePence * qty) / 100).toFixed(2)}</span>
         </span>
       </div>
 
@@ -89,7 +89,7 @@ export default function BuyMerchButton({
           "w-full rounded-full text-sm font-semibold px-6 py-3 transition-colors " +
           (inStock
             ? "bg-black text-white hover:bg-gray-800"
-            : "bg-gray-200 text-gray-500 cursor-not-allowed")
+            : "bg-gray-200 text-gray-500 dark:text-gray-400 cursor-not-allowed")
         }
       >
         {busy

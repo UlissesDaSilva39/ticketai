@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -36,8 +36,8 @@ function MarkPaidForm() {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-12">
-      <Link href="/admin/payouts" className="text-sm text-gray-500 hover:text-black">
-        ← Back to Payouts
+      <Link href="/admin/payouts" className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">
+        â† Back to Payouts
       </Link>
 
       <h1 className="text-4xl font-bold mb-8 mt-4" style={{ fontFamily: "var(--font-antonio)" }}>
@@ -80,3 +80,4 @@ export default function MarkPaidPage() {
     </Suspense>
   );
 }
+
