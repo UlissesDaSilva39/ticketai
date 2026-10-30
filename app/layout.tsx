@@ -1,4 +1,5 @@
-﻿import type { Metadata } from "next";
+﻿import ChatBot from '@/components/ChatBot';
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { createServerClient } from "@supabase/ssr";
@@ -63,8 +64,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Navbar user={navUser} />
         <main className="min-h-screen">{children}</main>
       </ThemeProvider>
+      <ChatBot />
     </body>
     </html>
   );
 }
+
 

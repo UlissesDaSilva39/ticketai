@@ -44,10 +44,13 @@ ${context || 'No matching entries found.'}`;
   if (!zaiRes.ok) {
     const err = await zaiRes.text();
     console.error('Z.ai error:', zaiRes.status, err);
-    return new Response(`Z.ai error: ${zaiRes.status}`, { status: 502 });
+    return new Response(`Z.ai error: ${zaiRes.status} ${err}`, { status: 502 });
   }
 
   return new Response(zaiRes.body, {
-    headers: { 'Content-Type': 'text/event-stream' },
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    },
   });
 }

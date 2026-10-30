@@ -33,7 +33,7 @@ export default function RoyaltiesPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950 dark:text-gray-100">
-      <div className="max-w-6xl mx-auto px-4 py-12">
+<div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
@@ -70,4 +70,7 @@ export default function RoyaltiesPage() {
     </main>
   )
 }
+
+
+
 

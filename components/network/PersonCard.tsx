@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import MessageButton from '@/components/MessageButton';
+import Link from "next/link";
 import FollowButton from "./FollowButton";
 
 type Person = {
@@ -94,8 +95,10 @@ export default function PersonCard({
           View profile
         </Link>
         <FollowButton targetId={person.id} initiallyFollowing={initiallyFollowing} />
+        <MessageButton targetUserId={person.id} />
       </div>
     </div>
   );
 }
+
 

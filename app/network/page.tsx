@@ -1,4 +1,6 @@
-﻿import type { Metadata } from "next";
+﻿
+import NetworkPrompt from '@/components/NetworkPrompt';
+import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import PersonCard from "@/components/network/PersonCard";
@@ -65,6 +67,7 @@ export default async function NetworkPage({
   if (!userId) {
     return (
       <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-32 sm:pb-0">
+      <NetworkPrompt />
         <div className="mx-auto max-w-[1400px] px-6 py-6 grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-3">
             <Sidebar />
@@ -185,7 +188,7 @@ export default async function NetworkPage({
               className="flex-1 bg-transparent outline-none px-3 py-2 text-sm"
             />
             {role ? <input type="hidden" name="role" value={role} /> : null}
-            <button
+<button
               type="submit"
               className="rounded-full bg-black text-white text-sm font-medium px-5 py-2 hover:bg-gray-800"
             >
@@ -259,4 +262,8 @@ export default async function NetworkPage({
     </div>
   );
 }
+
+
+
+
 

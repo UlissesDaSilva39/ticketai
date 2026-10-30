@@ -170,6 +170,9 @@ export default function BusinessPage() {
       </section>
 
       <p className="mt-8 text-center text-xs text-neutral-500">GRID â€” the network for live music.  Event data via Ticketmaster Developer API, used under permitted terms.</p>
-    </main>
+</main>
   );
 }
+
+
+
