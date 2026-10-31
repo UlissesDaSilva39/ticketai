@@ -58,6 +58,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Shop', href: '/shop' },
   { label: 'Royalties', href: '/royalties' },
   { label: 'Business', href: '/business' },
+  { label: 'Advertise', href: '/advertise' },
 ]
 
 type NavUser = {
@@ -212,7 +213,6 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
                 <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl py-2 w-64 z-50">
                   <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                     <div className="flex items-center gap-3">
-          <ThemeToggle />
                       <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">
                         {currentUser.name?.[0]?.toUpperCase() || 'U'}
                       </div>
