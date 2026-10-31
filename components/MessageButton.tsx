@@ -60,4 +60,26 @@ export default function MessageButton({ targetUserId }: { targetUserId: string }
       {open && createPortal(chatModal, document.body)}
     </>
   );
+}          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600 }}>Username</span>
+            <input required value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} placeholder="djpoxy" />
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600 }}>City</span>
+            <input required value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} placeholder="London" />
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600 }}>Genre</span>
+            <input required value={form.genre} onChange={e => setForm({ ...form, genre: e.target.value })} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} placeholder="House" />
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600 }}>Bio</span>
+            <textarea required value={form.bio} onChange={e => setForm({ ...form, bio: e.target.value })} rows={4} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} />
+          </label>
+          {error && <p style={{ color: '#dc2626', fontSize: '13px' }}>{error}</p>}
+          <button type="submit" disabled={loading} style={{ padding: '14px', borderRadius: '999px', border: 'none', background: '#111', color: '#fff', fontSize: '15px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer' }}>{loading ? 'Creating...' : 'Create profile'}</button>
+        </form>
+      </div>
+    </main>
+  );
 }
