@@ -1,4 +1,4 @@
-export const SIDEBAR_LIBRARY = [
+﻿export const SIDEBAR_LIBRARY = [
   { section: 'main', items: [
     { icon: 'home',   label: 'Home',    href: '/' },
     { icon: 'mic',    label: 'Artists', href: '/artists' },
@@ -15,5 +15,8 @@ export const SIDEBAR_LIBRARY = [
     { icon: 'sparkle', label: 'Opportunities', href: '/opportunities' },
     { icon: 'chart',   label: 'Dashboard',     href: '/organizer' },
     { icon: 'chart',   label: 'Data Ingestion', href: '/admin/ingestion' },
+  ]},
+  { section: 'dashboard', roles: ['artist', 'promoter', 'admin'], items: [
+    { icon: 'users', label: 'Audience', href: '/artist/dashboard' },
   ]},
 ] as const;

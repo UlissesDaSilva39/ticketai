@@ -4,7 +4,12 @@ import Link from 'next/link';
 import { SIDEBAR_LIBRARY } from '@/config/sidebar';
 import { Icon } from '@/components/ui/Icon';
 
-export function Sidebar() {
+export function Sidebar({ userRole }: { userRole?: string }) {
+  const visibleSections = SIDEBAR_LIBRARY.filter((section: any) => {
+    if (!section.roles) return true;
+    return userRole && section.roles.includes(userRole);
+  });
+
   return (
     <aside className="hidden lg:flex flex-col gap-4 w-64 pb-8">
       <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
@@ -13,9 +18,9 @@ export function Sidebar() {
           YOUR LIBRARY
         </div>
         <nav className="flex flex-col">
-          {SIDEBAR_LIBRARY.map((section) => (
+          {visibleSections.map((section: any) => (
             <div key={section.section} className="flex flex-col py-2 border-b border-gray-100 dark:border-gray-800 last:border-0">
-              {section.items.map((item) => (
+              {section.items.map((item: any) => (
                 <a key={item.href} href={item.href} className="flex items-center gap-3 px-2 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">
                   <Icon name={item.icon as any} className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                   {item.label}
@@ -50,8 +55,3 @@ export function Sidebar() {
     </aside>
   );
 }
-
-
-
-
-
