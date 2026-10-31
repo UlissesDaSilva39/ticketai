@@ -14,46 +14,11 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'Distribution', href: '/distribution' },
-  {
-    label: 'Discover',
-    dropdown: [
-      { label: 'Overview', href: '/discover' },
-      { label: 'Artists', href: '/discover/artists' },
-      { label: 'Venues', href: '/discover/venues' },
-      { label: 'Events', href: '/discover/events' },
-      { label: 'Promoters', href: '/discover/promoters' },
-      { label: 'Festivals', href: '/discover/festivals' },
-      { label: 'Labels', href: '/discover/labels' },
-    ],
-  },
   { label: 'Search', href: '/search' },
-  {
-    label: 'Artists',
-    dropdown: [
-      { label: 'All Artists', href: '/artists' },
-      { label: 'DJs', href: '/artists?type=dj' },
-      { label: 'Producers', href: '/artists?type=producer' },
-      { label: 'Vocalists', href: '/artists?type=vocalist' },
-      { label: 'Bands', href: '/artists?type=band' },
-    ],
-  },
-  {
-    label: 'Social',
-    dropdown: [
-      { label: 'Feed', href: '/feed' },
-      { label: 'People', href: '/people' },
-      { label: 'Messages', href: '/messages' },
-      { label: 'Following', href: '/following' },
-    ],
-  },
-  {
-    label: 'Network',
-    dropdown: [
-      { label: 'People', href: '/network' },
-      { label: 'Venues', href: '/network?tab=venues' },
-      { label: 'Promoters', href: '/network?tab=promoters' },
-    ],
-  },
+  { label: 'Cities', href: '/discover' },
+  { label: 'Artists', href: '/artists' },
+  { label: 'Social', href: '/feed' },
+  { label: 'Network', href: '/network' },
   { label: 'Industry', href: '/industry' },
   { label: 'Shop', href: '/shop' },
   { label: 'Royalties', href: '/royalties' },
