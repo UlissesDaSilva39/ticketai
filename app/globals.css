@@ -91,3 +91,27 @@ button.text-white:hover {
 
 .hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+
+/* ===== GRID Studio top-bar link ===== */
+.nav-item.is-studio,
+.nav-item[href="/studio"],
+a[href="/studio"].nav-item {
+  color: #4f8cff;
+  font-weight: 600;
+  position: relative;
+}
+.nav-item.is-studio::before,
+.nav-item[href="/studio"]::before,
+a[href="/studio"].nav-item::before {
+  content: "\25CF";
+  font-size: 8px;
+  color: #4f8cff;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.nav-item.is-studio:hover,
+.nav-item[href="/studio"]:hover,
+a[href="/studio"].nav-item:hover {
+  color: #ffffff;
+  background: rgba(79,140,255,0.12);
+}

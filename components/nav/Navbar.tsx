@@ -22,6 +22,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Royalties', href: '/royalties' },
   { label: 'Business', href: '/business' },
   { label: 'Advertise', href: '/advertise' },
+          { label: "Studio", href: "/studio" },
 ]
 
 type NavUser = {
@@ -286,6 +287,7 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
     </header>
   )
 }
+
 
 
 
