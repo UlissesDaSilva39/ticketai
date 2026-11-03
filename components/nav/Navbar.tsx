@@ -23,6 +23,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Business', href: '/business' },
   { label: 'Advertise', href: '/advertise' },
           { label: "Studio", href: "/studio" },
+  { label: "Stream", href: "/stream", icon: "S" },
+  { label: "Meet", href: "/meet", icon: "M" },
+  { label: "Tracks", href: "/tracks", icon: "T" },
 ]
 
 type NavUser = {
@@ -287,6 +290,8 @@ export function Navbar({ user: initialUser }: { user?: NavUser }) {
     </header>
   )
 }
+
+
 
 
 

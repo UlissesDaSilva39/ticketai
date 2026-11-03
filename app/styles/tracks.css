@@ -1,0 +1,100 @@
+﻿/* ===== GRID Tracks marketplace ===== */
+.tracks-page { min-height: 100vh; background: #14161a; color: #e7ebf1; }
+.tracks-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.tracks-hero { padding: 64px 0; background: radial-gradient(ellipse at top, rgba(79,140,255,0.08), transparent 60%); }
+.tracks-eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #4f8cff; font-weight: 700; margin: 0 0 16px; }
+.tracks-title { font-size: 48px; line-height: 1.05; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.02em; }
+.tracks-subtitle { font-size: 17px; line-height: 1.6; color: #9aa4b2; max-width: 640px; margin: 0 0 24px; }
+.tracks-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.tracks-section { padding: 48px 0; }
+.tracks-back { color: #4f8cff; font-size: 13px; text-decoration: none; display: inline-block; margin-bottom: 16px; }
+
+.tracks-filter-row { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: center; }
+.tracks-search { flex: 1; min-width: 240px; padding: 10px 14px; background: #0d0d0f; border: 1px solid #2a2f38; border-radius: 8px; color: #e7ebf1; font-size: 14px; }
+.tracks-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.tracks-filter { padding: 6px 12px; background: transparent; border: 1px solid #2a2f38; border-radius: 20px; color: #9aa4b2; font-size: 12px; cursor: pointer; }
+.tracks-filter.active { background: #4f8cff; border-color: #4f8cff; color: #fff; }
+
+.tracks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.tracks-card { text-decoration: none; color: inherit; background: #1b1e24; border: 1px solid #2a2f38; border-radius: 12px; overflow: hidden; transition: border-color .15s, transform .15s; }
+.tracks-card:hover { border-color: #4f8cff; transform: translateY(-2px); }
+.tracks-card-cover { aspect-ratio: 1; position: relative; display: grid; place-items: center; }
+.tracks-card-kind { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.6); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
+.tracks-card-split { position: absolute; top: 12px; right: 12px; background: #a855f7; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; }
+.tracks-card-body { padding: 16px; }
+.tracks-card-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.tracks-card-artist { font-size: 13px; color: #4f8cff; margin-bottom: 6px; }
+.tracks-card-meta { font-size: 11px; color: #9aa4b2; margin-bottom: 12px; }
+.tracks-card-footer { display: flex; justify-content: space-between; align-items: center; }
+.tracks-card-price { font-size: 14px; font-weight: 700; color: #00ff87; }
+.tracks-card-stats { font-size: 11px; color: #6b7480; }
+
+.tracks-empty { padding: 48px; text-align: center; color: #6b7480; font-size: 14px; border: 1px dashed #2a2f38; border-radius: 8px; }
+
+/* Detail page */
+.tracks-detail { display: grid; grid-template-columns: 1fr 320px; gap: 32px; margin-top: 24px; }
+.tracks-detail-main { min-width: 0; }
+.tracks-detail-cover { aspect-ratio: 1; max-width: 400px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 24px; }
+.tracks-detail-cover-inner { text-align: center; padding: 24px; }
+.tracks-detail-cover-title { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.tracks-detail-cover-artist { font-size: 14px; color: rgba(255,255,255,0.8); }
+.tracks-detail-title { font-size: 32px; font-weight: 800; margin: 0 0 12px; }
+.tracks-detail-desc { font-size: 15px; color: #9aa4b2; line-height: 1.6; margin: 0 0 24px; }
+.tracks-detail-specs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; padding: 16px; background: #1b1e24; border: 1px solid #2a2f38; border-radius: 8px; }
+.tracks-spec { display: flex; flex-direction: column; gap: 4px; }
+.tracks-spec span { font-size: 10px; color: #6b7480; text-transform: uppercase; letter-spacing: 0.08em; }
+.tracks-spec strong { font-size: 14px; color: #e7ebf1; }
+.tracks-detail-genres { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+.tracks-genre { font-size: 12px; padding: 4px 10px; background: #1b1e24; border: 1px solid #2a2f38; border-radius: 20px; color: #9aa4b2; }
+
+.tracks-detail-side { min-width: 0; }
+.tracks-side-card { padding: 20px; background: #1b1e24; border: 1px solid #2a2f38; border-radius: 12px; }
+.tracks-side-price { font-size: 32px; font-weight: 800; color: #00ff87; margin-bottom: 4px; }
+.tracks-side-license { font-size: 13px; color: #e7ebf1; margin-bottom: 2px; }
+.tracks-side-pricing { font-size: 11px; color: #6b7480; }
+.tracks-side-sold { padding: 12px; background: #1b1e24; border: 1px solid #ef4444; border-radius: 8px; color: #ef4444; font-weight: 600; text-align: center; margin-top: 16px; }
+.tracks-side-artist { display: flex; gap: 12px; align-items: center; }
+.tracks-side-avatar { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 20px; font-weight: 700; }
+.tracks-side-artist-name { font-size: 14px; font-weight: 600; }
+.tracks-side-artist-handle { font-size: 12px; color: #9aa4b2; }
+.tracks-side-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7480; margin: 24px 0 12px; }
+
+.tracks-collab-list { margin-top: 32px; }
+.tracks-collab-item { padding: 12px; background: #1b1e24; border: 1px solid #2a2f38; border-radius: 8px; margin-bottom: 8px; }
+.tracks-collab-head { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.tracks-collab-head strong { font-size: 13px; }
+.tracks-collab-split { font-size: 11px; color: #00ff87; font-weight: 600; }
+.tracks-collab-msg { font-size: 13px; color: #9aa4b2; margin: 0; }
+
+/* Forms */
+.tracks-form { display: flex; flex-direction: column; gap: 16px; }
+.tracks-field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #9aa4b2; }
+.tracks-field input, .tracks-field select, .tracks-field textarea { padding: 10px 12px; background: #0d0d0f; border: 1px solid #2a2f38; border-radius: 8px; color: #e7ebf1; font-size: 14px; font-family: inherit; }
+.tracks-field input[type="range"] { padding: 4px 0; }
+.tracks-checkbox { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #9aa4b2; cursor: pointer; }
+
+/* Modal */
+.tracks-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; }
+.tracks-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 480px; max-width: calc(100vw - 32px); background: #1b1e24; border: 1px solid #2a2f38; border-radius: 12px; padding: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 12px; }
+.tracks-modal-title { font-size: 18px; font-weight: 700; margin: 0 0 12px; }
+
+/* Purchases */
+.tracks-purchases { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; }
+.tracks-purchase { display: grid; grid-template-columns: 1fr auto auto auto; gap: 16px; align-items: center; padding: 16px; background: #1b1e24; border: 1px solid #2a2f38; border-radius: 8px; }
+.tracks-purchase-title { font-weight: 600; }
+.tracks-purchase-meta { font-size: 12px; color: #9aa4b2; }
+.tracks-purchase-price { font-family: monospace; font-weight: 600; color: #00ff87; }
+.tracks-purchase-date { font-size: 12px; color: #6b7480; }
+
+/* Shared btn styles (if not already in globals) */
+.btn { display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px; border-radius: 8px; border: 1px solid #2a2f38; background: transparent; color: #e7ebf1; font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer; }
+.btn:hover { background: #1b1e24; }
+.btn-primary { background: #4f8cff; border-color: #4f8cff; color: #fff; }
+.btn-primary:hover { background: #3d7aed; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@media (max-width: 1023px) {
+  .tracks-title { font-size: 32px; }
+  .tracks-detail { grid-template-columns: 1fr; }
+  .tracks-detail-specs { grid-template-columns: repeat(2, 1fr); }
+}
