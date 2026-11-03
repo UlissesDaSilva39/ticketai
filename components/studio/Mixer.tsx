@@ -1,40 +1,55 @@
 ﻿"use client";
 import { useStudio } from "./StudioContext";
+import MixerChannel from "./MixerChannel";
 
 export default function Mixer() {
-  const { project, setVolume, setPan, toggleMute, toggleSolo, selectedTrackId, setSelectedTrackId } = useStudio();
+  const { project, getAnalyser, selectedTrackId, setSelectedTrackId, mixerView, setMixerView } = useStudio() as any;
+
   return (
     <div className="studio-mixer">
-      <div className="studio-mixer-title">MIXER</div>
-      <div className="studio-faders">
-        {project.tracks.map(t => (
-          <div
+      <div className="studio-mixer-header">
+        <span className="studio-mixer-title">MIXER</span>
+        <div className="studio-mixer-controls">
+          <button
+            className={`studio-mixer-toggle ${mixerView === "strip" ? "active" : ""}`}
+            onClick={() => setMixerView("strip")}
+          >Strip</button>
+          <button
+            className={`studio-mixer-toggle ${mixerView === "wide" ? "active" : ""}`}
+            onClick={() => setMixerView("wide")}
+          >Wide</button>
+        </div>
+      </div>
+      <div className="studio-mixer-strips">
+        {project.tracks.map((t: any) => (
+          <MixerChannel
             key={t.id}
-            className={`studio-fader ${selectedTrackId === t.id ? "selected" : ""}`}
-            onClick={() => setSelectedTrackId(t.id)}
-          >
-            <div className="studio-fader-value">{Math.round(t.volume * 100)}</div>
-            <input
-              type="range" min={0} max={1} step={0.01} value={t.volume}
-              className="studio-fader-slider"
-              onChange={e => setVolume(t.id, Number(e.target.value))}
-            />
-            <input
-              type="range" min={-1} max={1} step={0.01} value={t.pan}
-              className="studio-pan-slider"
-              onChange={e => setPan(t.id, Number(e.target.value))}
-              title={`Pan ${t.pan > 0 ? "R" : t.pan < 0 ? "L" : "C"}`}
-            />
-            <div className="studio-fader-label">{t.name}</div>
-            <div className="studio-fader-buttons">
-              <button className={`studio-ms ${t.muted ? "on" : ""}`} onClick={() => toggleMute(t.id)}>M</button>
-              <button className={`studio-ms ${t.soloed ? "on" : ""}`} onClick={() => toggleSolo(t.id)}>S</button>
-            </div>
-          </div>
+            track={t}
+            selected={selectedTrackId === t.id}
+            onSelect={() => setSelectedTrackId(t.id)}
+            analyser={getAnalyser?.(t.id)}
+          />
         ))}
-        <div className="studio-fader master">
-          <div className="studio-fader-label">MASTER</div>
-          <div className="studio-fader-value">80</div>
+        <div className="studio-mixer-master">
+          <MixerChannel
+            track={{
+              id: "master",
+              name: "MASTER",
+              color: "#00d4ff",
+              volume: project.masterVolume,
+              pan: 0,
+              muted: false,
+              soloed: false,
+              type: "audio",
+              plugins: [],
+              clips: [],
+              notes: [],
+            }}
+            selected={false}
+            onSelect={() => {}}
+            analyser={undefined}
+            isMaster={true}
+          />
         </div>
       </div>
     </div>

@@ -27,10 +27,10 @@ export default function MessageButton({ targetUserId }: { targetUserId: string }
     <div style={{
       position: 'fixed', bottom: '20px', right: '20px',
       width: '340px', height: '450px',
-      background: '#fff', borderRadius: '16px', 
+      background: '#fff', borderRadius: '16px',
       boxShadow: '0 12px 48px rgba(0,0,0,0.3)',
-      display: 'flex', flexDirection: 'column', 
-      zIndex: 2147483647, 
+      display: 'flex', flexDirection: 'column',
+      zIndex: 2147483647,
       transform: 'translateZ(0)', // Forces a new stacking context above all cards
       border: '1px solid #e5e5e5', overflow: 'hidden'
     }}>
@@ -59,27 +59,5 @@ export default function MessageButton({ targetUserId }: { targetUserId: string }
       </button>
       {open && createPortal(chatModal, document.body)}
     </>
-  );
-}          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600 }}>Username</span>
-            <input required value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} placeholder="djpoxy" />
-          </label>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600 }}>City</span>
-            <input required value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} placeholder="London" />
-          </label>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600 }}>Genre</span>
-            <input required value={form.genre} onChange={e => setForm({ ...form, genre: e.target.value })} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} placeholder="House" />
-          </label>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 600 }}>Bio</span>
-            <textarea required value={form.bio} onChange={e => setForm({ ...form, bio: e.target.value })} rows={4} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ccc' }} />
-          </label>
-          {error && <p style={{ color: '#dc2626', fontSize: '13px' }}>{error}</p>}
-          <button type="submit" disabled={loading} style={{ padding: '14px', borderRadius: '999px', border: 'none', background: '#111', color: '#fff', fontSize: '15px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer' }}>{loading ? 'Creating...' : 'Create profile'}</button>
-        </form>
-      </div>
-    </main>
   );
 }

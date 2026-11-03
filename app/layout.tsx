@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "@/app/styles/stream-meet.css";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { Navbar } from "@/components/nav/Navbar";
@@ -69,5 +70,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     </html>
   );
 }
+
+
 
 

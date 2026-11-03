@@ -234,3 +234,36 @@ export function serializeProject(p: StudioProject): string {
   return JSON.stringify(stripped);
 }
 
+
+// ============================================================
+// Mixer types & utilities
+// ============================================================
+export type MixerViewMode = "strip" | "wide";
+
+export function gainToDb(gain: number): number {
+  if (gain <= 0) return -Infinity;
+  return 20 * Math.log10(gain);
+}
+
+export function dbToGain(db: number): number {
+  if (db === -Infinity) return 0;
+  return Math.pow(10, db / 20);
+}
+
+export function formatDb(db: number): string {
+  if (db === -Infinity) return "-∞";
+  if (db > 0) return `+${db.toFixed(1)}`;
+  return db.toFixed(1);
+}
+
+export function dbToFader(db: number): number {
+  if (db <= -60) return 0;
+  if (db >= 6) return 1;
+  return (db + 60) / 66;
+}
+
+export function faderToDb(pos: number): number {
+  if (pos <= 0) return -Infinity;
+  if (pos >= 1) return 6;
+  return (pos * 66) - 60;
+}

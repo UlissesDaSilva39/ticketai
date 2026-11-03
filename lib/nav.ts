@@ -15,6 +15,8 @@ export const NAV_ITEMS: NavItem[] = [
   { id: "business",     label: "Business",     href: "/business",     icon: "B", match: "prefix", mobile: false,  description: "Dashboard, promotion, industry, shop, advertise" },
   { id: "distribution", label: "Distribution", href: "/distribution", icon: "X", match: "prefix", mobile: false, description: "Campaigns, links, analytics" },
   { id: "studio",       label: "Studio",       href: "/studio",       icon: "S", match: "prefix", mobile: true,  description: "DAW: record, arrange, mix" },
+  { id: "stream", label: "Stream", href: "/stream", icon: "▶", match: "prefix", mobile: true, description: "Video + live broadcast" },
+  { id: "meet", label: "Meet", href: "/meet", icon: "◉", match: "prefix", mobile: true, description: "Video meetings" },
   { id: "my-grid",      label: "My GRID",      href: "/my-grid",      icon: "M", match: "prefix", mobile: true,  description: "Profile, saved, wallet, alerts, royalties" },
 ];
 
@@ -23,5 +25,6 @@ export function isActive(pathname: string, item: NavItem): boolean {
   if (item.match === "exact") return pathname === item.href;
   return pathname === item.href || pathname.startsWith(item.href + "/");
 }
+
 
 

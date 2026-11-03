@@ -1,33 +1,45 @@
 ﻿"use client";
 import { useStudio } from "./StudioContext";
-import MixerStrip from "./MixerStrip";
+import MixerChannel from "./MixerChannel";
 
 export default function MixView() {
-  const { project, selectedTrackId, setSelectedTrackId, setVolume, setPan, toggleMute, toggleSolo, getAnalyser } = useStudio() as any;
+  const { project, getAnalyser, selectedTrackId, setSelectedTrackId } = useStudio() as any;
+
   return (
     <div className="studio-mix-view">
       <div className="studio-mix-strips">
         {project.tracks.map((t: any) => (
-          <MixerStrip
+          <MixerChannel
             key={t.id}
             track={t}
             selected={selectedTrackId === t.id}
             onSelect={() => setSelectedTrackId(t.id)}
-            onVolume={v => setVolume(t.id, v)}
-            onPan={v => setPan(t.id, v)}
-            onMute={() => toggleMute(t.id)}
-            onSolo={() => toggleSolo(t.id)}
             analyser={getAnalyser?.(t.id)}
           />
         ))}
-        <div className="studio-strip master">
-          <div className="studio-strip-name">MASTER</div>
-          <div className="studio-strip-meter">
-            <div className="studio-strip-meter-fill" style={{ height: "40%" }} />
-          </div>
-          <input type="range" min={0} max={1} step={0.01} defaultValue={0.8} className="studio-strip-fader" />
+        <div className="studio-mixer-master">
+          <MixerChannel
+            track={{
+              id: "master",
+              name: "MASTER",
+              color: "#00d4ff",
+              volume: project.masterVolume,
+              pan: 0,
+              muted: false,
+              soloed: false,
+              type: "audio",
+              plugins: [],
+              clips: [],
+              notes: [],
+            }}
+            selected={false}
+            onSelect={() => {}}
+            analyser={undefined}
+            isMaster={true}
+          />
         </div>
       </div>
     </div>
   );
 }
+
