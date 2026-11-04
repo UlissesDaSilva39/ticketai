@@ -1,6 +1,4 @@
-﻿// ============================================================
-// GRID Navigation — grouped, logical structure
-// ============================================================
+// GRID nav — safe ASCII icons (no emoji, no encoding issues)
 
 export type NavItem = {
   id: string;
@@ -23,47 +21,40 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     id: "discover",
     label: "Discover",
-    icon: "◎",
+    icon: "D",
     items: [
-      { id: "home",        label: "Home",        href: "/",           icon: "⌂", match: "exact",  mobile: true,  description: "Homepage" },
-      { id: "radar",       label: "Radar",       href: "/radar",      icon: "◎", match: "prefix", mobile: true,  description: "Personalized feed" },
-      { id: "discover",    label: "Discover",    href: "/discover",   icon: "◈", match: "prefix", mobile: true,  description: "One place to see everything" },
-      { id: "stream",      label: "Stream",      href: "/stream",     icon: "▶", match: "prefix", mobile: true,  description: "Video + live broadcast" },
-      { id: "events",      label: "Events",      href: "/events",     icon: "◌", match: "prefix", mobile: false, description: "Live events and gigs" },
+      { id: "discover", label: "Discover", href: "/discover", icon: "D", match: "prefix", mobile: true, description: "Explore everything" },
+      { id: "radar", label: "Radar", href: "/radar", icon: "R", match: "prefix", mobile: true, description: "Personalized feed" },
+      { id: "stream", label: "Stream", href: "/stream", icon: "S", match: "prefix", mobile: true, description: "Video + live" },
     ],
   },
   {
     id: "create",
     label: "Create",
-    icon: "✎",
+    icon: "C",
     items: [
-      { id: "studio",       label: "Studio",       href: "/studio",       icon: "S", match: "prefix", mobile: true,  description: "Record, arrange, mix" },
-      { id: "tracks",       label: "Tracks",       href: "/tracks",       icon: "T", match: "prefix", mobile: true,  description: "Buy, sell, collaborate" },
-      { id: "distribution", label: "Distribution", href: "/distribution", icon: "↗", match: "prefix", mobile: false, description: "Release to 150+ platforms" },
-      { id: "records",      label: "Records",      href: "/records",      icon: "R", match: "prefix", mobile: true,  description: "Virtual record label" },
-      { id: "playlists",    label: "Playlists",    href: "/playlists",    icon: "▤", match: "prefix", mobile: false, description: "Cross-platform playlists" },
+      { id: "studio", label: "Studio", href: "/studio", icon: "S", match: "prefix", mobile: true, description: "Record, arrange, mix" },
+      { id: "tracks", label: "Tracks", href: "/tracks", icon: "T", match: "prefix", mobile: true, description: "Buy, sell, collaborate" },
+      { id: "records", label: "Records", href: "/records", icon: "R", match: "prefix", mobile: true, description: "Virtual record label" },
+      { id: "distribution", label: "Distribution", href: "/distribution", icon: "D", match: "prefix", mobile: false, description: "Release to 150+ platforms" },
     ],
   },
   {
     id: "connect",
     label: "Connect",
-    icon: "◉",
+    icon: "N",
     items: [
-      { id: "network",  label: "Network",  href: "/network",  icon: "N", match: "prefix", mobile: true,  description: "People, feed, opportunities" },
-      { id: "meet",     label: "Meet",     href: "/meet",     icon: "◉", match: "prefix", mobile: true,  description: "Video meetings" },
-      { id: "artists",  label: "Artists",  href: "/artists",  icon: "♪", match: "prefix", mobile: false, description: "Artist profiles and catalog" },
-      { id: "social",   label: "Social",   href: "/social",   icon: "◍", match: "prefix", mobile: false, description: "Social feed and posts" },
+      { id: "network", label: "Network", href: "/network", icon: "N", match: "prefix", mobile: true, description: "People, feed, opportunities" },
+      { id: "meet", label: "Meet", href: "/meet", icon: "M", match: "prefix", mobile: true, description: "Video meetings" },
+      { id: "playlists", label: "Playlists", href: "/playlists", icon: "P", match: "prefix", mobile: false, description: "Cross-platform playlists" },
     ],
   },
   {
     id: "business",
     label: "Business",
-    icon: "▦",
+    icon: "B",
     items: [
-      { id: "business",  label: "Business",  href: "/business",  icon: "▦", match: "prefix", mobile: false, description: "Promoter and venue tools" },
-      { id: "industry",  label: "Industry",  href: "/industry",  icon: "▣", match: "prefix", mobile: false, description: "Industry news and jobs" },
-      { id: "advertise", label: "Advertise", href: "/advertise", icon: "✦", match: "prefix", mobile: false, description: "Advertise on GRID" },
-      { id: "shop",      label: "Shop",      href: "/shop",      icon: "◇", match: "prefix", mobile: false, description: "Merch and physical" },
+      { id: "business", label: "Business", href: "/business", icon: "B", match: "prefix", mobile: false, description: "Tools for promoters and venues" },
     ],
   },
   {
@@ -71,26 +62,14 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "My GRID",
     icon: "M",
     items: [
-      { id: "profile",    label: "Profile",     href: "/profile",         icon: "M", match: "prefix", mobile: true,  description: "Your profile" },
-      { id: "royalties",  label: "Royalties",   href: "/royalties",       icon: "£", match: "prefix", mobile: true,  description: "Track earnings" },
-      { id: "purchases",  label: "Purchases",   href: "/tracks/purchases", icon: "▤", match: "prefix", mobile: false, description: "Your purchases" },
-      { id: "projects",   label: "My Projects", href: "/studio/projects", icon: "◫", match: "prefix", mobile: false, description: "Studio projects" },
-      { id: "settings",   label: "Settings",    href: "/settings",        icon: "⚙", match: "prefix", mobile: false, description: "Account settings" },
+      { id: "profile", label: "Profile", href: "/profile", icon: "M", match: "prefix", mobile: true, description: "Your profile" },
+      { id: "royalties", label: "Royalties", href: "/royalties", icon: "£", match: "prefix", mobile: true, description: "Track earnings" },
     ],
   },
 ];
 
-// Flat list for mobile bottom nav (only essential items)
-export const MOBILE_NAV: NavItem[] = [
-  { id: "home",     label: "Home",     href: "/",        icon: "⌂", match: "exact",  mobile: true, description: "Homepage" },
-  { id: "discover", label: "Discover", href: "/discover", icon: "◈", match: "prefix", mobile: true, description: "Discover" },
-  { id: "stream",   label: "Stream",   href: "/stream",   icon: "▶", match: "prefix", mobile: true, description: "Stream" },
-  { id: "network",  label: "Network",  href: "/network",  icon: "N", match: "prefix", mobile: true, description: "Network" },
-  { id: "my-grid",  label: "My GRID",  href: "/profile",  icon: "M", match: "prefix", mobile: true, description: "My GRID" },
-];
-
-// Flat list for legacy code that iterates NAV_ITEMS
 export const NAV_ITEMS: NavItem[] = NAV_GROUPS.flatMap(g => g.items);
+export const MOBILE_NAV: NavItem[] = NAV_ITEMS.filter(i => i.mobile);
 
 export function isActive(pathname: string, item: NavItem): boolean {
   if (!pathname) return false;

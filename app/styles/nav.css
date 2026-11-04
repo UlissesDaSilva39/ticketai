@@ -1,41 +1,43 @@
-﻿/* ===== GRID Nav Bar — grouped dropdowns ===== */
+/* ============================================================
+   GRID NAV — dropdown visibility fixed
+   ============================================================ */
 
 .grid-nav {
+  background: #111827;
+  border-bottom: 1px solid #293548;
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #14161a;
-  border-bottom: 1px solid #2a2f38;
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 .grid-nav-inner {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 56px;
-  padding: 0 20px;
-  max-width: 1600px;
+  height: 68px;
+  padding: 0 24px;
+  max-width: 1440px;
   margin: 0 auto;
 }
 
 .grid-nav-logo {
   font-weight: 800;
-  font-size: 16px;
+  font-size: 18px;
   letter-spacing: 0.14em;
-  color: #e7ebf1;
+  color: #F8FAFC;
   text-decoration: none;
-  padding: 0 16px 0 4px;
-  flex-shrink: 0;
+  padding-right: 16px;
 }
+.grid-nav-logo:hover { color: #16A36A; }
 
 .grid-nav-groups {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   flex: 1;
 }
 
+/* Each group is a positioning context */
 .grid-nav-group {
   position: relative;
 }
@@ -44,126 +46,113 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 38px;
+  height: 40px;
   padding: 0 14px;
   background: transparent;
   border: 0;
   border-radius: 8px;
-  color: #9aa4b2;
+  color: #94A3B8;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background .15s, color .15s;
+  transition: background 200ms, color 200ms;
   white-space: nowrap;
 }
-
-.grid-nav-group-btn:hover {
-  background: #1b1e24;
-  color: #e7ebf1;
-}
-
+.grid-nav-group-btn:hover { background: #172033; color: #F8FAFC; }
 .grid-nav-group.active > .grid-nav-group-btn {
-  background: rgba(79,140,255,0.12);
-  color: #4f8cff;
-}
-
-.grid-nav-group.open > .grid-nav-group-btn {
-  background: #1b1e24;
-  color: #e7ebf1;
+  background: rgba(22, 163, 106, 0.12);
+  color: #16A36A;
 }
 
 .grid-nav-group-icon {
-  font-size: 13px;
-  opacity: 0.8;
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #172033;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94A3B8;
+}
+.grid-nav-group.active .grid-nav-group-icon {
+  background: #16A36A;
+  color: #FFFFFF;
 }
 
 .grid-nav-chevron {
   font-size: 10px;
   opacity: 0.5;
-  transition: transform .15s;
+  transition: transform 200ms;
 }
+.grid-nav-group.open .grid-nav-chevron { transform: rotate(180deg); }
 
-.grid-nav-group.open .grid-nav-chevron {
-  transform: rotate(180deg);
-}
-
-/* Dropdown */
+/* ============================================================
+   THE CRITICAL RULES — dropdown is HIDDEN by default
+   ============================================================ */
 .grid-nav-dropdown {
+  display: none;                          /* ← hidden by default */
   position: absolute;
   top: 100%;
   left: 0;
-  margin-top: 4px;
+  margin-top: 6px;
   min-width: 280px;
-  background: #1b1e24;
-  border: 1px solid #2a2f38;
-  border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+  background: #172033;
+  border: 1px solid #293548;
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
   padding: 6px;
-  display: flex;
   flex-direction: column;
   gap: 2px;
   z-index: 200;
-  animation: navDropdownIn 0.12s ease-out;
 }
 
-@keyframes navDropdownIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Show on hover OR when .open class is set */
+.grid-nav-group:hover > .grid-nav-dropdown,
+.grid-nav-group.open > .grid-nav-dropdown {
+  display: flex;                          /* ← visible only on hover/open */
 }
 
+/* ============================================================
+   Dropdown items
+   ============================================================ */
 .grid-nav-item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
   padding: 10px 12px;
-  border-radius: 6px;
-  color: #e7ebf1;
+  border-radius: 8px;
+  color: #F8FAFC;
   text-decoration: none;
-  transition: background .12s;
+  transition: background 200ms;
 }
-
-.grid-nav-item:hover {
-  background: #232830;
-}
-
-.grid-nav-item.active {
-  background: rgba(79,140,255,0.12);
-}
+.grid-nav-item:hover { background: #1D2940; }
+.grid-nav-item.active { background: rgba(22, 163, 106, 0.12); color: #16A36A; }
 
 .grid-nav-item-icon {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: grid;
   place-items: center;
-  background: #232830;
-  border-radius: 4px;
+  background: #111827;
+  border-radius: 5px;
   font-size: 11px;
-  color: #9aa4b2;
+  color: #94A3B8;
   flex-shrink: 0;
-  margin-top: 2px;
+  font-weight: 700;
 }
-
 .grid-nav-item.active .grid-nav-item-icon {
-  background: #4f8cff;
-  color: #fff;
+  background: #16A36A;
+  color: #FFFFFF;
 }
 
 .grid-nav-item-body {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 0;
 }
-
-.grid-nav-item-label {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.grid-nav-item-desc {
-  font-size: 11px;
-  color: #6b7480;
-}
+.grid-nav-item-label { font-size: 14px; font-weight: 500; }
+.grid-nav-item-desc { font-size: 11px; color: #64748B; }
 
 .grid-nav-right {
   display: flex;
@@ -171,90 +160,19 @@
   gap: 8px;
   flex-shrink: 0;
 }
-
 .grid-nav-role {
-  display: inline-block;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(79,140,255,0.12);
-  color: #4f8cff;
+  background: rgba(22, 163, 106, 0.12);
+  color: #16A36A;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.04em;
 }
 
-/* Mobile bottom nav */
-.grid-nav-mobile {
-  display: none;
-}
-
+/* ============================================================
+   Responsive — hide groups on mobile
+   ============================================================ */
 @media (max-width: 1023px) {
-  .grid-nav-inner {
-    height: 48px;
-    padding: 0 12px;
-  }
-
-  .grid-nav-groups {
-    display: none;
-  }
-
-  .grid-nav-mobile {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 60px;
-    background: #14161a;
-    border-top: 1px solid #2a2f38;
-    z-index: 100;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-
-  .grid-nav-mobile-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    color: #9aa4b2;
-    text-decoration: none;
-    font-size: 10px;
-    font-weight: 500;
-  }
-
-  .grid-nav-mobile-item.active {
-    color: #4f8cff;
-  }
-
-  .grid-nav-mobile-icon {
-    width: 24px;
-    height: 24px;
-    display: grid;
-    place-items: center;
-    font-size: 11px;
-    font-weight: 700;
-    background: #1b1e24;
-    border-radius: 6px;
-  }
-
-  .grid-nav-mobile-item.active .grid-nav-mobile-icon {
-    background: #4f8cff;
-    color: #fff;
-  }
-
-  body {
-    padding-bottom: 60px;
-  }
-}
-
-@media (max-width: 767px) {
-  .grid-nav-inner {
-    gap: 4px;
-  }
-  .grid-nav-logo {
-    font-size: 14px;
-    padding-right: 8px;
-  }
+  .grid-nav-inner { height: 56px; padding: 0 16px; }
+  .grid-nav-groups { display: none; }
 }

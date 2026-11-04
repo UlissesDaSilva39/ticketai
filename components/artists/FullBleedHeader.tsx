@@ -1,4 +1,5 @@
-﻿export function FullBleedHeader({
+﻿"use client";
+export function FullBleedHeader({
   imageUrl,
   name,
   subtitle,

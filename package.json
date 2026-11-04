@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev --webpack",
+        "dev": "next dev",
         "build": "next build",
         "start": "next start",
         "lint": "eslint",
@@ -30,6 +30,7 @@
         "@ai-sdk/react": "^4.0.162",
         "@ai-sdk/zai": "^3.0.44",
         "@google/generative-ai": "^0.24.1",
+        "@next/swc-win32-x64-msvc": "^16.4.5",
         "@prisma/client": "^5.22.0",
         "@stripe/stripe-js": "^9.16.0",
         "@supabase/ssr": "^0.12.7",
@@ -54,7 +55,6 @@
     "devDependencies": {
         "@playwright/test": "^1.64.1",
         "@supabase/supabase-js": "^2.118.0",
-        "@tailwindcss/postcss": "^4",
         "@types/minimatch": "^6.0.0",
         "@types/node": "^20",
         "@types/pdfkit": "^0.17.6",
@@ -65,8 +65,12 @@
         "eslint": "^9",
         "eslint-config-next": "16.3.5",
         "start-server-and-test": "^3.0.13",
-        "tailwindcss": "^4",
         "tsx": "^4.23.15",
         "typescript": "5.9.3"
+    },
+    "allowScripts": {
+        "lightningcss": true,
+        "@tailwindcss/oxide": true,
+        "esbuild": true
     }
 }
