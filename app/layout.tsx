@@ -1,16 +1,166 @@
 ﻿import ChatBot from '@/components/ChatBot';
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import type { Metadata } from "next";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import { Inter } from "next/font/google";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import "./globals.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import "@/app/styles/stream-meet.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import "@/app/styles/tracks.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import { createServerClient } from "@supabase/ssr";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import { cookies } from "next/headers";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import { Navbar } from "@/components/nav/Navbar";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
 
 const inter = Inter({ subsets: ["latin"] });
 
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/records.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/studio.css";
+import "@/app/styles/nav.css";
+import "@/app/styles/meta.css";
+import "@/app/styles/nav.css";
 export const metadata: Metadata = {
   title: "GRID | The Network for Live Music",
   description: "Artists get booked. Promoters fill rooms. Venues get discovered.",
@@ -71,6 +221,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     </html>
   );
 }
+
+
+
+
+
 
 
 
