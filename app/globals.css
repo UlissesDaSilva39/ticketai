@@ -1,21 +1,134 @@
 @import "./styles/grid-design.css";
 
+/* ============================================================
+   GLOBAL APP LAYOUT & RESETS
+   ============================================================ */
+
 html, body {
   background: #090D14;
   color: #F8FAFC;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-main {
-  background: #090D14;
-  min-height: 100vh;
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Push content below navbar */
+.app-content-wrapper {
+  padding-top: 68px;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Standard Centered Container */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  width: 100%;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: #F8FAFC;
+}
+
+.page-subtitle {
+  font-size: 15px;
+  color: #94A3B8;
+  margin: 0;
+}
+
+/* Robust Card Grid */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.card {
+  background: #172033;
+  border: 1px solid #293548;
+  border-radius: 12px;
+  padding: 24px;
+  transition: border 200ms, transform 200ms;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  min-height: 140px;
+}
+
+.card:hover {
+  border-color: #16A36A;
+  transform: translateY(-2px);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #F8FAFC;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: #94A3B8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Action Buttons */
+.btn-primary {
+  background: #16A36A;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+  transition: background 200ms;
+}
+
+.btn-primary:hover {
+  background: #128456;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #F8FAFC;
+  border: 1px solid #293548;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 200ms;
+}
+
+.btn-secondary:hover {
+  background: #172033;
 }

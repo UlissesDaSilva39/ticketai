@@ -26,6 +26,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { id: "discover", label: "Discover", href: "/discover", icon: "D", match: "prefix", mobile: true, description: "Explore everything" },
       { id: "radar", label: "Radar", href: "/radar", icon: "R", match: "prefix", mobile: true, description: "Personalized feed" },
       { id: "stream", label: "Stream", href: "/stream", icon: "S", match: "prefix", mobile: true, description: "Video + live" },
+      { id: "radio", label: "Radio", href: "/radio", icon: "R", match: "prefix", mobile: true, description: "Live 24/7 radio" },
     ],
   },
   {

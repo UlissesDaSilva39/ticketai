@@ -11,7 +11,8 @@ export default function Navbar({ user }: { user?: any }) {
   return (
     <nav className="grid-nav">
       <div className="grid-nav-inner">
-        <Link href="/" className="grid-nav-logo">GRID</Link>        <div className="grid-nav-groups">
+        <Link href="/" className="grid-nav-logo">GRID</Link>
+        <div className="grid-nav-groups">
           <Link
             href="/"
             className={"grid-nav-group-btn" + (pathname === "/" ? " active" : "")}
@@ -39,21 +40,23 @@ export default function Navbar({ user }: { user?: any }) {
                 <span className="grid-nav-group-label">{group.label}</span>
                 <span className="grid-nav-chevron">v</span>
               </button>
-              <div className="grid-nav-dropdown">
-                {group.items.map(item => (
-                  <Link
-                    key={item.id}
-                    href={item.href}
-                    className={"grid-nav-item" + (isActive(pathname, item) ? " active" : "")}
-                  >
-                    <span className="grid-nav-item-icon">{item.icon}</span>
-                    <span className="grid-nav-item-body">
-                      <span className="grid-nav-item-label">{item.label}</span>
-                      <span className="grid-nav-item-desc">{item.description}</span>
-                    </span>
-                  </Link>
-                ))}
-              </div>
+              {openGroup === group.id && (
+                <div className="grid-nav-dropdown">
+                  {group.items.map(item => (
+                    <Link
+                      key={item.id}
+                      href={item.href}
+                      className={"grid-nav-item" + (isActive(pathname, item) ? " active" : "")}
+                    >
+                      <span className="grid-nav-item-icon">{item.icon}</span>
+                      <span className="grid-nav-item-body">
+                        <span className="grid-nav-item-label">{item.label}</span>
+                        <span className="grid-nav-item-desc">{item.description}</span>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

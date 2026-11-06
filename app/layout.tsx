@@ -1,10 +1,7 @@
-﻿import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata } from "next";
 import "./globals.css";
 import "@/app/styles/nav.css";
 import Navbar from "@/components/nav/Navbar";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GRID | The Network for Live Music",
@@ -21,9 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en"><body className={inter.className}>
+    <html lang="en">
+      <body>
         <Navbar user={null} />
-        <main className="min-h-screen">{children}</main>
+        <div className="app-content-wrapper">
+          {children}
+        </div>
       </body>
     </html>
   );
