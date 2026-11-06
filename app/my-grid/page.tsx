@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 
 export default function MyGridPage() {
@@ -14,9 +14,7 @@ export default function MyGridPage() {
       <div className="grid-cards">
         <div className="card">
           <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
-            <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "rgba(22, 163, 106, 0.15)", color: "#16A36A", display: "grid", placeItems: "center", fontSize: "24px", fontWeight: 700 }}>
-              U
-            </div>
+            <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "rgba(22, 163, 106, 0.15)", color: "#16A36A", display: "grid", placeItems: "center", fontSize: "24px", fontWeight: 700 }}>U</div>
             <div>
               <div className="card-title">User</div>
               <div className="card-subtitle">@user</div>

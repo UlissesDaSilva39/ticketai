@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import "./globals.css";
 import "@/app/styles/nav.css";
 import Navbar from "@/components/nav/Navbar";
@@ -6,10 +6,6 @@ import Navbar from "@/components/nav/Navbar";
 export const metadata: Metadata = {
   title: "GRID | The Network for Live Music",
   description: "Discover, stream, create, connect, and get paid.",
-  icons: {
-    icon: "/icon.svg",
-    apple: "/apple-icon.svg",
-  },
 };
 
 export default function RootLayout({
