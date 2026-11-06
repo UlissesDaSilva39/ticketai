@@ -1,57 +1,56 @@
-﻿'use client';
 import Link from 'next/link';
 
-import { SIDEBAR_LIBRARY } from '@/config/sidebar';
-import { Icon } from '@/components/ui/Icon';
-
-export function Sidebar({ userRole }: { userRole?: string }) {
-  const visibleSections = SIDEBAR_LIBRARY.filter((section: any) => {
-    if (!section.roles) return true;
-    return userRole && section.roles.includes(userRole);
-  });
-
+export function Sidebar() {
   return (
-    <aside className="hidden lg:flex flex-col gap-4 w-64 pb-8">
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-        <div className="flex items-center gap-2 texl-xs font-semibold tracking-wider text-gray-500 dark:text-gray-400 mb-3">
-          <Icon name="grid" className="w-4 h-4" />
-          YOUR LIBRARY
+    <div className="space-y-2">
+      
+      {/* 1. Profile Card */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+        <div className="h-[60px] bg-[#a0b4b7] dark:bg-gray-800"></div>
+        <div className="px-4 pb-4 relative text-center">
+          <div className="w-[72px] h-[72px] bg-zinc-800 rounded-full border-2 border-white dark:border-gray-900 flex items-center justify-center text-2xl font-bold text-white shadow-sm mx-auto -mt-9 mb-2">
+            U
+          </div>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white hover:underline cursor-pointer">Ulisses Bezerra Da Silva</h2>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Founder - CEO @ TicketAI</p>
+          <p className="text-xs text-gray-500 mt-0.5">London, England</p>
         </div>
-        <nav className="flex flex-col">
-          {visibleSections.map((section: any) => (
-            <div key={section.section} className="flex flex-col py-2 border-b border-gray-100 dark:border-gray-800 last:border-0">
-              {section.items.map((item: any) => (
-                <a key={item.href} href={item.href} className="flex items-center gap-3 px-2 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <Icon name={item.icon as any} className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          ))}
-        </nav>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
-          <Icon name="compass" className="w-5 h-5" />
-          Find events near you
-        </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Browse by city, genre, and date.</p>
-        <a href="/events" className="block w-full text-center rounded-full border border-gray-900 px-4 py-2 text-sm font-medium hover:bg-gray-900 hover:text-white transition">
-          Explore
-        </a>
+      {/* 2. Premium Ad Card */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 shadow-sm text-left">
+        <p className="text-xs text-gray-500 mb-1">Unlock Premium tools & insights</p>
+        <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2"><span className="text-yellow-600">🟨</span> Retry now for £0</p>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
-          <Icon name="sparkle" className="w-5 h-5" />
-          Grow on GRID
-        </div>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Get verified, unlock booking tools and AI.</p>
-        <Link href="/pro" className="block w-full text-center rounded-full border border-gray-900 px-4 py-2 text-sm font-medium hover:bg-gray-900 hover:text-white transition">
-          Upgrade to Pro
+      {/* 3. Stats Card */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 shadow-sm text-sm">
+        <Link href="#" className="flex items-center justify-between py-1 group">
+          <span className="text-gray-500 group-hover:text-gray-900">Profile viewers</span>
+          <span className="font-semibold text-blue-600">47</span>
+        </Link>
+        <Link href="#" className="flex items-center justify-between py-1 group mt-1">
+          <span className="text-gray-500 group-hover:text-gray-900">Post impressions</span>
+          <span className="font-semibold text-blue-600">57</span>
         </Link>
       </div>
-    </aside>
+
+      {/* 4. Navigation Card */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 shadow-sm text-sm">
+        <Link href="#" className="flex items-center gap-2 py-2 text-gray-500 hover:text-gray-900 font-medium">
+           <span className="text-lg">🔖</span> Saved items
+        </Link>
+        <Link href="#" className="flex items-center gap-2 py-2 text-gray-500 hover:text-gray-900 font-medium">
+           <span className="text-lg">👥</span> Groups
+        </Link>
+        <Link href="#" className="flex items-center gap-2 py-2 text-gray-500 hover:text-gray-900 font-medium">
+           <span className="text-lg">📰</span> Newsletters
+        </Link>
+        <Link href="#" className="flex items-center gap-2 py-2 text-gray-500 hover:text-gray-900 font-medium">
+           <span className="text-lg">📅</span> Events
+        </Link>
+      </div>
+
+    </div>
   );
 }

@@ -1,11 +1,10 @@
-﻿import type { Metadata } from "next";
-import "./globals.css";
-import "@/app/styles/nav.css";
-import Navbar from "@/components/nav/Navbar";
+import './globals.css';
+import Navbar from '@/components/Navbar';
+import MessagingPopup from '@/components/MessagingPopup';
 
-export const metadata: Metadata = {
-  title: "GRID | The Network for Live Music",
-  description: "Discover, stream, create, connect, and get paid.",
+export const metadata = {
+  title: 'GRID',
+  description: 'AI-powered event ticketing platform',
 };
 
 export default function RootLayout({
@@ -15,11 +14,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Navbar user={null} />
-        <div className="app-content-wrapper">
+      <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1">
           {children}
-        </div>
+        </main>
+        <MessagingPopup />
       </body>
     </html>
   );

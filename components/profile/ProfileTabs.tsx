@@ -1,37 +1,30 @@
-﻿"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-type Tab = { key: string; label: string; content: React.ReactNode };
-
-export default function ProfileTabs({ tabs }: { tabs: Tab[] }) {
-  const [active, setActive] = useState(tabs[0]?.key || "");
-
-  if (tabs.length === 0) return null;
-  const current = tabs.find((t) => t.key === active) || tabs[0];
+export default function ProfileTabs({ tabs }: { tabs: { key: string, label: string, content: React.ReactNode }[] }) {
+  const [activeTab, setActiveTab] = useState(tabs[0]?.key);
 
   return (
     <div>
-      <div role="tablist" className="flex gap-2 border-b border-gray-200 dark:border-gray-800 mb-6">
-        {tabs.map((t) => (
+      <div className="flex gap-6 border-b border-gray-200 dark:border-gray-800 mb-6">
+        {tabs.map((tab) => (
           <button
-            key={t.key}
-            role="tab"
-            aria-selected={current.key === t.key}
-            onClick={() => setActive(t.key)}
-            className={
-              "px-4 py-3 text-sm font-medium -mb-px border-b-2 transition-colors " +
-              (current.key === t.key
-                ? "border-black text-black dark:text-white"
-                : "border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white")
-            }
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={`pb-3 text-sm font-medium transition-colors ${
+              activeTab === tab.key
+                ? 'text-gray-900 dark:text-white border-b-2 border-emerald-500'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            }`}
           >
-            {t.label}
+            {tab.label}
           </button>
         ))}
       </div>
-      <div role="tabpanel">{current.content}</div>
+      <div>
+        {tabs.find((t) => t.key === activeTab)?.content}
+      </div>
     </div>
   );
 }
-

@@ -1,128 +1,49 @@
-﻿import Link from "next/link";
+'use client';
 
-type ProfileHeaderProps = {
-  profile: {
-    id: string;
-    username: string | null;
-    full_name: string | null;
-    avatar_url: string | null;
-    cover_image: string | null;
-    bio: string | null;
-    city: string | null;
-    genre: string | null;
-    role: string | null;
-    website: string | null;
-    instagram: string | null;
-    twitter: string | null;
-    spotify: string | null;
-    youtube: string | null;
-    soundcloud: string | null;
-  };
-  isOwnProfile: boolean;
-  stats: { posts: number; events: number; following: number; followers: number };
-};
+import Link from 'next/link';
 
-export default function ProfileHeader({ profile, isOwnProfile, stats }: ProfileHeaderProps) {
-  const name = profile.full_name || profile.username || "User";
-  const initials = name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-  const socialLinks: Array<{ label: string; href: string }> = [];
-  if (profile.website) socialLinks.push({ label: "Website", href: profile.website });
-  if (profile.instagram) socialLinks.push({ label: "Instagram", href: "https://instagram.com/" + profile.instagram.replace(/^@/, "") });
-  if (profile.twitter) socialLinks.push({ label: "Twitter", href: "https://twitter.com/" + profile.twitter.replace(/^@/, "") });
-  if (profile.spotify) socialLinks.push({ label: "Spotify", href: profile.spotify });
-  if (profile.youtube) socialLinks.push({ label: "YouTube", href: profile.youtube });
-  if (profile.soundcloud) socialLinks.push({ label: "SoundCloud", href: profile.soundcloud });
-
+export default function ProfileHeader({ profile, isOwnProfile, stats }: { profile: any, isOwnProfile: boolean, stats: any }) {
   return (
-    <header className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden">
-      <div className="relative h-40 bg-gradient-to-br from-gray-800 via-gray-900 to-black">
-        {profile.cover_image ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={profile.cover_image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-70" />
-        ) : null}
-      </div>
-      <div className="px-6 pb-6 -mt-12 relative">
-        <div className="flex items-end gap-4">
-          {profile.avatar_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={profile.avatar_url} alt={name} className="w-24 h-24 rounded-full object-cover border-4 border-white bg-white dark:bg-gray-900 shrink-0" />
-          ) : (
-            <div className="w-24 h-24 rounded-full bg-black text-white flex items-center justify-center text-2xl font-bold border-4 border-white shrink-0">
-              {initials}
-            </div>
-          )}
-          <div className="flex-1 min-w-0 pb-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-bold truncate">{name}</h1>
-              {profile.role ? (
-                <span className="text-[10px] uppercase tracking-wider bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-2 py-0.5 rounded-full font-medium">{profile.role}</span>
-              ) : null}
-            </div>
-            {profile.username ? (
-              <p className="text-sm text-gray-500 dark:text-gray-400">@{profile.username}</p>
-            ) : null}
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+      <div className="h-32 bg-gradient-to-r from-emerald-600 to-emerald-900"></div>
+      <div className="px-6 pb-6 relative">
+        <div className="flex items-end justify-between -mt-12 mb-4">
+          <div className="w-24 h-24 bg-zinc-800 rounded-full border-4 border-white dark:border-gray-900 flex items-center justify-center text-3xl font-bold text-white shadow-lg">
+            {profile.full_name?.charAt(0) || 'U'}
           </div>
-          {isOwnProfile ? (
-            <Link
-              href="/profile/edit"
-              className="px-4 py-2 border border-gray-300 rounded-full text-sm font-medium hover:border-gray-800 transition shrink-0"
-            >
+          {isOwnProfile && (
+            <Link href="/profile/edit" className="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-md text-sm font-medium">
               Edit profile
             </Link>
-          ) : null}
+          )}
+        </div>
+        
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            {profile.full_name || profile.username || 'User'}
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">@{profile.username || 'guest'}</p>
         </div>
 
-        {profile.bio ? (
-          <p className="text-sm text-gray-700 dark:text-gray-300 mt-4 whitespace-pre-wrap">{profile.bio}</p>
-        ) : null}
-
-        <div className="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400 mt-4">
-          {profile.city ? <span>{profile.city}</span> : null}
-          {profile.genre ? <span>· {profile.genre}</span> : null}
+        <div className="flex gap-6 border-t border-gray-100 dark:border-gray-800 pt-4">
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-gray-900 dark:text-white">{stats.posts}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Posts</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-gray-900 dark:text-white">{stats.events}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Events</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-gray-900 dark:text-white">{stats.followers}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Followers</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-gray-900 dark:text-white">{stats.following}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Following</span>
+          </div>
         </div>
-
-        {socialLinks.length > 0 ? (
-          <div className="flex flex-wrap gap-3 text-xs mt-3">
-            {socialLinks.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline"
-              >
-                {l.label}
-              </a>
-            ))}
-          </div>
-        ) : null}
-
-        <dl className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
-          <div>
-            <dd className="text-xl font-bold">{stats.posts}</dd>
-            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Posts</dt>
-          </div>
-          <div>
-            <dd className="text-xl font-bold">{stats.events}</dd>
-            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Events</dt>
-          </div>
-          <div>
-            <dd className="text-xl font-bold">{stats.followers}</dd>
-            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Followers</dt>
-          </div>
-          <div>
-            <dd className="text-xl font-bold">{stats.following}</dd>
-            <dt className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Following</dt>
-          </div>
-        </dl>
       </div>
-    </header>
+    </div>
   );
 }
-
