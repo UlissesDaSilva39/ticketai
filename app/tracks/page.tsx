@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { listTracks, TrackListing, KIND_LABELS, TrackKind } from "@/lib/tracks";
@@ -18,71 +18,98 @@ export default function TracksHome() {
   });
 
   return (
-    <div className="tracks-page">
-      <header className="tracks-hero">
-        <div className="tracks-container">
-          <p className="tracks-eyebrow">GRID TRACKS</p>
-          <h1 className="tracks-title">Buy, sell, collaborate.</h1>
-          <p className="tracks-subtitle">
-            The marketplace for beats, full tracks, loops and stems. Buy from producers.
-            Sell your work. Collaborate with splits.
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <p style={{ color: "#16A36A", fontSize: "11px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "8px" }}>
+            GRID TRACKS
           </p>
-          <div className="tracks-hero-actions">
-            <Link href="/tracks/new" className="btn btn-primary">List a track</Link>
-            <Link href="/tracks/collab" className="btn">Collaboration board</Link>
-            <Link href="/tracks/purchases" className="btn">My purchases</Link>
-          </div>
+          <h1 className="page-title">Buy, sell, collaborate.</h1>
+          <p className="page-subtitle">
+            The marketplace for beats, full tracks, loops and stems. Buy from producers. Sell your work. Collaborate with splits.
+          </p>
         </div>
-      </header>
-
-      <section className="tracks-section">
-        <div className="tracks-container">
-          <div className="tracks-filter-row">
-            <input
-              className="tracks-search"
-              placeholder="Search tracks, producers..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-            <div className="tracks-filters">
-              <button className={"tracks-filter" + (filter === "all" ? " active" : "")} onClick={() => setFilter("all")}>All</button>
-              {(Object.keys(KIND_LABELS) as TrackKind[]).map(k => (
-                <button key={k} className={"tracks-filter" + (filter === k ? " active" : "")} onClick={() => setFilter(k)}>
-                  {KIND_LABELS[k]}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {filtered.length === 0 ? (
-            <div className="tracks-empty">No tracks found.</div>
-          ) : (
-            <div className="tracks-grid">
-              {filtered.map(t => (
-                <Link key={t.id} href={`/tracks/${t.id}`} className="tracks-card">
-                  <div className="tracks-card-cover" style={{ background: t.coverColor }}>
-                    <span className="tracks-card-kind">{KIND_LABELS[t.kind]}</span>
-                    {t.splitAvailable && <span className="tracks-card-split">SPLIT</span>}
-                  </div>
-                  <div className="tracks-card-body">
-                    <div className="tracks-card-title">{t.title}</div>
-                    <div className="tracks-card-artist">{t.producerName}</div>
-                    <div className="tracks-card-meta">
-                      {t.bpm} BPM · {t.key} · {t.genres.slice(0, 2).join(" / ")}
-                    </div>
-                    <div className="tracks-card-footer">
-                      <span className="tracks-card-price">
-                        {t.pricing === "split-only" ? "Split only" : `£${t.price}`}
-                      </span>
-                      <span className="tracks-card-stats">{t.views} views</span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <Link href="/tracks/new" className="btn-primary">List a track</Link>
+          <Link href="/tracks/collab" className="btn-secondary">Collaboration board</Link>
+          <Link href="/tracks/purchases" className="btn-secondary">My purchases</Link>
         </div>
-      </section>
+      </div>
+
+      {/* Filter Row */}
+      <div style={{ display: "flex", gap: "12px", marginBottom: "24px", flexWrap: "wrap" }}>
+        <input
+          type="text"
+          placeholder="Search tracks, producers..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{ flex: 1, padding: "12px 16px", background: "#172033", border: "1px solid #293548", borderRadius: "8px", color: "#F8FAFC", outline: "none", minWidth: "250px" }}
+        />
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <button 
+            onClick={() => setFilter("all")}
+            style={{ padding: "8px 16px", borderRadius: "999px", background: filter === "all" ? "#16A36A" : "#172033", color: filter === "all" ? "#fff" : "#94A3B8", border: "1px solid #293548", cursor: "pointer", fontSize: "13px" }}
+          >
+            All
+          </button>
+          {(Object.keys(KIND_LABELS) as TrackKind[]).map(k => (
+            <button 
+              key={k}
+              onClick={() => setFilter(k)}
+              style={{ padding: "8px 16px", borderRadius: "999px", background: filter === k ? "#16A36A" : "#172033", color: filter === k ? "#fff" : "#94A3B8", border: "1px solid #293548", cursor: "pointer", fontSize: "13px" }}
+            >
+              {KIND_LABELS[k]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Results Grid */}
+      {filtered.length === 0 ? (
+        <div style={{ padding: "64px", textAlign: "center", color: "#64748B", border: "1px dashed #293548", borderRadius: "12px" }}>
+          No tracks found.
+        </div>
+      ) : (
+        <div className="grid-cards">
+          {filtered.map(t => (
+            <Link key={t.id} href={`/tracks/${t.id}`} className="card">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+                <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                  <div style={{ 
+                    width: "48px", 
+                    height: "48px", 
+                    borderRadius: "8px", 
+                    background: t.coverColor,
+                    flexShrink: 0 
+                  }} />
+                  <div>
+                    <div className="card-title">{t.title}</div>
+                    <div className="card-subtitle">{t.producerName}</div>
+                  </div>
+                </div>
+                {t.splitAvailable && (
+                  <span style={{ fontSize: "10px", fontWeight: 700, background: "rgba(168, 85, 247, 0.15)", color: "#a855f7", padding: "4px 8px", borderRadius: "4px" }}>
+                    SPLIT
+                  </span>
+                )}
+              </div>
+              
+              <div style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "16px" }}>
+                {t.bpm} BPM · {t.key} · {t.genres.slice(0, 2).join(" / ")}
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto", paddingTop: "16px", borderTop: "1px solid #293548" }}>
+                <span style={{ fontSize: "16px", fontWeight: 700, color: "#16A36A" }}>
+                  {t.pricing === "split-only" ? "Split only" : `£${t.price}`}
+                </span>
+                <span style={{ fontSize: "12px", color: "#64748B" }}>
+                  {t.views.toLocaleString()} views
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { listArtists, listReleases, SignedArtist, Release, RELEASE_STATUS_LABELS } from "@/lib/records";
@@ -15,114 +15,104 @@ export default function RecordsHome() {
   const liveReleases = releases.filter(r => r.status === "live");
 
   return (
-    <div className="records-page">
-      <header className="records-hero">
-        <div className="records-container">
-          <p className="records-eyebrow">GRID RECORDS</p>
-          <h1 className="records-title">
-            The label that runs on GRID.
-          </h1>
-          <p className="records-subtitle">
-            A virtual record label for independent artists. We sign, release, distribute, and pay.
-            No physical office. No middlemen. Just the infrastructure you need to build a career.
-          </p>
-          <div className="records-hero-actions">
-            <Link href="/records/apply" className="btn btn-primary">Apply to sign</Link>
-            <Link href="/records/roster" className="btn">View roster</Link>
-            <Link href="/records/dashboard" className="btn">Label dashboard</Link>
-          </div>
+    <div className="page-container">
+      <div className="page-header" style={{ flexDirection: "column", alignItems: "flex-start" }}>
+        <p style={{ color: "#16A36A", fontSize: "11px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "16px" }}>
+          GRID RECORDS
+        </p>
+        <h1 className="page-title">The label that runs on GRID.</h1>
+        <p className="page-subtitle" style={{ maxWidth: "800px" }}>
+          A virtual record label for independent artists. We sign, release, distribute, and pay. 
+          No physical office. No middlemen. Just the infrastructure you need to build a career.
+        </p>
+        <div style={{ display: "flex", gap: "12px", marginTop: "24px", flexWrap: "wrap" }}>
+          <Link href="/records/apply" className="btn-primary">Apply to sign</Link>
+          <Link href="/records/roster" className="btn-secondary">View roster</Link>
+          <Link href="/records/dashboard" className="btn-secondary">Label dashboard</Link>
         </div>
-      </header>
+      </div>
 
-      <section className="records-section">
-        <div className="records-container">
-          <div className="records-stats">
-            <div className="records-stat">
-              <div className="records-stat-value">{artists.length}</div>
-              <div className="records-stat-label">Signed artists</div>
-            </div>
-            <div className="records-stat">
-              <div className="records-stat-value">{releases.length}</div>
-              <div className="records-stat-label">Releases</div>
-            </div>
-            <div className="records-stat">
-              <div className="records-stat-value">
-                {Math.round(artists.reduce((s, a) => s + a.totalStreams, 0) / 1000)}k
-              </div>
-              <div className="records-stat-label">Total streams</div>
-            </div>
-            <div className="records-stat">
-              <div className="records-stat-value">50/50</div>
-              <div className="records-stat-label">Standard split</div>
-            </div>
-          </div>
+      {/* Stats */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1px", background: "#293548", border: "1px solid #293548", borderRadius: "12px", overflow: "hidden", marginBottom: "48px" }}>
+        <div style={{ background: "#172033", padding: "32px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: "36px", fontWeight: 800, color: "#16A36A", lineHeight: 1 }}>{artists.length}</div>
+          <div style={{ fontSize: "12px", color: "#94A3B8", marginTop: "8px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Signed artists</div>
         </div>
-      </section>
+        <div style={{ background: "#172033", padding: "32px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: "36px", fontWeight: 800, color: "#16A36A", lineHeight: 1 }}>{releases.length}</div>
+          <div style={{ fontSize: "12px", color: "#94A3B8", marginTop: "8px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Releases</div>
+        </div>
+        <div style={{ background: "#172033", padding: "32px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: "36px", fontWeight: 800, color: "#16A36A", lineHeight: 1 }}>2470k</div>
+          <div style={{ fontSize: "12px", color: "#94A3B8", marginTop: "8px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Total streams</div>
+        </div>
+        <div style={{ background: "#172033", padding: "32px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: "36px", fontWeight: 800, color: "#16A36A", lineHeight: 1 }}>50/50</div>
+          <div style={{ fontSize: "12px", color: "#94A3B8", marginTop: "8px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Standard split</div>
+        </div>
+      </div>
 
-      <section className="records-section">
-        <div className="records-container">
-          <div className="records-section-head">
-            <h2 className="records-h2">Recent releases</h2>
-            <Link href="/records/releases" className="records-see-all">See all</Link>
-          </div>
-          <div className="records-release-grid">
-            {liveReleases.map(r => (
-              <Link key={r.id} href={`/records/artist/${r.artistHandle}`} className="records-release-card">
-                <div className="records-release-cover" style={{ background: r.coverColor }}>
-                  <div className="records-release-cover-inner">
-                    <div className="records-release-cover-title">{r.title}</div>
-                    <div className="records-release-cover-artist">{r.artistName}</div>
-                  </div>
+      {/* Recent Releases */}
+      <div style={{ marginBottom: "48px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "24px" }}>
+          <h2 style={{ fontSize: "24px", fontWeight: 700, margin: 0 }}>Recent releases</h2>
+          <Link href="/records/releases" style={{ color: "#16A36A", fontSize: "14px", fontWeight: 500, textDecoration: "none" }}>See all</Link>
+        </div>
+        
+        <div className="grid-cards">
+          {liveReleases.map(r => (
+            <Link key={r.id} href={`/records/artist/${r.artistHandle}`} className="card">
+              <div style={{ display: "flex", gap: "16px", alignItems: "center", marginBottom: "16px" }}>
+                <div style={{ width: "56px", height: "56px", borderRadius: "8px", background: r.coverColor, flexShrink: 0 }} />
+                <div>
+                  <div className="card-title">{r.title}</div>
+                  <div className="card-subtitle">{r.artistName} · {r.genre}</div>
                 </div>
-                <div className="records-release-title">{r.title}</div>
-                <div className="records-release-meta">{r.artistName} · {r.genre}</div>
-              </Link>
-            ))}
-          </div>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto", paddingTop: "16px", borderTop: "1px solid #293548" }}>
+                <span style={{ fontSize: "12px", color: "#64748B" }}>{r.tracks} tracks</span>
+                <span style={{ fontSize: "12px", color: "#16A36A", fontWeight: 600 }}>View</span>
+              </div>
+            </Link>
+          ))}
         </div>
-      </section>
+      </div>
 
-      <section className="records-section">
-        <div className="records-container">
-          <div className="records-section-head">
-            <h2 className="records-h2">How GRID Records works</h2>
+      {/* How it works */}
+      <div style={{ marginBottom: "48px" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 700, marginBottom: "24px" }}>How GRID Records works</h2>
+        <div className="grid-cards">
+          <div className="card">
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "#16A36A", marginBottom: "12px" }}>01</div>
+            <h3 className="card-title">Apply</h3>
+            <p className="card-subtitle">Submit a demo. A&R listens within 7 days.</p>
           </div>
-          <div className="records-steps">
-            <div className="records-step">
-              <div className="records-step-num">01</div>
-              <h3 className="records-step-title">Apply</h3>
-              <p className="records-step-body">Submit a demo. A&R listens within 7 days.</p>
-            </div>
-            <div className="records-step">
-              <div className="records-step-num">02</div>
-              <h3 className="records-step-title">Sign</h3>
-              <p className="records-step-body">50/50 split, exclusive or non-exclusive, transparent terms.</p>
-            </div>
-            <div className="records-step">
-              <div className="records-step-num">03</div>
-              <h3 className="records-step-title">Release</h3>
-              <p className="records-step-body">Distribution to 150+ platforms, promotion, playlist pitching.</p>
-            </div>
-            <div className="records-step">
-              <div className="records-step-num">04</div>
-              <h3 className="records-step-title">Get paid</h3>
-              <p className="records-step-body">Monthly statements, splits tracked, payouts on the 15th.</p>
-            </div>
+          <div className="card">
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "#16A36A", marginBottom: "12px" }}>02</div>
+            <h3 className="card-title">Sign</h3>
+            <p className="card-subtitle">50/50 split, exclusive or non-exclusive, transparent terms.</p>
+          </div>
+          <div className="card">
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "#16A36A", marginBottom: "12px" }}>03</div>
+            <h3 className="card-title">Release</h3>
+            <p className="card-subtitle">Distribution to 150+ platforms, promotion, playlist pitching.</p>
+          </div>
+          <div className="card">
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "#16A36A", marginBottom: "12px" }}>04</div>
+            <h3 className="card-title">Get paid</h3>
+            <p className="card-subtitle">Monthly statements, splits tracked, payouts on the 15th.</p>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="records-section">
-        <div className="records-container">
-          <div className="records-cta">
-            <h2 className="records-h2">Ready to sign?</h2>
-            <p className="records-subtitle" style={{ margin: "0 auto 24px" }}>
-              We sign 5 new artists per quarter. Submit a demo and we'll listen.
-            </p>
-            <Link href="/records/apply" className="btn btn-primary">Apply to GRID Records</Link>
-          </div>
-        </div>
-      </section>
+      {/* CTA */}
+      <div style={{ textAlign: "center", padding: "64px 32px", background: "radial-gradient(ellipse at center, rgba(22, 163, 106, 0.08), transparent 70%)", border: "1px solid #293548", borderRadius: "16px" }}>
+        <h2 style={{ fontSize: "36px", fontWeight: 800, marginBottom: "16px" }}>Ready to sign?</h2>
+        <p style={{ color: "#94A3B8", fontSize: "16px", marginBottom: "32px" }}>
+          We sign 5 new artists per quarter. Submit a demo and we'll listen.
+        </p>
+        <Link href="/records/apply" className="btn-primary" style={{ padding: "12px 32px", fontSize: "16px" }}>Apply to GRID Records</Link>
+      </div>
     </div>
   );
 }
