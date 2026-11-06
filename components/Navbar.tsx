@@ -5,19 +5,24 @@ import Link from 'next/link';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isBusinessOpen, setIsBusinessOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const closeMenus = () => {
+      setIsMenuOpen(false);
+      setIsBusinessOpen(false);
+    };
+    window.addEventListener('click', closeMenus);
+    return () => window.removeEventListener('click', closeMenus);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show sub-navbar when scrolling down past the main profile header (approx 350px)
-      // Note: For a real app, you would check if the current path is /profile
-      if (window.scrollY > 350) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      if (window.scrollY > 350) setIsScrolled(true);
+      else setIsScrolled(false);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,8 +35,9 @@ export default function Navbar() {
         
         {/* LEFT: Logo & Search */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <Link href="/" className="text-2xl font-extrabold tracking-tighter text-emerald-600 dark:text-emerald-500">
-            GRID
+          <Link href="/" className="flex flex-col items-start leading-none">
+            <span className="text-2xl font-extrabold tracking-tighter text-emerald-600 dark:text-emerald-500">GRID</span>
+            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">Music Social Network</span>
           </Link>
           <div className="relative hidden md:block ml-2">
             <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -68,18 +74,16 @@ export default function Navbar() {
             <span className="absolute top-1 right-2 bg-emerald-600 text-white text-[10px] font-bold px-1.5 rounded-full">0</span>
           </Link>
 
-          {/* ME Dropdown Trigger */}
+          {/* ME Dropdown */}
           <div 
             className="flex flex-col items-center justify-center h-full w-[80px] text-gray-500 cursor-pointer hover:text-black dark:hover:text-white relative"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); setIsBusinessOpen(false); }}
           >
             <div className="w-6 h-6 bg-zinc-800 dark:bg-zinc-200 rounded-full mb-0.5 overflow-hidden"></div>
             <span className="text-[12px] flex items-center gap-1">Me ⌄</span>
 
-            {/* THE DROPDOWN MENU */}
             {isMenuOpen && (
-              <div className="absolute top-[52px] right-0 w-[300px] bg-white dark:bg-zinc-900 rounded-b-lg shadow-xl border border-gray-200 dark:border-zinc-800 p-4 text-left">
-                {/* ... Dropdown content ... */}
+              <div className="absolute top-[52px] right-0 w-[300px] bg-white dark:bg-zinc-900 rounded-b-lg shadow-xl border border-gray-200 dark:border-zinc-800 p-4 text-left" onClick={(e) => e.stopPropagation()}>
                 <div className="flex gap-3 mb-3">
                   <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">U</div>
                   <div>
@@ -93,7 +97,6 @@ export default function Navbar() {
                 </div>
                 <hr className="border-gray-200 dark:border-zinc-800 mb-3" />
                 <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                  <p className="font-semibold text-gray-900 dark:text-white">Account</p>
                   <Link href="#" className="flex items-center gap-2 hover:text-emerald-600"><span className="text-yellow-500">🟨</span> Get 1 free month of Premium</Link>
                   <Link href="#" className="block hover:text-emerald-600">Settings & Privacy</Link>
                   <Link href="#" className="block hover:text-emerald-600">Help</Link>
@@ -107,25 +110,61 @@ export default function Navbar() {
         </nav>
 
         {/* RIGHT: Business */}
-        <div className="flex items-center gap-4 flex-shrink-0 border-l border-gray-300 dark:border-zinc-800 pl-4">
-          <div className="flex flex-col items-center justify-center cursor-pointer text-gray-500 hover:text-black dark:hover:text-white">
+        <div className="flex items-center gap-4 flex-shrink-0 border-l border-gray-300 dark:border-zinc-800 pl-4 relative">
+          <div 
+            className="flex flex-col items-center justify-center cursor-pointer text-gray-500 hover:text-black dark:hover:text-white"
+            onClick={(e) => { e.stopPropagation(); setIsBusinessOpen(!isBusinessOpen); setIsMenuOpen(false); }}
+          >
             <svg className="w-6 h-6 mb-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
-            <span className="text-[12px] flex items-center gap-1">For Business</span>
+            <span className="text-[12px] flex items-center gap-1">For Business ⌄</span>
           </div>
           <div className="flex flex-col items-center justify-center cursor-pointer text-emerald-600 dark:text-emerald-500">
             <span className="text-[12px] font-medium underline decoration-transparent hover:decoration-current">Try Premium</span>
           </div>
+
+          {isBusinessOpen && (
+            <div 
+              className="absolute top-[48px] right-0 w-[700px] bg-white dark:bg-zinc-900 rounded-b-lg shadow-2xl border border-gray-200 dark:border-zinc-800 flex"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-1/2 p-6 border-r border-gray-100 dark:border-zinc-800">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">My Apps</h2>
+                <div className="space-y-4">
+                  <Link href="#" className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white flex-shrink-0">S</div>
+                    <p className="font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 text-sm">Sell</p>
+                  </Link>
+                  <Link href="#" className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white flex-shrink-0">G</div>
+                    <p className="font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 text-sm">Groups</p>
+                  </Link>
+                  <Link href="#" className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center text-white flex-shrink-0">B</div>
+                    <p className="font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 text-sm">Manage Billing</p>
+                  </Link>
+                </div>
+              </div>
+              <div className="w-1/2 p-6 bg-gray-50 dark:bg-zinc-900/50">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Explore more for business</h2>
+                <div className="space-y-5">
+                  <Link href="#" className="block group">
+                    <p className="font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 text-sm">Hire on GRID</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Find, attract, and recruit talent</p>
+                  </Link>
+                  <Link href="#" className="block group">
+                    <p className="font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 text-sm">Sell with GRID</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Unlock sales opportunities</p>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* DYNAMIC SUB-NAVBAR (Only visible on scroll) */}
-      <div 
-        className={`bg-white dark:bg-[#1b1f23] border-b border-gray-200 dark:border-zinc-800 shadow-sm w-full overflow-hidden transition-all duration-300 ease-in-out ${
-          isScrolled ? 'max-h-[60px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
+      {/* DYNAMIC SUB-NAVBAR (Scroll) */}
+      <div className={`bg-white dark:bg-[#1b1f23] border-b border-gray-200 dark:border-zinc-800 shadow-sm w-full overflow-hidden transition-all duration-300 ease-in-out ${isScrolled ? 'max-h-[60px] opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="mx-auto max-w-[1128px] px-4 h-[60px] flex items-center justify-between">
-          {/* Profile Info */}
           <div className="flex items-center gap-3">
              <div className="w-10 h-10 bg-zinc-800 rounded-full overflow-hidden flex-shrink-0">
                 <img src="https://ui-avatars.com/api/?name=Ulisses+Silva&background=random" className="w-full h-full object-cover" />
@@ -135,15 +174,10 @@ export default function Navbar() {
                <p className="text-xs text-gray-500">Founder - CEO @ TicketAI</p>
              </div>
           </div>
-
-          {/* Action Buttons */}
           <div className="flex items-center gap-2">
-            <button className="text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 p-2 rounded-full transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
-            </button>
-            <button className="border border-emerald-600 text-emerald-700 dark:text-emerald-500 font-semibold text-sm px-4 py-1.5 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors">Enhance profile</button>
-            <button className="border border-emerald-600 text-emerald-700 dark:text-emerald-500 font-semibold text-sm px-4 py-1.5 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors">Add section</button>
-            <button className="bg-emerald-600 text-white font-semibold text-sm px-4 py-1.5 rounded-full hover:bg-emerald-700 transition-colors">Open to</button>
+            <button className="border border-emerald-600 text-emerald-700 font-semibold text-sm px-4 py-1.5 rounded-full">Enhance profile</button>
+            <button className="border border-emerald-600 text-emerald-700 font-semibold text-sm px-4 py-1.5 rounded-full">Add section</button>
+            <button className="bg-emerald-600 text-white font-semibold text-sm px-4 py-1.5 rounded-full">Open to</button>
           </div>
         </div>
       </div>
