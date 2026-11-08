@@ -1,120 +1,82 @@
-import Link from 'next/link';
+"use client";
+import { usePathname } from "next/navigation";
 
 export default function NotificationsPage() {
+  const items = [
+    { icon:"🎧", text:"Sarah Jenkins and 14 others played your latest track", time:"2h ago" },
+    { icon:"🎵", text:"Beatport News: New royalty payout model announced for 2027", time:"5h ago" },
+    { icon:"🔥", text:"David Chen hyped your track: 'This is exactly the vibe I needed'", time:"1d ago" },
+    { icon:"🎟", text:"GRID Events: 'London Producer Meetup' is happening Nov 14", time:"2d ago" },
+  ];
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
       <div className="mx-auto max-w-[1128px] px-4 py-6 grid grid-cols-12 gap-6">
-        
-        {/* LEFT COLUMN: Navigation */}
-        <nav aria-label="Notifications Sidebar" className="col-span-12 lg:col-span-3 space-y-2">
-          
-          {/* Main Filter Card */}
+
+        {/* LEFT: profile sidebar */}
+        <aside className="col-span-12 lg:col-span-3 space-y-3">
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+            <div className="h-16 bg-gradient-to-r from-emerald-600 to-emerald-500" />
+            <div className="p-4 -mt-8">
+              <div className="w-16 h-16 rounded-full bg-emerald-600 text-white grid place-items-center font-bold text-xl ring-4 ring-white dark:ring-zinc-900">U</div>
+              <p className="font-semibold text-gray-900 dark:text-white mt-2">Ulisses Bezerra Da Silva</p>
+              <p className="text-xs text-gray-500 mt-0.5">Founder - CEO @ TicketAI</p>
+              <p className="text-xs text-gray-500 mt-1">London, England</p>
+              <div className="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800 flex items-center gap-2">
+                <div className="w-7 h-7 rounded bg-emerald-600 text-white grid place-items-center text-xs font-bold">T</div>
+                <span className="text-sm font-semibold text-gray-900 dark:text-white">TicketAI</span>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <h2 className="font-semibold text-gray-900 dark:text-white text-lg mb-4">Manage your notifications</h2>
-            <ul className="space-y-2 text-sm font-medium">
-              <li>
-                <Link href="#" className="flex items-center gap-3 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-500 rounded-md">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                  All Notifications
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-md transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                  My Posts
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-md transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
-                  Mentions
-                </Link>
-              </li>
+            <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Manage notifications</p>
+            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+              <li className="flex items-center gap-2 cursor-pointer hover:text-emerald-700"><span>🔔</span> All notifications</li>
+              <li className="flex items-center gap-2 cursor-pointer hover:text-emerald-700"><span>📝</span> My posts</li>
+              <li className="flex items-center gap-2 cursor-pointer hover:text-emerald-700"><span>💬</span> Mentions</li>
+              <li className="flex items-center gap-2 cursor-pointer hover:text-emerald-700"><span>⚙️</span> Notification settings</li>
             </ul>
           </div>
 
-          {/* Settings Card */}
-          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <h2 className="font-semibold text-gray-900 dark:text-white text-sm mb-3">Notification settings</h2>
-            <p className="text-xs text-gray-500 mb-3">Choose what you want to be notified about, and how.</p>
-            <Link href="#" className="text-sm font-semibold text-emerald-600 hover:text-emerald-500 hover:underline">Manage settings</Link>
+          <div className="px-4 text-xs text-center text-gray-500 space-y-1">
+            <p className="flex flex-wrap justify-center gap-x-2 gap-y-1">
+              <a href="#" className="hover:underline">About</a>
+              <a href="#" className="hover:underline">Accessibility</a>
+              <a href="#" className="hover:underline">Help Center</a>
+            </p>
+            <p className="flex flex-wrap justify-center gap-x-2 gap-y-1">
+              <a href="#" className="hover:underline">Privacy &amp; Terms ⌄</a>
+              <a href="#" className="hover:underline">Ad Choices</a>
+              <a href="#" className="hover:underline">Advertising</a>
+            </p>
+            <p className="flex flex-wrap justify-center gap-x-2 gap-y-1">
+              <a href="#" className="hover:underline">Business Services ⌄</a>
+              <a href="#" className="hover:underline">Get the GRID app</a>
+              <a href="#" className="hover:underline">More</a>
+            </p>
+            <p className="mt-3 font-semibold text-emerald-700 dark:text-emerald-500">GRID Corporation © 2026</p>
           </div>
-        </nav>
-
-        {/* CENTER COLUMN: Notification Feed */}
-        <main className="col-span-12 lg:col-span-6 space-y-2">
-          
-          {/* Header Card */}
-          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm flex justify-between items-center">
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Notifications</h1>
-            <div className="flex gap-4 text-xs font-semibold text-gray-500">
-              <button className="hover:text-gray-900 dark:hover:text-white">Mark all as read</button>
-              <button className="hover:text-gray-900 dark:hover:text-white">Settings</button>
-            </div>
-          </div>
-
-          {/* Notifications List */}
-          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-            
-            {/* Notification 1 (Unread) */}
-            <div className="flex items-start gap-3 p-4 bg-emerald-50/50 dark:bg-emerald-900/10 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer border-b border-gray-100 dark:border-zinc-800 transition-colors">
-              <div className="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
-                <img src="https://ui-avatars.com/api/?name=Sarah+Jenkins&background=random" className="w-full h-full" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 dark:text-gray-200">
-                  <span className="font-semibold text-gray-900 dark:text-white">Sarah Jenkins</span> and 14 others viewed your profile.
-                </p>
-                <p className="text-xs text-gray-500 mt-1">2h ago</p>
-              </div>
-              <div className="w-2.5 h-2.5 bg-emerald-600 rounded-full mt-1.5 flex-shrink-0"></div>
-            </div>
-
-            {/* Notification 2 (Unread) */}
-            <div className="flex items-start gap-3 p-4 bg-emerald-50/50 dark:bg-emerald-900/10 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer border-b border-gray-100 dark:border-zinc-800 transition-colors">
-              <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">in</div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 dark:text-gray-200">
-                  <span className="font-semibold text-gray-900 dark:text-white">LinkedIn News</span> shared a new article: "Tech layoffs hit London startups".
-                </p>
-                <p className="text-xs text-gray-500 mt-1">5h ago</p>
-              </div>
-              <div className="w-2.5 h-2.5 bg-emerald-600 rounded-full mt-1.5 flex-shrink-0"></div>
-            </div>
-
-            {/* Notification 3 (Read) */}
-            <div className="flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/50 cursor-pointer border-b border-gray-100 dark:border-zinc-800 transition-colors">
-              <div className="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
-                 <img src="https://ui-avatars.com/api/?name=David+Chen&background=random" className="w-full h-full" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 dark:text-gray-200">
-                  <span className="font-semibold text-gray-900 dark:text-white">David Chen</span> commented on your post: "This is exactly what I was looking for. Great insight!"
-                </p>
-                <p className="text-xs text-gray-500 mt-1">1d ago</p>
-              </div>
-            </div>
-
-            {/* Notification 4 (Read) */}
-            <div className="flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors">
-              <div className="w-12 h-12 bg-indigo-500 rounded-full flex-shrink-0 flex items-center justify-center text-white font-bold text-lg">G</div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 dark:text-gray-200">
-                  <span className="font-semibold text-gray-900 dark:text-white">GRID Corporation</span> posted a new event: "Tech Networking Mixer - London".
-                </p>
-                <p className="text-xs text-gray-500 mt-1">2d ago</p>
-              </div>
-            </div>
-
-          </div>
-        </main>
-
-        {/* RIGHT COLUMN: Empty for layout balance */}
-        <aside className="col-span-12 lg:col-span-3 space-y-2 hidden lg:block">
         </aside>
 
+        {/* CENTER: music activity */}
+        <main className="col-span-12 lg:col-span-9 space-y-3">
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <h1 className="font-semibold text-gray-900 dark:text-white">Your music activity</h1>
+            <p className="text-xs text-gray-500 mt-1">Plays, hypes, collab requests, bookings, royalty updates.</p>
+          </div>
+
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 divide-y divide-gray-100 dark:divide-zinc-800 shadow-sm">
+            {items.map((n, i) => (
+              <div key={i} className="flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/50">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/20 grid place-items-center text-lg">{n.icon}</div>
+                <div className="flex-1">
+                  <p className="text-sm text-gray-900 dark:text-white">{n.text}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{n.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
       </div>
     </div>
   );

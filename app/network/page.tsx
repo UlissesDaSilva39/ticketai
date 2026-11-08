@@ -1,161 +1,196 @@
-import Link from 'next/link';
+"use client";
+import { PlayIcon, MicIcon, SlidersIcon } from "@/components/MusicIcons";
 
 export default function NetworkPage() {
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
       <div className="mx-auto max-w-[1128px] px-4 py-6 grid grid-cols-12 gap-6">
-        
-        {/* LEFT COLUMN: Manage Network */}
-        <nav aria-label="Manage network" className="col-span-12 lg:col-span-3 space-y-2">
-          
-          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <h2 className="font-semibold text-gray-900 dark:text-white mb-4">Manage my network</h2>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-2 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white font-medium">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                  Connections
-                </div>
-                <span className="text-xs text-gray-500 font-medium">3,551</span>
-              </li>
-              <li className="flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-2 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white font-medium">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                  Following & followers
-                </div>
-              </li>
-              <li className="flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-2 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white font-medium">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                  Groups
-                </div>
-                <span className="text-xs text-gray-500 font-medium">60</span>
-              </li>
-              <li className="flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-2 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white font-medium">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                  Events
-                </div>
-                <span className="text-xs text-gray-500 font-medium">20</span>
-              </li>
-              <li className="flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-2 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white font-medium">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                  Pages
-                </div>
-                <span className="text-xs text-gray-500 font-medium">1,397</span>
-              </li>
-              <li className="flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-2 text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white font-medium">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
-                  Newsletters
-                </div>
-                <span className="text-xs text-gray-500 font-medium">284</span>
-              </li>
-            </ul>
-          </div>
 
-          {/* Footer links */}
-          <div className="px-4 text-xs text-center text-gray-500 space-y-1">
-            <p className="flex flex-wrap justify-center gap-x-2 gap-y-1">
-              <a href="#" className="hover:underline">About</a>
-              <a href="#" className="hover:underline">Accessibility</a>
-              <a href="#" className="hover:underline">Help Center</a>
-            </p>
-            <p className="flex flex-wrap justify-center gap-x-2 gap-y-1">
-              <a href="#" className="hover:underline">Privacy & Terms ⌄</a>
-              <a href="#" className="hover:underline">Ad Choices</a>
-              <a href="#" className="hover:underline">Advertising</a>
-            </p>
-             <p className="flex flex-wrap justify-center gap-x-2 gap-y-1">
-              <a href="#" className="hover:underline">Business Services ⌄</a>
-              <a href="#" className="hover:underline">Get the LinkedIn app</a>
-              <a href="#" className="hover:underline">More</a>
-            </p>
-            <p className="mt-3 font-semibold text-emerald-700 dark:text-emerald-500 flex justify-center items-center gap-1">
-              GRID Corporation © 2026
-            </p>
-          </div>
-        </nav>
-
-        {/* CENTER COLUMN: Invitations */}
-        <main className="col-span-12 lg:col-span-6 space-y-2">
-          
-          {/* Tabs */}
-          <div className="bg-white dark:bg-zinc-900 rounded-t-lg border border-gray-200 dark:border-zinc-800 flex border-b-0 shadow-sm pt-2 px-4">
-            <button className="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white border-b-2 border-emerald-600">Grow</button>
-            <button className="px-4 py-3 text-sm font-semibold text-gray-500 hover:text-gray-900">Catch up</button>
-          </div>
-
-          {/* Invitations Card */}
-          <div className="bg-white dark:bg-zinc-900 rounded-b-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-            <div className="p-4 border-b border-gray-100 dark:border-zinc-800">
-              <h2 className="font-semibold text-gray-900 dark:text-white">Invitations (111)</h2>
-            </div>
-
-            <div className="divide-y divide-gray-100 dark:divide-zinc-800">
+        {/* LEFT COLUMN: Profile & Stats */}
+        <aside className="col-span-12 lg:col-span-3 space-y-3">
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+            {/* Header Banner */}
+            <div className="h-16 bg-gradient-to-r from-emerald-600 to-emerald-500" />
+            
+            <div className="p-4 -mt-8">
+              {/* Avatar */}
+              <div className="w-16 h-16 rounded-full bg-emerald-600 text-white grid place-items-center font-bold text-xl ring-4 ring-white dark:ring-zinc-900">
+                U
+              </div>
               
-              {/* Invite 1 (Company) */}
-              <div className="flex items-start justify-between p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/50">
-                <div className="flex gap-3">
-                  <div className="w-20 h-20 bg-blue-700 flex items-center justify-center text-white font-bold text-3xl rounded-sm flex-shrink-0">
-                    V
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-0.5">Newsletter • Biweekly</p>
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm">Verint <span className="font-normal text-gray-600">invited you to subscribe to <span className="font-semibold">The CX Automation Briefing</span></span></p>
-                  </div>
-                </div>
-                <button className="text-gray-500 font-semibold text-sm px-3 py-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors flex-shrink-0">Ignore</button>
-              </div>
+              {/* Name & Role */}
+              <p className="font-semibold text-gray-900 dark:text-white mt-2 text-lg">Ulisses Silva</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Music Producer &amp; DJ</p>
+              <p className="text-xs text-gray-500 mt-1">London, UK</p>
+              
+              {/* Play Track Button */}
+              <button className="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-1.5">
+                <PlayIcon className="w-3.5 h-3.5" /> Play Latest Track
+              </button>
 
-              {/* Invite 2 (Person) */}
-              <div className="flex items-start justify-between p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/50">
-                <div className="flex gap-3">
-                  <div className="w-20 h-20 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
-                    <img src="https://ui-avatars.com/api/?name=Taimoor+Ali+Khan&background=random" className="w-full h-full" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm hover:underline cursor-pointer">Taimoor Ali Khan</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5 line-clamp-2">Founder @ Sentiments | Principal @ Taimoor Ali Khan & Co. Chartered Accountants...</p>
-                    <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                       <img src="https://ui-avatars.com/api/?name=Elena&background=random" className="w-4 h-4 rounded-full" /> Elena Pekelаnоu is a mutual connection
-                    </p>
-                  </div>
+              {/* EPK Button (NEW) */}
+              <button className="mt-2 w-full border border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-semibold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
+                View EPK
+              </button>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800 text-center">
+                <div>
+                  <p className="font-bold text-gray-900 dark:text-white text-sm">124</p>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wide">Connections</p>
                 </div>
-                <div className="flex gap-2 flex-shrink-0 mt-1">
-                  <button className="text-gray-500 font-semibold text-sm px-3 py-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors">Ignore</button>
-                  <button className="text-emerald-600 border border-emerald-600 hover:bg-emerald-50 font-semibold text-sm px-3 py-1 rounded-full transition-colors">Accept</button>
+                <div>
+                  <p className="font-bold text-gray-900 dark:text-white text-sm">2.4K</p>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wide">Followers</p>
                 </div>
               </div>
+            </div>
 
-              {/* Invite 3 (Person) */}
-              <div className="flex items-start justify-between p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/50">
-                <div className="flex gap-3">
-                  <div className="w-20 h-20 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
-                    <img src="https://ui-avatars.com/api/?name=Lewis+Thompson&background=random" className="w-full h-full" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm hover:underline cursor-pointer">Lewis Thompson <span className="text-xs bg-gray-200 px-1 rounded text-gray-600 font-normal">in</span> <span className="font-normal text-gray-500">wants to connect</span></p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5 line-clamp-2">Technology Recruitment Consultant at Sellick Partnership | Central Government & Defence...</p>
-                    <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                       <img src="https://ui-avatars.com/api/?name=James&background=random" className="w-4 h-4 rounded-full" /> James Myddelton and 13 other mutual connections
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-2 flex-shrink-0 mt-1">
-                  <button className="text-gray-500 font-semibold text-sm px-3 py-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors">Ignore</button>
-                  <button className="text-emerald-600 border border-emerald-600 hover:bg-emerald-50 font-semibold text-sm px-3 py-1 rounded-full transition-colors">Accept</button>
-                </div>
-              </div>
-
+            {/* Quick Links */}
+            <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
+              <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
+                <li className="cursor-pointer hover:text-emerald-600 transition-colors">Marketplace</li>
+                <li className="cursor-pointer hover:text-emerald-600 transition-colors">Saved Items</li>
+                <li className="cursor-pointer hover:text-emerald-600 transition-colors">Groups</li>
+                <li className="cursor-pointer hover:text-emerald-600 transition-colors">Events</li>
+              </ul>
             </div>
           </div>
+        </aside>
+
+        {/* CENTER COLUMN: Feed */}
+        <main className="col-span-12 lg:col-span-6 space-y-3">
+          
+          {/* Composer Box */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-emerald-600 text-white grid place-items-center font-bold flex-shrink-0">U</div>
+              <div className="flex-1">
+                <input 
+                  type="text" 
+                  placeholder="Share a track, an event, or an update..." 
+                  className="w-full bg-gray-100 dark:bg-zinc-800 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                <div className="flex justify-between items-center mt-3">
+                  <div className="flex gap-4">
+                    <button className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 flex items-center gap-1">
+                      🎵 Audio
+                    </button>
+                    <button className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 flex items-center gap-1">
+                      🎟 Event
+                    </button>
+                  </div>
+                  <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-5 py-1.5 rounded-full transition-colors">
+                    Publish
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Post: Demo Producer */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-blue-600 text-white grid place-items-center font-bold flex-shrink-0">D</div>
+              <div className="flex-1">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-semibold text-gray-900 dark:text-white text-sm">Demo Producer</p>
+                    <p className="text-xs text-gray-500">Music Producer · 2h</p>
+                  </div>
+                  <button className="text-gray-400 hover:text-gray-600">•••</button>
+                </div>
+                
+                <p className="text-sm text-gray-800 dark:text-gray-200 mt-3 mb-3">Just dropped a new beat. Let me know what you think!</p>
+                
+                {/* Audio Player */}
+                <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-3 flex items-center gap-3">
+                  <button className="w-10 h-10 rounded-full bg-emerald-600 text-white grid place-items-center hover:bg-emerald-700 transition-colors flex-shrink-0">
+                    <PlayIcon className="w-4 h-4 ml-0.5" />
+                  </button>
+                  {/* Fake Waveform */}
+                  <div className="flex-1 h-8 flex items-center gap-0.5 opacity-60">
+                    {[...Array(30)].map((_, i) => (
+                      <div key={i} className="flex-1 bg-emerald-600 rounded-sm" style={{height: `${Math.max(10, Math.random() * 100)}%`}}></div>
+                    ))}
+                  </div>
+                  <span className="text-xs font-medium text-gray-500">3:45</span>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4 mt-4 pt-3 border-t border-gray-100 dark:border-zinc-800">
+                  <button className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">🔥 Hype</button>
+                  <button className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">💬 Reply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Open Collabs */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-3">Open Collabs</h3>
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <MicIcon className="w-4 h-4 text-emerald-600 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">Vocalist needed for House track</p>
+                  <p className="text-xs text-gray-500">Posted by Sarah J. · 2h ago</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <SlidersIcon className="w-4 h-4 text-emerald-600 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">Mixing &amp; Mastering Engineer</p>
+                  <p className="text-xs text-gray-500">Posted by Studio X · 5h ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Industry News */}
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-3">Industry News</h3>
+            <div className="space-y-3">
+              <div>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white hover:underline cursor-pointer">Spotify announces new royalty payout model for 2027</p>
+                <p className="text-xs text-gray-500">Music Business Worldwide · 1h ago</p>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white hover:underline cursor-pointer">London venues fight back against rising operational costs</p>
+                <p className="text-xs text-gray-500">NME · 3h ago</p>
+              </div>
+            </div>
+          </div>
+
         </main>
 
-        {/* RIGHT COLUMN: Empty for this view, but keeps the grid layout intact */}
-        <aside className="col-span-12 lg:col-span-3 space-y-2 hidden lg:block">
-            {/* Placeholder for future ads or suggestions */}
+        {/* RIGHT COLUMN: Artists to Follow */}
+        <aside className="col-span-12 lg:col-span-3">
+          <div className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-4 shadow-sm sticky top-20">
+            <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-4">Artists to Follow</h3>
+            
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-pink-500 text-white grid place-items-center font-bold text-sm">SJ</div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">Sarah Jenkins</p>
+                  <p className="text-xs text-gray-500">Vocalist</p>
+                </div>
+              </div>
+              <button className="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-xs font-semibold px-3 py-1 rounded-full transition-colors">Follow</button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-indigo-500 text-white grid place-items-center font-bold text-sm">DC</div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">David Chen</p>
+                  <p className="text-xs text-gray-500">DJ / Producer</p>
+                </div>
+              </div>
+              <button className="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-xs font-semibold px-3 py-1 rounded-full transition-colors">Follow</button>
+            </div>
+          </div>
         </aside>
 
       </div>
