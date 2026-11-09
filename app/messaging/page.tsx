@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { PlayIcon, NoteIcon, AudioIcon, EpkIcon, SplitIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, AttachIcon } from "@/components/MusicIcons";
 
@@ -21,7 +22,6 @@ export default function MessagingPage() {
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
         
-        {/* LEFT COLUMN: Sidebar */}
         <aside className="col-span-12 lg:col-span-3 space-y-3 hidden lg:block">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
             <div className="h-20 bg-gradient-to-r from-emerald-600 to-emerald-500" />
@@ -30,7 +30,6 @@ export default function MessagingPage() {
               <p className="font-bold text-gray-900 dark:text-white text-lg">Ulisses Silva</p>
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Music Producer &amp; DJ</p>
               <p className="text-xs text-gray-500 mt-1">London, UK</p>
-              
               <div className="mt-5 space-y-2">
                 <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
                   <PlayIcon className="w-3.5 h-3.5" /> Play Latest Track
@@ -39,26 +38,19 @@ export default function MessagingPage() {
                   View EPK
                 </button>
               </div>
-              <div className="grid grid-cols-2 gap-2 mt-6 pt-5 border-t border-gray-100 dark:border-zinc-800 text-center">
-                <div><p className="font-bold text-gray-900 dark:text-white text-base">124</p><p className="text-[11px] text-gray-500 uppercase tracking-wide">Connections</p></div>
-                <div><p className="font-bold text-gray-900 dark:text-white text-base">2.4K</p><p className="text-[11px] text-gray-500 uppercase tracking-wide">Followers</p></div>
-              </div>
             </div>
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span></li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Events</span></li>
+                <li><Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></Link></li>
+                <li><Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></Link></li>
+                <li><Link href="/groups" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span></Link></li>
+                <li><Link href="/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Events</span></Link></li>
               </ul>
             </div>
           </div>
         </aside>
 
-        {/* RIGHT COLUMN: Messaging Interface */}
         <main className="col-span-12 lg:col-span-9 grid grid-cols-12 gap-3 h-[calc(100vh-120px)]">
-          
-          {/* Inbox List */}
           <section className="col-span-12 md:col-span-4 bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden flex flex-col">
             <div className="p-3 border-b border-gray-100 dark:border-zinc-800 flex flex-col gap-2">
               <h2 className="font-semibold text-gray-900 dark:text-white text-lg">Messaging</h2>
@@ -84,7 +76,6 @@ export default function MessagingPage() {
             </div>
           </section>
 
-          {/* Thread View */}
           <section className="col-span-12 md:col-span-8 bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 z-10">
               <div className="flex items-center gap-3">
@@ -113,16 +104,15 @@ export default function MessagingPage() {
               )}
             </div>
 
-            {/* Composer */}
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
               <div className="flex items-end gap-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl p-2 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all">
                 <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write a message..." className="w-full bg-transparent text-sm p-2 focus:outline-none resize-none max-h-32" rows={1} />
-                <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors mb-0.5">Send</button>
+                <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors mb-0.5">Send</button>
               </div>
               <div className="flex gap-2 mt-2 ml-1">
                 <button className="text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-semibold" title="Upload Track"><AudioIcon className="w-4 h-4" /> Upload Track</button>
                 <button className="text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-semibold" title="Share EPK"><EpkIcon className="w-4 h-4" /> EPK</button>
-                <button className="text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-semibold" title="Attach File"><AttachIcon className="w-4 h-4" /> File</button>
+                <button className="text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-semibold" title="Propose Split"><SplitIcon className="w-4 h-4" /> Split</button>
               </div>
             </div>
           </section>

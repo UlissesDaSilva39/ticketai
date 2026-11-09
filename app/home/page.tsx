@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { PlayIcon, MicIcon, SlidersIcon, NoteIcon, CalendarSVG, MarketIcon, BookmarkIcon, UsersIcon, HypeIcon, ReplyIcon } from "@/components/MusicIcons";
 
 export default function HomePage() {
@@ -39,21 +40,25 @@ export default function HomePage() {
 
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <MarketIcon className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Marketplace</span>
+                <li>
+                  <Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span>
+                  </Link>
                 </li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <BookmarkIcon className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Saved Items</span>
+                <li>
+                  <Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span>
+                  </Link>
                 </li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <UsersIcon className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Groups</span>
+                <li>
+                  <Link href="/groups" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span>
+                  </Link>
                 </li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <CalendarSVG className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Events</span>
+                <li>
+                  <Link href="/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Events</span>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -90,7 +95,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Post: Demo Producer */}
+          {/* Feed Post */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 rounded-full bg-blue-600 text-white grid place-items-center font-bold flex-shrink-0 text-lg">D</div>

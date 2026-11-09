@@ -1,5 +1,6 @@
 "use client";
-import { PlayIcon, MicIcon, SlidersIcon, NoteIcon, CalendarSVG, MarketIcon, BookmarkIcon, UsersIcon, HypeIcon, ReplyIcon, VideoIcon, EpkIcon, AttachIcon } from "@/components/MusicIcons";
+import Link from "next/link"; // CRITICAL: Next.js Link component
+import { PlayIcon, MicIcon, SlidersIcon, NoteIcon, CalendarSVG, MarketIcon, BookmarkIcon, UsersIcon, HypeIcon, ReplyIcon } from "@/components/MusicIcons";
 
 export default function NetworkPage() {
   return (
@@ -37,23 +38,32 @@ export default function NetworkPage() {
               </div>
             </div>
 
+            {/* SIDEBAR NAVIGATION - PROPERLY LINKED */}
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <MarketIcon className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Marketplace</span>
+                <li>
+                  <Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <MarketIcon className="w-5 h-5 text-emerald-600" /> 
+                    <span className="group-hover:text-emerald-700">Marketplace</span>
+                  </Link>
                 </li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <BookmarkIcon className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Saved Items</span>
+                <li>
+                  <Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <BookmarkIcon className="w-5 h-5 text-emerald-600" /> 
+                    <span className="group-hover:text-emerald-700">Saved Items</span>
+                  </Link>
                 </li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <UsersIcon className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Groups</span>
+                <li>
+                  <Link href="/groups" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <UsersIcon className="w-5 h-5 text-emerald-600" /> 
+                    <span className="group-hover:text-emerald-700">Groups</span>
+                  </Link>
                 </li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group">
-                  <CalendarSVG className="w-5 h-5 text-emerald-600" /> 
-                  <span className="group-hover:text-emerald-700">Events</span>
+                <li>
+                  <Link href="/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group">
+                    <CalendarSVG className="w-5 h-5 text-emerald-600" /> 
+                    <span className="group-hover:text-emerald-700">Events</span>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -62,8 +72,6 @@ export default function NetworkPage() {
 
         {/* CENTER COLUMN: Feed */}
         <main className="col-span-12 lg:col-span-6 space-y-4">
-          
-          {/* Composer Box with PROFESSIONAL Icons */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 rounded-full bg-emerald-600 text-white grid place-items-center font-bold flex-shrink-0">U</div>
@@ -90,7 +98,6 @@ export default function NetworkPage() {
             </div>
           </div>
 
-          {/* Post: Demo Producer */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 rounded-full bg-blue-600 text-white grid place-items-center font-bold flex-shrink-0 text-lg">D</div>
@@ -148,46 +155,6 @@ export default function NetworkPage() {
                   <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors">Mixing &amp; Mastering Engineer</p>
                   <p className="text-xs text-gray-500 mt-0.5">Posted by Studio X · 5h ago</p>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
-            <h3 className="font-bold text-gray-900 dark:text-white text-base mb-4">Industry News</h3>
-            <div className="space-y-4">
-              <div className="group cursor-pointer">
-                <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors leading-snug">Spotify announces new royalty payout model for 2027</p>
-                <p className="text-xs text-gray-500 mt-1">Music Business Worldwide · 1h ago</p>
-              </div>
-              <div className="group cursor-pointer">
-                <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors leading-snug">London venues fight back against rising operational costs</p>
-                <p className="text-xs text-gray-500 mt-1">NME · 3h ago</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
-            <h3 className="font-bold text-gray-900 dark:text-white text-base mb-4">Artists to Follow</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-pink-500 text-white grid place-items-center font-bold text-sm">SJ</div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white">Sarah Jenkins</p>
-                    <p className="text-xs text-gray-500">Vocalist</p>
-                  </div>
-                </div>
-                <button className="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-xs font-bold px-4 py-1.5 rounded-full transition-colors">Follow</button>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-500 text-white grid place-items-center font-bold text-sm">DC</div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white">David Chen</p>
-                    <p className="text-xs text-gray-500">DJ / Producer</p>
-                  </div>
-                </div>
-                <button className="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-xs font-bold px-4 py-1.5 rounded-full transition-colors">Follow</button>
               </div>
             </div>
           </div>

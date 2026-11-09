@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import { useState } from "react";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon, SlidersIcon } from "@/components/MusicIcons";
 
 const ShieldIcon = ({ className = "w-5 h-5" }) => (
@@ -18,13 +20,10 @@ const ArrowRightIcon = ({ className = "w-4 h-4" }) => (
 );
 
 export default function EscrowPage() {
-  const activeEscrows = [
-    { id: 1, project: "House Track - Session Vocals", partner: "Sarah J.", role: "Vocalist", amount: "£250.00", fee: "£12.50", status: "In Escrow", date: "Oct 28, 2026", icon: <MicIcon className="w-5 h-5" /> },
-    { id: 2, project: "Pop EP - Mixing & Mastering", partner: "Studio X", role: "Engineer", amount: "£400.00", fee: "£20.00", status: "In Escrow", date: "Nov 1, 2026", icon: <SlidersIcon className="w-5 h-5" /> }
-  ];
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   return (
-    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
+    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen relative">
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
 
         <aside className="col-span-12 lg:col-span-3 space-y-3 hidden lg:block">
@@ -39,17 +38,15 @@ export default function EscrowPage() {
                 <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
                   <PlayIcon className="w-3.5 h-3.5" /> Play Latest Track
                 </button>
-                <button className="w-full border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
-                  View EPK
-                </button>
+                <button className="w-full border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">View EPK</button>
               </div>
             </div>
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span></li>
-                <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Events</span></li>
+                <li><Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></Link></li>
+                <li><Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></Link></li>
+                <li><Link href="/groups" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span></Link></li>
+                <li><Link href="/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Events</span></Link></li>
               </ul>
             </div>
           </div>
@@ -67,7 +64,7 @@ export default function EscrowPage() {
                 <p className="text-xs font-semibold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider">Available Balance</p>
                 <p className="font-bold text-gray-900 dark:text-white text-xl">£1,240.00</p>
               </div>
-              <button className="ml-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors">Withdraw</button>
+              <button onClick={() => setShowWithdrawModal(true)} className="ml-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors">Withdraw</button>
             </div>
           </div>
 
@@ -77,29 +74,39 @@ export default function EscrowPage() {
               <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-1 rounded-full">2 Projects in Escrow</span>
             </div>
             <div className="divide-y divide-gray-100 dark:divide-zinc-800">
-              {activeEscrows.map((e) => (
-                <div key={e.id} className="p-5 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors flex flex-col md:flex-row justify-between md:items-center gap-4">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 flex-shrink-0">{e.icon}</div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 dark:text-white text-base">{e.project}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">With: <span className="font-semibold text-gray-900 dark:text-white">{e.partner}</span></p>
-                    </div>
-                  </div>
-                  <div className="text-left md:text-right bg-gray-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-gray-100 dark:border-zinc-700">
-                    <p className="text-xs text-gray-500 font-semibold uppercase">Amount Locked</p>
-                    <p className="font-bold text-gray-900 dark:text-white text-lg">{e.amount}</p>
-                    <p className="text-[10px] text-gray-500 mt-0.5">GRID Fee: {e.fee}</p>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">Release Funds <ArrowRightIcon /></button>
+              <div className="p-5 flex flex-col md:flex-row justify-between md:items-center gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0"><MicIcon className="w-5 h-5" /></div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-base">House Track - Session Vocals</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">With: <span className="font-semibold text-gray-900 dark:text-white">Sarah J.</span></p>
                   </div>
                 </div>
-              ))}
+                <div className="text-left md:text-right bg-gray-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-gray-100 dark:border-zinc-700">
+                  <p className="text-xs text-gray-500 font-semibold uppercase">Amount Locked</p>
+                  <p className="font-bold text-gray-900 dark:text-white text-lg">£250.00</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">GRID Fee: £12.50</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">Release Funds <ArrowRightIcon /></button>
+                </div>
+              </div>
             </div>
           </div>
         </main>
       </div>
+
+      {showWithdrawModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Withdraw Funds</h2>
+            <div className="flex gap-3 mt-4">
+              <button onClick={() => setShowWithdrawModal(false)} className="flex-1 border border-gray-300 font-semibold py-2 rounded-lg">Cancel</button>
+              <button onClick={() => setShowWithdrawModal(false)} className="flex-1 bg-emerald-600 text-white font-semibold py-2 rounded-lg">Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
