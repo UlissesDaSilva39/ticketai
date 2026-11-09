@@ -103,9 +103,9 @@ export default function HomePage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-bold text-gray-900 dark:text-white text-base">Demo Producer</p>
-                    <p className="text-xs text-gray-500">Music Producer · 2h</p>
+                    <p className="text-xs text-gray-500">Music Producer Â· 2h</p>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600 font-bold tracking-widest px-2">•••</button>
+                  <button className="text-gray-400 hover:text-gray-600 font-bold tracking-widest px-2">â€¢â€¢â€¢</button>
                 </div>
                 
                 <p className="text-[15px] text-gray-800 dark:text-gray-200 mt-4 mb-4">Just dropped a new beat. Let me know what you think!</p>
@@ -144,14 +144,14 @@ export default function HomePage() {
                 <MicIcon className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors">Vocalist needed for House track</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Posted by Sarah J. · 2h ago</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Posted by Sarah J. Â· 2h ago</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 group cursor-pointer">
                 <SlidersIcon className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors">Mixing &amp; Mastering Engineer</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Posted by Studio X · 5h ago</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Posted by Studio X Â· 5h ago</p>
                 </div>
               </div>
             </div>
@@ -162,11 +162,11 @@ export default function HomePage() {
             <div className="space-y-4">
               <div className="group cursor-pointer">
                 <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors leading-snug">Spotify announces new royalty payout model for 2027</p>
-                <p className="text-xs text-gray-500 mt-1">Music Business Worldwide · 1h ago</p>
+                <p className="text-xs text-gray-500 mt-1">Music Business Worldwide Â· 1h ago</p>
               </div>
               <div className="group cursor-pointer">
                 <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors leading-snug">London venues fight back against rising operational costs</p>
-                <p className="text-xs text-gray-500 mt-1">NME · 3h ago</p>
+                <p className="text-xs text-gray-500 mt-1">NME Â· 3h ago</p>
               </div>
             </div>
           </div>

@@ -7,7 +7,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const [businessOpen, setBusinessOpen] = useState(false);
   const [meOpen, setMeOpen] = useState(false);
-  
   const businessRef = useRef<HTMLDivElement>(null);
   const meRef = useRef<HTMLDivElement>(null);
 
@@ -70,8 +69,6 @@ export default function Navbar() {
 
             {meOpen && (
               <div className="absolute top-14 right-0 w-72 bg-white dark:bg-zinc-900 rounded-lg shadow-xl border border-gray-200 dark:border-zinc-800 overflow-hidden z-50">
-                
-                {/* Header */}
                 <div className="p-4 border-b border-gray-100 dark:border-zinc-800">
                   <div className="flex gap-3">
                     <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">U</div>
@@ -85,33 +82,25 @@ export default function Navbar() {
                     <button className="flex-1 bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-full hover:bg-emerald-700">Get Verified</button>
                   </div>
                 </div>
-
-                {/* Menu Links */}
                 <div className="p-2">
                   <Link href="/premium" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 text-amber-600 font-semibold text-sm">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     Try GRID Pro for £0
                   </Link>
-                  
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
-                  
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Account</p>
                   <Link href="/network" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Settings &amp; Privacy</Link>
                   <Link href="/network" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Help Center</Link>
-
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
-
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Manage</p>
+                  <Link href="/promote" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Promote Music</Link>
                   <Link href="/splits" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Releases &amp; Splits</Link>
                   <Link href="/payments" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Escrow &amp; Payouts</Link>
                   <Link href="/network" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Post Analytics</Link>
                 </div>
-
-                {/* Footer */}
                 <div className="p-2 border-t border-gray-100 dark:border-zinc-800">
                   <button className="w-full text-left px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Sign out</button>
                 </div>
-
               </div>
             )}
           </div>
@@ -119,7 +108,7 @@ export default function Navbar() {
           <div className="h-8 w-px bg-gray-300 dark:bg-zinc-700"></div>
           
           <div className="relative h-full hidden lg:flex" ref={businessRef}>
-            <button onClick={() => setBusinessOpen(!businessOpen)} className={`flex flex-col items-center justify-center h-full group outline-none ${businessOpen || pathname.includes('/business') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}>
+            <button onClick={() => setBusinessOpen(!businessOpen)} className={`flex flex-col items-center justify-center h-full group outline-none ${businessOpen || pathname.includes('/business') || pathname.includes('/calendar') || pathname.includes('/epk') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}>
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg>
               <span className="text-[10px] mt-1 flex items-center gap-0.5 font-semibold whitespace-nowrap">For Business <svg className={`w-2.5 h-2.5 transition-transform ${businessOpen ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg></span>
             </button>
