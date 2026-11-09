@@ -97,6 +97,11 @@ export default function Navbar() {
                   <Link href="/promote" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Promote Music</Link>
                   <Link href="/splits" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Releases &amp; Splits</Link>
                   <Link href="/payments" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Escrow &amp; Payouts</Link>
+                  
+                  <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
+                  <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Settings</p>
+                  <Link href="/legal" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Legal &amp; Privacy</Link>
+                  <Link href="/admin/curators" className="block px-2 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md font-semibold">Admin: Curator Verify</Link>
                 </div>
                 <div className="p-2 border-t border-gray-100 dark:border-zinc-800">
                   <button className="w-full text-left px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Sign out</button>
