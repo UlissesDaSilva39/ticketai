@@ -146,9 +146,9 @@ export default function ProfilePage() {
                         <PlayIcon className="w-5 h-5 ml-1" />
                       </button>
                       <div className="flex-1 h-8 flex items-center gap-1 opacity-80">
-                        {[...Array(40)].map((_, i) => (
-                          <div key={i} className="flex-1 bg-emerald-500 rounded-full" style={{height: `${Math.max(10, Math.random() * 100)}%`}}></div>
-                        ))}
+                        {[10, 30, 50, 80, 60, 40, 20, 70, 90, 50, 30, 60, 80, 40, 20, 60, 90, 70, 50, 30, 60, 80, 40, 20, 70, 90, 50, 30, 60, 80, 40, 20, 60, 90, 70, 50, 30, 60, 80, 40].map((h, i) => (
+                      <div key={i} className="flex-1 bg-emerald-500 rounded-full" style={{height: `${h}%`}}></div>
+                    ))}
                       </div>
                       <span className="text-xs font-semibold text-gray-500">3:45</span>
                     </div>
