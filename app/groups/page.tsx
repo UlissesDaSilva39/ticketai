@@ -1,8 +1,11 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG } from "@/components/MusicIcons";
 
-export default function GroupsPage() {
+export default function Page() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const groups = [
     { name: "London Producers", members: "12.4K", type: "Public Group", color: "bg-emerald-600" },
     { name: "Tech House Artists", members: "8.2K", type: "Private Group", color: "bg-purple-600" },

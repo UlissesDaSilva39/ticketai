@@ -1,8 +1,11 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon, TicketIcon, NoteIcon } from "@/components/MusicIcons";
 
-export default function EventsPage() {
+export default function Page() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const events = [
     {
       id: 1,
@@ -68,8 +71,8 @@ export default function EventsPage() {
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Music Producer &amp; DJ</p>
               <p className="text-xs text-gray-500 mt-1">London, UK</p>
               <div className="mt-5 space-y-2">
-                <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
-                  <PlayIcon className="w-3.5 h-3.5" /> Play Latest Track
+                <button onClick={() => setIsPlaying(!isPlaying)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
+                  <PlayIcon className="w-3.5 h-3.5" /> {isPlaying ? "Pause Track" : "Play Latest Track"}
                 </button>
                 <button className="w-full border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">View EPK</button>
               </div>

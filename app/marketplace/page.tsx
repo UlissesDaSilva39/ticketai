@@ -1,8 +1,11 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, NoteIcon } from "@/components/MusicIcons";
 
-export default function MarketplacePage() {
+export default function Page() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const products = [
     { title: "Dark Techno Sample Pack Vol. 1", seller: "Ulisses Silva", price: "£24.99", fee: "£2.50", type: "Sample Pack", color: "bg-emerald-800" },
     { title: "House Beat - 'Midnight' (Lease)", seller: "Demo Producer", price: "£49.99", fee: "£5.00", type: "Beat", color: "bg-blue-800" },

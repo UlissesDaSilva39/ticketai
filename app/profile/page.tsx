@@ -15,7 +15,9 @@ const MapPinIcon = ({ className = "w-4 h-4" }) => (
   </svg>
 );
 
-export default function ProfilePage() {
+export default function Page() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const [activeTab, setActiveTab] = useState("Feed");
 
   return (

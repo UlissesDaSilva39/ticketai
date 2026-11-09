@@ -3,7 +3,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { PlayIcon, NoteIcon, AudioIcon, EpkIcon, SplitIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, AttachIcon } from "@/components/MusicIcons";
 
-export default function MessagingPage() {
+export default function Page() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const [active, setActive] = useState("sarah");
   const [message, setMessage] = useState("");
 
@@ -31,8 +33,8 @@ export default function MessagingPage() {
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Music Producer &amp; DJ</p>
               <p className="text-xs text-gray-500 mt-1">London, UK</p>
               <div className="mt-5 space-y-2">
-                <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
-                  <PlayIcon className="w-3.5 h-3.5" /> Play Latest Track
+                <button onClick={() => setIsPlaying(!isPlaying)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
+                  <PlayIcon className="w-3.5 h-3.5" /> {isPlaying ? "Pause Track" : "Play Latest Track"}
                 </button>
                 <button className="w-full border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
                   View EPK

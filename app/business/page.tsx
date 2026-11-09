@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon } from "@/components/MusicIcons";
 
@@ -13,7 +14,9 @@ const StarIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export default function BusinessDashboard() {
+export default function Page() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const artists = [
     { id: 1, name: "Sarah Jenkins", role: "Vocalist · House", location: "London, UK", draw: "1.2K past tickets", match: "98% match", color: "bg-pink-500", verified: true },
     { id: 2, name: "David Chen", role: "DJ / Producer", location: "Berlin, DE", draw: "3.4K past tickets", match: "95% match", color: "bg-indigo-500", verified: true },

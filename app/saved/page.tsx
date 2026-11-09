@@ -1,8 +1,11 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, NoteIcon } from "@/components/MusicIcons";
 
-export default function SavedPage() {
+export default function Page() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">

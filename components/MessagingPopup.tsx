@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { NoteIcon, AudioIcon, EpkIcon, AttachIcon } from "@/components/MusicIcons";
 
 export default function MessagingPopup() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   if (!isOpen) {
     return (
@@ -62,13 +64,13 @@ export default function MessagingPopup() {
           <textarea placeholder="Write a message..." className="w-full bg-transparent text-sm focus:outline-none resize-none h-10" />
           <div className="flex items-center justify-between mt-1">
             <div className="flex gap-1 text-gray-500">
-              <button className="hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 p-1.5 rounded transition-colors" title="Upload Track">
+              <button type="button" onClick={() => router.push("/upload/track")} className="hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 p-1.5 rounded transition-colors" title="Upload Track">
                 <AudioIcon className="w-5 h-5" />
               </button>
-              <button className="hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 p-1.5 rounded transition-colors" title="Share EPK">
+              <button type="button" onClick={() => router.push("/epk")} className="hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 p-1.5 rounded transition-colors" title="Share EPK">
                 <EpkIcon className="w-5 h-5" />
               </button>
-              <button className="hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 p-1.5 rounded transition-colors" title="Attach File">
+              <button type="button" onClick={() => router.push("/splits/new")} className="hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 p-1.5 rounded transition-colors" title="Split">
                 <AttachIcon className="w-5 h-5" />
               </button>
             </div>

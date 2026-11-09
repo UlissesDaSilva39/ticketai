@@ -1,0 +1,97 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { StartRemixButton } from "@/components/StartRemixButton";
+
+type Req = {
+  id: string;
+  remixer_name: string;
+  status: string;
+  proposed_split: { original_pct: number; remixer_pct: number; platform_pct: number };
+  created_at: string;
+};
+
+export default function EpkPage() {
+  const router = useRouter();
+  const [requests, setRequests] = useState<Req[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch("/api/remix/request?mine=1");
+        if (r.ok) {
+          const j = await r.json();
+          setRequests(j.requests ?? []);
+        }
+      } catch {}
+      setLoading(false);
+    })();
+  }, []);
+
+  return (
+    <main className="mx-auto max-w-3xl px-6 py-16">
+      <h1 className="text-4xl font-bold mb-2">Your EPK</h1>
+      <p className="text-gray-500 mb-8">
+        Electronic Press Kit + collaboration history. Everything here is visible
+        to promoters and remixers who want to work with you.
+      </p>
+
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold">Collaborations</h2>
+          <StartRemixButton artistSlug="your-slug-here" />
+        </div>
+
+        {loading && <p className="text-sm text-gray-500">Loading…</p>}
+        {!loading && requests.length === 0 && (
+          <p className="text-sm text-gray-500">
+            No remix proposals yet. When someone clicks "Start Remix" on your
+            profile, their request appears here with the exact split numbers.
+          </p>
+        )}
+        <ul className="space-y-2">
+          {requests.map((r) => (
+            <li key={r.id} className="rounded-2xl border p-4 flex items-center justify-between">
+              <div>
+                <p className="font-medium">{r.remixer_name}</p>
+                <p className="text-xs text-gray-500">
+                  Split: {r.proposed_split.original_pct}% you / {r.proposed_split.remixer_pct}% them / {r.proposed_split.platform_pct}% platform
+                </p>
+              </div>
+              <span className="text-xs font-medium px-3 py-1 rounded-full bg-gray-100">
+                {r.status}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold mb-2">Bio</h2>
+        <p className="text-gray-600">
+          Your artist bio appears here. Update it from Settings.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-lg font-semibold mb-2">Latest tracks</h2>
+        <p className="text-gray-600">
+          Loaded from your published tracks.
+        </p>
+      </section>
+
+      <div className="flex gap-3">
+        <button onClick={() => router.push("/messages")}
+          className="rounded-full border px-5 py-3 text-sm">
+          Back to messages
+        </button>
+        <button onClick={() => router.push("/upload/track")}
+          className="rounded-full bg-black text-white px-5 py-3 text-sm">
+          Upload a track
+        </button>
+      </div>
+    </main>
+  );
+}

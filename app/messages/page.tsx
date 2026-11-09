@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CollabBoard } from '@/components/CollabBoard';
 
 export default function MessagesPage() {
   return (
@@ -141,7 +142,8 @@ export default function MessagesPage() {
               </div>
             </div>
           </div>
-        </main>
+          <div className="mt-8"><CollabBoard /></div>
+</main>
 
         {/* RIGHT COLUMN: Empty for layout balance */}
         <aside className="col-span-12 lg:col-span-4 hidden lg:block">

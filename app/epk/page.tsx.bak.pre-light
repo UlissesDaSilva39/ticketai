@@ -1,0 +1,158 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { StartRemixButton } from "@/components/StartRemixButton";
+import { Play, Music, FileText, ArrowLeft, Upload } from "lucide-react";
+
+type Req = {
+  id: string;
+  remixer_name: string;
+  status: string;
+  proposed_split: { original_pct: number; remixer_pct: number; platform_pct: number };
+  created_at: string;
+};
+
+export default function EpkPage() {
+  const router = useRouter();
+  const [requests, setRequests] = useState<Req[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch("/api/remix/request?mine=1");
+        if (r.ok) {
+          const j = await r.json();
+          setRequests(j.requests ?? []);
+        }
+      } catch {}
+      setLoading(false);
+    })();
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-[#0a0a0a] text-white selection:bg-emerald-500/30">
+      <div className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
+        
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-4 border border-emerald-500/20">
+              <FileText className="w-3.5 h-3.5" /> Artist Press Kit
+            </div>
+            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter text-white mb-3">
+              Your EPK
+            </h1>
+            <p className="text-gray-400 text-lg max-w-xl leading-relaxed">
+              Your Electronic Press Kit and collaboration history. This is your public
+              identity for promoters, labels, and remixers on GRID.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <StartRemixButton artistSlug="your-slug-here" />
+          </div>
+        </div>
+
+        {/* Collab History Section */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-xl font-bold tracking-tight text-white">Collaborations</h2>
+            <div className="h-px flex-1 bg-white/10" />
+            <span className="text-xs font-mono text-gray-500">{requests.length} total</span>
+          </div>
+
+          {loading && (
+            <div className="animate-pulse flex space-x-4">
+              <div className="flex-1 space-y-3 py-1">
+                <div className="h-16 bg-white/5 rounded-2xl w-full"></div>
+              </div>
+            </div>
+          )}
+
+          {!loading && requests.length === 0 && (
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8 text-center">
+              <p className="text-gray-400 text-sm">
+                No remix proposals yet. When someone clicks <strong className="text-white">Start Remix</strong> on your profile, their request will appear here with the exact split numbers.
+              </p>
+            </div>
+          )}
+
+          <ul className="space-y-3">
+            {requests.map((r) => (
+              <li key={r.id} className="group relative rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors p-5 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                    <Music className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-base">{r.remixer_name}</p>
+                    <p className="text-xs text-gray-400 mt-1 font-mono">
+                      Split: {r.proposed_split.original_pct}% you / {r.proposed_split.remixer_pct}% them / {r.proposed_split.platform_pct}% platform
+                    </p>
+                  </div>
+                </div>
+                <span className={`text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full border ${
+                  r.status === 'accepted' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                  r.status === 'rejected' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
+                  'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                }`}>
+                  {r.status}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Bio Section */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-xl font-bold tracking-tight text-white">Bio</h2>
+            <div className="h-px flex-1 bg-white/10" />
+            <button className="text-xs font-bold text-gray-400 hover:text-white transition-colors">
+              Edit
+            </button>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8">
+            <p className="text-gray-400 leading-relaxed">
+              Your artist bio will appear here. Promoters use this section to understand your background, genre, and past achievements before reaching out.
+            </p>
+          </div>
+        </section>
+
+        {/* Latest Tracks Section */}
+        <section className="mb-20">
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-xl font-bold tracking-tight text-white">Latest Tracks</h2>
+            <div className="h-px flex-1 bg-white/10" />
+            <button onClick={() => router.push("/upload/track")} className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors">
+              Upload New
+            </button>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8">
+            <p className="text-gray-400 leading-relaxed">
+              Your published tracks load automatically here, with play counts and direct links for promoters to stream.
+            </p>
+          </div>
+        </section>
+
+        {/* Footer Actions */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 border-t border-white/10 pt-8">
+          <button 
+            onClick={() => router.push("/messages")}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-transparent px-6 py-3 text-sm font-semibold text-white hover:bg-white/5 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back to messages
+          </button>
+          <button 
+            onClick={() => router.push("/upload/track")}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-white text-black px-6 py-3 text-sm font-bold hover:bg-gray-200 transition-colors"
+          >
+            <Upload className="w-4 h-4" /> Upload a track
+          </button>
+        </div>
+
+      </div>
+    </main>
+  );
+}
