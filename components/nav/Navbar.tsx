@@ -42,7 +42,9 @@ export default function Navbar() {
           <Link href="/" className="text-xl font-bold text-emerald-600 tracking-tight hidden md:block">GRID</Link>
           <div className="relative w-48 lg:w-64 hidden sm:block">
             <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <form action="/search" method="GET" className="w-full"><input type="text" name="q" placeholder="Search" className="w-full bg-[#eef3f8] dark:bg-zinc-900 border border-transparent focus:border-emerald-500 rounded-md pl-9 pr-3 py-1.5 text-sm focus:outline-none transition-colors" /></form>
+            <form action="/search" method="GET" className="w-full">
+              <input type="text" name="q" placeholder="Search" className="w-full bg-[#eef3f8] dark:bg-zinc-900 border border-transparent focus:border-emerald-500 rounded-md pl-9 pr-3 py-1.5 text-sm focus:outline-none transition-colors" />
+            </form>
           </div>
         </div>
 
@@ -83,14 +85,19 @@ export default function Navbar() {
                     </div>
                   </div>
                   <div className="flex gap-2 mt-3">
-                    <Link href="/network" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50">View Profile</Link>
-                    <button className="flex-1 bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-full hover:bg-emerald-700">Get Verified</button>
+                    {/* FIXED: View Profile correctly links to /profile */}
+                    <Link href="/profile" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">
+                      View Profile
+                    </Link>
+                    <button className="flex-1 bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-full hover:bg-emerald-700 transition-colors">
+                      Get Verified
+                    </button>
                   </div>
                 </div>
                 <div className="p-2">
                   <Link href="/premium" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 text-amber-600 font-semibold text-sm">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    Try GRID Pro for Â£0
+                    Try GRID Pro for £0
                   </Link>
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Manage</p>
