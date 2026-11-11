@@ -114,6 +114,17 @@ export default function JobsPage() {
         <main className="col-span-12 lg:col-span-9 space-y-4">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
             <h1 className="font-bold text-gray-900 dark:text-white text-2xl">Gigs &amp; opportunities</h1>
+            <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center flex-shrink-0">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-xs font-bold text-amber-900 dark:text-amber-400"><strong>Closes in 2 days</strong> — Session Vocalist for House track · Sarah J.</p>
+              </div>
+              <Link href="/jobs" className="text-xs font-bold text-amber-700 dark:text-amber-400 hover:underline whitespace-nowrap">Apply Now →</Link>
+            </div>
             <p className="text-sm text-gray-500 mt-1">Based on your role, genre, and mutual collaborators.</p>
           </div>
 

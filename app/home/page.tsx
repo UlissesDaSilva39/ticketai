@@ -12,6 +12,11 @@ const VerifiedIcon = ({ className = "w-4 h-4" }) => (
 const SparkleIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
 );
+const RocketIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+  </svg>
+);
 
 export default function HomePage() {
   const router = useRouter();
@@ -23,14 +28,11 @@ export default function HomePage() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [postToast, setPostToast] = useState(false);
-
-  // Algorithmic Matches
-  const [matches, setMatches] = useState([
-    { id: 1, type: "COLLAB", title: "House Vocalist needed", poster: "Sarah J.", match: "98% match", reason: "Same genre (House) + 3 mutual collabs", color: "bg-pink-500" },
-    { id: 2, type: "BOOKING", title: "Opening slot at Ministry of Sound", poster: "The O2 Academy", match: "95% match", reason: "Your genre + London based", color: "bg-emerald-600" },
-    { id: 3, type: "COLLAB", title: "Techno remix swap", poster: "Alex Rivera", match: "89% match", reason: "Same BPM range + techno focus", color: "bg-indigo-500" },
-  ]);
-  const [dismissedMatches, setDismissedMatches] = useState<number[]>([]);
+  
+  // Boost state
+  const [showBoostModal, setShowBoostModal] = useState(false);
+  const [boostSuccess, setBoostSuccess] = useState(false);
+  const [selectedTier, setSelectedTier] = useState(0);
 
   const handlePublish = () => {
     if (!postText.trim()) return;
@@ -60,11 +62,19 @@ export default function HomePage() {
     setFollowed(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
-  const dismissMatch = (id: number) => {
-    setDismissedMatches([...dismissedMatches, id]);
+  const handleBoostSubmit = () => {
+    setBoostSuccess(true);
+    setTimeout(() => {
+      setBoostSuccess(false);
+      setShowBoostModal(false);
+    }, 2500);
   };
 
-  const visibleMatches = matches.filter(m => !dismissedMatches.includes(m.id));
+  const boostTiers = [
+    { id: 0, price: 5, duration: "24 hours", reach: "10,000+ artists", badge: "" },
+    { id: 1, price: 15, duration: "3 days", reach: "30,000+ artists", badge: "Popular" },
+    { id: 2, price: 30, duration: "7 days", reach: "70,000+ artists", badge: "Best Value" },
+  ];
 
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen relative">
@@ -106,44 +116,39 @@ export default function HomePage() {
         {/* CENTER COLUMN */}
         <main className="col-span-12 lg:col-span-6 space-y-4">
           
-          {/* ALGORITHMIC MATCHES */}
-          {visibleMatches.length > 0 && (
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 rounded-xl border border-emerald-200 dark:border-emerald-800/50 p-5 shadow-sm">
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-2">
-                  <SparkleIcon className="w-5 h-5 text-emerald-600" /> Matched For You
-                </h2>
-                <Link href="/network" className="text-xs font-bold text-emerald-600 hover:underline">See all matches →</Link>
-              </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">Based on your genre (Tech House), role (Producer), and mutual collaborators.</p>
-              
-              <div className="space-y-3">
-                {visibleMatches.map((m) => (
-                  <div key={m.id} className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-3 flex items-start gap-3 group">
-                    <div className={`w-10 h-10 rounded-lg ${m.color} text-white grid place-items-center font-bold text-sm flex-shrink-0`}>
-                      {m.type === "COLLAB" ? <MicIcon className="w-5 h-5" /> : <CalendarSVG className="w-5 h-5" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-baseline">
-                        <p className="font-bold text-gray-900 dark:text-white text-sm truncate">{m.title}</p>
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 px-1.5 py-0.5 rounded ml-2 flex-shrink-0">{m.match}</span>
-                      </div>
-                      <p className="text-xs text-gray-500 mt-0.5">by {m.poster}</p>
-                      <p className="text-[10px] text-emerald-600 mt-1 font-medium">{m.reason}</p>
-                    </div>
-                    <div className="flex flex-col gap-1 flex-shrink-0">
-                      <button onClick={() => router.push('/jobs')} className="text-xs font-bold text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 px-2 py-1 rounded transition-colors">
-                        View
-                      </button>
-                      <button onClick={() => dismissMatch(m.id)} className="text-[10px] text-gray-400 hover:text-red-500 transition-colors">
-                        Hide
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {/* Algorithmic Matches */}
+          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 rounded-xl border border-emerald-200 dark:border-emerald-800/50 p-5 shadow-sm">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-2">
+                <SparkleIcon className="w-5 h-5 text-emerald-600" /> Matched For You
+              </h2>
+              <Link href="/network" className="text-xs font-bold text-emerald-600 hover:underline">See all →</Link>
             </div>
-          )}
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">Based on your genre (Tech House), role (Producer), and mutual collaborators.</p>
+            <div className="space-y-3">
+              {[
+                { title: "House Vocalist needed", poster: "Sarah J.", match: "98%", color: "bg-pink-500", reason: "Same genre (House) + 3 mutual collabs" },
+                { title: "Opening slot at Ministry of Sound", poster: "The O2 Academy", match: "95%", color: "bg-emerald-600", reason: "Your genre + London based" },
+              ].map((m, i) => (
+                <div key={i} className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-3 flex items-start gap-3 group">
+                  <div className={`w-10 h-10 rounded-lg ${m.color} text-white grid place-items-center font-bold text-sm flex-shrink-0`}>
+                    {m.title[0]}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-baseline">
+                      <p className="font-bold text-gray-900 dark:text-white text-sm truncate">{m.title}</p>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 px-1.5 py-0.5 rounded ml-2 flex-shrink-0">{m.match}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-0.5">by {m.poster}</p>
+                    <p className="text-[10px] text-emerald-600 mt-1 font-medium">{m.reason}</p>
+                  </div>
+                  <button onClick={() => router.push('/jobs')} className="text-xs font-bold text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 px-2 py-1 rounded transition-colors">
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Composer */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
@@ -178,6 +183,31 @@ export default function HomePage() {
             </div>
           </div>
 
+          {/* REFER & EARN BANNER */}
+          <div className="bg-gradient-to-r from-emerald-600 to-emerald-800 rounded-xl p-5 shadow-lg relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full"></div>
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full"></div>
+            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white flex-shrink-0 backdrop-blur-sm">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-white text-base">Refer &amp; Earn</p>
+                  <p className="text-sm text-emerald-100">Invite a friend → Get 1 month of GRID Pro free</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => alert("Referral link: grid.com/join?ref=ulisses")} 
+                className="bg-white text-emerald-700 font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-emerald-50 transition-colors whitespace-nowrap shadow-sm"
+              >
+                Invite Friends →
+              </button>
+            </div>
+          </div>
+
           {/* Feed Post */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
             <div className="flex items-start gap-3">
@@ -190,7 +220,14 @@ export default function HomePage() {
                     </p>
                     <p className="text-xs text-gray-500">Music Producer · 2h</p>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600 font-bold tracking-widest px-2">•••</button>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowBoostModal(true)}
+                      className="text-gray-400 hover:text-gray-600 font-bold tracking-widest px-2"
+                    >
+                      •••
+                    </button>
+                  </div>
                 </div>
                 
                 <p className="text-[15px] text-gray-800 dark:text-gray-200 mt-4 mb-4">Just dropped a new beat. Let me know what you think!</p>
@@ -216,6 +253,9 @@ export default function HomePage() {
                   </button>
                   <button onClick={() => setShowReplyModal(true)} className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">
                     <ReplyIcon className="w-5 h-5" /> Reply
+                  </button>
+                  <button onClick={() => setShowBoostModal(true)} className="flex items-center gap-2 text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors ml-auto">
+                    <RocketIcon className="w-4 h-4" /> Boost
                   </button>
                 </div>
               </div>
@@ -308,6 +348,71 @@ export default function HomePage() {
               <button onClick={() => setShowReplyModal(false)} className="flex-1 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-2 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
               <button onClick={handleReply} disabled={!replyText.trim()} className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold py-2 rounded-lg transition-colors">Send Reply</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* BOOST MODAL */}
+      {showBoostModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            {boostSuccess ? (
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <RocketIcon className="w-8 h-8" />
+                </div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Post Boosted!</h2>
+                <p className="text-sm text-gray-500">Your post is now reaching artists in your genre. Check analytics in 24h.</p>
+              </div>
+            ) : (
+              <>
+                <div className="bg-gradient-to-br from-amber-500 to-amber-700 p-6 text-center text-white">
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+                    <RocketIcon className="w-7 h-7" />
+                  </div>
+                  <h2 className="text-xl font-bold mb-1">Boost Your Post</h2>
+                  <p className="text-xs text-amber-100">Reach more artists and industry professionals.</p>
+                </div>
+                <div className="p-6">
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Choose your reach</p>
+                  <div className="space-y-2 mb-6">
+                    {boostTiers.map((tier) => (
+                      <button
+                        key={tier.id}
+                        onClick={() => setSelectedTier(tier.id)}
+                        className={`w-full text-left p-4 rounded-xl border-2 transition-all relative ${
+                          selectedTier === tier.id
+                            ? "border-amber-500 bg-amber-50 dark:bg-amber-900/20"
+                            : "border-gray-200 dark:border-zinc-700 hover:border-amber-300"
+                        }`}
+                      >
+                        {tier.badge && (
+                          <span className="absolute -top-2 right-3 bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">{tier.badge}</span>
+                        )}
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="font-bold text-gray-900 dark:text-white text-sm">{tier.reach}</p>
+                            <p className="text-xs text-gray-500">{tier.duration} · in your genre</p>
+                          </div>
+                          <p className="font-bold text-amber-600 text-xl">£{tier.price}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-3 mb-4">
+                    <p className="text-xs text-emerald-800 dark:text-emerald-400">
+                      <strong>Why boost?</strong> Boosted posts get 5x more views and 3x more hypes.
+                    </p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button onClick={() => setShowBoostModal(false)} className="flex-1 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-2 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+                    <button onClick={handleBoostSubmit} className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 rounded-lg transition-colors">
+                      Boost for £{boostTiers[selectedTier].price}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -50,6 +50,18 @@ export default function PremiumPage() {
           <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full text-xs font-bold mb-4">
             <StarIcon className="w-3.5 h-3.5" /> GRID PRO
           </div>
+          <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-xl p-4 mb-8 max-w-2xl mx-auto flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 animate-pulse">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-red-900 dark:text-red-400 text-sm">Your free trial ends in 3 days</p>
+              <p className="text-xs text-red-700 dark:text-red-500">Upgrade now to keep unlimited DMs and 0% escrow fees.</p>
+            </div>
+          </div>
+
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white tracking-tight mb-4">
             Take your music career to the <span className="text-emerald-600">next level.</span>
           </h1>
