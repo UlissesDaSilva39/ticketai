@@ -116,7 +116,64 @@ export default function PremiumPage() {
           </div>
         </div>
 
-        {/* Feature Comparison Table */}
+                {/* TESTIMONIALS SECTION */}
+        <div className="text-center mb-8 mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Trusted by top artists and producers</h2>
+          <p className="text-gray-500 mt-2">See how GRID Pro is accelerating careers in the music industry.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
+          
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm flex flex-col">
+            <div className="flex text-amber-500 mb-4">
+              {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" />)}
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 flex-1 leading-relaxed">
+              "I landed a £2,000 sync deal within two weeks of joining GRID Pro. The priority ranking in the collab feed is a game-changer."
+            </p>
+            <div className="flex items-center gap-3 mt-6">
+              <div className="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-sm">SJ</div>
+              <div>
+                <p className="font-bold text-gray-900 dark:text-white text-sm">Sarah Jenkins</p>
+                <p className="text-xs text-gray-500">Vocalist · London</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm flex flex-col">
+            <div className="flex text-amber-500 mb-4">
+              {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" />)}
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 flex-1 leading-relaxed">
+              "The 0% escrow fee alone pays for the subscription. I've closed 4 mixing gigs this month without losing a cut to platform fees."
+            </p>
+            <div className="flex items-center gap-3 mt-6">
+              <div className="w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-sm">DC</div>
+              <div>
+                <p className="font-bold text-gray-900 dark:text-white text-sm">David Chen</p>
+                <p className="text-xs text-gray-500">Producer · Berlin</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm flex flex-col">
+            <div className="flex text-amber-500 mb-4">
+              {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" />)}
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 flex-1 leading-relaxed">
+              "Unlimited split sheets saved my last collaboration. We signed the contract and released the track in the same day."
+            </p>
+            <div className="flex items-center gap-3 mt-6">
+              <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm">MC</div>
+              <div>
+                <p className="font-bold text-gray-900 dark:text-white text-sm">The Midnight Collective</p>
+                <p className="text-xs text-gray-500">Indie Band · Manchester</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+{/* Feature Comparison Table */}
         <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden mb-12">
           <div className="p-6 border-b border-gray-100 dark:border-zinc-800">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">Compare Plans</h2>

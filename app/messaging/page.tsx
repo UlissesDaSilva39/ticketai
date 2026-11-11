@@ -3,55 +3,45 @@ import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, NoteIcon, AudioIcon, EpkIcon, SplitIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG } from "@/components/MusicIcons";
 
+const LockIcon = ({ className = "w-6 h-6" }) => (
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+);
+const StarIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+);
+
 export default function MessagingPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeThread, setActiveThread] = useState("sarah");
   const [activeFilter, setActiveFilter] = useState("Inbox");
   const [message, setMessage] = useState("");
+  
+  // PAYWALL STATE
+  const [dmCount, setDmCount] = useState(5); // 5 free DMs allowed
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const [threads, setThreads] = useState([
-    { 
-      id: "beatport", 
-      name: "Beatport", 
-      preview: "Your Tech House Top 100 weekly drop is live", 
-      time: "4:08 PM", 
-      color: "bg-purple-600", 
-      badge: "NEWSLETTER", 
-      unread: true, 
-      messages: [
-        { from: "them", text: "Hi Ulisses, your Tech House Top 100 weekly drop is live. This week: Chris Stussy, Mau P, and Interplanetary Criminal.", hasAudio: true, audioName: "techhouse_top100.mp3", duration: "1:20" }
-      ]
-    },
-    { 
-      id: "sarah", 
-      name: "Sarah J.", 
-      preview: "Re: Vocalist for House track — here's my demo", 
-      time: "Oct 30", 
-      color: "bg-blue-600", 
-      badge: "COLLAB", 
-      unread: false, 
-      messages: [
-        { from: "them", text: "Hi Ulisses, loved your beat! I'm a vocalist looking for a House collab. Royalty split 50/50?", hasAudio: true, audioName: "vocal_demo_v2.wav", duration: "0:45" }
-      ]
-    },
-    { 
-      id: "sellick", 
-      name: "Sellick Records (A&R)", 
-      preview: "Loved your latest track — open to a call?", 
-      time: "Nov 3", 
-      color: "bg-emerald-600", 
-      badge: "INDUSTRY", 
-      unread: true, 
-      messages: [
-        { from: "them", text: "Hi Ulisses, I came across your latest track and loved the production. We are scouting Pop & R&B talent for 2027. Open to a quick call?", hasAudio: false }
-      ]
-    },
+    { id: "beatport", name: "Beatport", preview: "Your Tech House Top 100 weekly drop is live", time: "4:08 PM", color: "bg-purple-600", badge: "NEWSLETTER", unread: true, messages: [
+      { from: "them", text: "Hi Ulisses, your Tech House Top 100 weekly drop is live. This week: Chris Stussy, Mau P, and Interplanetary Criminal.", hasAudio: true, audioName: "techhouse_top100.mp3", duration: "1:20" }
+    ]},
+    { id: "sarah", name: "Sarah J.", preview: "Re: Vocalist for House track — here's my demo", time: "Oct 30", color: "bg-blue-600", badge: "COLLAB", unread: false, messages: [
+      { from: "them", text: "Hi Ulisses, loved your beat! I'm a vocalist looking for a House collab. Royalty split 50/50?", hasAudio: true, audioName: "vocal_demo_v2.wav", duration: "0:45" }
+    ]},
+    { id: "sellick", name: "Sellick Records (A&R)", preview: "Loved your latest track — open to a call?", time: "Nov 3", color: "bg-emerald-600", badge: "INDUSTRY", unread: true, messages: [
+      { from: "them", text: "Hi Ulisses, I came across your latest track and loved the production. We are scouting Pop & R&B talent for 2027. Open to a quick call?", hasAudio: false }
+    ]},
   ]);
 
   const activeData = threads.find(t => t.id === activeThread);
 
   const handleSend = () => {
     if (!message.trim()) return;
+
+    // Check if user has hit the limit
+    if (dmCount <= 0) {
+      setShowPaywall(true);
+      return;
+    }
     
     setThreads(prev => prev.map(t => 
       t.id === activeThread 
@@ -60,14 +50,20 @@ export default function MessagingPage() {
     ));
     
     setMessage("");
+    setDmCount(prev => prev - 1);
   };
 
   const handleAttach = (type: string) => {
+    if (dmCount <= 0) {
+      setShowPaywall(true);
+      return;
+    }
     setThreads(prev => prev.map(t => 
       t.id === activeThread 
         ? { ...t, messages: [...t.messages, { from: "me", text: `Attached a ${type} to this conversation.`, hasAudio: false }] }
         : t
     ));
+    setDmCount(prev => prev - 1);
   };
 
   const filteredThreads = threads.filter(t => {
@@ -79,7 +75,7 @@ export default function MessagingPage() {
   });
 
   return (
-    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
+    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen relative">
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
 
         <aside className="col-span-12 lg:col-span-3 space-y-3 hidden lg:block">
@@ -125,39 +121,21 @@ export default function MessagingPage() {
             </div>
             <div className="flex gap-2 px-3 py-2 border-b border-gray-100 dark:border-zinc-800 text-[11px] overflow-x-auto no-scrollbar">
               {["Inbox","Collabs","Bookings","Unread"].map(t => (
-                <button 
-                  key={t} 
-                  onClick={() => setActiveFilter(t)}
-                  className={`px-3 py-1.5 rounded-full border whitespace-nowrap transition-colors ${
-                    activeFilter === t 
-                      ? "bg-emerald-600 text-white border-emerald-600 font-semibold" 
-                      : "border-gray-300 dark:border-zinc-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-zinc-800"
-                  }`}
-                >
+                <button key={t} onClick={() => setActiveFilter(t)} className={`px-3 py-1.5 rounded-full border whitespace-nowrap transition-colors ${activeFilter === t ? "bg-emerald-600 text-white border-emerald-600 font-semibold" : "border-gray-300 dark:border-zinc-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                   {t}
                 </button>
               ))}
             </div>
             <div className="flex-1 overflow-y-auto divide-y divide-gray-100 dark:divide-zinc-800">
               {filteredThreads.map(t => (
-                <button 
-                  key={t.id} 
-                  onClick={() => setActiveThread(t.id)}
-                  className={`w-full text-left flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors ${activeThread===t.id ? "bg-emerald-50/50 dark:bg-emerald-900/10 border-l-4 border-emerald-600" : "border-l-4 border-transparent"}`}
-                >
-                  <div className={`w-10 h-10 ${t.color} rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
-                    {t.badge === "NEWSLETTER" ? <NoteIcon /> : t.name[0]}
-                  </div>
+                <button key={t.id} onClick={() => setActiveThread(t.id)} className={`w-full text-left flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors ${activeThread===t.id ? "bg-emerald-50/50 dark:bg-emerald-900/10 border-l-4 border-emerald-600" : "border-l-4 border-transparent"}`}>
+                  <div className={`w-10 h-10 ${t.color} rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>{t.badge === "NEWSLETTER" ? <NoteIcon /> : t.name[0]}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-baseline">
                       <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">{t.name}</p>
                       <span className="text-[10px] text-gray-500 ml-2 whitespace-nowrap">{t.time}</span>
                     </div>
-                    <span className={`inline-block text-[9px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${
-                      t.badge === "NEWSLETTER" ? "bg-purple-100 text-purple-700" :
-                      t.badge === "COLLAB" ? "bg-blue-100 text-blue-700" :
-                      "bg-emerald-100 text-emerald-700"
-                    }`}>{t.badge}</span>
+                    <span className={`inline-block text-[9px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${t.badge === "NEWSLETTER" ? "bg-purple-100 text-purple-700" : t.badge === "COLLAB" ? "bg-blue-100 text-blue-700" : "bg-emerald-100 text-emerald-700"}`}>{t.badge}</span>
                     <p className="text-xs text-gray-500 truncate mt-0.5">{t.preview}</p>
                   </div>
                   {t.unread && <div className="w-2 h-2 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"></div>}
@@ -169,9 +147,7 @@ export default function MessagingPage() {
           <section className="col-span-12 md:col-span-8 bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-zinc-800">
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full grid place-items-center text-white font-bold ${activeData?.color}`}>
-                  {activeData?.badge === "NEWSLETTER" ? <NoteIcon /> : activeData?.name[0]}
-                </div>
+                <div className={`w-10 h-10 rounded-full grid place-items-center text-white font-bold ${activeData?.color}`}>{activeData?.badge === "NEWSLETTER" ? <NoteIcon /> : activeData?.name[0]}</div>
                 <div>
                   <p className="font-bold text-gray-900 dark:text-white text-base">{activeData?.name}</p>
                   <p className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">{activeData?.badge}</p>
@@ -190,9 +166,7 @@ export default function MessagingPage() {
                     <p className="text-sm">{m.text}</p>
                     {m.hasAudio && (
                       <div className="mt-3 flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 rounded-lg p-2 border border-gray-100 dark:border-zinc-800">
-                        <button onClick={() => setIsPlaying(!isPlaying)} className="w-8 h-8 rounded-full bg-emerald-600 text-white grid place-items-center hover:bg-emerald-700 transition-colors">
-                          <PlayIcon className="w-4 h-4 ml-0.5" />
-                        </button>
+                        <button onClick={() => setIsPlaying(!isPlaying)} className="w-8 h-8 rounded-full bg-emerald-600 text-white grid place-items-center hover:bg-emerald-700 transition-colors"><PlayIcon className="w-4 h-4 ml-0.5" /></button>
                         <div className="flex-1">
                           <p className="text-xs font-semibold text-gray-900 dark:text-white">{m.audioName}</p>
                           <div className="h-1 bg-gray-200 dark:bg-zinc-700 rounded mt-1"><div className="h-1 bg-emerald-600 rounded" style={{width:"45%"}}></div></div>
@@ -206,15 +180,17 @@ export default function MessagingPage() {
             </div>
 
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
+              
+              {/* DM COUNTER */}
+              <div className="flex justify-between items-center mb-2 px-1">
+                <span className={`text-xs font-bold ${dmCount <= 1 ? "text-red-500" : "text-gray-500"}`}>
+                  {dmCount} free messages remaining
+                </span>
+                <Link href="/premium" className="text-xs font-bold text-emerald-600 hover:underline">Upgrade for unlimited</Link>
+              </div>
+
               <div className="flex items-end gap-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl p-2 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all">
-                <textarea 
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Write a message..." 
-                  className="w-full bg-transparent text-sm p-2 focus:outline-none resize-none max-h-32" 
-                  rows={1} 
-                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
-                />
+                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write a message..." className="w-full bg-transparent text-sm p-2 focus:outline-none resize-none max-h-32" rows={1} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())} />
                 <button onClick={handleSend} disabled={!message.trim()} className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors">Send</button>
               </div>
               <div className="flex gap-2 mt-2 ml-1">
@@ -226,6 +202,43 @@ export default function MessagingPage() {
           </section>
         </main>
       </div>
+
+      {/* PAYWALL MODAL */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-8 text-center text-white relative">
+              <button onClick={() => setShowPaywall(false)} className="absolute top-4 right-4 text-white/70 hover:text-white">&times;</button>
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
+                <LockIcon className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2">Daily Limit Reached</h2>
+              <p className="text-emerald-100 text-sm">You've sent your 5 free direct messages for today. Upgrade to GRID Pro to keep the conversation going.</p>
+            </div>
+            
+            <div className="p-6">
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">
+                  <StarIcon className="w-5 h-5 text-amber-500" /> Unlimited Direct Messages
+                </li>
+                <li className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">
+                  <StarIcon className="w-5 h-5 text-amber-500" /> Priority in Collab Feed
+                </li>
+                <li className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">
+                  <StarIcon className="w-5 h-5 text-amber-500" /> 0% Escrow Fees
+                </li>
+              </ul>
+
+              <Link href="/premium" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-colors block text-center mb-3 shadow-lg shadow-emerald-600/30">
+                Upgrade to GRID Pro — £10/mo
+              </Link>
+              <button onClick={() => setShowPaywall(false)} className="w-full text-center text-xs font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                Maybe later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

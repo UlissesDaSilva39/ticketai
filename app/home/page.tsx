@@ -128,7 +128,7 @@ export default function HomePage() {
               <div className="flex-1">
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="font-bold text-gray-900 dark:text-white text-base">Demo Producer</p>
+                    <p className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-1.5">Demo Producer <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg></p>
                     <p className="text-xs text-gray-500">Music Producer · 2h</p>
                   </div>
                   <button className="text-gray-400 hover:text-gray-600 font-bold tracking-widest px-2">•••</button>
@@ -194,7 +194,7 @@ export default function HomePage() {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-pink-500 text-white grid place-items-center font-bold text-sm">SJ</div>
                   <div>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white">Sarah Jenkins</p>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1">Sarah Jenkins <svg className="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg></p>
                     <p className="text-xs text-gray-500">Vocalist</p>
                   </div>
                 </div>
