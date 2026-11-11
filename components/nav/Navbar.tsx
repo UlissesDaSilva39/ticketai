@@ -85,13 +85,8 @@ export default function Navbar() {
                     </div>
                   </div>
                   <div className="flex gap-2 mt-3">
-                    {/* FIXED: View Profile correctly links to /profile */}
-                    <Link href="/profile" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">
-                      View Profile
-                    </Link>
-                    <button className="flex-1 bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-full hover:bg-emerald-700 transition-colors">
-                      Get Verified
-                    </button>
+                    <Link href="/profile" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">View Profile</Link>
+                    <Link href="/verify" className="flex-1 bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-700 transition-colors">Get Verified</Link>
                   </div>
                 </div>
                 <div className="p-2">
@@ -104,7 +99,6 @@ export default function Navbar() {
                   <Link href="/promote" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Promote Music</Link>
                   <Link href="/splits" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Releases &amp; Splits</Link>
                   <Link href="/payments" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Escrow &amp; Payouts</Link>
-                  
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Settings</p>
                   <Link href="/legal" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Legal &amp; Privacy</Link>

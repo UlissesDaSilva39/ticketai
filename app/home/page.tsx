@@ -6,24 +6,20 @@ import { PlayIcon, MicIcon, SlidersIcon, NoteIcon, CalendarSVG, MarketIcon, Book
 
 export default function HomePage() {
   const router = useRouter();
-  
-  // State to track if audio is playing
   const [isPlaying, setIsPlaying] = useState(false);
-  
-  // State to track hypes
   const [hypeCount, setHypeCount] = useState(0);
   const [hasHyped, setHasHyped] = useState(false);
-  
-  // State for follow buttons
   const [followed, setFollowed] = useState<{[key: string]: boolean}>({});
-
-  // Composer state
   const [postText, setPostText] = useState("");
+  const [showReplyModal, setShowReplyModal] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [postToast, setPostToast] = useState(false);
 
   const handlePublish = () => {
     if (!postText.trim()) return;
-    alert("Post published successfully!");
+    setPostToast(true);
     setPostText("");
+    setTimeout(() => setPostToast(false), 3000);
   };
 
   const handleHype = () => {
@@ -36,12 +32,19 @@ export default function HomePage() {
     }
   };
 
+  const handleReply = () => {
+    setShowReplyModal(false);
+    setReplyText("");
+    setPostToast(true);
+    setTimeout(() => setPostToast(false), 2000);
+  };
+
   const handleFollow = (name: string) => {
     setFollowed(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
   return (
-    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
+    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen relative">
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
 
         {/* LEFT COLUMN */}
@@ -133,7 +136,6 @@ export default function HomePage() {
                 
                 <p className="text-[15px] text-gray-800 dark:text-gray-200 mt-4 mb-4">Just dropped a new beat. Let me know what you think!</p>
                 
-                {/* Audio Player */}
                 <div className="bg-gray-50 dark:bg-zinc-800/50 rounded-xl p-3 flex items-center gap-3 border border-gray-100 dark:border-zinc-800">
                   <button onClick={() => setIsPlaying(!isPlaying)} className="w-10 h-10 rounded-full bg-emerald-600 text-white grid place-items-center hover:bg-emerald-700 transition-colors flex-shrink-0 shadow-sm">
                     <PlayIcon className="w-5 h-5 ml-1" />
@@ -146,7 +148,6 @@ export default function HomePage() {
                   <span className="text-xs font-semibold text-gray-500">3:45</span>
                 </div>
 
-                {/* Actions */}
                 <div className="flex gap-8 mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
                   <button 
                     onClick={handleHype} 
@@ -154,7 +155,7 @@ export default function HomePage() {
                   >
                     <HypeIcon className="w-5 h-5" /> {hypeCount > 0 ? `Hype (${hypeCount})` : "Hype"}
                   </button>
-                  <button onClick={() => alert("Reply feature coming soon!")} className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">
+                  <button onClick={() => setShowReplyModal(true)} className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">
                     <ReplyIcon className="w-5 h-5" /> Reply
                   </button>
                 </div>
@@ -230,8 +231,36 @@ export default function HomePage() {
             </div>
           </div>
         </aside>
-
       </div>
+
+      {/* REPLY MODAL */}
+      {showReplyModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Reply to Demo Producer</h2>
+            <textarea 
+              rows={4}
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              placeholder="Write your reply..." 
+              className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 resize-none mb-4" 
+            />
+            <div className="flex gap-3">
+              <button onClick={() => setShowReplyModal(false)} className="flex-1 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-2 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+              <button onClick={handleReply} disabled={!replyText.trim()} className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold py-2 rounded-lg transition-colors">Send Reply</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PUBLISH TOAST */}
+      {postToast && (
+        <div className="fixed bottom-8 right-8 z-50 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl">
+          <p className="font-bold">✓ Success!</p>
+          <p className="text-xs text-gray-400">Your update has been posted.</p>
+        </div>
+      )}
+
     </div>
   );
 }
