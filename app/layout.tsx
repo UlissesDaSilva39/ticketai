@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/nav/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ClientLayout } from "@/components/ClientLayout";
 
 export const metadata: Metadata = {
-  title: "GRID | Music Social Network",
-  description: "Discover, stream, create, connect, and get paid.",
+  title: "GRID | The #1 Music Industry Network",
+  description: "Get booked. Get paid. Find collabs, book gigs, and get paid via secure Escrow.",
 };
 
 export default function RootLayout({
@@ -16,9 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="bg-[#f4f2ee] dark:bg-black text-gray-900 dark:text-gray-100">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Navbar />
-          <main>{children}</main>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <ClientLayout>
+            {children}
+          </ClientLayout>
         </ThemeProvider>
       </body>
     </html>
