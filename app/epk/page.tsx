@@ -1,217 +1,101 @@
 "use client";
+import { useState } from "react";
+import Link from "next/link";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { StartRemixButton } from "@/components/StartRemixButton";
-import { Play, Music, FileText, ArrowLeft, Upload, Edit3, TrendingUp, DollarSign } from "lucide-react";
+const VerifiedIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+);
+const ShareIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+);
+const PlayIcon = ({ className = "w-6 h-6" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+);
+const MapPinIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+);
 
-type Req = {
-  id: string;
-  remixer_name: string;
-  status: string;
-  proposed_split: { original_pct: number; remixer_pct: number; platform_pct: number };
-  created_at: string;
-};
+export default function EPKPage() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-type Ledger = {
-  total_earned_cents: number;
-  transactions: any[];
-};
-
-export default function EpkPage() {
-  const router = useRouter();
-  const [requests, setRequests] = useState<Req[]>([]);
-  const [ledger, setLedger] = useState<Ledger | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const [reqRes, ledgerRes] = await Promise.all([
-          fetch("/api/remix/request?mine=1"),
-          fetch("/api/epk/ledger")
-        ]);
-        
-        if (reqRes.ok) {
-          const j = await reqRes.json();
-          setRequests(j.requests ?? []);
-        }
-        if (ledgerRes.ok) {
-          const j = await ledgerRes.json();
-          setLedger(j);
-        }
-      } catch {}
-      setLoading(false);
-    })();
-  }, []);
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.origin + "/artists/ulisses-silva");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
-    <main className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-24">
+    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
+      <div className="mx-auto max-w-[1280px] px-4 py-6">
         
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12 border-b border-gray-200 pb-10">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold uppercase tracking-widest mb-6 border border-gray-200">
-              <FileText className="w-3.5 h-3.5" /> Artist Press Kit
+        {/* Header */}
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden mb-6">
+          <div className="h-40 bg-gradient-to-r from-zinc-900 via-emerald-900 to-emerald-600 relative">
+            <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+              <VerifiedIcon className="w-4 h-4 text-emerald-400" /> Verified Artist
             </div>
-            <h1 className="text-5xl sm:text-7xl font-black tracking-tighter text-black mb-4">
-              Your EPK
-            </h1>
-            <p className="text-gray-500 text-lg leading-relaxed">
-              Electronic Press Kit + collaboration history. Everything here is visible to promoters and remixers who want to work with you.
-            </p>
           </div>
-          <div className="shrink-0">
-            <StartRemixButton artistSlug="your-slug-here" />
+          <div className="p-6 md:p-8 relative">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 -mt-20 md:-mt-24 mb-6">
+              <div className="flex items-end gap-5">
+                <div className="w-32 h-32 rounded-2xl bg-emerald-800 text-white grid place-items-center font-bold text-5xl ring-4 ring-white dark:ring-zinc-900 shadow-xl">U</div>
+                <div className="mb-2">
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">Ulisses Silva</h1>
+                  <p className="text-emerald-600 font-semibold text-lg">House / Techno Producer &amp; DJ</p>
+                  <div className="flex items-center gap-1 text-gray-500 text-sm mt-1"><MapPinIcon /> London, UK</div>
+                </div>
+              </div>
+              <div className="flex gap-3 w-full md:w-auto">
+                <button onClick={handleShare} className="flex-1 md:flex-none border-2 border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-bold px-6 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2">
+                  <ShareIcon /> {copied ? "Copied!" : "Share EPK"}
+                </button>
+                <Link href="/verify" className="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-2.5 rounded-lg transition-colors shadow-sm text-center">Book Now</Link>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y border-gray-100 dark:border-zinc-800">
+              <div><p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Avg. Ticket Draw</p><p className="text-2xl font-bold text-gray-900 dark:text-white">1,250</p></div>
+              <div><p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Monthly Listeners</p><p className="text-2xl font-bold text-gray-900 dark:text-white">45.2K</p></div>
+              <div><p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Past Shows</p><p className="text-2xl font-bold text-gray-900 dark:text-white">34</p></div>
+              <div><p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Match Score</p><p className="text-2xl font-bold text-emerald-600">98%</p></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+              <div className="md:col-span-2 space-y-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Biography</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Ulisses Silva is an up-and-coming House and Techno producer based in London. Known for his energetic sets blending classic Tech House grooves with modern melodic elements, Ulisses has quickly become a staple in the underground scene.</p>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white pt-4">Genre & Tags</h2>
+                <div className="flex flex-wrap gap-2">
+                  {["Tech House", "Melodic Techno", "Deep House", "DJ Set", "Live Act"].map(tag => (
+                    <span key={tag} className="bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-xs font-bold px-3 py-1.5 rounded-full">{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-gray-50 dark:bg-zinc-800/50 rounded-xl p-5 border border-gray-100 dark:border-zinc-800">
+                <h3 className="font-bold text-gray-900 dark:text-white mb-3">Tech Rider</h3>
+                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc list-inside">
+                  <li>2x CDJ-3000</li>
+                  <li>1x DJM-900 NXS2</li>
+                  <li>Stage Monitor required</li>
+                  <li>Set length: 60-120 mins</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Revenue Dashboard (New) */}
-        {ledger && (ledger.total_earned_cents > 0 || ledger.transactions.length > 0) && (
-          <section className="mb-16">
-            <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center">
-                  <TrendingUp className="w-8 h-8" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-emerald-800 uppercase tracking-widest mb-1">Your Earnings</p>
-                  <div className="text-4xl font-black text-emerald-900 flex items-baseline gap-2">
-                    ${(ledger.total_earned_cents / 100).toFixed(2)}
-                    <span className="text-sm font-medium text-emerald-700">total</span>
-                  </div>
-                </div>
-              </div>
-              
-              {ledger.transactions.length > 0 && (
-                <div className="flex-1 max-w-md w-full bg-white rounded-2xl border border-emerald-100 p-4 shadow-sm">
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Recent Transactions</p>
-                  <ul className="space-y-3">
-                    {ledger.transactions.slice(0,3).map((t, i) => (
-                      <li key={i} className="flex justify-between items-center text-sm">
-                        <div className="flex items-center gap-2">
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          <span className="capitalize text-gray-600">{t.source}</span>
-                          <span className="text-xs text-gray-400">({t.role})</span>
-                        </div>
-                        <span className="font-bold text-black">+${(t.my_cut_cents / 100).toFixed(2)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* Collaborations Section */}
-        <section className="mb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold tracking-tight text-black">Collaborations</h2>
-            <span className="text-sm font-medium text-gray-500">{requests.length} total</span>
-          </div>
-
-          {loading && (
-            <div className="animate-pulse flex space-x-4">
-              <div className="flex-1 space-y-3 py-1">
-                <div className="h-20 bg-gray-100 rounded-2xl w-full"></div>
-              </div>
-            </div>
-          )}
-
-          {!loading && requests.length === 0 && (
-            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-10 text-center">
-              <p className="text-gray-500 text-sm">
-                No remix proposals yet. When someone clicks <strong className="text-black">Start Remix</strong> on your profile, their request will appear here with the exact split numbers.
-              </p>
-            </div>
-          )}
-
-          <ul className="space-y-4">
-            {requests.map((r) => (
-              <li key={r.id} onClick={() => router.push(`/remix/${r.id}`)} className="cursor-pointer group rounded-2xl border border-gray-200 bg-white p-6 flex items-center justify-between hover:border-gray-400 transition-colors">
-                <div className="flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-full bg-gray-100 text-black flex items-center justify-center border border-gray-200 group-hover:bg-gray-200 transition-colors">
-                    <Music className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-black text-lg flex items-center gap-2">
-                      {r.remixer_name}
-                      {r.status === 'released' && (
-                        <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-600" title="Verified Collaboration">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-3 h-3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </span>
-                      )}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1 font-medium">
-                      Split: <span className="text-black">{r.proposed_split.original_pct}% you</span> / <span className="text-black">{r.proposed_split.remixer_pct}% them</span> / {r.proposed_split.platform_pct}% platform
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  <span className={`text-xs uppercase tracking-widest font-bold px-4 py-2 rounded-full border ${
-                    r.status === 'accepted' ? 'bg-green-50 text-green-700 border-green-200' : 
-                    r.status === 'released' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                    r.status === 'rejected' ? 'bg-red-50 text-red-700 border-red-200' : 
-                    'bg-gray-100 text-gray-700 border-gray-200'
-                  }`}>
-                    {r.status}
-                  </span>
-                  <span className="text-xs text-gray-400 group-hover:text-black transition-colors">Manage →</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Bio Section */}
-        <section className="mb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold tracking-tight text-black">Bio</h2>
-            <button className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-black transition-colors">
-              <Edit3 className="w-4 h-4" /> Edit
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Featured Mix</h2>
+          <div className="bg-gray-100 dark:bg-zinc-800 rounded-xl p-8 flex flex-col items-center justify-center border border-gray-200 dark:border-zinc-700">
+            <button onClick={() => setIsPlaying(!isPlaying)} className="w-16 h-16 rounded-full bg-emerald-600 text-white grid place-items-center hover:bg-emerald-700 transition-transform hover:scale-105 shadow-lg mb-3">
+              <PlayIcon className="w-8 h-8 ml-1" />
             </button>
+            <p className="font-bold text-gray-900 dark:text-white">Live at Ministry of Sound (2026)</p>
+            <p className="text-xs text-gray-500 mt-1">1:02:45 • 45.2K plays</p>
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white p-8">
-            <p className="text-gray-500 leading-relaxed">
-              Your artist bio will appear here. Promoters use this section to understand your background, genre, and past achievements before reaching out.
-            </p>
-          </div>
-        </section>
-
-        {/* Latest Tracks Section */}
-        <section className="mb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold tracking-tight text-black">Latest Tracks</h2>
-            <button onClick={() => router.push("/upload/track")} className="text-sm font-semibold text-black hover:underline">
-              Upload New
-            </button>
-          </div>
-          <div className="rounded-2xl border border-gray-200 bg-white p-8">
-            <p className="text-gray-500 leading-relaxed">
-              Your published tracks load automatically here, with play counts and direct links for promoters to stream.
-            </p>
-          </div>
-        </section>
-
-        {/* Footer Actions */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 border-t border-gray-200 pt-10">
-          <button 
-            onClick={() => router.push("/messages")}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-8 py-4 text-sm font-bold text-black hover:bg-gray-50 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to messages
-          </button>
-          <button 
-            onClick={() => router.push("/upload/track")}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-black text-white px-8 py-4 text-sm font-bold hover:bg-gray-900 transition-colors"
-          >
-            <Upload className="w-4 h-4" /> Upload a track
-          </button>
         </div>
-
       </div>
-    </main>
+    </div>
   );
 }

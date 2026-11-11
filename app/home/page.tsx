@@ -4,6 +4,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PlayIcon, MicIcon, SlidersIcon, NoteIcon, CalendarSVG, MarketIcon, BookmarkIcon, UsersIcon, HypeIcon, ReplyIcon } from "@/components/MusicIcons";
 
+const VerifiedIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 20 20">
+    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+  </svg>
+);
+const SparkleIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+);
+
 export default function HomePage() {
   const router = useRouter();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -14,6 +23,14 @@ export default function HomePage() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [postToast, setPostToast] = useState(false);
+
+  // Algorithmic Matches
+  const [matches, setMatches] = useState([
+    { id: 1, type: "COLLAB", title: "House Vocalist needed", poster: "Sarah J.", match: "98% match", reason: "Same genre (House) + 3 mutual collabs", color: "bg-pink-500" },
+    { id: 2, type: "BOOKING", title: "Opening slot at Ministry of Sound", poster: "The O2 Academy", match: "95% match", reason: "Your genre + London based", color: "bg-emerald-600" },
+    { id: 3, type: "COLLAB", title: "Techno remix swap", poster: "Alex Rivera", match: "89% match", reason: "Same BPM range + techno focus", color: "bg-indigo-500" },
+  ]);
+  const [dismissedMatches, setDismissedMatches] = useState<number[]>([]);
 
   const handlePublish = () => {
     if (!postText.trim()) return;
@@ -43,6 +60,12 @@ export default function HomePage() {
     setFollowed(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
+  const dismissMatch = (id: number) => {
+    setDismissedMatches([...dismissedMatches, id]);
+  };
+
+  const visibleMatches = matches.filter(m => !dismissedMatches.includes(m.id));
+
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen relative">
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
@@ -58,15 +81,10 @@ export default function HomePage() {
               <p className="text-xs text-gray-500 mt-1">London, UK</p>
               
               <div className="mt-5 space-y-2">
-                <button 
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2"
-                >
+                <button onClick={() => setIsPlaying(!isPlaying)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
                   <PlayIcon className="w-3.5 h-3.5" /> {isPlaying ? "Pause Track" : "Play Latest Track"}
                 </button>
-                <Link href="/epk" className="w-full border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors block text-center">
-                  View EPK
-                </Link>
+                <Link href="/epk" className="w-full border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors block text-center">View EPK</Link>
               </div>
 
               <div className="grid grid-cols-2 gap-2 mt-6 pt-5 border-t border-gray-100 dark:border-zinc-800 text-center">
@@ -88,6 +106,45 @@ export default function HomePage() {
         {/* CENTER COLUMN */}
         <main className="col-span-12 lg:col-span-6 space-y-4">
           
+          {/* ALGORITHMIC MATCHES */}
+          {visibleMatches.length > 0 && (
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-900/10 rounded-xl border border-emerald-200 dark:border-emerald-800/50 p-5 shadow-sm">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-2">
+                  <SparkleIcon className="w-5 h-5 text-emerald-600" /> Matched For You
+                </h2>
+                <Link href="/network" className="text-xs font-bold text-emerald-600 hover:underline">See all matches →</Link>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">Based on your genre (Tech House), role (Producer), and mutual collaborators.</p>
+              
+              <div className="space-y-3">
+                {visibleMatches.map((m) => (
+                  <div key={m.id} className="bg-white dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 p-3 flex items-start gap-3 group">
+                    <div className={`w-10 h-10 rounded-lg ${m.color} text-white grid place-items-center font-bold text-sm flex-shrink-0`}>
+                      {m.type === "COLLAB" ? <MicIcon className="w-5 h-5" /> : <CalendarSVG className="w-5 h-5" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-baseline">
+                        <p className="font-bold text-gray-900 dark:text-white text-sm truncate">{m.title}</p>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400 px-1.5 py-0.5 rounded ml-2 flex-shrink-0">{m.match}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">by {m.poster}</p>
+                      <p className="text-[10px] text-emerald-600 mt-1 font-medium">{m.reason}</p>
+                    </div>
+                    <div className="flex flex-col gap-1 flex-shrink-0">
+                      <button onClick={() => router.push('/jobs')} className="text-xs font-bold text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 px-2 py-1 rounded transition-colors">
+                        View
+                      </button>
+                      <button onClick={() => dismissMatch(m.id)} className="text-[10px] text-gray-400 hover:text-red-500 transition-colors">
+                        Hide
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Composer */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
             <div className="flex items-start gap-3">
@@ -128,7 +185,9 @@ export default function HomePage() {
               <div className="flex-1">
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-1.5">Demo Producer <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg></p>
+                    <p className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-1.5">
+                      Demo Producer <VerifiedIcon className="text-emerald-500" />
+                    </p>
                     <p className="text-xs text-gray-500">Music Producer · 2h</p>
                   </div>
                   <button className="text-gray-400 hover:text-gray-600 font-bold tracking-widest px-2">•••</button>
@@ -194,7 +253,7 @@ export default function HomePage() {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-pink-500 text-white grid place-items-center font-bold text-sm">SJ</div>
                   <div>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1">Sarah Jenkins <svg className="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg></p>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1">Sarah Jenkins <VerifiedIcon className="text-emerald-500" /></p>
                     <p className="text-xs text-gray-500">Vocalist</p>
                   </div>
                 </div>
