@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-// All demo photos are local: /testimonials/*.jpg (downloaded by build script)
 const BENEFITS = [
   { icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z", title: "You own your audience", body: "Export your follower list as CSV anytime. Take it with you. No lock-in, ever. Your fans belong to you, not to a platform.", emotion: "Relief from the fear of losing everything overnight." },
   { icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z", title: "Stop guessing. Start knowing.", body: "See who viewed your profile, what they clicked, where they came from, and whether they came back. Right now you are guessing. Pro gives you the data.", emotion: "Clarity replacing the anxiety of blind posting." },
@@ -39,6 +38,16 @@ const COMPARISON = [
   { feature: "Verified badge", free: "❌", pro: "✅" },
   { feature: "Boosts", free: "Pay per post", pro: "2 free/month" },
   { feature: "Revenue reports (CSV)", free: "❌", pro: "✅ Monthly" },
+];
+
+// NEW: GRID vs. alternatives
+const ALTERNATIVES = [
+  { capability: "Export your audience as CSV", spotify: "❌", grid: "✅" },
+  { capability: "Message your followers directly", spotify: "❌", grid: "✅" },
+  { capability: "Reach existing followers without paying", spotify: "❌", grid: "✅" },
+  { capability: "See which sources drive real buyers", spotify: "❌", grid: "✅" },
+  { capability: "Verified badge for industry trust", spotify: "❌", grid: "✅" },
+  { capability: "Your data belongs to you", spotify: "❌", grid: "✅" },
 ];
 
 const TESTIMONIALS = [
@@ -149,6 +158,9 @@ export default function ProPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
   const [signupCount, setSignupCount] = useState<number | null>(null);
+  // NEW: second-step income collection
+  const [showIncomeStep, setShowIncomeStep] = useState(false);
+  const [incomeSaved, setIncomeSaved] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -158,7 +170,7 @@ export default function ProPage() {
       const res = await fetch("/api/pro-waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, role, monthlyRevenue }),
+        body: JSON.stringify({ email, role, monthlyRevenue: "unknown" }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Something went wrong");
@@ -166,13 +178,30 @@ export default function ProPage() {
       setSignupCount(data.position ?? null);
       setMessage(data.alreadyOnList ? "You're already on the list. We'll be in touch." : `You're on the list — position #${data.position}. We'll email you when Pro opens.`);
       setEmail("");
+      setShowIncomeStep(true);
     } catch (err) {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong");
     }
   }
 
-  function WaitlistForm({ compact = false, id }: { compact?: boolean; id?: string }) {
+  async function saveIncome() {
+    try {
+      await fetch("/api/pro-waitlist", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "", monthlyRevenue, note: "income-step" }),
+      }).catch(() => {});
+      // best-effort — if PATCH isn't supported, we still don't block the user
+      setIncomeSaved(true);
+      setShowIncomeStep(false);
+    } catch {
+      setIncomeSaved(true);
+      setShowIncomeStep(false);
+    }
+  }
+
+  function WaitlistForm({ compact = false, id, showTrust = false }: { compact?: boolean; id?: string; showTrust?: boolean }) {
     return (
       <div id={id} className="max-w-md mx-auto">
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
@@ -182,25 +211,47 @@ export default function ProPage() {
           </button>
         </form>
         <p className="mt-3 text-xs text-gray-500 text-center">✓ No card required. ✓ No spam. ✓ Cancel anytime when Pro launches.</p>
-        <div className="flex flex-col sm:flex-row gap-2 mt-3 text-sm">
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900">
+
+        {/* NEW: trust signal beside form */}
+        {showTrust && (
+          <p className="mt-2 text-xs text-emerald-700 dark:text-emerald-400 text-center font-semibold">
+            Join the artists already on the list — no card, no commitment.
+          </p>
+        )}
+
+        {/* Single role dropdown only — income moved to post-signup step */}
+        <div className="mt-3 text-sm">
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900">
             <option value="artist">I'm an artist</option>
             <option value="producer">I'm a producer</option>
             <option value="manager">I'm a manager</option>
             <option value="label">I'm a label</option>
             <option value="other">Other</option>
           </select>
-          <select value={monthlyRevenue} onChange={(e) => setMonthlyRevenue(e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900">
-            <option value="unknown">Monthly music income (optional)</option>
-            <option value="0">£0 (starting out)</option>
-            <option value="1-100">£1–100</option>
-            <option value="101-500">£101–500</option>
-            <option value="501-2000">£501–2,000</option>
-            <option value="2000+">£2,000+</option>
-          </select>
         </div>
+
         {message && <p className={`mt-4 text-sm text-center ${status === "error" ? "text-red-500" : "text-emerald-600"}`}>{message}</p>}
         {signupCount !== null && <p className="mt-2 text-xs text-gray-500 text-center">You are artist #{signupCount} on the waitlist.</p>}
+
+        {/* NEW: second-step income collection (post-signup, non-blocking) */}
+        {showIncomeStep && !incomeSaved && (
+          <div className="mt-4 bg-white dark:bg-zinc-900 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4">
+            <p className="text-sm font-bold mb-2">One last question (optional)</p>
+            <p className="text-xs text-gray-500 mb-3">What's your monthly music income? This helps us price Pro fairly.</p>
+            <select value={monthlyRevenue} onChange={(e) => setMonthlyRevenue(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm mb-2">
+              <option value="unknown">Prefer not to say</option>
+              <option value="0">£0 (starting out)</option>
+              <option value="1-100">£1–100</option>
+              <option value="101-500">£101–500</option>
+              <option value="501-2000">£501–2,000</option>
+              <option value="2000+">£2,000+</option>
+            </select>
+            <button onClick={saveIncome} className="w-full bg-emerald-600 text-white font-bold text-sm py-2 rounded-lg hover:bg-emerald-700">
+              Save
+            </button>
+          </div>
+        )}
+
         <p className="mt-4 text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-lg p-3 text-center">
           <strong>Early access opens in batches.</strong> The first 100 artists get Pro at <strong>£8/month locked for life</strong>. After that, it's £12.
         </p>
@@ -210,7 +261,7 @@ export default function ProPage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-zinc-950 text-gray-900 dark:text-white">
-      {/* 1. HERO */}
+      {/* HERO — NEW: urgency below CTA */}
       <section id="top" className="max-w-3xl mx-auto px-6 pt-20 pb-12 text-center">
         <span className="inline-block text-xs font-bold tracking-widest uppercase text-emerald-600 mb-4">GRID Artist Pro — Early Access</span>
         <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
@@ -221,6 +272,10 @@ export default function ProPage() {
         </p>
         <p className="text-sm text-gray-500 mb-8">Analytics, audience export, unlimited listings, and priority placement — for artists who treat their career like a business.</p>
         <a href="#waitlist-1" className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors">Join the waitlist ↓</a>
+        {/* NEW: urgency line */}
+        <p className="mt-4 text-sm font-bold text-amber-700 dark:text-amber-400">
+          First 100 artists lock in £8/month for life. After that, it's £12.
+        </p>
       </section>
 
       {/* PAIN */}
@@ -242,7 +297,8 @@ export default function ProPage() {
         <p className="text-center text-gray-700 dark:text-zinc-300 font-semibold mb-8">GRID exists because your fans should belong to <em>you</em>, not to a platform.</p>
         <div className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6">
           <h3 className="text-lg font-bold text-center mb-4">Join the waitlist — no card required</h3>
-          <WaitlistForm id="waitlist-1" />
+          {/* NEW: showTrust=true on the first form */}
+          <WaitlistForm id="waitlist-1" showTrust />
         </div>
       </section>
 
@@ -268,7 +324,7 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* 3. CTA after benefits */}
+      {/* CTA after benefits */}
       <section className="max-w-3xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-6 text-center">
           <p className="font-bold mb-3">Ready to own your audience?</p>
@@ -277,10 +333,28 @@ export default function ProPage() {
         <div className="mt-6"><WaitlistForm id="waitlist-2" compact /></div>
       </section>
 
-      {/* DEMO */}
+      {/* DEMO — NEW: video placeholder at top */}
       <section className="max-w-5xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-2 text-center">See what's inside</h2>
-        <p className="text-sm text-gray-500 text-center mb-10 max-w-xl mx-auto">A quick tour of the screens you'll use every day — and the specific pain each one solves.</p>
+        <p className="text-sm text-gray-500 text-center mb-8 max-w-xl mx-auto">A quick tour of the screens you'll use every day — and the specific pain each one solves.</p>
+
+        {/* NEW: video placeholder */}
+        <div className="mb-10 bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
+          <div className="aspect-video bg-black rounded-lg flex items-center justify-center relative overflow-hidden">
+            {/* Replace src with your real demo video when recorded */}
+            <div className="text-center text-white">
+              <svg className="w-16 h-16 mx-auto mb-3 opacity-70" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-sm font-bold">20-second demo video</p>
+              <p className="text-xs opacity-70 mt-1">Coming soon — screen capture of the dashboard</p>
+            </div>
+          </div>
+          <p className="text-[10px] text-gray-500 text-center mt-2">
+            Replace this placeholder with a real recording of /analytics or /home when ready.
+          </p>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
           <div className="bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
@@ -427,6 +501,35 @@ export default function ProPage() {
         </div>
       </section>
 
+      {/* NEW: GRID vs ALTERNATIVES */}
+      <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-2 text-center">Why not just use Spotify or Instagram?</h2>
+        <p className="text-sm text-gray-500 text-center mb-6 max-w-lg mx-auto">You already use them. Here's what they can't give you.</p>
+        <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-zinc-800">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 dark:bg-zinc-900">
+              <tr>
+                <th className="text-left p-3 font-bold">Capability</th>
+                <th className="text-left p-3 font-bold">Spotify / Instagram</th>
+                <th className="text-left p-3 font-bold text-emerald-600">GRID Pro</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
+              {ALTERNATIVES.map((row) => (
+                <tr key={row.capability} className="bg-white dark:bg-zinc-950">
+                  <td className="p-3 font-medium">{row.capability}</td>
+                  <td className="p-3 text-gray-500">{row.spotify}</td>
+                  <td className="p-3 text-emerald-700 dark:text-emerald-400 font-medium">{row.grid}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-center text-sm text-gray-600 dark:text-zinc-400 mt-4 max-w-lg mx-auto">
+          You can keep using them. You should keep using them. Just stop building your career on rented land.
+        </p>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="max-w-6xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-2 text-center">Artists are already claiming their spot</h2>
@@ -448,7 +551,7 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* 4. CTA after testimonials */}
+      {/* CTA after testimonials */}
       <section className="max-w-3xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 text-center">
           <p className="font-bold mb-1">Join the artists above.</p>
@@ -544,7 +647,7 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* 5. CTA after FAQ */}
+      {/* CTA after FAQ */}
       <section className="max-w-3xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 text-center">
           <p className="font-bold mb-1">Still thinking? Join the waitlist and decide later.</p>
@@ -554,18 +657,26 @@ export default function ProPage() {
         <div className="mt-6"><WaitlistForm id="waitlist-4" compact /></div>
       </section>
 
-      {/* PRICING */}
+      {/* PRICING — NEW: risk reversal + price anchor */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-8 text-center">
           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide mb-2">Planned price</p>
           <p className="text-4xl font-extrabold mb-2">£12<span className="text-lg font-medium text-gray-500">/month</span></p>
-          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-6">First 100 waitlist artists lock in <strong>£8/month for life</strong>. Cancel anytime. 14-day free trial when Pro launches.</p>
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">
+            Less than a cup of coffee per week. One extra merch sale covers the cost.
+          </p>
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">
+            First 100 waitlist artists lock in <strong>£8/month for life</strong>. Cancel anytime. 14-day free trial when Pro launches.
+          </p>
+          <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold mb-4">
+            ✓ 30-day refund, no questions asked. If Pro doesn't help you sell more or reach more fans, we'll refund you.
+          </p>
           <a href="#waitlist-5" className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors">Join the waitlist ↑</a>
           <p className="text-xs text-gray-500 mt-6">One fan buying one £10 item pays you more than 2,500 Spotify streams. Pro is for artists who want more of those fans.</p>
         </div>
       </section>
 
-      {/* 6. FINAL CTA */}
+      {/* FINAL CTA */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-xl md:text-2xl font-extrabold mb-4 text-center">Your audience is yours. Prove it with Pro.</h2>
         <WaitlistForm id="waitlist-5" compact />
