@@ -465,6 +465,287 @@ export default function ProPage() {
         </div>
       </section>
 
+      {/* DEMO / SEE WHAT'S INSIDE */}
+      <section className="max-w-5xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-2 text-center">
+          See what's inside
+        </h2>
+        <p className="text-sm text-gray-500 text-center mb-10 max-w-xl mx-auto">
+          A quick tour of the screens you'll use every day — and the specific pain each one solves.
+        </p>
+
+        {/* 1. ANALYTICS DASHBOARD */}
+        <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
+          <div className="bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            {/* Mock dashboard */}
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Analytics</p>
+              <span className="text-[10px] text-emerald-600 font-bold">Last 90 days</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2 mb-3">
+              <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-2">
+                <p className="text-[10px] text-gray-500">Profile views</p>
+                <p className="text-lg font-extrabold">1,284</p>
+                <p className="text-[10px] text-emerald-600 font-bold">+32%</p>
+              </div>
+              <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-2">
+                <p className="text-[10px] text-gray-500">Followers</p>
+                <p className="text-lg font-extrabold">842</p>
+                <p className="text-[10px] text-emerald-600 font-bold">+18%</p>
+              </div>
+              <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-2">
+                <p className="text-[10px] text-gray-500">Merch sales</p>
+                <p className="text-lg font-extrabold">£410</p>
+                <p className="text-[10px] text-emerald-600 font-bold">+54%</p>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
+              <p className="text-[10px] text-gray-500 mb-2">Traffic sources</p>
+              {[
+                { name: "GRID Discoveries", pct: 62, color: "bg-emerald-500" },
+                { name: "Direct / followers", pct: 24, color: "bg-blue-500" },
+                { name: "Instagram", pct: 9, color: "bg-pink-500" },
+                { name: "Other", pct: 5, color: "bg-gray-400" },
+              ].map((s) => (
+                <div key={s.name} className="mb-1.5 last:mb-0">
+                  <div className="flex justify-between text-[10px] mb-0.5">
+                    <span className="text-gray-600 dark:text-zinc-400">{s.name}</span>
+                    <span className="font-bold">{s.pct}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-gray-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                    <div className={`h-full ${s.color}`} style={{ width: `${s.pct}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="text-lg font-bold mb-2">Analytics — stop guessing, start knowing</h3>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-red-600">The pain:</strong> You post, you hope, you refresh. You have no idea which posts actually drive sales, which platform sends real fans, or whether anyone comes back.
+            </p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-emerald-600">The relief:</strong> One dashboard shows profile views, follower growth, merch sales, and traffic sources across 90 days. You see exactly which platform sends buyers — and stop wasting time on the ones that don't.
+            </p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
+              → In the example above, 62% of real traffic comes from GRID Discoveries — not Instagram.
+            </p>
+          </div>
+        </div>
+
+        {/* 2. AUDIENCE EXPORT */}
+        <div className="grid md:grid-cols-2 gap-8 items-center mb-12 md:flex-row-reverse">
+          <div className="md:order-2 bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Your audience</p>
+              <button className="text-[10px] bg-emerald-600 text-white font-bold px-2 py-1 rounded">
+                Export CSV
+              </button>
+            </div>
+            <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 overflow-hidden">
+              <table className="w-full text-[10px]">
+                <thead className="bg-gray-50 dark:bg-zinc-900">
+                  <tr>
+                    <th className="text-left p-2 font-bold text-gray-500">Name</th>
+                    <th className="text-left p-2 font-bold text-gray-500">Email</th>
+                    <th className="text-left p-2 font-bold text-gray-500">Source</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
+                  {[
+                    ["Sarah J.", "sarah.j@…", "Discoveries"],
+                    ["Mark T.", "mark.t@…", "Direct"],
+                    ["Luna P.", "luna.p@…", "Collab"],
+                    ["Ravi K.", "ravi.k@…", "Discoveries"],
+                    ["Chloe B.", "chloe.b@…", "Direct"],
+                  ].map(([name, email, source], i) => (
+                    <tr key={i}>
+                      <td className="p-2 font-medium">{name}</td>
+                      <td className="p-2 text-gray-500">{email}</td>
+                      <td className="p-2 text-emerald-600">{source}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-[10px] text-gray-500 mt-2 text-center">
+              842 followers · Export anytime · No lock-in
+            </p>
+          </div>
+          <div className="md:order-1">
+            <h3 className="text-lg font-bold mb-2">Audience export — your followers become yours</h3>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-red-600">The pain:</strong> On Spotify and Instagram, your followers are a number on someone else's server. You can't email them, message them, or take them with you. If the platform changes, they're gone.
+            </p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-emerald-600">The relief:</strong> One click exports your followers as a CSV — name, email, and source. Import to Mailchimp, Substack, or anything. If GRID disappeared tomorrow, you'd still have your audience.
+            </p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
+              → The only platform where "your audience" means a file you own.
+            </p>
+          </div>
+        </div>
+
+        {/* 3. DIRECT MESSAGING */}
+        <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
+          <div className="bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Message your followers</p>
+              <span className="text-[10px] text-gray-400">842 recipients</span>
+            </div>
+            <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3 mb-2">
+              <p className="text-[10px] text-gray-500 mb-1">Subject</p>
+              <p className="text-xs font-bold">New EP out Friday — early listen for you</p>
+            </div>
+            <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3 mb-2">
+              <p className="text-[10px] text-gray-500 mb-1">Message</p>
+              <p className="text-xs text-gray-700 dark:text-zinc-300 leading-relaxed">
+                Hey — you've been with me since the start, so you get the first listen. Link below, no ads, no algorithm. Just you and me. — M
+              </p>
+            </div>
+            <button className="w-full bg-emerald-600 text-white font-bold text-xs py-2 rounded-lg">
+              Send to 842 followers
+            </button>
+            <p className="text-[10px] text-gray-500 mt-2 text-center">
+              Direct. No algorithm. No ad spend.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-bold mb-2">Direct messaging — reach people who chose you</h3>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-red-600">The pain:</strong> On social platforms, only 2–5% of your followers see any given post. You're paying to reach people who already said yes to you. The algorithm decides who hears your release.
+            </p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-emerald-600">The relief:</strong> Send a direct message to all your GRID followers. No algorithm, no ad spend, no "boost." They follow you — they hear from you. Announce a release, a gig, or a thank-you.
+            </p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
+              → The opposite of "pay to reach your own audience."
+            </p>
+          </div>
+        </div>
+
+        {/* 4. COLLAB REQUEST INBOX */}
+        <div className="grid md:grid-cols-2 gap-8 items-center mb-12 md:flex-row-reverse">
+          <div className="md:order-2 bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Collab requests</p>
+              <span className="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded">3 new</span>
+            </div>
+            {[
+              { name: "Taimoor K.", role: "Producer", note: "House track, vocal needed", badge: "Verified" },
+              { name: "Lewis T.", role: "A&R · Sellick", note: "Looking for techno demos", badge: "Verified" },
+              { name: "Luna P.", role: "Vocalist", note: "Open to collab, EP in May", badge: "" },
+            ].map((c, i) => (
+              <div key={i} className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-2.5 mb-2 last:mb-0 flex items-start gap-2">
+                <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0">
+                  {c.name[0]}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1">
+                    <p className="text-[11px] font-bold truncate">{c.name}</p>
+                    {c.badge && (
+                      <span className="text-[8px] bg-emerald-100 text-emerald-700 px-1 rounded font-bold">
+                        {c.badge}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[9px] text-gray-500">{c.role}</p>
+                  <p className="text-[10px] text-gray-700 dark:text-zinc-300 mt-0.5">{c.note}</p>
+                </div>
+              </div>
+            ))}
+            <p className="text-[10px] text-gray-500 mt-2 text-center">
+              Sorted. Verified. Yours to accept or ignore.
+            </p>
+          </div>
+          <div className="md:order-1">
+            <h3 className="text-lg font-bold mb-2">Collab inbox — the signal, not the noise</h3>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-red-600">The pain:</strong> Collab requests arrive in Instagram DMs, buried between spam, "check my track" messages, and people who ghost you after one reply. You can't tell who's serious.
+            </p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-emerald-600">The relief:</strong> A dedicated inbox where requests are structured, verified, and sortable. See who's real (verified badge), what they want (one-line note), and decide who to open. No more drowning in DMs.
+            </p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
+              → Spend your time on the 10% of requests that matter.
+            </p>
+          </div>
+        </div>
+
+        {/* 5. VERIFIED PROFILE */}
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-extrabold text-lg">
+                  M
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-1">
+                    <p className="font-bold text-sm">Maya Okonkwo</p>
+                    <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <p className="text-[10px] text-gray-500">Independent artist · London</p>
+                </div>
+              </div>
+              <div className="flex gap-1.5 mb-3">
+                <span className="text-[9px] bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded font-semibold">House</span>
+                <span className="text-[9px] bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded font-semibold">Soul</span>
+                <span className="text-[9px] bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded font-semibold">Live</span>
+              </div>
+              <div className="grid grid-cols-3 gap-1.5 text-center">
+                <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1.5">
+                  <p className="text-[10px] font-extrabold">842</p>
+                  <p className="text-[8px] text-gray-500">Followers</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1.5">
+                  <p className="text-[10px] font-extrabold">1.2k</p>
+                  <p className="text-[8px] text-gray-500">Views</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1.5">
+                  <p className="text-[10px] font-extrabold">14</p>
+                  <p className="text-[8px] text-gray-500">Merch</p>
+                </div>
+              </div>
+            </div>
+            <p className="text-[10px] text-gray-500 mt-2 text-center">
+              Verified badge · Activity signals · Trust at a glance
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-bold mb-2">Verified profile — proof you're real</h3>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-red-600">The pain:</strong> A&Rs, labels, and collaborators get hundreds of messages from people who look active but aren't. They can't tell who's serious, so they ignore everyone. Real artists get lost in the noise.
+            </p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">
+              <strong className="text-emerald-600">The relief:</strong> A verified badge plus activity signals (followers, views, merch sales) tells industry people at a glance: this person is active, real, and worth a reply. Small signal. Big door.
+            </p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
+              → The trust shortcut that used to take years of gatekeeping.
+            </p>
+          </div>
+        </div>
+
+        {/* CTA after demo */}
+        <div className="mt-12 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-6 text-center">
+          <p className="font-bold mb-1">Want early access to this?</p>
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">
+            The first 100 waitlist artists lock in £8/month for life.
+          </p>
+          <a
+            href="#waitlist-demo"
+            className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors"
+          >
+            Join the waitlist →
+          </a>
+        </div>
+        <div className="mt-6">
+          <WaitlistForm id="waitlist-demo" compact />
+        </div>
+      </section>
+
       {/* COMPARISON */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-6 text-center">
