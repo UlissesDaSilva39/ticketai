@@ -151,6 +151,161 @@ function ReliefBox({ label, text }: { label: string; text: string }) {
   );
 }
 
+// ---- Micro-demo shared components ----
+
+function MicroDemoAnalytics() {
+  return (
+    <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Analytics</p>
+        <span className="text-[9px] text-emerald-600 font-bold">90 days</span>
+      </div>
+      <div className="grid grid-cols-3 gap-1.5 mb-2">
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1.5"><p className="text-[8px] text-gray-500">Views</p><p className="text-sm font-extrabold">1,284</p><p className="text-[8px] text-emerald-600 font-bold">+32%</p></div>
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1.5"><p className="text-[8px] text-gray-500">Followers</p><p className="text-sm font-extrabold">842</p><p className="text-[8px] text-emerald-600 font-bold">+18%</p></div>
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1.5"><p className="text-[8px] text-gray-500">Sales</p><p className="text-sm font-extrabold">£410</p><p className="text-[8px] text-emerald-600 font-bold">+54%</p></div>
+      </div>
+      <div className="bg-gray-50 dark:bg-zinc-900 rounded p-2">
+        <p className="text-[8px] text-gray-500 mb-1">Top source</p>
+        <div className="flex items-center gap-2">
+          <span className="text-[9px] font-bold">GRID Discoveries</span>
+          <div className="flex-1 h-1.5 bg-gray-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-full bg-emerald-500" style={{ width: "62%" }} />
+          </div>
+          <span className="text-[9px] font-bold">62%</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MicroDemoExport() {
+  return (
+    <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Your audience</p>
+        <button className="text-[8px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">Export CSV</button>
+      </div>
+      <div className="space-y-1">
+        {[
+          ["Sarah J.", "Discoveries"],
+          ["Mark T.", "Direct"],
+          ["Luna P.", "Collab"],
+        ].map(([name, source], i) => (
+          <div key={i} className="flex items-center justify-between bg-gray-50 dark:bg-zinc-900 rounded px-2 py-1">
+            <span className="text-[9px] font-medium">{name}</span>
+            <span className="text-[8px] text-emerald-600">{source}</span>
+          </div>
+        ))}
+      </div>
+      <p className="text-[8px] text-gray-500 mt-2 text-center">842 followers · One click · Yours to keep</p>
+    </div>
+  );
+}
+
+function MicroDemoMessaging() {
+  return (
+    <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Message followers</p>
+        <span className="text-[8px] text-gray-400">842</span>
+      </div>
+      <div className="bg-gray-50 dark:bg-zinc-900 rounded p-2 mb-1.5">
+        <p className="text-[8px] text-gray-500 mb-0.5">Subject</p>
+        <p className="text-[9px] font-bold">New EP — early listen</p>
+      </div>
+      <div className="bg-gray-50 dark:bg-zinc-900 rounded p-2 mb-2">
+        <p className="text-[8px] text-gray-500 mb-0.5">Message</p>
+        <p className="text-[9px] text-gray-700 dark:text-zinc-300 leading-relaxed">Hey — first listen, no ads, no algorithm. Just you and me. — M</p>
+      </div>
+      <button className="w-full bg-emerald-600 text-white font-bold text-[9px] py-1.5 rounded">Send to 842</button>
+      <p className="text-[8px] text-gray-500 mt-1.5 text-center">No algorithm · No ad spend</p>
+    </div>
+  );
+}
+
+function MicroDemoCollab() {
+  return (
+    <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Collab requests</p>
+        <span className="text-[8px] bg-emerald-100 text-emerald-700 font-bold px-1.5 py-0.5 rounded">3 new</span>
+      </div>
+      {[
+        { name: "Taimoor K.", role: "Producer", note: "House vocal needed", v: true },
+        { name: "Lewis T.", role: "A&R · Sellick", note: "Techno demos", v: true },
+        { name: "Luna P.", role: "Vocalist", note: "Open to collab", v: false },
+      ].map((c, i) => (
+        <div key={i} className="flex items-start gap-1.5 bg-gray-50 dark:bg-zinc-900 rounded px-2 py-1 mb-1 last:mb-0">
+          <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[8px] font-bold flex-shrink-0">{c.name[0]}</div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1">
+              <p className="text-[9px] font-bold truncate">{c.name}</p>
+              {c.v && <span className="text-[7px] bg-emerald-100 text-emerald-700 px-1 rounded font-bold">Verified</span>}
+            </div>
+            <p className="text-[7px] text-gray-500">{c.role} · {c.note}</p>
+          </div>
+        </div>
+      ))}
+      <p className="text-[8px] text-gray-500 mt-2 text-center">The signal, not the noise</p>
+    </div>
+  );
+}
+
+function MicroDemoVerified() {
+  return (
+    <div className="bg-white dark:bg-zinc-950 rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
+      <div className="flex items-center gap-2 mb-2">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-extrabold text-xs">M</div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1">
+            <p className="text-[10px] font-bold truncate">Maya Okonkwo</p>
+            <svg className="w-3 h-3 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+          </div>
+          <p className="text-[8px] text-gray-500">Independent · London</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-1 text-center">
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1"><p className="text-[9px] font-extrabold">842</p><p className="text-[7px] text-gray-500">Followers</p></div>
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1"><p className="text-[9px] font-extrabold">1.2k</p><p className="text-[7px] text-gray-500">Views</p></div>
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded p-1"><p className="text-[9px] font-extrabold">14</p><p className="text-[7px] text-gray-500">Merch</p></div>
+      </div>
+      <p className="text-[8px] text-gray-500 mt-2 text-center">Trust at a glance</p>
+    </div>
+  );
+}
+
+// ---- Shared micro-demo section wrapper ----
+
+function MicroDemoSection({
+  eyebrow,
+  title,
+  pain,
+  relief,
+  children,
+  side = "left",
+}: {
+  eyebrow: string;
+  title: string;
+  pain: string;
+  relief: string;
+  children: React.ReactNode;
+  side?: "left" | "right";
+}) {
+  return (
+    <section className="max-w-4xl mx-auto px-6 py-10 border-t border-gray-200 dark:border-zinc-800">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-2">See what's inside · {eyebrow}</p>
+      <div className={`grid md:grid-cols-2 gap-6 items-center`}>
+        <div className={side === "right" ? "md:order-2" : ""}>{children}</div>
+        <div className={side === "right" ? "md:order-1" : ""}>
+          <h3 className="text-lg font-bold mb-2">{title}</h3>
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2"><strong className="text-red-600">The pain:</strong> {pain}</p>
+          <p className="text-sm text-gray-600 dark:text-zinc-400"><strong className="text-emerald-600">The relief:</strong> {relief}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
 export default function ProPage() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("artist");
@@ -324,6 +479,17 @@ export default function ProPage() {
         </div>
       </section>
 
+            {/* MICRO-DEMO 1: ANALYTICS */}
+      <MicroDemoSection
+        eyebrow="Analytics"
+        title="This is what your dashboard looks like"
+        pain="You post, you hope, you refresh. No idea what's actually working."
+        relief="One screen shows views, followers, sales, and your #1 traffic source — across 90 days."
+        side="left"
+      >
+        <MicroDemoAnalytics />
+      </MicroDemoSection>
+
       {/* CTA after benefits */}
       <section className="max-w-3xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-6 text-center">
@@ -486,6 +652,17 @@ export default function ProPage() {
         <div className="mt-6"><WaitlistForm id="waitlist-demo" compact /></div>
       </section>
 
+            {/* MICRO-DEMO 2: AUDIENCE EXPORT */}
+      <MicroDemoSection
+        eyebrow="Audience export"
+        title="One click. 842 followers. A file you own."
+        pain="Your followers are a number on someone else's server. You can't take them with you."
+        relief="Export as CSV — name, email, source. Import to Mailchimp or Substack. Your audience is yours, forever."
+        side="right"
+      >
+        <MicroDemoExport />
+      </MicroDemoSection>
+
       {/* COMPARISON */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-6 text-center">Free vs. Pro — what actually changes</h2>
@@ -561,6 +738,17 @@ export default function ProPage() {
         <div className="mt-6"><WaitlistForm id="waitlist-3" compact /></div>
       </section>
 
+            {/* MICRO-DEMO 3: DIRECT MESSAGING */}
+      <MicroDemoSection
+        eyebrow="Direct messaging"
+        title="Reach the people who actually chose you"
+        pain="Only 2–5% of your followers see any post. You pay to reach people who already said yes."
+        relief="Message all 842 followers directly. No algorithm. No ad spend. They chose you — they hear from you."
+        side="left"
+      >
+        <MicroDemoMessaging />
+      </MicroDemoSection>
+
       {/* FOUNDER NOTE */}
       <section className="max-w-2xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-6 md:p-8">
@@ -577,6 +765,17 @@ export default function ProPage() {
           <p className="text-sm font-bold text-gray-900 dark:text-white">— [Your Name], Founder</p>
         </div>
       </section>
+
+            {/* MICRO-DEMO 4: COLLAB INBOX */}
+      <MicroDemoSection
+        eyebrow="Collab inbox"
+        title="The signal, not the noise"
+        pain="Collab requests buried in Instagram DMs. You can't tell who's serious."
+        relief="A structured inbox: verified, sortable, one-line notes. Spend time on the 10% that matter."
+        side="right"
+      >
+        <MicroDemoCollab />
+      </MicroDemoSection>
 
       {/* OBJECTIONS */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
@@ -633,6 +832,17 @@ export default function ProPage() {
         </div>
         <div className="mt-6"><WaitlistForm id="waitlist-emotional" compact /></div>
       </section>
+
+            {/* MICRO-DEMO 5: VERIFIED PROFILE */}
+      <MicroDemoSection
+        eyebrow="Verified profile"
+        title="This is what A&Rs see"
+        pain="Industry people get hundreds of messages from accounts that look active but aren't."
+        relief="A verified badge plus real activity signals tells them at a glance: this person is worth a reply."
+        side="left"
+      >
+        <MicroDemoVerified />
+      </MicroDemoSection>
 
       {/* FAQ */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
