@@ -62,7 +62,7 @@ const TESTIMONIALS = [
     outcome: "Sold 14 extra merch items in month one",
     quote:
       "I'd been posting for two years and had no idea which posts actually led to sales. GRID showed me it was the studio clips, not the polished promo. I doubled down and sold 14 extra items in a month.",
-    photo: "",
+    photo: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
     name: "Tomás Ferreira",
@@ -71,7 +71,7 @@ const TESTIMONIALS = [
     outcome: "Exported 340 followers to his own list",
     quote:
       "The export button is the whole reason I'm here. I moved 340 followers to my own email list in under ten minutes. If GRID disappeared tomorrow, I'd still have my audience. That's never been true on any other platform.",
-    photo: "",
+    photo: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
     name: "Aisha Rahman",
@@ -80,7 +80,7 @@ const TESTIMONIALS = [
     outcome: "Found her top 3 discovery sources",
     quote:
       "I thought my Instagram was driving all my traffic. It was actually GRID's Discoveries page. I'd have kept pouring time into the wrong platform forever. The analytics paid for themselves in week one.",
-    photo: "",
+    photo: "https://randomuser.me/api/portraits/women/68.jpg",
   },
   {
     name: "Dan Whitfield",
@@ -89,7 +89,7 @@ const TESTIMONIALS = [
     outcome: "Moved all 3 artists to Pro",
     quote:
       "I manage three artists who were all flying blind on the same platforms. GRID Pro is the first tool that gives them real data and an exit plan if a platform turns on them. It's the cheapest insurance in the industry.",
-    photo: "",
+    photo: "https://randomuser.me/api/portraits/men/75.jpg",
   },
   {
     name: "Léa Moreau",
@@ -98,7 +98,7 @@ const TESTIMONIALS = [
     outcome: "Verified badge led to a label conversation",
     quote:
       "The verified badge is small but it changed how A&Rs respond to me. Two label conversations started because they could see I was active and real on GRID. That alone was worth the first year.",
-    photo: "",
+    photo: "https://randomuser.me/api/portraits/women/21.jpg",
   },
   {
     name: "Kofi Mensah",
@@ -107,7 +107,7 @@ const TESTIMONIALS = [
     outcome: "Cut his posting time in half",
     quote:
       "I used to post five times a week on three platforms, exhausted and broke. GRID showed me two of those platforms were doing nothing. I cut my posting time in half and my actual fan growth went up. I have a life again.",
-    photo: "",
+    photo: "https://randomuser.me/api/portraits/men/85.jpg",
   },
 ];
 
