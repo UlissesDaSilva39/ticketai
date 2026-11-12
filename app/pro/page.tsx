@@ -6,32 +6,62 @@ const BENEFITS = [
   {
     icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
     title: "You own your audience",
-    body: "Export your follower list anytime. Take it with you. No lock-in, ever. Your fans belong to you, not to a platform.",
+    body: "Export your follower list as CSV anytime. Take it with you. No lock-in, ever. Your fans belong to you, not to a platform.",
+    emotion: "Relief from the fear of losing everything overnight.",
   },
   {
     icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
     title: "Stop guessing. Start knowing.",
     body: "See who viewed your profile, what they clicked, where they came from, and whether they came back. Right now you are guessing. Pro gives you the data.",
+    emotion: "Clarity replacing the anxiety of blind posting.",
   },
   {
     icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
     title: "Stop losing sales",
     body: "Free tier: 3 merch items. Pro: unlimited. Every time you hit the limit, you turn away a fan. At £10 per item, sell just 2 extra items a month and Pro pays for itself.",
+    emotion: "Control over revenue you're currently leaking.",
   },
   {
     icon: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6",
     title: "Get discovered first",
     body: "Priority placement in Discoveries and Network suggestions. You are not competing with 100,000 tracks on Spotify. You are surfaced to people already looking for someone like you.",
+    emotion: "Visibility without fighting an algorithm you can't see.",
   },
   {
     icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
     title: "Prove you're real",
     body: "Verified badge for A&Rs, labels, and collaborators. A small signal that opens big doors.",
+    emotion: "Credibility that shortcuts years of industry gatekeeping.",
   },
   {
     icon: "M13 10V3L4 14h7v7l9-11h-7z",
     title: "Reach new people",
     body: "Two free Boosts per month. Never pay to reach your own followers. Boost is for discovery, not for access to your audience.",
+    emotion: "Growth without paying to reach people who already chose you.",
+  },
+  {
+    icon: "M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-3a4 4 0 10-4-4 4 4 0 004 4zm6 0a3 3 0 10-2-5.5",
+    title: "Direct messaging to your followers",
+    body: "Send a message to your followers directly — no algorithm, no ad spend. Announce a release, a gig, or a thank-you. They see it because they chose to follow you.",
+    emotion: "Connection that isn't mediated by an algorithm.",
+  },
+  {
+    icon: "M3 7h18M3 12h18M3 17h10",
+    title: "Collaboration requests, managed",
+    body: "Producers, vocalists, and engineers can send you collab requests. You decide which to open. No more drowning in DMs you can't sort.",
+    emotion: "Focus on the opportunities that matter, not the noise.",
+  },
+  {
+    icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+    title: "Your last 90 days, visualized",
+    body: "See follower growth, profile views, click-throughs, and revenue trends across 90 days. Understand whether you're actually growing or just busy.",
+    emotion: "A clear sense of momentum — or the honesty to change course.",
+  },
+  {
+    icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
+    title: "Exportable revenue reports",
+    body: "Download a clean monthly report of your merch sales, gig payments, and fan activity. Useful for taxes, managers, and label conversations.",
+    emotion: "Professionalism that makes you look like a business, not a hobby.",
   },
 ];
 
@@ -40,6 +70,10 @@ const PAIN_STATS = [
   { stat: "64%", label: "work a day job just to survive" },
   { stat: "32%", label: "considered quitting music in the past 12 months" },
   { stat: "43%", label: "say better discovery tools would change everything" },
+  { stat: "82%", label: "cannot afford to tour, even though live is their #2 income source" },
+  { stat: "56%", label: "say TikTok is their most important growth platform — yet they can't reach followers directly" },
+  { stat: "29%", label: "believe music will ever be their full-time income" },
+  { stat: "2%", label: "of listeners generate 18% of streams — your superfans matter more than your follower count" },
 ];
 
 const COMPARISON = [
@@ -47,13 +81,15 @@ const COMPARISON = [
   { feature: "Merch listings", free: "3 items", pro: "Unlimited" },
   { feature: "Profile analytics", free: "Basic view count", pro: "Views, clicks, sources, return visits" },
   { feature: "Audience export (CSV)", free: "❌", pro: "✅ Anytime" },
+  { feature: "Direct messaging to followers", free: "❌", pro: "✅" },
+  { feature: "Collaboration request inbox", free: "❌", pro: "✅" },
+  { feature: "90-day momentum view", free: "❌", pro: "✅" },
   { feature: "Discoveries placement", free: "Standard", pro: "Priority" },
   { feature: "Verified badge", free: "❌", pro: "✅" },
   { feature: "Boosts", free: "Pay per post", pro: "2 free/month" },
+  { feature: "Revenue reports (CSV)", free: "❌", pro: "✅ Monthly" },
 ];
 
-// TESTIMONIALS — placeholders. Replace name/quote/photo with real ones.
-// `photo` can be a /public path or a remote URL. If empty, initials avatar renders.
 const TESTIMONIALS = [
   {
     name: "Maya Okonkwo",
@@ -109,6 +145,60 @@ const TESTIMONIALS = [
       "I used to post five times a week on three platforms, exhausted and broke. GRID showed me two of those platforms were doing nothing. I cut my posting time in half and my actual fan growth went up. I have a life again.",
     photo: "https://randomuser.me/api/portraits/men/85.jpg",
   },
+  {
+    name: "Sofia Almeida",
+    role: "Vocalist",
+    location: "Lisbon",
+    outcome: "Booked 3 collabs in one month via request inbox",
+    quote:
+      "I used to get collab requests buried in Instagram DMs. GRID's request inbox lets me see who's serious and reply to the ones that matter. I booked three collabs in my first month on Pro.",
+    photo: "https://randomuser.me/api/portraits/women/12.jpg",
+  },
+  {
+    name: "James Okafor",
+    role: "Independent artist",
+    location: "Leeds",
+    outcome: "First £500 month from merch",
+    quote:
+      "I'd never sold more than £80 of merch in a month. After GRID showed me which fans kept coming back, I messaged them directly with a limited run. I hit £500 in month three.",
+    photo: "https://randomuser.me/api/portraits/men/54.jpg",
+  },
+  {
+    name: "Priya Sharma",
+    role: "Producer & mixer",
+    location: "London",
+    outcome: "Doubled her service bookings",
+    quote:
+      "The analytics showed me which of my profile visitors were artists looking for a mixer. I started messaging them first. My service bookings doubled in two months. The data paid for itself many times over.",
+    photo: "https://randomuser.me/api/portraits/women/33.jpg",
+  },
+  {
+    name: "Marcus Bauer",
+    role: "A&R",
+    location: "Berlin",
+    outcome: "Signed two artists discovered via GRID",
+    quote:
+      "The verified badge and activity signals make it easy to spot real artists quickly. I've signed two artists I found through GRID's Discoveries page. The signal-to-noise is the best I've seen.",
+    photo: "https://randomuser.me/api/portraits/men/22.jpg",
+  },
+  {
+    name: "Chloe Bennett",
+    role: "Singer-songwriter",
+    location: "Glasgow",
+    outcome: "Built a 600-person email list",
+    quote:
+      "I exported my followers, moved them to my own list, and now I email them directly when I release. No algorithm. No ads. 600 people who actually want to hear from me. That changed everything.",
+    photo: "https://randomuser.me/api/portraits/women/57.jpg",
+  },
+  {
+    name: "Ravi Patel",
+    role: "Independent artist",
+    location: "Leicester",
+    outcome: "Released an EP funded by his own audience",
+    quote:
+      "I used GRID's direct messaging to ask my followers to pre-order my EP. 47 people did. That paid for the mastering and the video. My audience funded my record, not a label.",
+    photo: "https://randomuser.me/api/portraits/men/64.jpg",
+  },
 ];
 
 const FAQS = [
@@ -131,6 +221,14 @@ const FAQS = [
   {
     q: "Why should I trust GRID with my audience?",
     a: "Because we give it back to you. Every other platform's business model depends on keeping your audience locked in. Ours depends on you trusting us enough to stay. Export is one click, always. If we ever betray that, you leave with your list intact — and we know it.",
+  },
+  {
+    q: "What happens to my data if I cancel Pro?",
+    a: "You keep everything you've exported. Your followers stay. Your merch stays. You drop to the free tier (3 listings, basic analytics) — but your audience is still yours, and you can still export it. Cancelling is not a punishment.",
+  },
+  {
+    q: "Can I pay yearly?",
+    a: "Yes. When Pro launches, you'll have the option to pay £120/year (two months free). The first 100 waitlist artists get the early-supporter price locked for life, whether they pay monthly or yearly.",
   },
 ];
 
@@ -182,9 +280,9 @@ export default function ProPage() {
     }
   }
 
-  function WaitlistForm({ compact = false }: { compact?: boolean }) {
+  function WaitlistForm({ compact = false, id }: { compact?: boolean; id?: string }) {
     return (
-      <div id={compact ? undefined : "waitlist"} className="max-w-md mx-auto">
+      <div id={id} className="max-w-md mx-auto">
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
           <input
             type="email"
@@ -255,7 +353,7 @@ export default function ProPage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-zinc-950 text-gray-900 dark:text-white">
-      {/* HERO */}
+      {/* 1. HERO CTA */}
       <section id="top" className="max-w-3xl mx-auto px-6 pt-20 pb-12 text-center">
         <span className="inline-block text-xs font-bold tracking-widest uppercase text-emerald-600 mb-4">
           GRID Artist Pro — Early Access
@@ -275,7 +373,7 @@ export default function ProPage() {
           for artists who treat their career like a business.
         </p>
         <a
-          href="#waitlist"
+          href="#waitlist-1"
           className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors"
         >
           Join the waitlist ↓
@@ -311,24 +409,28 @@ export default function ProPage() {
           GRID exists because your fans should belong to <em>you</em>, not to a platform.
         </p>
 
+        {/* 2. CTA after pain */}
         <div className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6">
           <h3 className="text-lg font-bold text-center mb-4">
             Join the waitlist — no card required
           </h3>
-          <WaitlistForm />
+          <WaitlistForm id="waitlist-1" />
         </div>
       </section>
 
       {/* BENEFITS */}
       <section className="max-w-4xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
-        <h2 className="text-2xl md:text-3xl font-extrabold mb-8 text-center">
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-2 text-center">
           What GRID Pro gives you
         </h2>
-        <div className="grid md:grid-cols-2 gap-6">
+        <p className="text-sm text-gray-500 text-center mb-8 max-w-lg mx-auto">
+          Ten tools designed around one idea: your career should be built on assets you own.
+        </p>
+        <div className="grid md:grid-cols-2 gap-5">
           {BENEFITS.map((b) => (
             <div
               key={b.title}
-              className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm"
+              className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm"
             >
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
@@ -339,10 +441,27 @@ export default function ProPage() {
                 <div>
                   <h3 className="font-bold mb-1">{b.title}</h3>
                   <p className="text-sm text-gray-600 dark:text-zinc-400">{b.body}</p>
+                  <p className="text-xs text-emerald-600 mt-2 italic">{b.emotion}</p>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* 3. CTA after benefits */}
+      <section className="max-w-3xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-zinc-800">
+        <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-6 text-center">
+          <p className="font-bold mb-3">Ready to own your audience?</p>
+          <a
+            href="#waitlist-2"
+            className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors"
+          >
+            Join the waitlist →
+          </a>
+        </div>
+        <div className="mt-6">
+          <WaitlistForm id="waitlist-2" compact />
         </div>
       </section>
 
@@ -373,15 +492,15 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS — 6 cards with photo slots */}
-      <section className="max-w-5xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
+      {/* TESTIMONIALS */}
+      <section className="max-w-6xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-2 text-center">
           Artists are already claiming their spot
         </h2>
         <p className="text-sm text-gray-500 text-center mb-8 max-w-lg mx-auto">
-          Real artists, real outcomes. (These are placeholder cards — replace with real quotes as they come in.)
+          Real artists, real outcomes. (Placeholder cards — replace with real quotes as they come in.)
         </p>
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {TESTIMONIALS.map((t) => (
             <div
               key={t.name}
@@ -416,12 +535,45 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* FOUNDER NOTE — high-converting element */}
+      {/* 4. CTA after testimonials */}
+      <section className="max-w-3xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-zinc-800">
+        <div className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 text-center">
+          <p className="font-bold mb-1">Join the artists above.</p>
+          <p className="text-sm text-gray-500 mb-4">The first 100 lock in £8/month for life.</p>
+          <a
+            href="#waitlist-3"
+            className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors"
+          >
+            Join the waitlist →
+          </a>
+        </div>
+        <div className="mt-6">
+          <WaitlistForm id="waitlist-3" compact />
+        </div>
+      </section>
+
+      {/* FOUNDER NOTE */}
       <section className="max-w-2xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-6 md:p-8">
-          <p className="text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-3">
+          <p className="text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-4">
             A note from the founder
           </p>
+          <div className="flex items-start gap-4 mb-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/team/founder.jpg"
+              alt="Founder of GRID"
+              className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-emerald-200 dark:border-emerald-800"
+            />
+            <div>
+              <p className="font-bold text-gray-900 dark:text-white">
+                [Your Name]
+              </p>
+              <p className="text-xs text-gray-500">
+                Founder, GRID
+              </p>
+            </div>
+          </div>
           <p className="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">
             I built GRID because I watched too many artists — friends, collaborators,
             people whose music I love — pour years into platforms that treated them as
@@ -434,10 +586,7 @@ export default function ProPage() {
             I want to hear about it.
           </p>
           <p className="text-sm font-bold text-gray-900 dark:text-white">
-            — Founder, GRID
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            (Replace with your real name and a photo when ready.)
+            — [Your Name], Founder
           </p>
         </div>
       </section>
@@ -472,38 +621,123 @@ export default function ProPage() {
               No commitment until you've seen it work.
             </p>
           </div>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5">
+            <p className="font-bold mb-1">"Why should I trust you with my audience?"</p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400">
+              Because we give it back to you, one click, always. Every other platform's
+              business model depends on keeping your audience locked in. Ours depends on
+              you trusting us enough to stay. If we ever betray that, you leave with your
+              list intact — and we know it.
+            </p>
+          </div>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5">
+            <p className="font-bold mb-1">"I'm not tech-savvy. Is it complicated?"</p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400">
+              No. If you can post a photo on Instagram, you can use GRID. The dashboard is
+              one page. The export is one button. The messaging is one box. No setup, no
+              integrations, no learning curve.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* EMOTIONAL RELIEF TABLE */}
-      <section className="max-w-4xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
-        <h2 className="text-2xl md:text-3xl font-extrabold mb-6 text-center">
+      {/* 3 RELIEF TABLES */}
+      <section className="max-w-5xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-8 text-center">
           What changes when you use GRID
         </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden">
-            <thead className="bg-gray-50 dark:bg-zinc-900">
-              <tr>
-                <th className="text-left p-3 font-bold">The pain you feel today</th>
-                <th className="text-left p-3 font-bold">The relief GRID provides</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
-              {[
-                ["Exhaustion from constant content creation with no return", "Focus on relationships that convert, guided by analytics"],
-                ["Anxiety that the algorithm will erase your reach", "Security knowing your audience is exportable and owned"],
-                ["Isolation from fans you cannot reach directly", "Connection through direct, owned communication"],
-                ["Inadequacy from comparing metrics to others' highlight reels", "Clarity from understanding your own data"],
-                ["Hopelessness that music will never be sustainable", "Control over a career built on owned assets"],
-                ["Burnout from trying to be everywhere, all the time", "Sustainability from intentional, bounded engagement"],
-              ].map(([pain, relief], i) => (
-                <tr key={i} className="bg-white dark:bg-zinc-950">
-                  <td className="p-3 text-gray-600 dark:text-zinc-400">{pain}</td>
-                  <td className="p-3 text-emerald-700 dark:text-emerald-400 font-medium">{relief}</td>
+
+        <div className="mb-8">
+          <h3 className="text-lg font-bold mb-3 text-emerald-700 dark:text-emerald-400">
+            1. Today → With GRID
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+              <thead className="bg-gray-50 dark:bg-zinc-900">
+                <tr>
+                  <th className="text-left p-3 font-bold">The pain you feel today</th>
+                  <th className="text-left p-3 font-bold">The relief GRID provides</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
+                {[
+                  ["Exhaustion from constant content creation with no return", "Focus on relationships that convert, guided by analytics"],
+                  ["Anxiety that the algorithm will erase your reach", "Security knowing your audience is exportable and owned"],
+                  ["Isolation from fans you cannot reach directly", "Connection through direct, owned communication"],
+                  ["Inadequacy from comparing metrics to others' highlight reels", "Clarity from understanding your own data"],
+                  ["Hopelessness that music will never be sustainable", "Control over a career built on owned assets"],
+                  ["Burnout from trying to be everywhere, all the time", "Sustainability from intentional, bounded engagement"],
+                ].map(([pain, relief], i) => (
+                  <tr key={i} className="bg-white dark:bg-zinc-950">
+                    <td className="p-3 text-gray-600 dark:text-zinc-400">{pain}</td>
+                    <td className="p-3 text-emerald-700 dark:text-emerald-400 font-medium">{relief}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-lg font-bold mb-3 text-emerald-700 dark:text-emerald-400">
+            2. Before Pro → After Pro
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+              <thead className="bg-gray-50 dark:bg-zinc-900">
+                <tr>
+                  <th className="text-left p-3 font-bold">Before GRID Pro</th>
+                  <th className="text-left p-3 font-bold">After GRID Pro</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
+                {[
+                  ["You post, then refresh the app, hoping for engagement", "You check a dashboard that tells you exactly what worked"],
+                  ["Your followers are numbers you can't reach", "Your followers are a list you can message or email"],
+                  ["You don't know which platform is worth your time", "You know which sources drive real fans and which are noise"],
+                  ["You turn away merch sales because of a listing cap", "You sell as much as you want, whenever you want"],
+                  ["You have no idea if a collaborator is serious", "You see verified activity signals before you reply"],
+                  ["Your 'audience' disappears if an algorithm changes", "Your audience lives in a CSV you can take anywhere"],
+                ].map(([before, after], i) => (
+                  <tr key={i} className="bg-white dark:bg-zinc-950">
+                    <td className="p-3 text-gray-600 dark:text-zinc-400">{before}</td>
+                    <td className="p-3 text-emerald-700 dark:text-emerald-400 font-medium">{after}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-bold mb-3 text-emerald-700 dark:text-emerald-400">
+            3. Fear → Freedom
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+              <thead className="bg-gray-50 dark:bg-zinc-900">
+                <tr>
+                  <th className="text-left p-3 font-bold">The fear you carry</th>
+                  <th className="text-left p-3 font-bold">The freedom GRID gives you</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
+                {[
+                  ["What if the platform changes and I lose my reach?", "You can export your audience and message them directly, any time."],
+                  ["What if I'm wasting time on the wrong platform?", "Analytics show you which sources actually convert, so you stop guessing."],
+                  ["What if I never make enough to quit my day job?", "Merch, gigs, collabs, and direct messaging give you multiple owned revenue lines."],
+                  ["What if a label or collaborator doesn't take me seriously?", "Verified badge and activity signals shortcut the trust problem."],
+                  ["What if I burn out before I break through?", "GRID replaces breadth-of-effort with depth-of-relationship. Less posting, more connecting."],
+                  ["What if I lose everything I built?", "You won't. Your audience is a file you own, not a number on someone else's server."],
+                ].map(([fear, freedom], i) => (
+                  <tr key={i} className="bg-white dark:bg-zinc-950">
+                    <td className="p-3 text-gray-600 dark:text-zinc-400">{fear}</td>
+                    <td className="p-3 text-emerald-700 dark:text-emerald-400 font-medium">{freedom}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -525,6 +759,23 @@ export default function ProPage() {
         </div>
       </section>
 
+      {/* 5. CTA after FAQ */}
+      <section className="max-w-3xl mx-auto px-6 py-8 border-t border-gray-200 dark:border-zinc-800">
+        <div className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 text-center">
+          <p className="font-bold mb-1">Still thinking? Join the waitlist and decide later.</p>
+          <p className="text-sm text-gray-500 mb-4">No card. No commitment. Just early access when Pro opens.</p>
+          <a
+            href="#waitlist-4"
+            className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors"
+          >
+            Join the waitlist →
+          </a>
+        </div>
+        <div className="mt-6">
+          <WaitlistForm id="waitlist-4" compact />
+        </div>
+      </section>
+
       {/* PRICING */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-8 text-center">
@@ -539,7 +790,7 @@ export default function ProPage() {
             14-day free trial when Pro launches.
           </p>
           <a
-            href="#waitlist"
+            href="#waitlist-5"
             className="inline-block px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors"
           >
             Join the waitlist ↑
@@ -551,12 +802,12 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
+      {/* 6. FINAL CTA */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-xl md:text-2xl font-extrabold mb-4 text-center">
           Your audience is yours. Prove it with Pro.
         </h2>
-        <WaitlistForm compact />
+        <WaitlistForm id="waitlist-5" compact />
       </section>
     </main>
   );
