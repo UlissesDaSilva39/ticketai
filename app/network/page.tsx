@@ -111,6 +111,34 @@ export default function NetworkPage() {
             ))}
           </div>
 
+          {/* RECENTLY VIEWED RAIL */}
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
+                <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Recently Viewed
+              </h3>
+              <button className="text-xs font-semibold text-gray-500 hover:text-red-500 transition-colors">Clear history</button>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
+              {[
+                { name: "Taimoor Khan", role: "Producer", color: "bg-emerald-600" },
+                { name: "Lewis Thompson", role: "A&R · Sellick", color: "bg-blue-600" },
+                { name: "Alex Rivera", role: "Techno", color: "bg-indigo-600" },
+                { name: "Beatport", role: "Curator", color: "bg-purple-600" },
+                { name: "Luna Park", role: "Vocalist", color: "bg-pink-500" },
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col items-center flex-shrink-0 w-24 group cursor-pointer">
+                  <div className={`w-16 h-16 rounded-full ${item.color} text-white flex items-center justify-center font-bold text-xl mb-2 ring-2 ring-transparent group-hover:ring-emerald-500 transition-all`}>
+                    {item.name[0]}
+                  </div>
+                  <p className="text-[11px] font-bold text-gray-900 dark:text-white text-center leading-tight truncate w-full">{item.name}</p>
+                  <p className="text-[9px] text-gray-500 text-center truncate w-full">{item.role}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h2 className="font-bold text-gray-900 dark:text-white text-lg">Suggested Creators</h2>

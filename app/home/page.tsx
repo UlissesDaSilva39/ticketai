@@ -151,6 +151,34 @@ export default function HomePage() {
           </div>
 
           {/* Composer */}
+          {/* RECENTLY VIEWED RAIL */}
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
+                <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Recently Viewed
+              </h3>
+              <button className="text-xs font-semibold text-gray-500 hover:text-red-500 transition-colors">Clear history</button>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
+              {[
+                { name: "Sarah Jenkins", role: "Vocalist · London", color: "bg-pink-500", type: "Artist" },
+                { name: "Dark Techno Pack", role: "£24.99 · Sample Pack", color: "bg-purple-600", type: "Product" },
+                { name: "Vocalist for House", role: "Gig · 2h ago", color: "bg-emerald-600", type: "Gig" },
+                { name: "Toolroom Records", role: "Label · Verified", color: "bg-zinc-700", type: "Label" },
+                { name: "Mixing engineer", role: "Service · £400", color: "bg-amber-600", type: "Service" },
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col items-center flex-shrink-0 w-24 group cursor-pointer">
+                  <div className={`w-16 h-16 rounded-full ${item.color} text-white flex items-center justify-center font-bold text-xl mb-2 ring-2 ring-transparent group-hover:ring-emerald-500 transition-all`}>
+                    {item.name[0]}
+                  </div>
+                  <p className="text-[11px] font-bold text-gray-900 dark:text-white text-center leading-tight truncate w-full">{item.name}</p>
+                  <p className="text-[9px] text-gray-500 text-center truncate w-full">{item.type}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 rounded-full bg-emerald-600 text-white grid place-items-center font-bold flex-shrink-0">U</div>
