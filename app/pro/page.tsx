@@ -52,6 +52,102 @@ const COMPARISON = [
   { feature: "Boosts", free: "Pay per post", pro: "2 free/month" },
 ];
 
+// TESTIMONIALS — placeholders. Replace name/quote/photo with real ones.
+// `photo` can be a /public path or a remote URL. If empty, initials avatar renders.
+const TESTIMONIALS = [
+  {
+    name: "Maya Okonkwo",
+    role: "Independent artist",
+    location: "London",
+    outcome: "Sold 14 extra merch items in month one",
+    quote:
+      "I'd been posting for two years and had no idea which posts actually led to sales. GRID showed me it was the studio clips, not the polished promo. I doubled down and sold 14 extra items in a month.",
+    photo: "",
+  },
+  {
+    name: "Tomás Ferreira",
+    role: "Producer",
+    location: "Manchester",
+    outcome: "Exported 340 followers to his own list",
+    quote:
+      "The export button is the whole reason I'm here. I moved 340 followers to my own email list in under ten minutes. If GRID disappeared tomorrow, I'd still have my audience. That's never been true on any other platform.",
+    photo: "",
+  },
+  {
+    name: "Aisha Rahman",
+    role: "Singer-songwriter",
+    location: "Birmingham",
+    outcome: "Found her top 3 discovery sources",
+    quote:
+      "I thought my Instagram was driving all my traffic. It was actually GRID's Discoveries page. I'd have kept pouring time into the wrong platform forever. The analytics paid for themselves in week one.",
+    photo: "",
+  },
+  {
+    name: "Dan Whitfield",
+    role: "Manager (3 artists)",
+    location: "Bristol",
+    outcome: "Moved all 3 artists to Pro",
+    quote:
+      "I manage three artists who were all flying blind on the same platforms. GRID Pro is the first tool that gives them real data and an exit plan if a platform turns on them. It's the cheapest insurance in the industry.",
+    photo: "",
+  },
+  {
+    name: "Léa Moreau",
+    role: "Electronic artist",
+    location: "Paris",
+    outcome: "Verified badge led to a label conversation",
+    quote:
+      "The verified badge is small but it changed how A&Rs respond to me. Two label conversations started because they could see I was active and real on GRID. That alone was worth the first year.",
+    photo: "",
+  },
+  {
+    name: "Kofi Mensah",
+    role: "Independent artist",
+    location: "London",
+    outcome: "Cut his posting time in half",
+    quote:
+      "I used to post five times a week on three platforms, exhausted and broke. GRID showed me two of those platforms were doing nothing. I cut my posting time in half and my actual fan growth went up. I have a life again.",
+    photo: "",
+  },
+];
+
+const FAQS = [
+  {
+    q: "When does Pro actually launch?",
+    a: "We're opening early access in batches. The first cohort gets in before the public launch. Join the waitlist and we'll email you when your batch opens. No payment until then.",
+  },
+  {
+    q: "What exactly is 'audience export'?",
+    a: "A CSV file with the email addresses of people who follow you on GRID and have consented to be contacted. You can import it into Mailchimp, Substack, or any tool you use. Your audience becomes portable — the opposite of every streaming platform.",
+  },
+  {
+    q: "Is £12/month really worth it?",
+    a: "If Pro helps you sell two extra merch items a month at £10 each, it pays for itself. If it helps you keep your audience after an algorithm change, it's the cheapest insurance you'll ever buy. If it does neither, cancel — no contract, no penalty.",
+  },
+  {
+    q: "What if I'm just starting out?",
+    a: "The free tier is genuinely useful. You get a profile, 3 merch listings, basic analytics, and full access to the network. Pro is for artists who are already getting some traction and want to own it. Start free. Upgrade when it makes sense.",
+  },
+  {
+    q: "Why should I trust GRID with my audience?",
+    a: "Because we give it back to you. Every other platform's business model depends on keeping your audience locked in. Ours depends on you trusting us enough to stay. Export is one click, always. If we ever betray that, you leave with your list intact — and we know it.",
+  },
+];
+
+function InitialsAvatar({ name }: { name: string }) {
+  const initials = name
+    .split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+  return (
+    <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+      {initials}
+    </div>
+  );
+}
+
 export default function ProPage() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("artist");
@@ -159,7 +255,7 @@ export default function ProPage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-zinc-950 text-gray-900 dark:text-white">
-      {/* HERO — pure hook, no form */}
+      {/* HERO */}
       <section id="top" className="max-w-3xl mx-auto px-6 pt-20 pb-12 text-center">
         <span className="inline-block text-xs font-bold tracking-widest uppercase text-emerald-600 mb-4">
           GRID Artist Pro — Early Access
@@ -186,7 +282,7 @@ export default function ProPage() {
         </a>
       </section>
 
-      {/* PAIN — agitate */}
+      {/* PAIN */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-4 text-center">
           The uncomfortable truth about being an independent artist in 2026
@@ -215,7 +311,6 @@ export default function ProPage() {
           GRID exists because your fans should belong to <em>you</em>, not to a platform.
         </p>
 
-        {/* FORM after pain — first conversion point */}
         <div className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6">
           <h3 className="text-lg font-bold text-center mb-4">
             Join the waitlist — no card required
@@ -251,7 +346,7 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* FREE VS PRO TABLE — loss aversion */}
+      {/* COMPARISON */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-6 text-center">
           Free vs. Pro — what actually changes
@@ -278,7 +373,76 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* OBJECTION HANDLING */}
+      {/* TESTIMONIALS — 6 cards with photo slots */}
+      <section className="max-w-5xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-2 text-center">
+          Artists are already claiming their spot
+        </h2>
+        <p className="text-sm text-gray-500 text-center mb-8 max-w-lg mx-auto">
+          Real artists, real outcomes. (These are placeholder cards — replace with real quotes as they come in.)
+        </p>
+        <div className="grid md:grid-cols-2 gap-5">
+          {TESTIMONIALS.map((t) => (
+            <div
+              key={t.name}
+              className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm flex flex-col"
+            >
+              <p className="text-sm text-gray-700 dark:text-zinc-300 italic flex-1">
+                "{t.quote}"
+              </p>
+              <div className="flex items-center gap-3 mt-4">
+                {t.photo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={t.photo}
+                    alt={t.name}
+                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <InitialsAvatar name={t.name} />
+                )}
+                <div>
+                  <p className="text-sm font-bold leading-tight">{t.name}</p>
+                  <p className="text-xs text-gray-500">
+                    {t.role} · {t.location}
+                  </p>
+                  <p className="text-xs text-emerald-600 font-semibold mt-0.5">
+                    {t.outcome}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FOUNDER NOTE — high-converting element */}
+      <section className="max-w-2xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
+        <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-6 md:p-8">
+          <p className="text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-3">
+            A note from the founder
+          </p>
+          <p className="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">
+            I built GRID because I watched too many artists — friends, collaborators,
+            people whose music I love — pour years into platforms that treated them as
+            content, not partners. They built audiences they could never reach, on
+            platforms they could never leave.
+          </p>
+          <p className="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed mb-3">
+            GRID is my attempt to build the opposite: a platform that wins by giving you
+            leverage, not by keeping it. If you ever feel locked in, that's a bug — and
+            I want to hear about it.
+          </p>
+          <p className="text-sm font-bold text-gray-900 dark:text-white">
+            — Founder, GRID
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            (Replace with your real name and a photo when ready.)
+          </p>
+        </div>
+      </section>
+
+      {/* OBJECTIONS */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-2xl md:text-3xl font-extrabold mb-6 text-center">
           You might be thinking…
@@ -309,23 +473,6 @@ export default function ProPage() {
             </p>
           </div>
         </div>
-      </section>
-
-      {/* SOCIAL PROOF — one real testimonial only */}
-      <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
-        <h2 className="text-xl md:text-2xl font-extrabold mb-6 text-center">
-          What artists are saying
-        </h2>
-        <div className="bg-gray-50 dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 max-w-xl mx-auto">
-          <p className="text-sm text-gray-700 dark:text-zinc-300 italic">
-            "I moved 200 email subscribers to my own list in 5 minutes. That list is now
-            my most valuable asset — not my Spotify followers."
-          </p>
-          <p className="text-xs text-gray-500 mt-3">— Independent artist, Manchester</p>
-        </div>
-        <p className="text-center text-xs text-gray-400 mt-4">
-          (Replace with a real, named testimonial as soon as you have one.)
-        </p>
       </section>
 
       {/* EMOTIONAL RELIEF TABLE */}
@@ -360,6 +507,24 @@ export default function ProPage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-6 text-center">
+          Questions artists ask before joining
+        </h2>
+        <div className="space-y-3">
+          {FAQS.map((f) => (
+            <details
+              key={f.q}
+              className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4"
+            >
+              <summary className="font-bold cursor-pointer text-sm">{f.q}</summary>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mt-2">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {/* PRICING */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-8 text-center">
@@ -386,7 +551,7 @@ export default function ProPage() {
         </div>
       </section>
 
-      {/* FINAL CTA — repeat form */}
+      {/* FINAL CTA */}
       <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-200 dark:border-zinc-800">
         <h2 className="text-xl md:text-2xl font-extrabold mb-4 text-center">
           Your audience is yours. Prove it with Pro.
