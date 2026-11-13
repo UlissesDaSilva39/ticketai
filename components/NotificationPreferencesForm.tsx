@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -112,7 +112,7 @@ export default function NotificationPreferencesForm({
           ) : savedAt ? (
             "Saved " + savedAt
           ) : saving ? (
-            "Savingâ€¦"
+            "Saving…"
           ) : null}
         </p>
       </div>

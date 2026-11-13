@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -360,7 +360,7 @@ export default function MessageThread({
           className="w-10 h-10 grid place-items-center rounded-full border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50"
           aria-label="Attach file"
         >
-          {uploading ? "â€¦" : "ðŸ“Ž"}
+          {uploading ? "…" : "ðŸ“Ž"}
         </button>
         <textarea
           value={body}

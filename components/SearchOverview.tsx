@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -51,7 +51,7 @@ export default function SearchOverview() {
             <section>
               <div className="flex items-center justify-between mb-6 border-b border-gray-200 dark:border-gray-800 pb-2">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Artists matching "{query}"</h2>
-                <Link href="/discover/artists" className="text-sm font-semibold text-black dark:text-white hover:underline">See all Artists â†’</Link>
+                <Link href="/discover/artists" className="text-sm font-semibold text-black dark:text-white hover:underline">See all Artists →</Link>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {data.artists.map((a: any) => (
@@ -72,7 +72,7 @@ export default function SearchOverview() {
             <section>
               <div className="flex items-center justify-between mb-6 border-b border-gray-200 dark:border-gray-800 pb-2">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Events matching "{query}"</h2>
-                <Link href="/discover/events" className="text-sm font-semibold text-black dark:text-white hover:underline">See all Events â†’</Link>
+                <Link href="/discover/events" className="text-sm font-semibold text-black dark:text-white hover:underline">See all Events →</Link>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {data.events.map((e: any) => (
@@ -80,7 +80,7 @@ export default function SearchOverview() {
                     <div className="h-32 bg-gray-100 dark:bg-gray-800"><img src={e.image} alt={e.name} className="w-full h-full object-cover" /></div>
                     <div className="p-4 flex-1 flex flex-col">
                       <h3 className="font-bold text-gray-900 dark:text-gray-100 line-clamp-1">{e.name}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">{e.date} Â· {e.venue}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">{e.date} · {e.venue}</p>
                       <a href={e.tmUrl} target="_blank" rel="noopener noreferrer" className="mt-auto text-sm font-semibold text-black dark:text-white hover:underline">Get Tickets â†—</a>
                     </div>
                   </div>
@@ -94,7 +94,7 @@ export default function SearchOverview() {
             <section>
               <div className="flex items-center justify-between mb-6 border-b border-gray-200 dark:border-gray-800 pb-2">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Venues matching "{query}"</h2>
-                <Link href="/discover/venues" className="text-sm font-semibold text-black dark:text-white hover:underline">See all Venues â†’</Link>
+                <Link href="/discover/venues" className="text-sm font-semibold text-black dark:text-white hover:underline">See all Venues →</Link>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {data.venues.map((v: any) => (

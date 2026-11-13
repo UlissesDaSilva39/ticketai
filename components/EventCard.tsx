@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Event } from "@/lib/types";
 import EventCardActions from "./EventCardActions";
 import { Bell, MapPin, Users } from "lucide-react";
@@ -113,7 +113,7 @@ export function EventCard({
 
       {firstTicket && (
         <p className={"text-xs uppercase tracking-widest " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
-          From Ã‚Â£{Number(firstTicket.price).toFixed(2)}
+          From Ã‚£{Number(firstTicket.price).toFixed(2)}
         </p>
       )}
 
@@ -148,7 +148,7 @@ export function EventCard({
           </div>
           <p className={"text-xs mt-1.5 " + (dark ? "text-gray-400" : "text-gray-500 dark:text-gray-400")}>
             {isSoldOut
-              ? "Sold out Ã‚Â· " + soldCount + " tickets sold"
+              ? "Sold out Ã‚· " + soldCount + " tickets sold"
               : remaining <= 10
                 ? "Only " + remaining + " left"
                 : remaining + " of " + capacity + " left"}

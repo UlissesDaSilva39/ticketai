@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef } from "react";
 
@@ -84,7 +84,7 @@ export default function AudioUploader({
             {uploading ? "Uploading..." : "Upload an MP3 preview"}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            MP3, WAV, or OGG Â· Max 50MB
+            MP3, WAV, or OGG · Max 50MB
           </p>
         </button>
       ) : (

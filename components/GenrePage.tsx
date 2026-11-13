@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { EventCard } from "@/components/EventCard";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -72,7 +72,7 @@ export async function GenreEventsPage({ genre }: { genre: GenreMeta }) {
             href={`/search?q=${encodeURIComponent(genre.name)}`}
             className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
           >
-            Search all events â†’
+            Search all events →
           </Link>
         </div>
 

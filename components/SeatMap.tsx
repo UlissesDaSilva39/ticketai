@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -76,7 +76,7 @@ export default function SeatMap({
                           ? "bg-[#00FF87] text-black dark:text-white border-2 border-black"
                           : "bg-white dark:bg-gray-900 border border-gray-300 hover:border-black")
                     }
-                    title={seat + " - Â£" + row.price}
+                    title={seat + " - £" + row.price}
                   >
                     {seat.replace(row.label, "")}
                   </button>
@@ -84,7 +84,7 @@ export default function SeatMap({
               })}
             </div>
             <div className="w-16 text-xs text-right text-gray-500 dark:text-gray-400 font-medium">
-              Â£{row.price}
+              £{row.price}
             </div>
           </div>
         ))}

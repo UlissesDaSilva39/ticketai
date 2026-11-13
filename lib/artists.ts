@@ -1,4 +1,4 @@
-﻿export type Track = {
+export type Track = {
   id: string;
   title: string;
   genre: string;
@@ -125,21 +125,21 @@ export async function getArtists(): Promise<Artist[]> {
       trackCount: 3, playCount: 35,
       responseTime: '~2 hours',
       memberSince: 'Oct 2026',
-      earnedTotal: 'Â£3,400',
+      earnedTotal: '£3,400',
       tracks: [
-        { id: 't1', title: 'A&R Demo Reel Â· Classical Crossover', genre: 'Classical', duration: '12:30', plays: 18, previewUrl: '/audio/elena-demo-1.mp3' },
+        { id: 't1', title: 'A&R Demo Reel · Classical Crossover', genre: 'Classical', duration: '12:30', plays: 18, previewUrl: '/audio/elena-demo-1.mp3' },
         { id: 't2', title: 'String Arrangement Sampler', genre: 'Orchestral', duration: '6:42', plays: 12, previewUrl: '/audio/elena-demo-2.mp3' },
         { id: 't3', title: 'Sync Placement Demo â€” Film & TV', genre: 'Cinematic', duration: '8:05', plays: 5, previewUrl: '/audio/elena-demo-3.mp3' },
       ],
       services: [
-        { label: 'A&R consultation', price: 'Â£150 / hour', description: '45-minute call + written feedback on your release plan.', turnaround: '3-day turnaround' },
-        { label: 'Full album A&R', price: 'Â£3,000 / project', description: 'End-to-end A&R across 10-14 tracks â€” direction, sequencing, session support.', turnaround: '4-12 weeks', popular: true },
-        { label: 'Sync licensing advice', price: 'Â£250 / session', description: '60-minute session on pitching your catalogue to sync supervisors.', turnaround: 'Next-day booking' },
-        { label: 'Artist development', price: 'Â£450 / month', description: 'Ongoing mentorship â€” release strategy, industry intros, quarterly reviews.', turnaround: '3-month minimum' },
+        { label: 'A&R consultation', price: '£150 / hour', description: '45-minute call + written feedback on your release plan.', turnaround: '3-day turnaround' },
+        { label: 'Full album A&R', price: '£3,000 / project', description: 'End-to-end A&R across 10-14 tracks â€” direction, sequencing, session support.', turnaround: '4-12 weeks', popular: true },
+        { label: 'Sync licensing advice', price: '£250 / session', description: '60-minute session on pitching your catalogue to sync supervisors.', turnaround: 'Next-day booking' },
+        { label: 'Artist development', price: '£450 / month', description: 'Ongoing mentorship â€” release strategy, industry intros, quarterly reviews.', turnaround: '3-month minimum' },
       ],
       reviews: [
-        { quote: "Elena opened doors I couldn't reach. She transformed my release strategy and helped me secure three sync placements in one quarter.", name: 'Marcus K.', role: 'Composer Â· London', rating: 5, date: '2 weeks ago', verified: true },
-        { quote: 'Clear, professional, and fast. Got my album placed on a Netflix doc in six weeks. Highly recommended.', name: 'Nova R.', role: 'Producer Â· Berlin', rating: 5, date: '1 month ago', verified: true },
+        { quote: "Elena opened doors I couldn't reach. She transformed my release strategy and helped me secure three sync placements in one quarter.", name: 'Marcus K.', role: 'Composer · London', rating: 5, date: '2 weeks ago', verified: true },
+        { quote: 'Clear, professional, and fast. Got my album placed on a Netflix doc in six weeks. Highly recommended.', name: 'Nova R.', role: 'Producer · Berlin', rating: 5, date: '1 month ago', verified: true },
       ],
       credits: [
         { title: 'Netflix documentary â€” Original Score', role: 'A&R', year: '2026' },
@@ -150,27 +150,27 @@ export async function getArtists(): Promise<Artist[]> {
       latestDrop: {
         label: 'NEW DROP',
         title: 'A&R Demo Reel Vol. 2',
-        subtitle: 'Out now Â· 3 tracks Â· 12:30',
+        subtitle: 'Out now · 3 tracks · 12:30',
         ctaUrl: '/artists/elenapetrova',
       },
       merch: [
-        { id: 'm1', name: 'Elena Petrova Logo Tee', price: 'Â£25', image: '/img/merch-tee.jpg', sizes: ['S','M','L','XL'], url: '/merch/elena-logo-tee' },
-        { id: 'm2', name: 'A&R Sessions Vinyl', price: 'Â£30', image: '/img/merch-vinyl.jpg', stock: 12, url: '/merch/elena-vinyl' },
-        { id: 'm3', name: 'Studio Notes Zine', price: 'Â£15', image: '/img/merch-zine.jpg', limited: true, stock: 50, url: '/merch/elena-zine' },
+        { id: 'm1', name: 'Elena Petrova Logo Tee', price: '£25', image: '/img/merch-tee.jpg', sizes: ['S','M','L','XL'], url: '/merch/elena-logo-tee' },
+        { id: 'm2', name: 'A&R Sessions Vinyl', price: '£30', image: '/img/merch-vinyl.jpg', stock: 12, url: '/merch/elena-vinyl' },
+        { id: 'm3', name: 'Studio Notes Zine', price: '£15', image: '/img/merch-zine.jpg', limited: true, stock: 50, url: '/merch/elena-zine' },
       ],
       bundle: {
         id: 'b1',
         name: 'A&R Starter Pack',
         description: 'Logo Tee + Studio Notes Zine + Digital Demo Reel',
-        originalPrice: 'Â£65',
-        bundlePrice: 'Â£49',
-        saving: 'Save Â£16',
+        originalPrice: '£65',
+        bundlePrice: '£49',
+        saving: 'Save £16',
         stock: 50,
         url: '/merch/elena-bundle',
       },
       membership: {
         tier: 'Inner circle',
-        price: 'Â£5 / month',
+        price: '£5 / month',
         perks: [
           'Early access to unreleased demos',
           'Monthly behind-the-scenes A&R notes',
@@ -178,7 +178,7 @@ export async function getArtists(): Promise<Artist[]> {
           'Priority booking for sessions',
         ],
         url: 'https://patreon.com/elenapetrova',
-        comparison: '200 supporters Ã— Â£5 = Â£1,000/month vs. ~250,000 streams for the same revenue',
+        comparison: '200 supporters Ã— £5 = £1,000/month vs. ~250,000 streams for the same revenue',
       },
       social: { instagram: 'elenapetrova', website: 'elenapetrova.com' },
     },

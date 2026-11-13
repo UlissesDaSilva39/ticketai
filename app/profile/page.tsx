@@ -2,6 +2,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon, NoteIcon, HypeIcon, ReplyIcon } from "@/components/MusicIcons";
+import BadgeShelf from "@/components/BadgeShelf";
+import BadgeToast from "@/components/BadgeToast";
+import ProfileCompleteness from "@/components/ProfileCompleteness";
+import ReferralCard from "@/components/ReferralCard";
+import RevenueCard from "@/components/RevenueCard";
 
 const VerifiedIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
@@ -22,6 +27,10 @@ export default function Page() {
 
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
+      <ProfileCompleteness profile={profile} />
+      <ReferralCard />
+      <RevenueCard />
+      
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
 
         {/* LEFT COLUMN: Sidebar */}
@@ -240,6 +249,8 @@ export default function Page() {
         </aside>
 
       </div>
-    </div>
+    
+      <BadgeShelf />
+      <BadgeToast /></div>
   );
 }

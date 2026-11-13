@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -48,7 +48,7 @@ export default function FriendButton({
       disabled={busy || status === "pending"}
       className={"px-5 py-2.5 text-sm font-medium rounded-full transition-colors " + style}
     >
-      {busy ? "â€¦" : label}
+      {busy ? "…" : label}
     </button>
   );
 }

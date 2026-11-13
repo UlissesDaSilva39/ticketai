@@ -2,6 +2,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { MicIcon, SlidersIcon, MatchIcon, NoteIcon } from "@/components/MusicIcons";
+import ApplyGate from "@/components/ApplyGate";
+import { useProStatus } from "@/lib/hooks/useProStatus";
 
 const CheckIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -14,6 +16,9 @@ const ShareIcon = ({ className = "w-4 h-4" }) => (
 );
 
 export default function JobsPage() {
+  const { recordApplication, hasHitLimit } = useProStatus();
+  const [showApplyGate, setShowApplyGate] = useState(false);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [gigs, setGigs] = useState([
     { id:1, type:"COLLAB", title:"Session Vocalist needed — House track (royalty split)", poster:"Sarah J.", role:"Vocalist · House", loc:"London · Remote", pay:"Royalty split 50/50", match:"Strong match — 3 mutual collaborators", posted:"2h ago", icon:<MicIcon className="w-4 h-4"/>, saved:false },
@@ -268,6 +273,7 @@ export default function JobsPage() {
           </div>
         </div>
       )}
+      <ApplyGate open={showApplyGate} onClose={() => setShowApplyGate(false)} />
     </div>
   );
 }
