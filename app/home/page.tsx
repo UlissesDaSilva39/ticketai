@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PlayIcon, MicIcon, SlidersIcon, NoteIcon, CalendarSVG, MarketIcon, BookmarkIcon, UsersIcon, HypeIcon, ReplyIcon } from "@/components/MusicIcons";
+import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 
 const VerifiedIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
@@ -151,7 +152,8 @@ export default function HomePage() {
           </div>
 
           {/* Composer */}
-          {/* RECENTLY VIEWED RAIL */}
+          <RecentlyViewedRail title="Recently Viewed" />
+
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">

@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PlayIcon, MicIcon, SlidersIcon, CalendarSVG, MarketIcon, BookmarkIcon, UsersIcon } from "@/components/MusicIcons";
+import RecentlyViewedRail from "@/components/RecentlyViewedRail";
 
 const VerifiedIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
@@ -90,6 +91,9 @@ export default function NetworkPage() {
 
         <main className="col-span-12 lg:col-span-9 space-y-4">
           
+          <RecentlyViewedRail title="Recently Viewed" filterTypes={["person", "artist", "label"]} />
+
+          
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
             <h1 className="font-bold text-gray-900 dark:text-white text-2xl">Discover GRID</h1>
             <p className="text-sm text-gray-500 mt-1">Find new collaborators, gigs, and communities.</p>
@@ -111,7 +115,6 @@ export default function NetworkPage() {
             ))}
           </div>
 
-          {/* RECENTLY VIEWED RAIL */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
