@@ -1,14 +1,16 @@
-﻿import { FEATURES } from "@/lib/features";
-import { COMING_SOON } from "@/lib/copy";
-import { ComingSoon } from "@/components/ComingSoon";
-"use client";
+﻿"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { useLicensing } from "@/lib/hooks/useLicensing";
 import LicenceBadge from "@/components/LicenceBadge";
 import TrackCredit from "@/components/TrackCredit";
+import { FEATURES } from "@/lib/features";
+import { COMING_SOON } from "@/lib/copy";
+import { ComingSoon } from "@/components/ComingSoon";
 
-function BillboardPagePage() {
+
+function BillboardPageInner() {
   const { getRankedTracks, recordPlay, hydrated } = useLicensing();
   const [filter, setFilter] = useState<"top40" | "all" | "new">("top40");
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -103,10 +105,8 @@ function BillboardPagePage() {
     </div>
   );
 }
-export const metadata = {
-  robots: { index: FEATURES.streaming, follow: FEATURES.streaming },
-};
+
 export default function Page() {
   if (!FEATURES.streaming) return <ComingSoon {...COMING_SOON.streaming} />;
-  return <BillboardPagePage />;
+  return <BillboardPageInner />;
 }

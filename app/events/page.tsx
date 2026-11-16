@@ -1,12 +1,14 @@
-﻿import { FEATURES } from "@/lib/features";
-import { COMING_SOON } from "@/lib/copy";
-import { ComingSoon } from "@/components/ComingSoon";
-"use client";
+﻿"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon, TicketIcon, NoteIcon } from "@/components/MusicIcons";
+import { FEATURES } from "@/lib/features";
+import { COMING_SOON } from "@/lib/copy";
+import { ComingSoon } from "@/components/ComingSoon";
 
-function PagePage() {
+
+function PageInner() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const events = [
@@ -177,10 +179,8 @@ function PagePage() {
     </div>
   );
 }
-export const metadata = {
-  robots: { index: FEATURES.ticketing, follow: FEATURES.ticketing },
-};
+
 export default function Page() {
   if (!FEATURES.ticketing) return <ComingSoon {...COMING_SOON.ticketing} />;
-  return <PagePage />;
+  return <PageInner />;
 }
