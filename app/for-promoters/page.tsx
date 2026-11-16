@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -54,10 +54,10 @@ export default function ForPromotersPage() {
               className="text-3xl font-bold uppercase"
               style={{ fontFamily: "var(--font-antonio)" }}
             >
-              Ã‚Â£0 commission
+              Ã‚£0 commission
             </p>
             <p className="mt-3 text-gray-700 dark:text-gray-300">
-              Other platforms take 3.5% + 49p per ticket. We take Ã‚Â£0. You pay
+              Other platforms take 3.5% + 49p per ticket. We take Ã‚£0. You pay
               only the Stripe processing fee that any payment processor charges.
             </p>
           </div>
@@ -110,8 +110,8 @@ export default function ForPromotersPage() {
             </thead>
             <tbody>
               {[
-                ["Listing fee", "Ã‚Â£0", "Ã‚Â£0", "Ã‚Â£0"],
-                ["Per-ticket commission", "3.5% + 49p", "~5%", "Ã‚Â£0"],
+                ["Listing fee", "Ã‚£0", "Ã‚£0", "Ã‚£0"],
+                ["Per-ticket commission", "3.5% + 49p", "~5%", "Ã‚£0"],
                 ["Payout delay", "5ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ30 days", "5 days", "3 days"],
                 ["Built-in campaign tracking", "No", "No", "Yes"],
                 ["Click & conversion attribution", "No", "No", "Yes"],
@@ -192,12 +192,12 @@ export default function ForPromotersPage() {
           {[
             {
               t: "Featured placement",
-              p: "from Ã‚Â£19/day",
+              p: "from Ã‚£19/day",
               d: "Pin your event to the top of search results in your city.",
             },
             {
               t: "Push to your followers",
-              p: "from Ã‚Â£9 per blast",
+              p: "from Ã‚£9 per blast",
               d: "Notify everyone who follows you on GRID.",
             },
             {

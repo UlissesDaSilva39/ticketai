@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import type { Band } from '@/lib/bands';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
@@ -35,7 +35,7 @@ export function BandCard({ band }: { band: Band }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{gig.venue}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {gig.date} Â· Doors {gig.doors} Â· {gig.city}
+            {gig.date} · Doors {gig.doors} · {gig.city}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <span className="text-sm font-semibold text-neutral-900">{gig.priceFrom}</span>

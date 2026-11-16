@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 
@@ -160,7 +160,7 @@ export default async function FollowingPage() {
                             {evs.map((e) => (
                               <li key={e.id}>
                                 <Link href={"/event/" + e.id} className="text-sm hover:underline">
-                                  <span className="text-gray-500 dark:text-gray-400">{formatDate(e.start_date)}</span> Â· {e.title}
+                                  <span className="text-gray-500 dark:text-gray-400">{formatDate(e.start_date)}</span> · {e.title}
                                 </Link>
                               </li>
                             ))}

@@ -1,10 +1,10 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 
 const CITIES = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const GENRES = ['All genres', 'House', 'Techno', 'Jazz', 'DnB'];
-const WHEN   = ['This weekend', 'Under Â£20', 'Free'];
+const WHEN   = ['This weekend', 'Under £20', 'Free'];
 
 export function PromoterFilters() {
   const [city, setCity]   = useState('All cities');

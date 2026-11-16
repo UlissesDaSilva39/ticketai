@@ -1,4 +1,4 @@
-﻿import { createAdminClient } from '@/lib/supabase/admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { ClaimActions } from './ClaimActions';
 
 export const dynamic = 'force-dynamic';
@@ -22,7 +22,7 @@ export default async function AdminClaimsPage() {
           Profile Claims
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          {pending.length} pending Â· {reviewed.length} reviewed
+          {pending.length} pending · {reviewed.length} reviewed
         </p>
 
         <h2 className="text-xl font-bold mb-4">Pending review</h2>
@@ -37,10 +37,10 @@ export default async function AdminClaimsPage() {
                 <div className="flex justify-between items-start gap-4">
                   <div>
                     <p className="font-semibold">
-                      {c.target_type} Â· {c.target_id.slice(0, 8)}â€¦
+                      {c.target_type} · {c.target_id.slice(0, 8)}â€¦
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Claimant: {c.claimant_id.slice(0, 8)}â€¦ Â· Method: {c.verification_method}
+                      Claimant: {c.claimant_id.slice(0, 8)}â€¦ · Method: {c.verification_method}
                     </p>
                     <p className="text-xs text-gray-400 mt-1">
                       {new Date(c.created_at).toLocaleString('en-GB')}
@@ -63,7 +63,7 @@ export default async function AdminClaimsPage() {
           <div className="space-y-2">
             {reviewed.map(c => (
               <div key={c.id} className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 flex justify-between text-sm">
-                <span>{c.target_type} Â· {c.target_id.slice(0, 8)}â€¦</span>
+                <span>{c.target_type} · {c.target_id.slice(0, 8)}â€¦</span>
                 <span className={`font-semibold ${c.status === 'approved' ? 'text-green-700' : 'text-red-700'}`}>
                   {c.status}
                 </span>

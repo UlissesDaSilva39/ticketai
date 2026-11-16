@@ -1,9 +1,9 @@
-﻿const SAMPLE = [
-  { artist: 'Aaliyah J.',       role: 'Singer',    key: 'Am', genre: 'R&B',      rate: 'Â£350', status: 'live' },
-  { artist: 'Marcus K.',        role: 'Rapper',    key: 'Cm', genre: 'Hip-Hop',  rate: 'Â£280', status: 'live' },
-  { artist: 'Nova Rae',         role: 'Topliner',  key: 'F',  genre: 'Pop',      rate: 'Â£450', status: 'live' },
-  { artist: 'Bristol Soul Co.', role: 'Singer',    key: 'G',  genre: 'Soul',     rate: 'Â£220', status: 'live' },
-  { artist: 'Aaliyah J.',       role: 'Topliner',  key: 'Dm', genre: 'R&B',      rate: 'Â£180', status: 'live' },
+const SAMPLE = [
+  { artist: 'Aaliyah J.',       role: 'Singer',    key: 'Am', genre: 'R&B',      rate: '£350', status: 'live' },
+  { artist: 'Marcus K.',        role: 'Rapper',    key: 'Cm', genre: 'Hip-Hop',  rate: '£280', status: 'live' },
+  { artist: 'Nova Rae',         role: 'Topliner',  key: 'F',  genre: 'Pop',      rate: '£450', status: 'live' },
+  { artist: 'Bristol Soul Co.', role: 'Singer',    key: 'G',  genre: 'Soul',     rate: '£220', status: 'live' },
+  { artist: 'Aaliyah J.',       role: 'Topliner',  key: 'Dm', genre: 'R&B',      rate: '£180', status: 'live' },
 ];
 
 export function LiveFeatureBoard() {
@@ -64,7 +64,7 @@ export function LiveFeatureBoard() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Board refreshed 2 minutes ago Â· Powered by GRID Artists
+            Board refreshed 2 minutes ago · Powered by GRID Artists
           </div>
         </div>
       </div>

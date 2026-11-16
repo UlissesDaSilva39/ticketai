@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import { INDUSTRY_NAV_COLUMNS } from '@/config/industryNav';
 import {
   IconIndustry,
@@ -16,7 +16,7 @@ import {
 const TRENDING_SERVICES = [
   {
     title: 'Record a 3-min track, mixed + mastered',
-    price: 'Â£150â€“Â£500',
+    price: '£150â€“£500',
     delivery: '5 days',
     rating: 4.9,
     reviews: 42,
@@ -27,7 +27,7 @@ const TRENDING_SERVICES = [
   },
   {
     title: 'Full event poster + social media kit',
-    price: 'Â£80â€“Â£300',
+    price: '£80â€“£300',
     delivery: '3 days',
     rating: 4.8,
     reviews: 67,
@@ -38,7 +38,7 @@ const TRENDING_SERVICES = [
   },
   {
     title: '90-minute DJ set â€” house/techno',
-    price: 'Â£300â€“Â£3,000',
+    price: '£300â€“£3,000',
     delivery: 'Book date',
     rating: 5.0,
     reviews: 28,
@@ -182,7 +182,7 @@ export default function IndustryPage() {
                   <span>({svc.reviews} reviews)</span>
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  <strong className="text-gray-900 dark:text-gray-100">{svc.seller}</strong> Â· {svc.city}
+                  <strong className="text-gray-900 dark:text-gray-100">{svc.seller}</strong> · {svc.city}
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
                   <div>

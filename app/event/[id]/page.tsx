@@ -1,4 +1,4 @@
-﻿import { Suspense } from "react";
+import { Suspense } from "react";
 import { createServerSupabase } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -443,13 +443,13 @@ export default async function EventPage({
                   href={`/event/${e.id}/attendees`}
                   className="inline-block mt-3 text-sm text-white/70 underline hover:text-white"
                 >
-                  See all {goingCount} attendees Ã‚Â· {goingCount} going
+                  See all {goingCount} attendees Ã‚· {goingCount} going
                 </a>
                 <SaveButton eventId={event.id} />
               </div>
             )}
             <p className="text-sm text-white/70 mt-3">
-                  {interestedCount} interested Ã‚Â· {goingCount} going
+                  {interestedCount} interested Ã‚· {goingCount} going
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 mt-6">
@@ -518,7 +518,7 @@ export default async function EventPage({
                   >
                     {e.venues.name}
                   </Link>
-                  {e.venues.city ? " Ã‚Â· " : ""}{e.venues.city}
+                  {e.venues.city ? " Ã‚· " : ""}{e.venues.city}
                 </span>
               )}
             </div>
@@ -635,7 +635,7 @@ export default async function EventPage({
                   <p className="font-medium">{t.name}</p>
 
                   <p className="font-bold">
-                    Ã‚Â£{Number(t.price || 0).toFixed(2)}
+                    Ã‚£{Number(t.price || 0).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -656,7 +656,7 @@ export default async function EventPage({
                       fontFamily: "var(--font-antonio)",
                     }}
                   >
-                    Ã‚Â£{lowestPrice.toFixed(2)}
+                    Ã‚£{lowestPrice.toFixed(2)}
                   </p>
 
                   <CheckoutLink

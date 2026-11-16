@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -123,7 +123,7 @@ export function BookingRow({ booking }: Props) {
             type="number"
             min="1"
             step="1"
-            placeholder="Counter price (Â£)"
+            placeholder="Counter price (£)"
             value={counterPrice}
             onChange={(e) => setCounterPrice(e.target.value)}
             className="w-40 rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-black"

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -70,7 +70,7 @@ export default function FeedPost({
             {name}
           </Link>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            {post.author_type !== "user" ? "@" + (author?.username || "user") + " ÃƒÆ’Ã¢â‚¬Å¡Â· " : ""}
+            {post.author_type !== "user" ? "@" + (author?.username || "user") + " ÃƒÆ’Ã¢â‚¬Å¡· " : ""}
             {timeAgo(post.created_at)}
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function FeedPost({
             <p className="font-semibold text-sm">{event.title}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               {event.start_date ? formatEventDate(event.start_date) : "Date TBC"}
-              {fromPrice !== null ? " ÃƒÆ’Ã¢â‚¬Å¡Â· From Â£" + fromPrice.toFixed(2) : ""}
+              {fromPrice !== null ? " ÃƒÆ’Ã¢â‚¬Å¡· From £" + fromPrice.toFixed(2) : ""}
             </p>
           </div>
         </Link>

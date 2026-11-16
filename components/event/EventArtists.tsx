@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { PlayChip } from "@/components/player/PlayChip";
 
 type Artist = {
@@ -117,7 +117,7 @@ export default function EventArtists({
               {tracks.length > 0 ? (
                 <div className="mt-4 border-t border-gray-100 dark:border-gray-800 pt-4">
                   <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-bold mb-2">
-                    {"Listen before you buy Â· " +
+                    {"Listen before you buy · " +
                       tracks.length +
                       " track" +
                       (tracks.length === 1 ? "" : "s")}
@@ -158,7 +158,7 @@ export default function EventArtists({
                           <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                             {t.artist_name || "Artist"}
                             {t.duration_seconds
-                              ? " Â· " +
+                              ? " · " +
                                 Math.floor(t.duration_seconds / 60) +
                                 ":" +
                                 String(t.duration_seconds % 60).padStart(2, "0")

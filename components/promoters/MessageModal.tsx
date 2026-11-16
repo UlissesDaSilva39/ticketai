@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -32,7 +32,7 @@ export function MessageModal({
     const parts: string[] = [];
     if (context?.eventTitle) parts.push(`Event: ${context.eventTitle}`);
     if (context?.venueName) parts.push(`Venue: ${context.venueName}`);
-    setSubject(parts.join(' Â· '));
+    setSubject(parts.join(' · '));
     setSent(false);
     setError(null);
     setTimeout(() => textareaRef.current?.focus(), 50);
@@ -129,7 +129,7 @@ export function MessageModal({
               </label>
               <input id="message-subject" type="text" value={subject}
                 onChange={(e) => setSubject(e.target.value.slice(0, 120))}
-                placeholder={`Booking enquiry Â· ${promoterName}`}
+                placeholder={`Booking enquiry · ${promoterName}`}
                 className="mt-2 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-black" />
             </div>
 

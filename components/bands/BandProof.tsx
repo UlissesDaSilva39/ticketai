@@ -1,12 +1,12 @@
-﻿const LOGOS = ['Village Underground', 'Printworks', 'Fabric', 'Motion', 'YES', 'Brudenell'];
+const LOGOS = ['Village Underground', 'Printworks', 'Fabric', 'Motion', 'YES', 'Brudenell'];
 
 const TESTIMONIALS = [
   { quote: 'Sold our last tour through GRID. No booking fees, no resellers.',
-    name: 'The Static Frames', role: 'Post-punk Â· London', stat: 'Â£18k tour revenue' },
+    name: 'The Static Frames', role: 'Post-punk · London', stat: '£18k tour revenue' },
   { quote: 'Three festivals booked through GRID in one season. No middlemen.',
-    name: 'Ghost Signals', role: 'Indie Â· Manchester', stat: '3 festival slots' },
+    name: 'Ghost Signals', role: 'Indie · Manchester', stat: '3 festival slots' },
   { quote: 'First tour where we actually made money. The splits tool saved us.',
-    name: 'Northern Lights', role: 'Folk Â· Leeds', stat: 'Â£6,400 saved' },
+    name: 'Northern Lights', role: 'Folk · Leeds', stat: '£6,400 saved' },
 ];
 
 export function BandProof() {

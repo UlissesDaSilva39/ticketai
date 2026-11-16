@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 
 type Placement = {
@@ -106,9 +106,9 @@ export default function FeaturedAdminPage() {
            <div key={p.id} className="border border-gray-200 dark:border-gray-800 rounded-lg p-3 flex justify-between items-center">
              <div>
                <p className="font-semibold">{p.artist_name}</p>
-               <p className="text-xs text-gray-500 dark:text-gray-400">{p.placement_type} Â· until {new Date(p.ends_at).toLocaleDateString()}</p>
+               <p className="text-xs text-gray-500 dark:text-gray-400">{p.placement_type} · until {new Date(p.ends_at).toLocaleDateString()}</p>
              </div>
-             <p className="text-sm font-semibold">Â£{(p.amount_paid_gbp ?? 0).toFixed(2)}</p>
+             <p className="text-sm font-semibold">£{(p.amount_paid_gbp ?? 0).toFixed(2)}</p>
            </div>
          ))}
        </div>

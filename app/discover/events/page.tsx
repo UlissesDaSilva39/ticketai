@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
@@ -85,7 +85,7 @@ export default function DiscoverEventsPage() {
                 <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
                   <div>
                     {event.priceMin ? (
-                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">From Â£{event.priceMin}</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">From £{event.priceMin}</p>
                     ) : (
                       <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">See price on TM</p>
                     )}

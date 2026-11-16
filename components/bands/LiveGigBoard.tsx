@@ -1,9 +1,9 @@
-﻿const SAMPLE = [
-  { band: 'The Static Frames', venue: 'Village Underground', city: 'London',     doors: '7:30pm',  price: 'Â£18', status: 'live' },
-  { band: 'Low Tide',          venue: 'Fabric',              city: 'London',     doors: '10:00pm', price: 'Â£22', status: 'live' },
-  { band: 'Ghost Signals',     venue: 'YES',                 city: 'Manchester', doors: '8:00pm',  price: 'Â£16', status: 'live' },
-  { band: 'Northern Lights',   venue: 'Brudenell',           city: 'Leeds',      doors: '8:30pm',  price: 'Â£14', status: 'live' },
-  { band: 'Hard Knocks',       venue: 'O2 Academy',          city: 'Birmingham', doors: '7:00pm',  price: 'Â£20', status: 'live' },
+const SAMPLE = [
+  { band: 'The Static Frames', venue: 'Village Underground', city: 'London',     doors: '7:30pm',  price: '£18', status: 'live' },
+  { band: 'Low Tide',          venue: 'Fabric',              city: 'London',     doors: '10:00pm', price: '£22', status: 'live' },
+  { band: 'Ghost Signals',     venue: 'YES',                 city: 'Manchester', doors: '8:00pm',  price: '£16', status: 'live' },
+  { band: 'Northern Lights',   venue: 'Brudenell',           city: 'Leeds',      doors: '8:30pm',  price: '£14', status: 'live' },
+  { band: 'Hard Knocks',       venue: 'O2 Academy',          city: 'Birmingham', doors: '7:00pm',  price: '£20', status: 'live' },
 ];
 
 export function LiveGigBoard() {
@@ -64,7 +64,7 @@ export function LiveGigBoard() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Board refreshed 3 minutes ago Â· Powered by GRID Gigs
+            Board refreshed 3 minutes ago · Powered by GRID Gigs
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -81,7 +81,7 @@ export default function TopTracks({ artistId }: { artistId: string }) {
       <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
         <h2 className="text-lg font-bold">Top Tracks</h2>
         <span className="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
-          {isDemo ? "Demo Â· Upload to replace" : "Uploaded tracks"}
+          {isDemo ? "Demo · Upload to replace" : "Uploaded tracks"}
         </span>
       </div>
       <ul>
@@ -105,7 +105,7 @@ export default function TopTracks({ artistId }: { artistId: string }) {
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{t.title}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                Artist Â· {t.audio_url ? "Single" : "Demo"}
+                Artist · {t.audio_url ? "Single" : "Demo"}
               </p>
             </div>
             <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums hidden sm:block w-20 text-right">

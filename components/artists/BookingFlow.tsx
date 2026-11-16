@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -11,13 +11,13 @@ type Props = {
 };
 
 function parsePrice(price: string): { amount: number } | null {
-  const m = price.match(/([Â£â‚¬$])?\s*([\d,]+)/);
+  const m = price.match(/([£â‚¬$])?\s*([\d,]+)/);
   if (!m) return null;
   return { amount: Number(m[2].replace(/,/g, '')) };
 }
 
 function formatMoney(n: number): string {
-  return `Â£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 export function BookingFlow({ artistSlug, artistName, services }: Props) {

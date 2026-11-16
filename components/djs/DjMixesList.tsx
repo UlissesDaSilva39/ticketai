@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -66,7 +66,7 @@ export function DjMixesList({ mixes }: { mixes?: DjMix[] }) {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{m.title}</p>
                   <p className="text-xs text-neutral-500">
-                    {m.duration} Â· {m.plays.toLocaleString()} plays
+                    {m.duration} · {m.plays.toLocaleString()} plays
                   </p>
                 </div>
                 {m.price && (

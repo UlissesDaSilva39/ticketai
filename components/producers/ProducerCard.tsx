@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import type { Producer } from '@/lib/producers';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
@@ -29,7 +29,7 @@ export function ProducerCard({ producer }: { producer: Producer }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{beat.title}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {beat.key} Â· {beat.bpm} BPM Â· {beat.genre}
+            {beat.key} · {beat.bpm} BPM · {beat.genre}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <button type="button"

@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
@@ -117,7 +117,7 @@ export default async function OrganizerDashboard() {
             className="text-4xl font-bold"
             style={{ fontFamily: "var(--font-antonio)" }}
           >
-            Â£{totalRevenue.toFixed(2)}
+            £{totalRevenue.toFixed(2)}
           </p>
         </div>
       </div>
@@ -156,7 +156,7 @@ export default async function OrganizerDashboard() {
                     month: "short",
                     year: "numeric",
                   })}{" "}
-                  Â· {event.status}
+                  · {event.status}
                 </p>
               </div>
               <div className="flex gap-2">

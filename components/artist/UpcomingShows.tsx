@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { priceFrom } from "@/lib/posts";
 
 type Show = {
@@ -52,7 +52,7 @@ export default function UpcomingShows({ shows }: { shows: Show[] }) {
                 <p className="text-sm font-bold truncate">{s.title}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                   {date}
-                  {from !== null ? " Ãƒâ€šÂ· From Â£" + from.toFixed(2) : ""}
+                  {from !== null ? " Ãƒâ€š· From £" + from.toFixed(2) : ""}
                 </p>
               </div>
               <Link

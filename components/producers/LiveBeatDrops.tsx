@@ -1,9 +1,9 @@
-﻿const SAMPLE = [
-  { producer: 'Kaytranada Jr.',   title: 'Motion',        key: 'Am', bpm: 92,  price: 'Â£49', status: 'live' },
-  { producer: 'Ghost Loops',      title: 'Static',        key: 'Cm', bpm: 140, price: 'Â£79', status: 'live' },
-  { producer: 'Neon Frames',      title: 'Afterglow',     key: 'F',  bpm: 128, price: 'Â£39', status: 'live' },
-  { producer: 'Bristol Bass Co.', title: 'Low Tide',      key: 'G',  bpm: 174, price: 'Â£59', status: 'live' },
-  { producer: 'Kaytranada Jr.',   title: 'Reflection',    key: 'Dm', bpm: 88,  price: 'Â£49', status: 'live' },
+const SAMPLE = [
+  { producer: 'Kaytranada Jr.',   title: 'Motion',        key: 'Am', bpm: 92,  price: '£49', status: 'live' },
+  { producer: 'Ghost Loops',      title: 'Static',        key: 'Cm', bpm: 140, price: '£79', status: 'live' },
+  { producer: 'Neon Frames',      title: 'Afterglow',     key: 'F',  bpm: 128, price: '£39', status: 'live' },
+  { producer: 'Bristol Bass Co.', title: 'Low Tide',      key: 'G',  bpm: 174, price: '£59', status: 'live' },
+  { producer: 'Kaytranada Jr.',   title: 'Reflection',    key: 'Dm', bpm: 88,  price: '£49', status: 'live' },
 ];
 
 export function LiveBeatDrops() {
@@ -64,7 +64,7 @@ export function LiveBeatDrops() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Previews refreshed 2 minutes ago Â· Powered by GRID Beats
+            Previews refreshed 2 minutes ago · Powered by GRID Beats
           </div>
         </div>
       </div>

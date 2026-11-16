@@ -1,9 +1,9 @@
-﻿const SAMPLE = [
-  { vocalist: 'Aaliyah J.',       type: 'Topliner',     key: 'Am', range: 'Alto',     rate: 'Â£350', status: 'live' },
-  { vocalist: 'Marcus K.',        type: 'Session',      key: 'Cm', range: 'Tenor',    rate: 'Â£280', status: 'live' },
-  { vocalist: 'Nova Rae',         type: 'Featured Hook',key: 'F',  range: 'Soprano',  rate: 'Â£450', status: 'live' },
-  { vocalist: 'Bristol Soul Co.', type: 'Session',      key: 'G',  range: 'Baritone', rate: 'Â£220', status: 'live' },
-  { vocalist: 'Aaliyah J.',       type: 'Featured Hook',key: 'Dm', range: 'Alto',     rate: 'Â£180', status: 'live' },
+const SAMPLE = [
+  { vocalist: 'Aaliyah J.',       type: 'Topliner',     key: 'Am', range: 'Alto',     rate: '£350', status: 'live' },
+  { vocalist: 'Marcus K.',        type: 'Session',      key: 'Cm', range: 'Tenor',    rate: '£280', status: 'live' },
+  { vocalist: 'Nova Rae',         type: 'Featured Hook',key: 'F',  range: 'Soprano',  rate: '£450', status: 'live' },
+  { vocalist: 'Bristol Soul Co.', type: 'Session',      key: 'G',  range: 'Baritone', rate: '£220', status: 'live' },
+  { vocalist: 'Aaliyah J.',       type: 'Featured Hook',key: 'Dm', range: 'Alto',     rate: '£180', status: 'live' },
 ];
 
 export function LiveVocalShowcase() {
@@ -64,7 +64,7 @@ export function LiveVocalShowcase() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Showcase refreshed 2 minutes ago Â· Powered by GRID Vocalists
+            Showcase refreshed 2 minutes ago · Powered by GRID Vocalists
           </div>
         </div>
       </div>

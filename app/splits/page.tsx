@@ -37,7 +37,7 @@ export default function SplitsPage() {
 
           {tracks.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-sm text-gray-500 mb-4">No licensed tracks yet.</p>
+              <p className="text-sm text-gray-500 mb-4">No licensed tracks yet — <a href="/licensing" className="text-emerald-600 underline">licence your first track</a></p>
               <Link href="/licensing" className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg">
                 Licence your first track
               </Link>

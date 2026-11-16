@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import type { Venue } from '@/lib/venues';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
@@ -34,10 +34,10 @@ export function VenueCard({ venue }: { venue: Venue }) {
             Tonight&apos;s slot
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">
-            {slot.date} Â· {slot.hours}
+            {slot.date} · {slot.hours}
           </p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {slot.price} Â· {slot.techLine}
+            {slot.price} · {slot.techLine}
           </p>
           <div className="mt-3 flex items-center justify-end">
             <Link href={`/venues/${venue.slug}/book`}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -92,7 +92,7 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
   function formatDiscount(p: Promo) {
     return p.discount_type === "percent"
       ? p.discount_value + "% off"
-      : "Â£" + Number(p.discount_value).toFixed(2) + " off";
+      : "£" + Number(p.discount_value).toFixed(2) + " off";
   }
 
   return (
@@ -135,7 +135,7 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
                 className="w-full rounded-lg border bg-white dark:bg-gray-900 px-3 py-2 text-sm outline-none focus:border-black"
               >
                 <option value="percent">Percent off</option>
-                <option value="fixed">Fixed Â£ off</option>
+                <option value="fixed">Fixed £ off</option>
               </select>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
           <div className="grid gap-4 md:grid-cols-3">
             <div>
               <label className="block text-sm font-medium mb-1">
-                {discountType === "percent" ? "Discount %" : "Discount Â£"}
+                {discountType === "percent" ? "Discount %" : "Discount £"}
               </label>
               <input
                 type="number"
@@ -206,9 +206,9 @@ export default function PromoCodes({ campaignId }: { campaignId: string }) {
               <div>
                 <p className="font-mono font-semibold">{p.code}</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  {formatDiscount(p)} Ãƒâ€šÂ· Used {p.times_used}
+                  {formatDiscount(p)} Ãƒâ€š· Used {p.times_used}
                   {p.max_uses ? "/" + p.max_uses : ""}
-                  {p.expires_at ? " Ãƒâ€šÂ· Expires " + new Date(p.expires_at).toLocaleDateString("en-GB") : ""}
+                  {p.expires_at ? " Ãƒâ€š· Expires " + new Date(p.expires_at).toLocaleDateString("en-GB") : ""}
                 </p>
               </div>
               {p.active ? (

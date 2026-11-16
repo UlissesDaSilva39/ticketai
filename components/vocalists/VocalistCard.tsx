@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import type { Vocalist } from '@/lib/vocalists';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
@@ -37,7 +37,7 @@ export function VocalistCard({ vocalist }: { vocalist: Vocalist }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{demo.title}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {demo.key} Â· {demo.range} Â· {demo.genre}
+            {demo.key} · {demo.range} · {demo.genre}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <button type="button"

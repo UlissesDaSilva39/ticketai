@@ -1,14 +1,14 @@
-﻿const PILLARS = [
-  { tag: '01 Â· BOOKINGS', title: 'Get booked for clubs, festivals, private events',
+const PILLARS = [
+  { tag: '01 · BOOKINGS', title: 'Get booked for clubs, festivals, private events',
     body: 'Real-time availability across 400+ venues. Filter by capacity, set time, and fee. Book directly or send offers.',
     cta: 'See how booking works â†’', href: '/how-it-works' },
-  { tag: '02 Â· MIXES', title: 'Publish mixes, edits, and IDs',
+  { tag: '02 · MIXES', title: 'Publish mixes, edits, and IDs',
     body: 'Streaming previews that convert to bookings. Curated drops that push your mix to promoters and labels already searching your style.',
     cta: 'Publish a mix â†’', href: '/mixcloud' },
-  { tag: '03 Â· RESIDENCIES', title: 'Land regular club slots and monthly nights',
+  { tag: '03 · RESIDENCIES', title: 'Land regular club slots and monthly nights',
     body: 'Venue residency board showing open slots across 400+ venues. Apply with one click, negotiate terms, sign contracts in-app.',
     cta: 'Browse residencies â†’', href: '/residencies' },
-  { tag: '04 Â· MONEY', title: 'Set your fee, get paid same day',
+  { tag: '04 · MONEY', title: 'Set your fee, get paid same day',
     body: '3% per booking, no monthly fee. Payouts land the morning after the set. Split revenue with agents, managers, and collaborators automatically.',
     cta: 'See how splits work â†’', href: '/how-it-works#splits' },
 ];

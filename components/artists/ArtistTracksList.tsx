@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import type { Track } from '@/lib/artists';
@@ -81,7 +81,7 @@ export function ArtistTracksList({ tracks }: { tracks?: Track[] }) {
           Tracks
         </h2>
         <p className="text-xs text-neutral-500">
-          {tracks.length} tracks Ã‚Â· Total {totalMinutes}:{String(totalRemaining).padStart(2, '0')}
+          {tracks.length} tracks Ã‚· Total {totalMinutes}:{String(totalRemaining).padStart(2, '0')}
         </p>
       </div>
 
@@ -111,7 +111,7 @@ export function ArtistTracksList({ tracks }: { tracks?: Track[] }) {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold">{t.title}</p>
                   <p className="text-xs text-neutral-500">
-                    {t.genre} Ã‚Â· {t.duration} Ã‚Â· {t.plays} plays
+                    {t.genre} Ã‚· {t.duration} Ã‚· {t.plays} plays
                   </p>
                 </div>
               </div>

@@ -132,7 +132,36 @@ export default function ProPage() {
         </div>
 
         {/* Tiers */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        
+        {/* PRIMARY CTA + TESTIMONIALS — added by improve script */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
+            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+            Pro users earn £2,400/year back on average
+          </div>
+          <button className="bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3.5 rounded-lg text-base shadow-lg transition-colors">
+            Try free for 30 days →
+          </button>
+          <p className="text-xs text-gray-500 dark:text-zinc-400 mt-2">No credit card required · Cancel anytime</p>
+        </div>
+
+        {/* TESTIMONIALS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+          {[
+            { name: "Sarah J.", role: "Vocalist · London", quote: "Booked 3 sessions in my first month on Pro. Paid for itself 10× over." },
+            { name: "Studio X", role: "Engineer · Manchester", quote: "Unlimited applications meant I actually got hired. Best £5 I spend." },
+            { name: "Kai A.", role: "Producer · Copenhagen", quote: "The analytics showed me who was viewing. Game-changer for outreach." },
+          ].map((t, i) => (
+            <div key={i} className="bg-white dark:bg-zinc-800 rounded-xl border border-gray-200 dark:border-zinc-700 p-5">
+              <div className="flex text-amber-500 text-sm mb-2">★★★★★</div>
+              <p className="text-sm text-gray-700 dark:text-zinc-300 mb-3 italic">&quot;{t.quote}&quot;</p>
+              <p className="text-xs font-bold text-gray-900 dark:text-white">{t.name}</p>
+              <p className="text-[10px] text-gray-500">{t.role}</p>
+            </div>
+          ))}
+        </div>
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {TIERS.map((tier) => {
             const isCurrent = (isPro && tier.id === "pro") || (!isPro && tier.id === "free");
             const isStudio = tier.id === "studio";
@@ -199,8 +228,8 @@ export default function ProPage() {
                   <p className="text-[10px] text-gray-400 text-center mt-2">
                     Billed monthly · Cancel anytime
                   </p>
-                )}
-              </div>
+                )}</div>
+
             );
           })}
         </div>

@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import type { DJ } from '@/lib/djs';
 import { MessageButton } from '@/components/promoters/MessageButton';
 
@@ -35,7 +35,7 @@ export function DjCard({ dj }: { dj: DJ }) {
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{set.venue}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {set.date} Ã¢â‚¬Å¡Â· Set {set.setTime} Ã¢â‚¬Å¡Â· {set.city}
+            {set.date} Ã¢â‚¬Å¡· Set {set.setTime} Ã¢â‚¬Å¡· {set.city}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <span className="text-sm font-semibold text-neutral-900">{set.price}</span>

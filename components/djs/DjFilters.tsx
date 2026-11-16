@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 
@@ -6,7 +6,7 @@ const STYLES = ['All genres', 'House', 'Techno', 'DnB', 'Disco', 'Hip-Hop'];
 const CITIES = ['All cities', 'London', 'Manchester', 'Berlin', 'Bristol'];
 const TIERS  = ['All tiers', 'Resident', 'Headliner', 'International'];
 const DRAWS  = ['All draw', '<200', '200-500', '500-1500', '1500+'];
-const FEES   = ['All fees', 'Under Â£500', 'Â£500-Â£1000', 'Â£1000+'];
+const FEES   = ['All fees', 'Under £500', '£500-£1000', '£1000+'];
 
 export function DjFilters() {
   const [style, setStyle] = useState('All genres');

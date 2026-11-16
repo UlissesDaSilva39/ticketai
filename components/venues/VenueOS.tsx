@@ -1,14 +1,14 @@
-﻿const PILLARS = [
-  { tag: '01 Â· AVAILABILITY', title: 'Publish your calendar, take bookings 24/7',
+const PILLARS = [
+  { tag: '01 · AVAILABILITY', title: 'Publish your calendar, take bookings 24/7',
     body: 'Real-time calendar sync. Set recurring slots, blackout dates, and day-rate overrides in one dashboard.',
     cta: 'Manage calendar â†’', href: '/venues/calendar' },
-  { tag: '02 Â· BOOKINGS', title: 'Receive offers from vetted promoters, bands, and DJs',
+  { tag: '02 · BOOKINGS', title: 'Receive offers from vetted promoters, bands, and DJs',
     body: 'Auto-match to your genre and capacity. Approve, counter, or decline in one click. No more DM-chasing.',
     cta: 'Review offers â†’', href: '/venues/offers' },
-  { tag: '03 Â· TECH', title: 'Publish tech spec, riders, and capacity',
+  { tag: '03 · TECH', title: 'Publish tech spec, riders, and capacity',
     body: 'PA, lights, backline, monitors, engineer, curfew, load-in times. Everything a promoter needs to book with confidence.',
     cta: 'Manage tech spec â†’', href: '/venues/tech' },
-  { tag: '04 Â· MONEY', title: 'Get paid on time, every time',
+  { tag: '04 · MONEY', title: 'Get paid on time, every time',
     body: '3% per booking, no monthly fee. Deposits auto-collected, released 24h before doors. No-shows forfeit. Split revenue with bar and kitchen auto.',
     cta: 'See how deposits work â†’', href: '/how-it-works#deposits' },
 ];

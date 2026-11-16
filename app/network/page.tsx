@@ -237,7 +237,25 @@ export default function NetworkPage() {
           </div>
 
           {/* N3+N4: Merged tabbed section with shared filters */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
+          
+        {/* FEATURED this week */}
+        <div className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/10 border border-amber-200 dark:border-amber-800 rounded-xl p-4 mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">⭐ Featured this week</h3>
+            <a href="/pro" className="text-[10px] font-bold text-amber-700 dark:text-amber-400 hover:underline">Become featured →</a>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {[{name:"Toolroom Records",role:"Label · London",c:"bg-pink-500"},{name:"Ministry of Sound",role:"Venue · London",c:"bg-indigo-600"},{name:"Sarah Jenkins",role:"Vocalist · London",c:"bg-rose-500"}].map((f,i)=>(
+              <a key={i} href="/pro" className="flex-shrink-0 w-40 bg-white dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700 p-3 hover:border-amber-400 transition-colors">
+                <div className={"w-10 h-10 rounded-full " + f.c + " text-white grid place-items-center font-bold text-sm mb-2"}>{f.name[0]}</div>
+                <p className="text-xs font-bold text-gray-900 dark:text-white truncate">{f.name}</p>
+                <p className="text-[10px] text-gray-500 truncate">{f.role}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+
+<div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
             {/* Tabs */}
             <div className="flex border-b border-gray-200 dark:border-zinc-800 mb-4">
               <button

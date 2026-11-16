@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPromoterBySlug } from '@/lib/promoters';
 import { getDjBySlug } from '@/lib/djs';
@@ -92,7 +92,7 @@ export default async function BookingRequestPage({ params }: Params) {
             id="budget"
             name="budget"
             type="text"
-            placeholder="e.g. Â£800"
+            placeholder="e.g. £800"
             className="mt-2 w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm outline-none focus:border-neutral-900"
           />
         </div>

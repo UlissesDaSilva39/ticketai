@@ -1,9 +1,9 @@
-﻿const SAMPLE = [
-  { dj: 'DJ Proxy',        venue: 'Fabric',     city: 'London',     set: '1:00am',  fee: 'Â£800' },
-  { dj: 'Nightshift Nina', venue: 'Hidden',     city: 'Manchester', set: '12:00am', fee: 'Â£700' },
+const SAMPLE = [
+  { dj: 'DJ Proxy',        venue: 'Fabric',     city: 'London',     set: '1:00am',  fee: '£800' },
+  { dj: 'Nightshift Nina', venue: 'Hidden',     city: 'Manchester', set: '12:00am', fee: '£700' },
   { dj: 'Berlin Bass',     venue: 'Kraftwerk',  city: 'Berlin',     set: '2:00am',  fee: 'EUR 1500' },
-  { dj: 'Selecta Jade',    venue: 'Printworks', city: 'London',     set: '1:30am',  fee: 'Â£900' },
-  { dj: 'Techno Nation',   venue: 'Printworks', city: 'London',     set: '2:00am',  fee: 'Â£1,200' },
+  { dj: 'Selecta Jade',    venue: 'Printworks', city: 'London',     set: '1:30am',  fee: '£900' },
+  { dj: 'Techno Nation',   venue: 'Printworks', city: 'London',     set: '2:00am',  fee: '£1,200' },
 ];
 
 export function LiveSetBoard() {
@@ -64,7 +64,7 @@ export function LiveSetBoard() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Board refreshed 3 minutes ago Â· Powered by GRID DJs
+            Board refreshed 3 minutes ago · Powered by GRID DJs
           </div>
         </div>
       </div>

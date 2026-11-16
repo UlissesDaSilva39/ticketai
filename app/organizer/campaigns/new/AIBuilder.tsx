@@ -1,4 +1,4 @@
-﻿ "use client";
+ "use client";
 
 import { useState } from "react";
 
@@ -162,17 +162,17 @@ export default function AIBuilder({
               <div className="rounded-lg border bg-white dark:bg-gray-900 p-4">
                 <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Audience</p>
                 <p className="mt-1 font-medium">
-                  {result.audience.location || "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"} Ãƒâ€šÂ· {result.audience.ageMin}ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“{result.audience.ageMax}
+                  {result.audience.location || "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"} Ãƒâ€š· {result.audience.ageMin}ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“{result.audience.ageMax}
                 </p>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  {result.audience.interests.join(" Ãƒâ€šÂ· ")}
+                  {result.audience.interests.join(" Ãƒâ€š· ")}
                 </p>
               </div>
 
               <div className="rounded-lg border bg-white dark:bg-gray-900 p-4">
                 <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Budget</p>
                 <p className="mt-1 font-medium">
-                  Â£{result.budget.total} total Ãƒâ€šÂ· Â£{result.budget.daily}/day
+                  £{result.budget.total} total Ãƒâ€š· £{result.budget.daily}/day
                 </p>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{result.budget.reasoning}</p>
               </div>
@@ -191,7 +191,7 @@ export default function AIBuilder({
               <div className="rounded-lg border bg-white dark:bg-gray-900 p-4">
                 <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Forecast</p>
                 <p className="mt-1 font-medium">
-                  {result.duration_days} days Ãƒâ€šÂ· {result.expected_conversion_rate}% conv rate
+                  {result.duration_days} days Ãƒâ€š· {result.expected_conversion_rate}% conv rate
                 </p>
               </div>
             </div>

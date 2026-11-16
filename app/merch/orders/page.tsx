@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 
@@ -76,7 +76,7 @@ export default async function MerchOrdersPage() {
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold truncate">{p?.title || "Product"}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Qty {o.quantity} Â· {symbol}{(o.amount_pence / 100).toFixed(2)} Â·{" "}
+                        Qty {o.quantity} · {symbol}{(o.amount_pence / 100).toFixed(2)} ·{" "}
                         {new Date(o.created_at).toLocaleDateString("en-GB")}
                       </p>
                     </div>
