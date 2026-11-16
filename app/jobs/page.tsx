@@ -4,6 +4,8 @@ import Link from "next/link";
 import { MicIcon, SlidersIcon, MatchIcon, NoteIcon } from "@/components/MusicIcons";
 import ApplyGate from "@/components/ApplyGate";
 import { useProStatus } from "@/lib/hooks/useProStatus";
+import FeatureGigModal from "@/components/FeatureGigModal";
+import { useRevenue } from "@/lib/hooks/useRevenue";
 
 const CheckIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -18,6 +20,16 @@ const ShareIcon = ({ className = "w-4 h-4" }) => (
 export default function JobsPage() {
   const { recordApplication, hasHitLimit } = useProStatus();
   const [showApplyGate, setShowApplyGate] = useState(false);
+
+  // Feature gig state
+  const { isGigFeatured } = useRevenue();
+  const [showFeatureGig, setShowFeatureGig] = useState(false);
+  const [selectedFeatureGig, setSelectedFeatureGig] = useState<{ id: number; title: string } | null>(null);
+
+  const handleFeatureGig = (gig: any) => {
+    setSelectedFeatureGig({ id: gig.id, title: gig.title });
+    setShowFeatureGig(true);
+  };
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [gigs, setGigs] = useState([
@@ -164,6 +176,12 @@ export default function JobsPage() {
                   <button onClick={() => handleSave(g.id)} className={`border text-sm font-semibold px-5 py-1.5 rounded-full transition-colors ${g.saved ? "border-emerald-600 text-emerald-600 bg-emerald-50" : "border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                     {g.saved ? "✓ Saved" : "Save"}
                   </button>
+                  <button onClick={() => handleFeatureGig(g)} className="border border-amber-400 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 text-sm font-semibold px-4 py-1.5 rounded-full transition-colors">
+                    ⭐ Feature £10
+                  </button>
+                  {isGigFeatured(String(g.id)) && (
+                    <span className="text-[10px] font-bold text-amber-600 bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 rounded-full flex items-center">⭐ Featured</span>
+                  )}
                 </div>
               </div>
             ))
@@ -274,6 +292,14 @@ export default function JobsPage() {
         </div>
       )}
       <ApplyGate open={showApplyGate} onClose={() => setShowApplyGate(false)} />
+      {selectedFeatureGig && (
+        <FeatureGigModal
+          open={showFeatureGig}
+          onClose={() => setShowFeatureGig(false)}
+          gigId={String(selectedFeatureGig.id)}
+          gigTitle={selectedFeatureGig.title}
+        />
+      )}
     </div>
   );
 }

@@ -1,13 +1,22 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
 import { getArtist } from "@/lib/data/artists";
 import TrackRecentlyViewed from "@/components/TrackRecentlyViewed";
 import SimilarArtistsRail from "@/components/SimilarArtistsRail";
+import BookArtistModal from "@/components/BookArtistModal";
+import MusicPlayer from "@/components/MusicPlayer";
+import AvailabilityBadge from "@/components/AvailabilityBadge";
+import { useRevenue } from "@/lib/hooks/useRevenue";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default async function ArtistPage({ params }: PageProps) {
+  const { recordBooking } = useRevenue();
+  const [showBookModal, setShowBookModal] = useState(false);
+  const [bookingArtist, setBookingArtist] = useState<any>(null);
   const { id } = await params;
   const artist = getArtist(id);
 
@@ -90,6 +99,22 @@ export default async function ArtistPage({ params }: PageProps) {
             </button>
             <button className="px-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-800 text-sm font-semibold text-gray-700 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
               Message
+
+            {/* Book CTA — added by wire-artist-booking.ps1 */}
+            <button
+              onClick={() => {
+                setBookingArtist({
+                  id: String(artist.id),
+                  name: artist.name,
+                  ratePence: 40000,
+                  role: artist.role,
+                });
+                setShowBookModal(true);
+              }}
+              className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold transition-colors"
+            >
+              Book {artist.name} — £400/session →
+            </button>
             </button>
           </div>
         </div>

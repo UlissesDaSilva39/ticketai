@@ -75,6 +75,20 @@ const TIERS: Tier[] = [
     ],
     cta: "Start 30-day free trial",
   },
+  {
+    id: "verified",
+    name: "Verified",
+    price: "£10",
+    cadence: "per month",
+    tagline: "Stand out with a verified badge",
+    features: [
+      "Verified badge on profile and listings",
+      "Priority in search results",
+      "Verified label on gig applications",
+      "Manual approval by GRID team",
+    ],
+    cta: "Get verified",
+  },
 ];
 
 export default function ProPage() {

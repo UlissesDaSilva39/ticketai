@@ -16,6 +16,7 @@ import {
   ReplyIcon,
 } from "@/components/MusicIcons";
 import RecentlyViewedRail from "@/components/RecentlyViewedRail";
+import { LICENSED_TRACKS } from "@/lib/data/licensedTracks";
 
 const VerifiedIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
@@ -653,6 +654,36 @@ export default function HomePage() {
                 </button>
               </div>
             </div>
+          </div>
+        
+          {/* GRID Billboard card */}
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-2">
+                <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                </svg>
+                GRID Billboard
+              </h3>
+              <span className="text-[10px] font-bold text-emerald-600 uppercase">Live</span>
+            </div>
+            <div className="space-y-3">
+              {[...LICENSED_TRACKS].sort((a, b) => b.plays - a.plays).slice(0, 3).map((track, i) => (
+                <a key={track.id} href="/billboard" className="flex items-center gap-3 group">
+                  <div className="w-5 text-center text-xs font-bold text-gray-400">{i + 1}</div>
+                  <div className={`w-8 h-8 rounded-lg ${track.color} text-white grid place-items-center text-xs font-bold flex-shrink-0`}>
+                    {track.title[0]}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover:text-emerald-600 transition-colors">{track.title}</p>
+                    <p className="text-[10px] text-gray-500 truncate">{track.artistName} · {track.plays.toLocaleString()} plays</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+            <a href="/billboard" className="block mt-4 pt-3 border-t border-gray-100 dark:border-zinc-800 text-center text-xs font-bold text-emerald-600 hover:underline">
+              See full chart →
+            </a>
           </div>
         </aside>
       </div>
