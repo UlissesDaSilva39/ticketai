@@ -243,6 +243,17 @@ export default function NetworkPage() {
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">⭐ Featured this week</h3>
             <a href="/pro" className="text-[10px] font-bold text-amber-700 dark:text-amber-400 hover:underline">Become featured →</a>
+
+            {/* FEATURED UPSELL — added by improve script */}
+            <div className="mt-4 p-4 bg-white dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700">
+              <p className="text-xs font-bold text-gray-900 dark:text-white mb-1">Featured member this week</p>
+              <p className="text-xs text-gray-500">Featured artists get 8x more profile views and 4x more bookings.</p>
+              <div className="flex gap-2 mt-2">
+                <a href="/pro" className="text-xs font-bold text-emerald-600 hover:underline">Get featured →</a>
+                <span className="text-xs text-gray-400">·</span>
+                <span className="text-xs text-gray-500">From £25/month</span>
+              </div>
+            </div>
           </div>
           <div className="flex gap-2 overflow-x-auto pb-1">
             {[{name:"Toolroom Records",role:"Label · London",c:"bg-pink-500"},{name:"Ministry of Sound",role:"Venue · London",c:"bg-indigo-600"},{name:"Sarah Jenkins",role:"Vocalist · London",c:"bg-rose-500"}].map((f,i)=>(

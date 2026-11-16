@@ -685,7 +685,38 @@ export default function HomePage() {
               See full chart →
             </a>
           </div>
-        </aside>
+        
+          {/* TRENDING ON GRID */}
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
+            <h3 className="font-bold text-gray-900 dark:text-white text-base mb-4 flex items-center gap-2">
+              <span className="text-emerald-600">📈</span> Trending on GRID
+            </h3>
+            <div className="space-y-3 text-sm">
+              <a href="/billboard" className="flex justify-between items-center hover:text-emerald-600 group">
+                <span className="text-gray-700 dark:text-zinc-300">🎵 <strong>Midnight</strong> by Sarah Jenkins</span>
+                <span className="text-xs text-emerald-600 font-bold">#1 ↑</span>
+              </a>
+              <a href="/jobs" className="flex justify-between items-center hover:text-emerald-600 group">
+                <span className="text-gray-700 dark:text-zinc-300">💼 Vocalist needed · House</span>
+                <span className="text-xs text-emerald-600 font-bold">98%</span>
+              </a>
+              <a href="/artist/7" className="flex justify-between items-center hover:text-emerald-600 group">
+                <span className="text-gray-700 dark:text-zinc-300">⭐ Kai Andersen</span>
+                <span className="text-xs text-emerald-600 font-bold">+150</span>
+              </a>
+            </div>
+            <a href="/billboard" className="block mt-4 pt-3 border-t border-gray-100 dark:border-zinc-800 text-center text-xs font-bold text-emerald-600 hover:underline">See all →</a>
+          </div>
+
+          {/* SMART UPSELL — added by improve script */}
+          <div className="bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl p-5 text-white shadow-lg">
+            <p className="text-sm font-bold mb-1">You&apos;ve been active this week!</p>
+            <p className="text-xs text-amber-100 mb-3">You&apos;ve viewed 4 artists and applied to 2 gigs. Upgrade to Pro for unlimited applications and priority matching.</p>
+            <a href="/pro" className="inline-block bg-white text-amber-700 font-bold text-xs px-4 py-2 rounded-lg hover:bg-amber-50">
+              Try free 30 days →
+            </a>
+          </div>
+</aside>
       </div>
 
       {/* REPLY MODAL */}

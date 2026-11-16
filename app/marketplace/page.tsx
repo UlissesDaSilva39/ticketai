@@ -75,6 +75,14 @@ export default function MarketplacePage() {
               <Link href="/seller" className="border border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold px-5 py-2.5 rounded-lg transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-900/20">Seller Dashboard</Link>
               <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors shadow-sm">+ Sell on GRID</button>
             </div>
+
+        {/* TRUST STRIP — added by improve script */}
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-3 mb-4 flex flex-wrap gap-4 justify-center text-xs">
+          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Verified sellers</span>
+          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Secure checkout · 10,000+ sales</span>
+          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>30-day money-back guarantee</span>
+          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Instant download</span>
+        </div>
           </div>
 
           <div className="flex gap-2 overflow-x-auto pb-2">
@@ -104,12 +112,12 @@ export default function MarketplacePage() {
                     <div>
                       <p className="text-xs text-gray-400 uppercase font-semibold">Price {p.pwyw ? "(or more)" : ""}</p>
                       <p className="font-bold text-emerald-600 text-lg">£{p.price.toFixed(2)}</p>
-                      <p className="text-[10px] text-red-500 font-semibold mt-0.5">🔥 3 people have this in cart</p>
+                      <p className="text-[10px] text-red-500 font-semibold mt-0.5"<p className="text-xs text-amber-600 dark:text-amber-400 font-bold">>🔥 3 people have this in cart</p><p className="text-[10px] text-gray-500">248 people bought this week</p></p>
                       <p className="text-[10px] text-red-500 font-semibold mt-0.5 flex items-center gap-1">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                        </svg>
-                        3 people have this in cart
+                        </svg<p className="text-xs text-amber-600 dark:text-amber-400 font-bold">>
+                        3 people have this in cart</p><p className="text-[10px] text-gray-500">248 people bought this week</p>
                       </p>
                     </div>
                     <div className="text-right">

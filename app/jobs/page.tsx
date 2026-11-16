@@ -129,7 +129,17 @@ export default function JobsPage() {
 
         {/* CENTER: GIGS */}
         <main className="col-span-12 lg:col-span-9 space-y-4">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
+          
+          {/* RECOMMENDED FOR YOU — added by improve script */}
+          <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-bold text-emerald-900 dark:text-emerald-300">✨ Recommended for you</p>
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 rounded-full">98% MATCH</span>
+            </div>
+            <p className="text-xs text-emerald-800 dark:text-emerald-400">Based on your House genre, London location, and 3 mutual collaborators. Apply first — this one closes in 2 days.</p>
+          </div>
+
+<div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
             <h1 className="font-bold text-gray-900 dark:text-white text-2xl">Gigs &amp; opportunities</h1>
             <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">

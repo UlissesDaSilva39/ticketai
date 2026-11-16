@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ClientLayout } from "@/components/ClientLayout";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "GRID | The #1 Music Industry Network",
@@ -21,7 +22,8 @@ export default function RootLayout({
             {children}
           </ClientLayout>
         </ThemeProvider>
-      </body>
+        <Footer />
+</body>
     </html>
   );
 }
