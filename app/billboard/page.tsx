@@ -1,3 +1,6 @@
+﻿import { FEATURES } from "@/lib/features";
+import { COMING_SOON } from "@/lib/copy";
+import { ComingSoon } from "@/components/ComingSoon";
 "use client";
 import { useState } from "react";
 import Link from "next/link";
@@ -5,7 +8,7 @@ import { useLicensing } from "@/lib/hooks/useLicensing";
 import LicenceBadge from "@/components/LicenceBadge";
 import TrackCredit from "@/components/TrackCredit";
 
-export default function BillboardPage() {
+function BillboardPagePage() {
   const { getRankedTracks, recordPlay, hydrated } = useLicensing();
   const [filter, setFilter] = useState<"top40" | "all" | "new">("top40");
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -24,7 +27,7 @@ export default function BillboardPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <Link href="/" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-6 inline-block">
-          ← Back to GRID
+          â† Back to GRID
         </Link>
 
         <div className="mb-8">
@@ -73,7 +76,7 @@ export default function BillboardPage() {
                   <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{track.title}</p>
                   <LicenceBadge status={track.status} territory={track.territories[0]} />
                 </div>
-                <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">{track.artistName} · {track.genre}</p>
+                <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">{track.artistName} Â· {track.genre}</p>
                 <TrackCredit
                   isrc={track.isrc}
                   masterOwner={track.masterOwner}
@@ -93,10 +96,17 @@ export default function BillboardPage() {
 
         <div className="mt-6 text-center">
           <Link href="/licensing" className="text-sm font-bold text-emerald-600 hover:underline">
-            Licence your music to GRID →
+            Licence your music to GRID â†’
           </Link>
         </div>
       </div>
     </div>
   );
+}
+export const metadata = {
+  robots: { index: FEATURES.streaming, follow: FEATURES.streaming },
+};
+export default function Page() {
+  if (!FEATURES.streaming) return <ComingSoon {...COMING_SOON.streaming} />;
+  return <BillboardPagePage />;
 }
