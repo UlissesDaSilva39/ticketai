@@ -86,6 +86,7 @@ export default function Navbar() {
                   </div>
                   <div className="flex gap-2 mt-3">
                     <Link href="/profile" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">View Profile</Link>
+              <Link href="/events/my-tickets" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">My Tickets</Link>
               <Link href="/licensing" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">Licensing</Link>
                     <Link href="/verify" className="flex-1 bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-700 transition-colors">Get Verified</Link>
                   </div>

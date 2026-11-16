@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -9,6 +9,7 @@ import {
   CalendarIcon, MapPinIcon, UsersIcon, DollarIcon, TagIcon,
   MusicIcon, GiftIcon, XIcon, TrophyIcon, ClockIcon, PlayIcon, ChartIcon, BookmarkIcon, ShareIcon
 } from '@/components/people/Icons';
+import { useEventCommission } from "@/lib/hooks/useEventCommission";
 
 // ============ MOCK DATA ============
 const EVENT_DB = {
@@ -202,6 +203,8 @@ const s: Record<string, React.CSSProperties> = {
 };
 
 export default function EventPage() {
+  const { recordCommission } = useEventCommission();
+
   const params = useParams();
   const id = params?.id as string;
   const EVENT = EVENT_DB[id as keyof typeof EVENT_DB] || FALLBACK_EVENT;
@@ -422,6 +425,19 @@ export default function EventPage() {
                       <p style={s.artistRole}>{artist.role}</p>
                       <button
                         onClick={() => {
+    // Auto-added by GRID: track 5% commission
+    try {
+      if (typeof event !== "undefined" && event) {
+        recordCommission({
+          eventId: String(event.id || "unknown"),
+          eventTitle: String(event.title || "Untitled event"),
+          buyerName: String(typeof buyerName !== "undefined" ? buyerName : "Anonymous"),
+          quantity: Number(typeof quantity !== "undefined" ? quantity : 1),
+          pricePerTicketPence: Number(event.pricePence || event.price || 0),
+        });
+      }
+    } catch (err) { console.warn("Commission tracking failed:", err); }
+
                           if (typeof window !== 'undefined') {
                             localStorage.setItem(`follow_${artist.name}`, 'true');
                             alert(`You are now following ${artist.name}!`);
