@@ -1,6 +1,12 @@
-"use client";
+﻿"use client";
+
 import { useEffect, useState } from "react";
 import { useReferral } from "@/lib/hooks/useReferral";
+{/* data-join-privacy */}
+<p style={{ marginTop: 12, fontSize: 13, opacity: 0.7 }}>
+  We&apos;ll only use your email to tell you when GRID launches. Unsubscribe anytime.
+  See our <a href="/legal/privacy" style={{ textDecoration: "underline" }}>privacy policy</a>.
+</p>
 
 export default function JoinPage() {
   const { addToWaitlist, recordOpen } = useReferral("GRID");
@@ -37,7 +43,7 @@ export default function JoinPage() {
         </h1>
         <p className="text-sm text-gray-500 text-center mb-6">
           {ref
-            ? `Your friend shared a referral code (${ref}). GRID is invite-only right now — leave your email and we'll unlock your account this week.`
+            ? `Your friend shared a referral code (${ref}). GRID is invite-only right now â€” leave your email and we'll unlock your account this week.`
             : "GRID is invite-only right now. Leave your email and we'll be in touch."}
         </p>
 
@@ -60,7 +66,7 @@ export default function JoinPage() {
               type="submit"
               className="w-full px-4 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-colors"
             >
-              Claim my invite →
+              Claim my invite â†’
             </button>
             <p className="text-[10px] text-gray-400 text-center mt-2">
               No spam. Just your invite. Unsubscribe any time.

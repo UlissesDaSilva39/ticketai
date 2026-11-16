@@ -1,8 +1,17 @@
-"use client";
+﻿"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { LICENSING_CONTACTS, LICENCE_REQUIREMENTS, PROGRAMME_STEPS, PRS_DIGITAL_LICENCE } from "@/lib/data/licensingInfo";
 import { useLicensing } from "@/lib/hooks/useLicensing";
+{/* data-licensing-notice */}
+<section style={{ padding: "16px 0 24px", borderBottom: "1px solid currentColor", opacity: 0.9 }}>
+  <p style={{ margin: 0, fontSize: 16 }}>
+    GRID is working through PRS and label licensing before switching on
+    streaming. Until then, no full tracks play on this site. Profiles,
+    gig listings, and the waitlist remain available.
+  </p>
+</section>
 
 const CheckIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -40,7 +49,7 @@ export default function LicensingPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         <Link href="/" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-6 inline-block">
-          ← Back to GRID
+          â† Back to GRID
         </Link>
 
         <div className="text-center mb-12">
@@ -107,7 +116,7 @@ export default function LicensingPage() {
                 <p className="text-xs text-gray-600 dark:text-zinc-400 mt-2">{c.description}</p>
                 <div className="mt-2 flex gap-3 text-xs">
                   <a href={c.url} target="_blank" rel="noopener noreferrer" className="text-emerald-600 font-semibold hover:underline">
-                    Website →
+                    Website â†’
                   </a>
                   {c.email && (
                     <a href={`mailto:${c.email}`} className="text-emerald-600 font-semibold hover:underline">
@@ -186,7 +195,7 @@ export default function LicensingPage() {
                 </div>
               )}
               <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors">
-                Submit for review →
+                Submit for review â†’
               </button>
               <p className="text-[10px] text-gray-400 text-center">
                 Or email licensing@grid.app directly with your details.
