@@ -45,7 +45,6 @@ export default function MarketplacePage() {
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen relative">
       <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
 
-        {/* LEFT COLUMN: Sidebar (UNCHANGED) */}
         <aside className="col-span-12 lg:col-span-3 space-y-3 hidden lg:block">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
             <div className="h-20 bg-gradient-to-r from-emerald-600 to-emerald-500" />
@@ -66,7 +65,6 @@ export default function MarketplacePage() {
           </div>
         </aside>
 
-        {/* MAIN COLUMN: Marketplace (UPDATED) */}
         <main className="col-span-12 lg:col-span-9 space-y-4">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
             <h1 className="font-bold text-gray-900 dark:text-white text-2xl flex items-center gap-2"><MarketIcon className="w-6 h-6 text-emerald-600" /> GRID Marketplace</h1>
@@ -76,13 +74,12 @@ export default function MarketplacePage() {
               <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors shadow-sm">+ Sell on GRID</button>
             </div>
 
-        {/* TRUST STRIP — added by improve script */}
-        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-3 mb-4 flex flex-wrap gap-4 justify-center text-xs">
-          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Verified sellers</span>
-          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Secure checkout · 10,000+ sales</span>
-          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>30-day money-back guarantee</span>
-          <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Instant download</span>
-        </div>
+            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-3 mt-4 flex flex-wrap gap-4 justify-center text-xs">
+              <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Verified sellers</span>
+              <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Secure checkout · 10,000+ sales</span>
+              <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>30-day money-back guarantee</span>
+              <span className="flex items-center gap-1.5 text-gray-700 dark:text-zinc-300"><span className="text-emerald-600 font-bold">✓</span>Instant download</span>
+            </div>
           </div>
 
           <div className="flex gap-2 overflow-x-auto pb-2">
@@ -112,13 +109,8 @@ export default function MarketplacePage() {
                     <div>
                       <p className="text-xs text-gray-400 uppercase font-semibold">Price {p.pwyw ? "(or more)" : ""}</p>
                       <p className="font-bold text-emerald-600 text-lg">£{p.price.toFixed(2)}</p>
-                      <p className="text-[10px] text-red-500 font-semibold mt-0.5"<p className="text-xs text-amber-600 dark:text-amber-400 font-bold">>🔥 3 people have this in cart</p><p className="text-[10px] text-gray-500">248 people bought this week</p></p>
-                      <p className="text-[10px] text-red-500 font-semibold mt-0.5 flex items-center gap-1">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                        </svg<p className="text-xs text-amber-600 dark:text-amber-400 font-bold">>
-                        3 people have this in cart</p><p className="text-[10px] text-gray-500">248 people bought this week</p>
-                      </p>
+                      <p className="text-[10px] text-amber-600 dark:text-amber-400 font-bold mt-0.5">🔥 3 people have this in cart</p>
+                      <p className="text-[10px] text-gray-500">248 people bought this week</p>
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-gray-400 uppercase font-semibold">GRID Fee (10%)</p>
@@ -135,7 +127,6 @@ export default function MarketplacePage() {
         </main>
       </div>
 
-      {/* PURCHASE MODAL */}
       {selectedProduct && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
