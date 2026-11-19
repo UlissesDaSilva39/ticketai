@@ -1,159 +1,184 @@
 "use client";
-import { useState } from "react";
+
+import { useState, FormEvent, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-const CheckIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-);
-const GoogleIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-);
+// Only allow same-site redirects like /home (blocks //evil.com and full URLs)
+function safeRedirect(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/home";
+  return value;
+}
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const params = useSearchParams();
+  const redirectTo = safeRedirect(params.get("redirect"));
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
-    
-    if (!email || !password) {
-      setError("Please fill in both fields.");
-      return;
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.message ?? "Login failed. Check your details and try again.");
+        setLoading(false);
+        return;
+      }
+
+      router.push(redirectTo);
+      router.refresh();
+    } catch {
+      setError("Network error. Please try again.");
+      setLoading(false);
     }
-    
-    setIsLoading(true);
-    
-    // Simulate login (no database yet)
-    setTimeout(() => {
-      // Route to home
-      router.push("/home");
-    }, 1500);
-  };
+  }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      
-      {/* LEFT PANEL: Branding */}
-      <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-zinc-900 to-emerald-900 p-12 flex-col justify-between text-white">
-        <Link href="/" className="text-3xl font-bold tracking-tight">GRID</Link>
-        
+    <main className="min-h-screen grid lg:grid-cols-2">
+      {/* Left: brand + benefits */}
+      <aside className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-900 text-white p-12">
+        <Link href="/" className="text-2xl font-extrabold tracking-tight">
+          GRID
+        </Link>
+
         <div>
-          <h1 className="text-4xl font-bold mb-4">Welcome back.</h1>
-          <p className="text-emerald-100 text-lg mb-8">
-            Your next collab, gig, or booking is waiting.
-          </p>
-          
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20">
-            <p className="text-sm text-emerald-100 italic">"GRID helped me land a £2,000 sync deal within two weeks."</p>
-            <div className="flex items-center gap-2 mt-3">
-              <div className="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center font-bold text-xs">S</div>
-              <div>
-                <p className="text-xs font-bold">Sarah Jenkins</p>
-                <p className="text-[10px] text-emerald-300">Vocalist · London</p>
-              </div>
-            </div>
-          </div>
+          <h2 className="text-4xl font-bold leading-tight">Welcome back to the industry&apos;s #1 music network.</h2>
+          <p className="mt-4 text-lg text-emerald-50">Pick up where you left off. Get booked. Get paid.</p>
+          <ul className="mt-8 space-y-3 text-emerald-50">
+            <li><span aria-hidden="true" className="text-emerald-200">&#10003;</span> Access to 10,000+ artists and venues</li>
+            <li><span aria-hidden="true" className="text-emerald-200">&#10003;</span> Secure Escrow payments on every deal</li>
+            <li><span aria-hidden="true" className="text-emerald-200">&#10003;</span> Verified badges to build trust</li>
+            <li><span aria-hidden="true" className="text-emerald-200">&#10003;</span> Licensing, Billboard and royalty splits</li>
+          </ul>
         </div>
 
-        <p className="text-emerald-300 text-xs">© 2026 GRID Corporation. All rights reserved.</p>
-      </div>
+        <p className="text-sm text-emerald-100">&copy; 2026 GRID Music Ltd. All rights reserved.</p>
+      </aside>
 
-      {/* RIGHT PANEL: Login Form */}
-      <div className="flex-1 flex items-center justify-center p-6 md:p-12 bg-[#f4f2ee] dark:bg-black">
-        <div className="w-full max-w-md">
-          
-          {/* Mobile Logo */}
-          <Link href="/" className="md:hidden block text-2xl font-bold text-emerald-600 mb-8">GRID</Link>
+      {/* Right: form */}
+      <section className="flex items-center justify-center p-8 bg-white text-neutral-900">
+        <div className="w-full max-w-sm">
+          <Link href="/" className="lg:hidden text-2xl font-extrabold tracking-tight text-emerald-700">
+            GRID
+          </Link>
 
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Log in to GRID</h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-              New here? <Link href="/signup" className="text-emerald-600 font-semibold hover:underline">Create an account</Link>
-            </p>
-          </div>
+          <h1 className="mt-6 lg:mt-0 text-3xl font-bold">Log in</h1>
+          <p className="mt-2 text-sm text-neutral-600">
+            New to GRID?{" "}
+            <Link href="/join" className="font-semibold text-emerald-700 underline hover:text-emerald-800">
+              Create your account
+            </Link>
+          </p>
 
-          {/* Google OAuth Button */}
           <button
-            onClick={() => router.push("/home")}
-            className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors mb-6"
+            type="button"
+            onClick={() => setError("Google sign-in is not connected yet. Please use your email for now.")}
+            className="mt-6 w-full border border-neutral-300 rounded-lg px-3 py-2.5 text-sm font-medium hover:border-emerald-300 hover:bg-emerald-50"
           >
-            <GoogleIcon /> Continue with Google
+            Continue with Google
           </button>
 
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300 dark:border-zinc-700"></div>
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-[#f4f2ee] dark:bg-black px-3 text-gray-500">Or log in with email</span>
-            </div>
+          <div className="my-6 flex items-center gap-3 text-xs text-neutral-500">
+            <span className="h-px flex-1 bg-neutral-200" />
+            Or log in with email
+            <span className="h-px flex-1 bg-neutral-200" />
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3 text-sm text-red-600 dark:text-red-400">
-                {error}
-              </div>
-            )}
-
-            {/* Email */}
+          <form onSubmit={onSubmit} className="space-y-4" noValidate={false}>
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium mb-1">
+                Email
+              </label>
               <input
+                id="email"
+                name="email"
                 type="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                required
+                className="w-full border border-neutral-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600"
               />
             </div>
 
-            {/* Password */}
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Password</label>
-                <Link href="/forgot-password" className="text-xs text-emerald-600 font-semibold hover:underline">Forgot?</Link>
+              <label htmlFor="password" className="block text-sm font-medium mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full border border-neutral-300 rounded-lg px-3 py-2.5 pr-16 text-sm focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-neutral-600 hover:text-emerald-700"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
               </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Your password"
-                className="w-full bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-              />
             </div>
 
-            {/* Remember me */}
-            <div className="flex items-center">
-              <input type="checkbox" id="remember" className="w-4 h-4 accent-emerald-600 rounded" />
-              <label htmlFor="remember" className="ml-2 text-xs text-gray-600 dark:text-gray-400">Remember me for 30 days</label>
-            </div>
+            {error && (
+              <p role="alert" className="text-sm text-red-600">
+                {error}
+              </p>
+            )}
 
-            {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 mt-2"
+              disabled={loading}
+              className="w-full bg-emerald-700 text-white rounded-lg px-3 py-2.5 text-sm font-semibold hover:bg-emerald-800 disabled:opacity-50"
             >
-              {isLoading ? "Logging in..." : "Log in →"}
+              {loading ? "Logging in..." : "Log in \u2192"}
             </button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-8 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
-            <p className="text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wide mb-1">Demo Login</p>
-            <p className="text-xs text-amber-700 dark:text-amber-500">Use any email and password to log in as Ulisses Silva.</p>
-          </div>
-
+          <p className="mt-6 text-xs text-neutral-500">
+            By logging in, you agree to our{" "}
+            <Link href="/terms" className="text-emerald-700 underline hover:text-emerald-800">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" className="text-emerald-700 underline hover:text-emerald-800">
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

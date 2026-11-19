@@ -1,0 +1,24 @@
+=== 1. Server running? ===
+GET /login -> 200
+
+=== 2. Login API ===
+POST /api/auth/login -> 200
+Set-Cookie: ticketai_session=dev-1795029629406; Path=/; Expires=Thu, 19 ...
+
+=== 3. /home with that cookie ===
+GET /home with cookie -> 307 (still redirecting: cookie name mismatch)
+
+=== 4. Cookie name ===
+.env.local: NEXT_PUBLIC_AUTH_COOKIE_NAME=ticketai_session
+middleware.ts:4: const AUTH_COOKIE_NAME =
+middleware.ts:5: process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME ?? "ticketai_session";
+middleware.ts:26: const token = req.cookies.get(AUTH_COOKIE_NAME)?.value;
+
+=== 5. Login page source ===
+Lines: 414
+use client:            True
+calls /api/auth/login: False
+useSearchParams:       True
+Suspense wrapper:      True
+default export:        True
+import @/lib/supabase/client -> found
