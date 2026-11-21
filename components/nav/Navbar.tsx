@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,27 +11,34 @@ export default function Navbar() {
   
   const [businessOpen, setBusinessOpen] = useState(false);
   const [meOpen, setMeOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  
   const businessRef = useRef<HTMLDivElement>(null);
   const meRef = useRef<HTMLDivElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
     function handleClickOutside(event: MouseEvent) {
       if (businessRef.current && !businessRef.current.contains(event.target as Node)) setBusinessOpen(false);
       if (meRef.current && !meRef.current.contains(event.target as Node)) setMeOpen(false);
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) setMoreOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const navItems = [
-    { name: "Home", path: "/home", icon: HomeIcon, hasBadge: true },
-    { name: "Network", path: "/network", icon: NetworkIcon },
-    { name: "Jobs", path: "/jobs", icon: JobsIcon },
+    { name: "Home", path: "/home", icon: HomeIcon, badge: "1" },
+    { name: "Network", path: "/network", icon: NetworkIcon, badge: "3" },
+    { name: "Jobs", path: "/jobs", icon: JobsIcon, badge: null },
+    { name: "Messaging", path: "/messaging", icon: MessagingIcon, badge: "2" },
+    { name: "Notifications", path: "/notifications", icon: NotificationsIcon, badge: "7" },
+  ];
+
+  const moreItems = [
     { name: "Payments", path: "/payments", icon: PaymentsIcon },
     { name: "Splits", path: "/splits", icon: SplitsIcon },
-    { name: "Messaging", path: "/messaging", icon: MessagingIcon },
-    { name: "Notifications", path: "/notifications", icon: NotificationsIcon },
   ];
 
   return (
@@ -56,24 +63,46 @@ export default function Navbar() {
               <Link key={item.name} href={item.path} className={`relative flex flex-col items-center justify-center h-full px-4 min-w-[64px] group transition-colors ${isActive ? "text-gray-900 dark:text-white font-semibold" : "text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white"}`}>
                 <div className="relative">
                   <Icon isActive={isActive} />
-                  {item.hasBadge && (<span className="absolute -top-1.5 -right-1 flex h-3 w-3"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-white dark:border-zinc-950"></span></span>)}
+                  {item.badge && (
+                    <span className="absolute -top-1 -right-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-bold text-white border-2 border-white dark:border-zinc-950">
+                      {item.badge}
+                    </span>
+                  )}
                 </div>
                 <span className="text-[10px] mt-1 hidden md:block tracking-wide whitespace-nowrap">{item.name}</span>
                 {isActive && <span className="absolute bottom-0 left-0 w-full h-[3px] bg-gray-900 dark:bg-white rounded-t-sm" />}
               </Link>
             );
           })}
+
+          <div className="relative h-full flex flex-col items-center justify-center px-4 min-w-[64px]" ref={moreRef}>
+            <button onClick={() => setMoreOpen(!moreOpen)} className={`flex flex-col items-center justify-center h-full group outline-none ${moreOpen ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white'}`}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+              <span className="text-[10px] mt-1 flex items-center gap-0.5">More <svg className={`w-2.5 h-2.5 transition-transform ${moreOpen ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg></span>
+            </button>
+            {moreOpen && (
+              <div className="absolute top-14 left-1/2 -translate-x-1/2 w-48 bg-white dark:bg-zinc-900 rounded-lg shadow-xl border border-gray-200 dark:border-zinc-800 py-2 z-50">
+                {moreItems.map((item) => {
+                   const Icon = item.icon;
+                   const isActive = pathname === item.path;
+                   return (
+                    <Link key={item.name} href={item.path} onClick={() => setMoreOpen(false)} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-sm text-gray-700 dark:text-gray-300">
+                      <Icon isActive={isActive} />
+                      {item.name}
+                    </Link>
+                   )
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center h-full flex-shrink-0 gap-4">
-          
-          {/* ME DROPDOWN */}
           <div className="relative h-full flex" ref={meRef}>
             <button onClick={() => setMeOpen(!meOpen)} className={`flex flex-col items-center justify-center h-full group outline-none ${meOpen ? 'text-emerald-600' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}>
               <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-zinc-700 overflow-hidden flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">U</div>
               <span className="text-[10px] mt-1 flex items-center gap-0.5">Me <svg className={`w-2.5 h-2.5 transition-transform ${meOpen ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg></span>
             </button>
-
             {meOpen && (
               <div className="absolute top-14 right-0 w-72 bg-white dark:bg-zinc-900 rounded-lg shadow-xl border border-gray-200 dark:border-zinc-800 overflow-hidden z-50">
                 <div className="p-4 border-b border-gray-100 dark:border-zinc-800">
@@ -86,7 +115,7 @@ export default function Navbar() {
                   </div>
                   <div className="flex gap-2 mt-3">
                     <Link href="/profile" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">View Profile</Link>
-              <Link href="/licensing" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">Licensing</Link>
+                    <Link href="/licensing" className="flex-1 border border-emerald-600 text-emerald-700 text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-50 transition-colors">Licensing</Link>
                     <Link href="/verify" className="flex-1 bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-full text-center hover:bg-emerald-700 transition-colors">Get Verified</Link>
                   </div>
                 </div>
@@ -99,7 +128,7 @@ export default function Navbar() {
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Manage</p>
                   <Link href="/promote" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Promote Music</Link>
                   <Link href="/splits" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Releases &amp; Splits</Link>
-          <Link href="/billboard" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Releases &amp; Billboard</Link>
+                  <Link href="/billboard" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Releases &amp; Billboard</Link>
                   <Link href="/payments" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Escrow &amp; Payouts</Link>
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Settings</p>
@@ -115,7 +144,6 @@ export default function Navbar() {
 
           <div className="h-8 w-px bg-gray-300 dark:bg-zinc-700"></div>
           
-          {/* BUSINESS DROPDOWN */}
           <div className="relative h-full hidden lg:flex" ref={businessRef}>
             <button onClick={() => setBusinessOpen(!businessOpen)} className={`flex flex-col items-center justify-center h-full group outline-none ${businessOpen || pathname.includes('/business') || pathname.includes('/calendar') || pathname.includes('/epk') ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}>
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg>
@@ -141,7 +169,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* DARK MODE TOGGLE */}
           <button 
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="flex flex-col items-center justify-center cursor-pointer text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white group h-full hidden lg:flex"
@@ -155,9 +182,9 @@ export default function Navbar() {
           </button>
 
           <Link href="/premium" className="flex flex-col items-center justify-center cursor-pointer text-amber-600 hover:text-amber-700 group h-full hidden lg:flex">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span className="text-[10px] mt-1 text-gray-500 group-hover:text-amber-600 whitespace-nowrap">Try Premium</span>
-                </Link>
+            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span className="text-[10px] mt-1 text-gray-500 group-hover:text-amber-600 whitespace-nowrap">Try Premium</span>
+          </Link>
         </div>
       </div>
     </nav>
