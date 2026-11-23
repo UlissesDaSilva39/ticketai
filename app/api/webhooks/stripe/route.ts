@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { stripe } from "@/lib/stripe";
 import { sendTicketEmail } from "@/lib/email";
+import { handleBillingEvent } from "@/lib/pro";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,6 +32,14 @@ export async function POST(req: NextRequest) {
     const msg = err instanceof Error ? err.message : "unknown";
     console.error("Stripe webhook signature verification failed:", msg);
     return NextResponse.json({ error: `Webhook Error: ${msg}` }, { status: 400 });
+  }
+
+  // GRID Pro subscriptions (same handler as /api/stripe/webhook).
+  try {
+    if (await handleBillingEvent(event)) return NextResponse.json({ received: true });
+  } catch (err) {
+    console.error("Pro billing webhook failed:", err);
+    return NextResponse.json({ error: "Pro billing failed" }, { status: 500 });
   }
 
   if (event.type !== "checkout.session.completed") {

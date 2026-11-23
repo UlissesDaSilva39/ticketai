@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { getProStatus } from "@/lib/pro";
 
 export const dynamic = "force-dynamic";
 
@@ -73,9 +74,17 @@ export async function GET() {
     role: meta.role ?? null,
   };
 
+  let pro: Awaited<ReturnType<typeof getProStatus>> | null = null;
+  try {
+    pro = await getProStatus(user.id);
+  } catch (e) {
+    console.error("[me/summary] pro status failed:", e);
+  }
+
   return NextResponse.json({
     user: { id: user.id, email: user.email },
     profile,
+    pro,
     latestTrack: trackRes.data
       ? { postId: trackRes.data.id, url: trackRes.data.audio_url, title: trackRes.data.audio_title ?? "Untitled track" }
       : null,

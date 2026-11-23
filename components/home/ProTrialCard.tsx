@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-const BENEFITS = ["Unlimited gig applications", "Priority in matched results", "Full post analytics"];
+// Keep in step with what Pro really includes (see app/pro/page.tsx).
+const BENEFITS = ["Unlimited gig applications", "All your matches unlocked", "Pro badge on your profile and posts"];
 
 export default function ProTrialCard() {
   return (
@@ -23,7 +24,7 @@ export default function ProTrialCard() {
       >
         Start free trial &rarr;
       </Link>
-      <p className="mt-2 text-center text-xs text-neutral-600">&pound;0 for 30 days &middot; Cancel anytime</p>
+      <p className="mt-2 text-center text-xs text-neutral-600">30 days free, then &pound;5/month &middot; Cancel anytime</p>
     </section>
   );
 }

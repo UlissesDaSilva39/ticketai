@@ -4,11 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ReplyIcon } from "@/components/MusicIcons";
 import ShareMenu from "./ShareMenu";
+import ProBadge from "@/components/ProBadge";
 import { addComment, deleteComment, getComments, incrementShare, type FeedComment } from "@/app/home/actions";
 import { eventDate, type SavedPost } from "@/components/grid/GridComposer";
 import { initials, roleLabel } from "@/lib/hooks/useMe";
 
-type Author = { name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null };
+type Author = { name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null; pro?: boolean };
 type FeedPost = SavedPost & { author_type?: string | null };
 
 const PAGE = 10;
@@ -318,6 +319,7 @@ function PostCard({
             <p className="font-bold text-gray-900 dark:text-white text-base truncate">
               {profileHref ? <Link href={profileHref} className="hover:underline">{name}</Link> : name}
             </p>
+            {author?.pro && <ProBadge />}
             {!isMine && (
               <button
                 type="button"

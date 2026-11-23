@@ -24,6 +24,16 @@ export type Me = {
   user: { id: string; email: string | null };
   profile: MeProfile;
   latestTrack: { postId: string; url: string; title: string } | null;
+  pro: {
+    active: boolean;
+    source: "subscription" | "grant" | null;
+    status: string | null;
+    trialing: boolean;
+    until: string | null;
+    cancelAtPeriodEnd: boolean;
+    hasSubscription: boolean;
+    hadSubscription: boolean;
+  } | null;
   counts: { followers: number; following: number; unreadNotifications: number; unreadMessages: number };
 };
 
@@ -51,6 +61,12 @@ export function invalidateMe() {
   cache = null;
 }
 
+/** Re-fetch the user everywhere on the page (e.g. after Pro checkout). */
+export function refreshMe() {
+  cache = null;
+  if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("grid:meChanged"));
+}
+
 /** The logged-in user's profile and counts. `me` is null while loading or when logged out. */
 export function useMe() {
   const [me, setMe] = useState<Me | null>(null);
@@ -58,13 +74,17 @@ export function useMe() {
 
   useEffect(() => {
     let alive = true;
-    load().then((data) => {
-      if (!alive) return;
-      setMe(data);
-      setLoading(false);
-    });
+    const run = () =>
+      load().then((data) => {
+        if (!alive) return;
+        setMe(data);
+        setLoading(false);
+      });
+    run();
+    window.addEventListener("grid:meChanged", run);
     return () => {
       alive = false;
+      window.removeEventListener("grid:meChanged", run);
     };
   }, []);
 

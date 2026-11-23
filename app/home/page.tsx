@@ -17,6 +17,7 @@ import GridComposer, { type SavedPost } from "@/components/grid/GridComposer";
 import HomeFeed from "@/components/home/HomeFeed";
 import SuggestedPeople from "@/components/home/SuggestedPeople";
 import { useMe, displayName, initials, roleLabel, compactNumber, type MeProfile } from "@/lib/hooks/useMe";
+import ProBadge from "@/components/ProBadge";
 
 // Profile-strength checklist built from the real profile. Edits happen on /profile/edit.
 function profileStrengthItems(p: MeProfile) {
@@ -46,6 +47,7 @@ export default function HomePage() {
   const router = useRouter();
   const { me, loading: meLoading } = useMe();
   const myName = displayName(me?.profile, me?.user.email);
+  const isPro = !!me?.pro?.active;
   const [isPlaying, setIsPlaying] = useState(false);
   const trackRef = useRef<HTMLAudioElement>(null);
   function toggleTrack() {
@@ -86,7 +88,10 @@ export default function HomePage() {
                 </div>
               ) : (
                 <>
-                  <p className="font-bold text-gray-900 dark:text-white text-lg">{myName}</p>
+                  <p className="font-bold text-gray-900 dark:text-white text-lg flex items-center justify-center gap-1.5">
+                    {myName}
+                    {isPro && <ProBadge />}
+                  </p>
                   {me?.profile.username && <p className="text-xs text-gray-500">@{me.profile.username}</p>}
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{roleLabel(me?.profile.role, me?.profile.genre)}</p>
                   {me?.profile.city && <p className="text-xs text-gray-500 mt-1">{me.profile.city}</p>}
@@ -147,14 +152,14 @@ export default function HomePage() {
         {/* CENTER COLUMN */}
         <main className="col-span-12 lg:col-span-6 space-y-4">
           <CtaTracker />
-          <MobileProBar />
+          {!isPro && <MobileProBar />}
           <OfferBanner />
           
           {/* STORIES */}
           <GridStories myName={myName} myAvatar={me?.profile.avatar_url ?? null} />
 
           {/* Opportunities ranked for this user (/api/matches) */}
-          <MatchedForYou />
+          <MatchedForYou isPro={isPro} />
 
           {/* Composer (photo/video/audio/event posts) */}
           <div id="composer" />
@@ -192,7 +197,7 @@ export default function HomePage() {
 
         {/* RIGHT COLUMN */}
         <aside className="col-span-12 lg:col-span-3 space-y-4">
-          <ProTrialCard />
+          {!isPro && !meLoading && <ProTrialCard />}
           <InviteCard />
           <OpenCollabs />
 

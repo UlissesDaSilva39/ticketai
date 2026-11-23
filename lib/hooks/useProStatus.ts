@@ -1,7 +1,10 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
+import { useMe, refreshMe } from "@/lib/hooks/useMe";
 
-const TRIAL_KEY = "grid:proTrial";
+// GRID Pro status now comes from the server (subscriptions / pro_grants via
+// /api/me/summary). Previously it was a trial stored in the browser only.
+
 const TRIAL_DAYS = 30;
 const FREE_APPLICATIONS_PER_WEEK = 3;
 const APPLICATIONS_KEY = "grid:applications";
@@ -15,24 +18,6 @@ export interface ProStatus {
   freeApplicationsLeft: number;
   hasHitLimit: boolean;
   hydrated: boolean;
-}
-
-interface TrialState {
-  startedAt: number;
-  expiresAt: number;
-}
-
-function readTrial(): TrialState | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(TRIAL_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed.startedAt || !parsed.expiresAt) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
 }
 
 function weekStart(): number {
@@ -53,86 +38,81 @@ function readApplicationsThisWeek(): number {
   }
 }
 
-export function useProStatus() {
-  const [isPro, setIsPro] = useState(false);
-  const [isTrial, setIsTrial] = useState(false);
-  const [daysLeft, setDaysLeft] = useState(0);
-  const [trialStartedAt, setTrialStartedAt] = useState<number | null>(null);
-  const [applicationsThisWeek, setApplicationsThisWeek] = useState(0);
-  const [hydrated, setHydrated] = useState(false);
-
-  const refresh = useCallback(() => {
-    const trial = readTrial();
-    const now = Date.now();
-    if (trial && trial.expiresAt > now) {
-      setIsPro(true);
-      setIsTrial(true);
-      setDaysLeft(Math.ceil((trial.expiresAt - now) / (24 * 60 * 60 * 1000)));
-      setTrialStartedAt(trial.startedAt);
-    } else {
-      setIsPro(false);
-      setIsTrial(false);
-      setDaysLeft(0);
-      setTrialStartedAt(null);
+/** Sends the browser to Stripe Checkout for GRID Pro. Returns an error message on failure. */
+export async function goToProCheckout(): Promise<string | null> {
+  try {
+    const res = await fetch("/api/billing/checkout", { method: "POST", credentials: "include" });
+    const d = await res.json().catch(() => ({}));
+    if (res.status === 401) {
+      window.location.href = "/login?redirect=/pro";
+      return null;
     }
-    setApplicationsThisWeek(readApplicationsThisWeek());
-  }, []);
+    if (!res.ok || !d.url) return d.error || "Could not start checkout. Try again.";
+    window.location.href = d.url;
+    return null;
+  } catch {
+    return "Could not reach the server. Try again.";
+  }
+}
+
+/** Opens Stripe's page to cancel or update the subscription. Returns an error message on failure. */
+export async function openBillingPortal(): Promise<string | null> {
+  try {
+    const res = await fetch("/api/billing/portal", { method: "POST", credentials: "include" });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok || !d.url) return d.error || "Could not open subscription settings.";
+    window.location.href = d.url;
+    return null;
+  } catch {
+    return "Could not reach the server. Try again.";
+  }
+}
+
+export function useProStatus() {
+  const { me, loading } = useMe();
+  const [applicationsThisWeek, setApplicationsThisWeek] = useState(0);
+
+  const pro = me?.pro ?? null;
+  const isPro = !!pro?.active;
+  const isTrial = isPro && (pro?.trialing || pro?.source === "grant");
+  const daysLeft = pro?.until ? Math.max(0, Math.ceil((new Date(pro.until).getTime() - Date.now()) / 86_400_000)) : 0;
 
   useEffect(() => {
+    const refresh = () => setApplicationsThisWeek(readApplicationsThisWeek());
     refresh();
-    setHydrated(true);
-    const onChange = () => refresh();
-    window.addEventListener("grid:proChanged", onChange);
-    window.addEventListener("grid:applicationsChanged", onChange);
-    window.addEventListener("storage", onChange);
+    window.addEventListener("grid:applicationsChanged", refresh);
+    window.addEventListener("storage", refresh);
     return () => {
-      window.removeEventListener("grid:proChanged", onChange);
-      window.removeEventListener("grid:applicationsChanged", onChange);
-      window.removeEventListener("storage", onChange);
+      window.removeEventListener("grid:applicationsChanged", refresh);
+      window.removeEventListener("storage", refresh);
     };
-  }, [refresh]);
+  }, []);
 
+  // Kept for existing callers: "start trial" = go to Stripe Checkout.
   const startTrial = useCallback(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const now = Date.now();
-      const trial: TrialState = {
-        startedAt: now,
-        expiresAt: now + TRIAL_DAYS * 24 * 60 * 60 * 1000,
-      };
-      window.localStorage.setItem(TRIAL_KEY, JSON.stringify(trial));
-      window.dispatchEvent(new CustomEvent("grid:proChanged"));
-      refresh();
-    } catch {}
-  }, [refresh]);
+    void goToProCheckout();
+  }, []);
 
+  // Kept for existing callers: "cancel" = Stripe's manage-subscription page.
   const cancelTrial = useCallback(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.removeItem(TRIAL_KEY);
-      window.dispatchEvent(new CustomEvent("grid:proChanged"));
-      refresh();
-    } catch {}
-  }, [refresh]);
+    void openBillingPortal();
+  }, []);
 
   const recordApplication = useCallback(() => {
     if (typeof window === "undefined") return false;
     const current = readApplicationsThisWeek();
-    if (!isPro && current >= FREE_APPLICATIONS_PER_WEEK) {
-      return false;
-    }
+    if (!isPro && current >= FREE_APPLICATIONS_PER_WEEK) return false;
     try {
       const raw = window.localStorage.getItem(APPLICATIONS_KEY);
       const arr: number[] = raw ? JSON.parse(raw) : [];
       arr.push(Date.now());
       window.localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(arr));
       window.dispatchEvent(new CustomEvent("grid:applicationsChanged"));
-      refresh();
       return true;
     } catch {
       return false;
     }
-  }, [isPro, refresh]);
+  }, [isPro]);
 
   const hasHitLimit = !isPro && applicationsThisWeek >= FREE_APPLICATIONS_PER_WEEK;
   const freeApplicationsLeft = isPro ? Infinity : Math.max(0, FREE_APPLICATIONS_PER_WEEK - applicationsThisWeek);
@@ -141,14 +121,16 @@ export function useProStatus() {
     isPro,
     isTrial,
     daysLeft,
-    trialStartedAt,
+    trialStartedAt: null as number | null,
     applicationsThisWeek,
     freeApplicationsLeft,
     hasHitLimit,
-    hydrated,
+    hydrated: !loading,
+    pro,
     startTrial,
     cancelTrial,
     recordApplication,
+    refresh: refreshMe,
   };
 }
 

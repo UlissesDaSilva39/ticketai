@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { createClient } from "@/lib/supabase/client";
 import { useMe, invalidateMe, displayName, initials, roleLabel } from "@/lib/hooks/useMe";
+import ProBadge from "@/components/ProBadge";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -145,7 +146,10 @@ export default function Navbar() {
                       <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">{initials(myName)}</div>
                     )}
                     <div className="min-w-0">
-                      <p className="font-bold text-gray-900 dark:text-white text-sm truncate">{myName}</p>
+                      <p className="font-bold text-gray-900 dark:text-white text-sm truncate flex items-center gap-1.5">
+                        <span className="truncate">{myName}</span>
+                        {me?.pro?.active && <ProBadge />}
+                      </p>
                       {me?.profile.username && <p className="text-xs text-gray-500 truncate">@{me.profile.username}</p>}
                       <p className="text-xs text-gray-500 mt-0.5">{roleLabel(me?.profile.role, me?.profile.genre)}</p>
                     </div>
@@ -157,9 +161,9 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="p-2">
-                  <Link href="/premium" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 text-amber-600 font-semibold text-sm">
+                  <Link href="/pro" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 text-amber-600 font-semibold text-sm">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    Try GRID Pro for Â£0
+                    {me?.pro?.active ? "Your GRID Pro" : me?.pro?.hadSubscription ? "Get GRID Pro" : "Try GRID Pro free for 30 days"}
                   </Link>
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Manage</p>
@@ -227,9 +231,9 @@ export default function Navbar() {
             <span className="text-[10px] mt-1 text-gray-500 whitespace-nowrap">Theme</span>
           </button>
 
-          <Link href="/premium" className="flex flex-col items-center justify-center cursor-pointer text-amber-600 hover:text-amber-700 group h-full hidden lg:flex">
+          <Link href="/pro" className="flex flex-col items-center justify-center cursor-pointer text-amber-600 hover:text-amber-700 group h-full hidden lg:flex">
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <span className="text-[10px] mt-1 text-gray-500 group-hover:text-amber-600 whitespace-nowrap">Try Premium</span>
+            <span className="text-[10px] mt-1 text-gray-500 group-hover:text-amber-600 whitespace-nowrap">{me?.pro?.active ? "Pro" : "Try Pro"}</span>
           </Link>
         </div>
       </div>

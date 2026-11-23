@@ -1,6 +1,9 @@
 "use client";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useProStatus, PRO_LIMITS } from "@/lib/hooks/useProStatus";
+import { useSearchParams } from "next/navigation";
+import { useProStatus, PRO_LIMITS, goToProCheckout, openBillingPortal } from "@/lib/hooks/useProStatus";
+import { refreshMe } from "@/lib/hooks/useMe";
 
 const CheckIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -14,85 +17,97 @@ const CrownIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
   </svg>
 );
 
-interface Tier {
-  id: "free" | "pro" | "studio";
-  name: string;
-  price: string;
-  cadence: string;
-  tagline: string;
-  features: string[];
-  highlight?: boolean;
-  cta: string;
-}
+const PRICE = "£5";
 
-const TIERS: Tier[] = [
+// Only benefits that work today; the rest are clearly marked as coming soon.
+const FREE_FEATURES = [
+  "Full profile + EPK",
+  `${PRO_LIMITS.freeApplicationsPerWeek} gig applications per week`,
+  "Your top 3 matches",
+  "Post, reply and follow",
+  "Stories and invites",
+];
+const PRO_FEATURES = [
+  "Unlimited gig applications",
+  "All your matches unlocked",
+  "Pro badge on your profile and posts",
+  "No upgrade banners",
+];
+const PRO_COMING_SOON = ["Post analytics (views, likes, shares)", "See who viewed your profile"];
+
+const FAQ = [
   {
-    id: "free",
-    name: "Free",
-    price: "£0",
-    cadence: "forever",
-    tagline: "Everything you need to get started",
-    features: [
-      "Full profile + EPK",
-      `${PRO_LIMITS.freeApplicationsPerWeek} gig applications per week`,
-      "Matched for you (top 6)",
-      "Follow up to 50 creators",
-      "Post to the feed",
-    ],
-    cta: "Current plan",
+    q: "How does the free trial work?",
+    a: `Your first ${PRO_LIMITS.trialDays} days are free. You add a card at checkout, but nothing is charged until the trial ends. Cancel before then and you pay nothing.`,
+  },
+  { q: "How much is Pro after the trial?", a: `${PRICE} per month, billed monthly by Stripe. Prices include VAT where applicable.` },
+  {
+    q: "Can I cancel anytime?",
+    a: "Yes. Use “Manage subscription” on this page. You keep Pro until the end of the period you've paid for.",
   },
   {
-    id: "pro",
-    name: "Pro",
-    price: "£5",
-    cadence: "per month",
-    tagline: "For active producers, vocalists, and DJs",
-    features: [
-      "Unlimited gig applications",
-      "Priority in matched results",
-      "Full post analytics (views, hypes, clicks)",
-      "See who viewed your profile",
-      "Unlimited follows",
-      "Pro badge on your profile",
-    ],
-    highlight: true,
-    cta: "Start 30-day free trial",
+    q: "What happens to my applications if I cancel?",
+    a: `Everything you've sent stays in your history. You go back to the free limit of ${PRO_LIMITS.freeApplicationsPerWeek} applications per week.`,
   },
   {
-    id: "studio",
-    name: "Studio",
-    price: "£15",
-    cadence: "per month",
-    tagline: "For labels, studios, and teams",
-    features: [
-      "Everything in Pro",
-      "Featured gig placement (£10/gig waived)",
-      "5 team seats",
-      "Advanced search filters",
-      "Direct messaging priority",
-      "Custom EPK branding",
-      "Dedicated support",
-    ],
-    cta: "Start 30-day free trial",
-  },
-  {
-    id: "verified",
-    name: "Verified",
-    price: "£10",
-    cadence: "per month",
-    tagline: "Stand out with a verified badge",
-    features: [
-      "Verified badge on profile and listings",
-      "Priority in search results",
-      "Verified label on gig applications",
-      "Manual approval by GRID team",
-    ],
-    cta: "Get verified",
+    q: "Can I get Pro for free?",
+    a: "Yes. Invite 3 friends with your personal link (on your home page). When the third one joins, you get a free month of Pro.",
   },
 ];
 
-export default function ProPage() {
-  const { isPro, isTrial, daysLeft, hydrated, startTrial, cancelTrial } = useProStatus();
+function fmtDate(iso: string | null | undefined) {
+  return iso ? new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
+}
+
+function ProPageInner() {
+  const { isPro, hydrated, pro } = useProStatus();
+  const params = useSearchParams();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [banner, setBanner] = useState<string | null>(null);
+
+  // Back from Stripe Checkout: confirm the subscription so Pro switches on at once.
+  useEffect(() => {
+    const status = params.get("checkout");
+    const sessionId = params.get("session_id");
+    if (status === "cancelled") setBanner("Checkout cancelled. You haven't been charged.");
+    if (status === "success" && sessionId) {
+      setBanner("Confirming your subscription…");
+      fetch("/api/billing/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ sessionId }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          refreshMe();
+          setBanner(d?.pro?.active ? "Welcome to GRID Pro! 🎉" : "Payment received. Pro will switch on in a moment — refresh if it doesn't.");
+        })
+        .catch(() => setBanner("Payment received. Refresh the page in a moment to see Pro."))
+        .finally(() => window.history.replaceState(null, "", "/pro"));
+    }
+  }, [params]);
+
+  async function start() {
+    setBusy(true);
+    setError(null);
+    const err = await goToProCheckout();
+    if (err) {
+      setError(err);
+      setBusy(false);
+    }
+  }
+
+  async function manage() {
+    setBusy(true);
+    setError(null);
+    const err = await openBillingPortal();
+    if (err) {
+      setError(err);
+      setBusy(false);
+    }
+  }
 
   if (!hydrated) {
     return (
@@ -102,189 +117,162 @@ export default function ProPage() {
     );
   }
 
+  const trialCopy = pro?.hadSubscription ? `${PRICE} / month` : `Try free for ${PRO_LIMITS.trialDays} days`;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-12 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
             <CrownIcon className="w-4 h-4" />
             GRID Pro
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
-            Do more. Get matched faster. Get paid.
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">Apply to more gigs. See every match.</h1>
           <p className="text-base text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            Pro members apply to 4× more gigs, show up first in matched results, and get real analytics on their reach.
+            {PRICE} a month, with your first {PRO_LIMITS.trialDays} days free. Cancel anytime.
           </p>
-          {isPro && isTrial && (
-            <div className="mt-6 inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 px-4 py-2 rounded-full text-sm font-semibold">
-              <CheckIcon className="w-4 h-4" />
-              You&apos;re on trial — {daysLeft} days left
-              <button
-                onClick={cancelTrial}
-                className="ml-2 underline text-xs font-normal opacity-70 hover:opacity-100"
-              >
-                cancel
-              </button>
+
+          {banner && (
+            <p role="status" className="mt-6 inline-block rounded-full bg-emerald-100 dark:bg-emerald-900/30 px-4 py-2 text-sm font-semibold text-emerald-800 dark:text-emerald-300">
+              {banner}
+            </p>
+          )}
+
+          {isPro && pro && (
+            <div className="mt-6 mx-auto max-w-md rounded-2xl border border-emerald-200 dark:border-emerald-900 bg-white dark:bg-zinc-900 p-5 text-left">
+              <p className="flex items-center gap-2 font-bold text-gray-900 dark:text-white">
+                <CrownIcon className="w-5 h-5 text-amber-500" /> You have GRID Pro
+              </p>
+              <p className="mt-1 text-sm text-gray-600 dark:text-zinc-400">
+                {pro.source === "grant"
+                  ? `Free Pro from your invites, until ${fmtDate(pro.until)}.`
+                  : pro.trialing
+                    ? `Free trial until ${fmtDate(pro.until)}. ${pro.cancelAtPeriodEnd ? "It won't renew." : `Then ${PRICE}/month.`}`
+                    : pro.cancelAtPeriodEnd
+                      ? `Cancelled. Pro stays on until ${fmtDate(pro.until)}.`
+                      : pro.status === "past_due"
+                        ? "Your last payment failed. Please update your card to keep Pro."
+                        : `Renews on ${fmtDate(pro.until)}.`}
+              </p>
+              {pro.hasSubscription && (
+                <button
+                  type="button"
+                  onClick={manage}
+                  disabled={busy}
+                  className="mt-3 text-sm font-semibold text-emerald-700 dark:text-emerald-400 hover:underline disabled:opacity-50"
+                >
+                  Manage subscription →
+                </button>
+              )}
             </div>
+          )}
+          {error && (
+            <p role="alert" className="mt-4 text-sm text-red-600">
+              {error}
+            </p>
           )}
         </div>
 
-        {/* Tiers */}
-        
-        {/* PRIMARY CTA + TESTIMONIALS — added by improve script */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 px-4 py-1.5 rounded-full text-xs font-bold mb-4">
-            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-            Pro users earn £2,400/year back on average
-          </div>
-          <button className="bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3.5 rounded-lg text-base shadow-lg transition-colors">
-            Try free for 30 days →
-          </button>
-          <p className="text-xs text-gray-500 dark:text-zinc-400 mt-2">No credit card required · Cancel anytime</p>
-        </div>
-
-        {/* TESTIMONIALS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-          {[
-            { name: "Sarah J.", role: "Vocalist · London", quote: "Booked 3 sessions in my first month on Pro. Paid for itself 10× over." },
-            { name: "Studio X", role: "Engineer · Manchester", quote: "Unlimited applications meant I actually got hired. Best £5 I spend." },
-            { name: "Kai A.", role: "Producer · Copenhagen", quote: "The analytics showed me who was viewing. Game-changer for outreach." },
-          ].map((t, i) => (
-            <div key={i} className="bg-white dark:bg-zinc-800 rounded-xl border border-gray-200 dark:border-zinc-700 p-5">
-              <div className="flex text-amber-500 text-sm mb-2">★★★★★</div>
-              <p className="text-sm text-gray-700 dark:text-zinc-300 mb-3 italic">&quot;{t.quote}&quot;</p>
-              <p className="text-xs font-bold text-gray-900 dark:text-white">{t.name}</p>
-              <p className="text-[10px] text-gray-500">{t.role}</p>
+        {/* Plans */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 max-w-3xl mx-auto">
+          <div className="relative bg-white dark:bg-zinc-900 rounded-2xl border-2 border-gray-200 dark:border-zinc-800 p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Free</h2>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">Everything you need to get started</p>
+            <div className="my-6">
+              <span className="text-4xl font-bold text-gray-900 dark:text-white">£0</span>
+              <span className="text-sm text-gray-500 ml-1">/ forever</span>
             </div>
-          ))}
-        </div>
+            <ul className="space-y-2 mb-6">
+              {FREE_FEATURES.map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
+                  <CheckIcon className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+            <button disabled className="w-full py-3 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-500 text-sm font-bold cursor-not-allowed">
+              {isPro ? "Free plan" : "Current plan"}
+            </button>
+          </div>
 
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {TIERS.map((tier) => {
-            const isCurrent = (isPro && tier.id === "pro") || (!isPro && tier.id === "free");
-            const isStudio = tier.id === "studio";
-            return (
-              <div
-                key={tier.id}
-                className={`relative bg-white dark:bg-zinc-900 rounded-2xl border-2 p-6 ${
-                  tier.highlight
-                    ? "border-amber-500 shadow-xl"
-                    : "border-gray-200 dark:border-zinc-800"
-                }`}
+          <div className="relative bg-white dark:bg-zinc-900 rounded-2xl border-2 border-amber-500 shadow-xl p-6">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">
+              {pro?.hadSubscription ? "PRO" : `${PRO_LIMITS.trialDays} DAYS FREE`}
+            </div>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Pro</h2>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">For active producers, vocalists and DJs</p>
+            <div className="my-6">
+              <span className="text-4xl font-bold text-gray-900 dark:text-white">{PRICE}</span>
+              <span className="text-sm text-gray-500 ml-1">/ month</span>
+            </div>
+            <ul className="space-y-2 mb-3">
+              {PRO_FEATURES.map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
+                  <CheckIcon className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+            <ul className="space-y-2 mb-6">
+              {PRO_COMING_SOON.map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-500 dark:text-zinc-500">
+                  <span className="mt-0.5 rounded bg-gray-100 dark:bg-zinc-800 px-1.5 text-[10px] font-bold uppercase">Soon</span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+            {isPro ? (
+              <button disabled className="w-full py-3 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-500 text-sm font-bold cursor-not-allowed">
+                Active
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={start}
+                disabled={busy}
+                className="w-full py-3 rounded-lg text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white transition-colors disabled:opacity-60"
               >
-                {tier.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">
-                    MOST POPULAR
-                  </div>
-                )}
-                <div className="mb-4">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">{tier.name}</h2>
-                  <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">{tier.tagline}</p>
-                </div>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900 dark:text-white">{tier.price}</span>
-                  <span className="text-sm text-gray-500 ml-1">/ {tier.cadence}</span>
-                </div>
-                <ul className="space-y-2 mb-6">
-                  {tier.features.map((f, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
-                      <CheckIcon className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                {isCurrent ? (
-                  <button
-                    disabled
-                    className="w-full py-3 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-500 text-sm font-bold cursor-not-allowed"
-                  >
-                    {tier.id === "free" ? "Current plan" : "Active"}
-                  </button>
-                ) : tier.id === "free" ? (
-                  <button
-                    disabled
-                    className="w-full py-3 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-500 text-sm font-bold cursor-not-allowed"
-                  >
-                    Free forever
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      startTrial();
-                      // For Studio, we just start the Pro trial for now
-                    }}
-                    className={`w-full py-3 rounded-lg text-sm font-bold transition-colors ${
-                      tier.highlight
-                        ? "bg-amber-500 hover:bg-amber-600 text-white"
-                        : "bg-emerald-600 hover:bg-emerald-700 text-white"
-                    }`}
-                  >
-                    {isPro ? "Upgrade to " + tier.name : tier.cta} →
-                  </button>
-                )}
-                {isStudio && (
-                  <p className="text-[10px] text-gray-400 text-center mt-2">
-                    Billed monthly · Cancel anytime
-                  </p>
-                )}</div>
-
-            );
-          })}
+                {busy ? "Opening secure checkout…" : `${trialCopy} →`}
+              </button>
+            )}
+            <p className="text-[11px] text-gray-500 text-center mt-2">
+              {pro?.hadSubscription ? "Billed monthly · Cancel anytime" : `Card required · ${PRICE}/month after the trial · Cancel anytime`}
+            </p>
+          </div>
         </div>
 
         {/* FAQ */}
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-6">
-            Questions, answered
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-6">Questions, answered</h2>
           <div className="space-y-3">
-            {[
-              {
-                q: "Do I need a credit card to start the trial?",
-                a: "No. The trial is on us for 30 days. You can upgrade to a paid plan at any time, or let it expire — no charge.",
-              },
-              {
-                q: "What happens to my applications when the trial ends?",
-                a: "All applications you sent during the trial stay in your history. You go back to the free limit (3 per week) unless you upgrade.",
-              },
-              {
-                q: "Can I cancel anytime?",
-                a: "Yes. One click in your settings. No questions, no retention offers.",
-              },
-              {
-                q: "What counts as an application?",
-                a: "Each time you click 'Apply' on a gig. Viewing a gig, saving it, or messaging the poster doesn't count.",
-              },
-              {
-                q: "How do I earn money from GRID?",
-                a: "Apply to paid gigs (Ministry of Sound, Studio X, and 128+ open collabs this week). GRID takes 0% of what you earn from collabs you find here.",
-              },
-            ].map((faq, i) => (
-              <details key={i} className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4">
-                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer text-sm">
-                  {faq.q}
-                </summary>
+            {FAQ.map((faq) => (
+              <details key={faq.q} className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4">
+                <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer text-sm">{faq.q}</summary>
                 <p className="text-sm text-gray-600 dark:text-zinc-400 mt-3">{faq.a}</p>
               </details>
             ))}
           </div>
+          <p className="mt-6 text-center text-xs text-gray-500">
+            Payments are processed securely by Stripe. By subscribing you agree to our{" "}
+            <Link href="/terms" className="underline">Terms</Link> and <Link href="/refund-policy" className="underline">Refund policy</Link>.
+          </p>
         </div>
 
-        {/* Footer CTA */}
         <div className="text-center mt-12">
-          <p className="text-sm text-gray-500 dark:text-zinc-400 mb-4">
-            Ready to find your next paid gig?
-          </p>
-          <Link
-            href="/network"
-            className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-lg transition-colors"
-          >
-            Browse open collabs →
+          <Link href="/home" className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-lg transition-colors">
+            Back to GRID →
           </Link>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProPageInner />
+    </Suspense>
   );
 }

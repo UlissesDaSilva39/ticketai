@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { sendTicketEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { handleBillingEvent } from "@/lib/pro";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -22,6 +23,14 @@ export async function POST(req: NextRequest) {
     const message = err instanceof Error ? err.message : "Invalid signature";
     console.error("Webhook signature verification failed:", message);
     return NextResponse.json({ error: message }, { status: 400 });
+  }
+
+  // GRID Pro subscriptions (checkout + subscription created/updated/deleted).
+  try {
+    if (await handleBillingEvent(event)) return NextResponse.json({ received: true });
+  } catch (err) {
+    console.error("Pro billing webhook failed:", err);
+    return NextResponse.json({ error: "Pro billing failed" }, { status: 500 });
   }
 
   if (event.type !== "checkout.session.completed") {

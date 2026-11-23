@@ -1,6 +1,7 @@
 // Server-only helpers for invite codes and referrals (service key; never import in client code).
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notifyServer } from "@/lib/notify-server";
+import { grantPro, REFERRAL_REWARD_DAYS } from "@/lib/pro";
 
 export const REFERRAL_GOAL = 3; // friends who join = 1 free Pro month
 
@@ -59,14 +60,19 @@ export async function recordReferral(referredId: string, rawCode: unknown, refer
   const { count } = await admin.from("referrals").select("id", { count: "exact", head: true }).eq("referrer_id", owner.user_id);
   const total = count ?? 1;
   const who = referredName && !referredName.includes("@") ? referredName : "Someone";
+
+  // Reward: a free month of Pro once the goal is reached (given only once).
+  const rewarded = total >= REFERRAL_GOAL ? await grantPro(owner.user_id, "referral", REFERRAL_REWARD_DAYS, `${total} referrals`) : false;
+
   await notifyServer({
     userId: owner.user_id,
     type: "referral",
     title: `${who} joined GRID with your invite 🎉`,
-    body:
-      total >= REFERRAL_GOAL
-        ? `That's ${total} friends — you've unlocked a free month of GRID Pro.`
+    body: rewarded
+      ? `That's ${total} friends — your free month of GRID Pro is now active.`
+      : total >= REFERRAL_GOAL
+        ? `That's ${total} friends who joined through you. Thank you!`
         : `${total} of ${REFERRAL_GOAL} friends joined. ${REFERRAL_GOAL - total} more for a free Pro month.`,
-    href: "/home",
+    href: rewarded ? "/pro" : "/home",
   });
 }
