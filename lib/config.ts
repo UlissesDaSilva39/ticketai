@@ -34,7 +34,6 @@ export const config = {
   },
 
   auth: {
-    cookieName: optional("NEXT_PUBLIC_AUTH_COOKIE_NAME", "ticketai_session"),
     loginPath: optional("NEXT_PUBLIC_AUTH_LOGIN_PATH", "/auth/login"),
     logoutPath: optional("NEXT_PUBLIC_AUTH_LOGOUT_PATH", "/auth/logout"),
     refreshPath: optional("NEXT_PUBLIC_AUTH_REFRESH_PATH", "/auth/refresh"),

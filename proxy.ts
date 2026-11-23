@@ -1,12 +1,60 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { createAdminClient } from "@/lib/supabase/admin";
+
+async function isAdmin(userId: string) {
+  const { data } = await createAdminClient()
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .maybeSingle();
+  return data?.role === "admin";
+}
 
 // Next.js 16: this file replaces middleware.ts (same behaviour, new name).
-const IS_PROD = process.env.NEXT_PUBLIC_ENV === "production";
+const IS_PROD = process.env.NODE_ENV === "production" || process.env.NEXT_PUBLIC_ENV === "production";
 
-const PUBLIC_PATHS = ["/login", "/register", "/signup", "/verify", "/premium", "/faq", "/about", "/auth"];
-const PROTECTED_PATHS = ["/dashboard", "/analytics", "/social", "/artists/me"];
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const SUPABASE_WS = SUPABASE_URL.replace(/^http/, "ws");
+
+// Content-Security-Policy: only our own scripts plus Stripe; embeds limited to the
+// players we use. 'unsafe-inline' is needed for Next's inline bootstrap scripts
+// (a nonce-based policy would be the next step up); 'unsafe-eval' only in dev.
+const CSP = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${IS_PROD ? "" : " 'unsafe-eval'"} https://js.stripe.com`,
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob: https:",
+  "media-src 'self' blob: https:",
+  `connect-src 'self' ${SUPABASE_URL} ${SUPABASE_WS} https://api.stripe.com${IS_PROD ? "" : " ws: wss:"}`,
+  "frame-src https://open.spotify.com https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://js.stripe.com https://hooks.stripe.com",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  ...(IS_PROD ? ["upgrade-insecure-requests"] : []),
+].join("; ");
+
+const PUBLIC_PATHS = ["/login", "/register", "/signup", "/forgot-password", "/reset-password", "/premium", "/faq", "/about", "/auth"];
+// Members-only areas: logged-out visitors are sent to /login?redirect=<page>.
+// Marketing, discovery (cities, genres, artists, events), pricing and legal pages stay public.
+const PROTECTED_PATHS = [
+  // feed & social
+  "/home", "/feed", "/network", "/connections", "/friends", "/following", "/people", "/groups", "/social",
+  // work & messages
+  "/jobs", "/opportunities", "/messaging", "/messages", "/inbox", "/notifications",
+  // the user's own stuff
+  "/profile", "/my-grid", "/my-tickets", "/epk", "/saved", "/settings", "/onboarding", "/artists/me",
+  // money
+  "/payments", "/wallet", "/splits", "/royalties", "/seller", "/upgrade",
+  // tools
+  "/dashboard", "/analytics", "/business", "/calendar", "/promote", "/upload", "/studio",
+  "/distribution", "/import", "/verify",
+  // staff
+  "/admin",
+];
 
 function matches(pathname: string, paths: string[]) {
   return paths.some((p) => pathname === p || pathname.startsWith(p + "/"));
@@ -17,6 +65,8 @@ function withSecurityHeaders(res: NextResponse) {
   res.headers.set("X-Frame-Options", "DENY");
   res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   res.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.headers.set("Content-Security-Policy", CSP);
+  res.headers.set("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
   if (IS_PROD) {
     res.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
   }
@@ -52,6 +102,11 @@ export async function proxy(req: NextRequest) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("redirect", pathname);
     return withSecurityHeaders(NextResponse.redirect(loginUrl));
+  }
+
+  // Admin area: logged in is not enough, the profile must have role = 'admin'.
+  if (user && matches(pathname, ["/admin"]) && !(await isAdmin(user.id))) {
+    return withSecurityHeaders(NextResponse.redirect(new URL("/unauthorized", req.url)));
   }
 
   return withSecurityHeaders(res);

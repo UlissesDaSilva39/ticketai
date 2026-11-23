@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 // Matches the check constraint on public.profiles.role ('fan','artist','industry').
 export type ProfileRole = "fan" | "artist" | "industry";
@@ -73,6 +74,11 @@ export async function signUp(input: SignupInput): Promise<SignupResult> {
   // when email confirmation is off in Supabase.
   // The confirmation email links back here, so it works on any port/domain.
   const h = await headers();
+
+  // Stop sign-up spam: 5 sign-ups per IP per hour.
+  if (!rateLimit(`signup:ip:${clientIp(h)}`, 5, 60 * 60 * 1000).ok) {
+    return { error: "Too many sign-up attempts. Please try again later." };
+  }
   const origin =
     h.get("origin") ??
     `${h.get("x-forwarded-proto") ?? "http"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
@@ -88,16 +94,18 @@ export async function signUp(input: SignupInput): Promise<SignupResult> {
   });
 
   if (error) {
+    // Don't reveal which emails have accounts: answer exactly like a new sign-up.
     if (error.code === "user_already_exists" || /already registered/i.test(error.message)) {
-      return { error: "An account with this email already exists. Try logging in." };
+      return { ok: true, needsConfirmation: true };
     }
     return { error: error.message };
   }
   if (!data.user) return { error: "Could not create your account. Please try again." };
 
   // Supabase returns a user with no identities when the email is already registered.
+  // Same answer as a new sign-up so the page can't be used to discover accounts.
   if (data.user.identities && data.user.identities.length === 0) {
-    return { error: "An account with this email already exists. Try logging in." };
+    return { ok: true, needsConfirmation: true };
   }
 
   // Service role: works even before the user has a session (email confirmation on),

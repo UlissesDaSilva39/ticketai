@@ -71,7 +71,7 @@ export default function SignupPage() {
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Check your email</h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             We sent a confirmation link to <span className="font-semibold text-gray-900 dark:text-white">{confirmEmail}</span>.
-            Click it to activate your account, then log in.
+            Click it to activate your account, then log in. Already have an account? Just log in or reset your password.
           </p>
           <Link href="/login" className="inline-block mt-8 text-emerald-600 font-semibold hover:underline">Go to log in →</Link>
         </div>
