@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { passwordProblem } from "@/lib/auth/password-policy";
 
 // Matches the check constraint on public.profiles.role ('fan','artist','industry').
 export type ProfileRole = "fan" | "artist" | "industry";
@@ -58,7 +59,8 @@ export async function signUp(input: SignupInput): Promise<SignupResult> {
   const city = (input.city ?? "").trim();
 
   if (!email || !password) return { error: "Email and password are required." };
-  if (password.length < 8) return { error: "Password must be at least 8 characters." };
+  const weak = passwordProblem(password, email);
+  if (weak) return { error: weak };
   if (!full_name) return { error: "Please enter your full name." };
   if (!ROLES.includes(role)) return { error: "Please choose who you are." };
 

@@ -9,14 +9,16 @@
 --   promoters            -> commission_rate
 --   venues               -> revenue_share_percent, total_revenue
 --
--- BEFORE RUNNING: these queries use select('*') with the visitor's key and will
--- fail with "permission denied" once columns are hidden. Change them to list
--- the columns they actually show:
---   app/u/[username]/page.tsx        (profiles)
---   app/organizers/[id]/page.tsx
---   app/organizer/profile/page.tsx
---   app/dashboard/page.tsx           (count only: use select('id', ...))
---   any public artist / venue / promoter page that reads these tables
+-- READY TO RUN (updated 2026-11-23): the public pages that read these tables
+-- as a logged-out visitor now select only safe columns via
+-- lib/db/public-columns.ts (keep that file and the GRANT lists below in sync):
+--   app/u/[username]/page.tsx, app/organizers/[id]/page.tsx, app/venue/[slug]/page.tsx
+-- Owner dashboards that read private columns (organizer, venue/promoter
+-- dashboards) are members-only in proxy.ts, so they use the logged-in role,
+-- which this script does not change.
+--
+-- HOW TO RUN: Supabase dashboard → SQL Editor → paste this file → Run.
+-- Then open /u/<a username> and /organizers/<id> while logged out to confirm.
 --
 -- How it works: Postgres column privileges. We remove table-wide SELECT for the
 -- anon role and grant SELECT only on the safe columns. Logged-in users

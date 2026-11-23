@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { passwordProblem, PASSWORD_HINT } from "@/lib/auth/password-policy";
 
 // Reached from the password-reset email (via /auth/callback, which signs the user in).
 export default function ResetPasswordPage() {
@@ -27,7 +28,8 @@ export default function ResetPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (password.length < 8) return setError("Password must be at least 8 characters.");
+    const weak = passwordProblem(password, email ?? undefined);
+    if (weak) return setError(weak);
     if (password !== confirm) return setError("The two passwords don't match.");
 
     setSaving(true);
@@ -82,7 +84,7 @@ export default function ResetPasswordPage() {
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">New password</label>
                 <input type="password" autoComplete="new-password" value={password}
-                  onChange={(e) => setPassword(e.target.value)} placeholder="At least 8 characters" className={inputClass} />
+                  onChange={(e) => setPassword(e.target.value)} placeholder={PASSWORD_HINT} className={inputClass} />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Confirm password</label>

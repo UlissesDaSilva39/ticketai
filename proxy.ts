@@ -52,6 +52,8 @@ const PROTECTED_PATHS = [
   // tools
   "/dashboard", "/analytics", "/business", "/calendar", "/promote", "/upload", "/studio",
   "/distribution", "/import", "/verify",
+  // owner dashboards (they read the owner's private columns)
+  "/organizer", "/venue/dashboard", "/promoter/dashboard", "/promoter/analytics",
   // staff
   "/admin",
 ];

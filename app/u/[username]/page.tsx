@@ -1,4 +1,5 @@
 ﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { PUBLIC_PROFILE_COLUMNS } from "@/lib/db/public-columns";
 import { EventCard } from "@/components/EventCard";
 import FriendButton from "@/components/FriendButton";
 import MessageButton from "@/components/MessageButton";
@@ -18,7 +19,7 @@ export default async function PublicProfilePage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("*")
+    .select(PUBLIC_PROFILE_COLUMNS)
     .ilike("username", username)
     .eq("is_public", true)
     .maybeSingle();

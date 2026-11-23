@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp } from "./actions";
 import { createClient } from "@/lib/supabase/client";
+import { passwordProblem, PASSWORD_HINT } from "@/lib/auth/password-policy";
 
 const CheckIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -31,7 +32,8 @@ export default function SignupPage() {
     setError("");
     if (!role) return setError("Please choose Artist / Producer or Venue / A&R.");
     if (!fullName.trim()) return setError("Please enter your full name.");
-    if (password.length < 8) return setError("Password must be at least 8 characters.");
+    const weak = passwordProblem(password, email);
+    if (weak) return setError(weak);
 
     startTransition(async () => {
       const res = await signUp({ email, password, full_name: fullName, role: profileRole });
@@ -205,7 +207,8 @@ export default function SignupPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 8 characters"
+                placeholder={PASSWORD_HINT}
+                autoComplete="new-password"
                 className="w-full bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
               />
             </div>

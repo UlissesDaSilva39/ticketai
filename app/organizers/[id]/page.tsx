@@ -1,4 +1,5 @@
 ﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { PUBLIC_PROFILE_COLUMNS } from "@/lib/db/public-columns";
 import { EventCard } from "@/components/EventCard";
 import FollowButton from "@/components/FollowButton";
 import Link from "next/link";
@@ -33,7 +34,7 @@ export default async function OrganizerProfilePage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("*")
+    .select(PUBLIC_PROFILE_COLUMNS)
     .eq("id", id)
     .maybeSingle();
 
