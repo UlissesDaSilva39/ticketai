@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ReplyIcon } from "@/components/MusicIcons";
+import ShareMenu from "./ShareMenu";
 import { addComment, deleteComment, getComments, incrementShare, type FeedComment } from "@/app/home/actions";
 import { eventDate, type SavedPost } from "@/components/grid/GridComposer";
 import { initials, roleLabel } from "@/lib/hooks/useMe";
@@ -225,26 +226,8 @@ function PostCard({
   onFollow: () => void;
   onShared: (count: number) => void;
 }) {
-  const [shareNote, setShareNote] = useState<string | null>(null);
-
-  // Share: phone share sheet when available, otherwise copy the post link.
-  async function share() {
-    const url = `${window.location.origin}/post/${post.id}`;
-    let shared = false;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: "Post on GRID", text: post.body?.slice(0, 100) ?? "", url });
-        shared = true;
-      } else {
-        await navigator.clipboard.writeText(url);
-        shared = true;
-        setShareNote("Link copied ✓");
-        setTimeout(() => setShareNote(null), 2000);
-      }
-    } catch {
-      // Share sheet cancelled, or clipboard blocked.
-    }
-    if (!shared) return;
+  // Count a share once the user copies the link or picks a destination.
+  async function countShare() {
     try {
       const res = await incrementShare(post.id);
       if ("share_count" in res && typeof res.share_count === "number") onShared(res.share_count);
@@ -415,16 +398,12 @@ function PostCard({
             >
               <ReplyIcon className="w-5 h-5" /> Reply{post.comment_count ? ` (${post.comment_count})` : ""}
             </button>
-            <button
-              type="button"
-              onClick={share}
-              className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors"
-            >
-              <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              {shareNote ?? `Share${post.share_count ? ` (${post.share_count})` : ""}`}
-            </button>
+            <ShareMenu
+              url={typeof window !== "undefined" ? `${window.location.origin}/post/${post.id}` : `/post/${post.id}`}
+              text={post.body ?? `${name} on GRID`}
+              label={`Share${post.share_count ? ` (${post.share_count})` : ""}`}
+              onShared={countShare}
+            />
           </div>
 
           {replyOpen && (
