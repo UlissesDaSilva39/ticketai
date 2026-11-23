@@ -5,6 +5,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { passwordProblem } from "@/lib/auth/password-policy";
+import { recordReferral } from "@/lib/referrals";
 
 // Matches the check constraint on public.profiles.role ('fan','artist','industry').
 export type ProfileRole = "fan" | "artist" | "industry";
@@ -16,6 +17,8 @@ type SignupInput = {
   role: ProfileRole;
   username?: string;
   city?: string;
+  /** Invite code from /signup?ref=CODE */
+  ref?: string | null;
 };
 
 export type SignupResult =
@@ -127,6 +130,15 @@ export async function signUp(input: SignupInput): Promise<SignupResult> {
   if (profileError) {
     console.error("[signup] profile upsert failed:", profileError);
     return { error: "Your account was created, but setting up your profile failed. Please contact support." };
+  }
+
+  // Joined through someone's invite link: record it and notify the inviter.
+  if (input.ref) {
+    try {
+      await recordReferral(data.user.id, input.ref, full_name);
+    } catch (e) {
+      console.error("[signup] referral not recorded:", e);
+    }
   }
 
   return { ok: true, needsConfirmation: !data.session };

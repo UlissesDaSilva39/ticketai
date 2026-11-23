@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { recordReferral } from "@/lib/referrals";
 
 // Google (OAuth) and email-confirmation links land here with a one-time ?code=.
 // We swap it for a session cookie, make sure a profile row exists, then redirect.
@@ -54,6 +55,16 @@ export async function GET(req: Request) {
       { onConflict: "id" }
     );
     if (profileError) console.error("[auth/callback] profile upsert failed:", profileError);
+
+    // New Google sign-up through an invite link (/signup?ref=CODE).
+    const ref = url.searchParams.get("ref");
+    if (ref) {
+      try {
+        await recordReferral(user.id, ref, full_name);
+      } catch (e) {
+        console.error("[auth/callback] referral not recorded:", e);
+      }
+    }
   }
 
   return NextResponse.redirect(new URL(next, url.origin));

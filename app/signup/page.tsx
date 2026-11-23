@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp } from "./actions";
@@ -22,6 +22,23 @@ export default function SignupPage() {
   const [isLoading, startTransition] = useTransition();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+  // Invite code from /signup?ref=CODE, kept for 30 days in case they leave and come back.
+  const [ref, setRef] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const fromUrl = new URLSearchParams(window.location.search).get("ref");
+      const code = fromUrl && /^[A-Za-z0-9]{6,12}$/.test(fromUrl) ? fromUrl.toUpperCase() : null;
+      if (code) {
+        localStorage.setItem("grid:ref", JSON.stringify({ code, at: Date.now() }));
+        setRef(code);
+        return;
+      }
+      const saved = JSON.parse(localStorage.getItem("grid:ref") || "null");
+      if (saved?.code && Date.now() - saved.at < 30 * 24 * 3600 * 1000) setRef(saved.code);
+    } catch {
+      /* storage unavailable */
+    }
+  }, []);
   const [confirmEmail, setConfirmEmail] = useState<string | null>(null);
 
   // "Venue / A&R" maps to the "industry" role in the profiles table.
@@ -36,7 +53,7 @@ export default function SignupPage() {
     if (weak) return setError(weak);
 
     startTransition(async () => {
-      const res = await signUp({ email, password, full_name: fullName, role: profileRole });
+      const res = await signUp({ email, password, full_name: fullName, role: profileRole, ref });
       if ("error" in res && res.error) {
         setError(res.error);
         return;
@@ -54,7 +71,7 @@ export default function SignupPage() {
     setError("");
     setGoogleLoading(true);
     const next = `/onboarding`;
-    const params = new URLSearchParams({ next, ...(role ? { role: profileRole } : {}) });
+    const params = new URLSearchParams({ next, ...(role ? { role: profileRole } : {}), ...(ref ? { ref } : {}) });
     const { error } = await createClient().auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${window.location.origin}/auth/callback?${params}` },
@@ -124,6 +141,11 @@ export default function SignupPage() {
             <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
               Already have an account? <Link href="/login" className="text-emerald-600 font-semibold hover:underline">Log in</Link>
             </p>
+            {ref && (
+              <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+                🎉 You&apos;ve been invited to GRID
+              </p>
+            )}
           </div>
 
           {/* Google OAuth Button */}

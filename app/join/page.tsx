@@ -17,6 +17,11 @@ export default function JoinPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const r = params.get("ref");
+    // Real invite codes now go straight to sign-up.
+    if (r && /^[A-Za-z0-9]{6,12}$/.test(r)) {
+      window.location.replace("/signup?ref=" + encodeURIComponent(r.toUpperCase()));
+      return;
+    }
     setRef(r);
     recordOpen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
