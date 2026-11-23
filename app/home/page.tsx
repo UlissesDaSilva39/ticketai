@@ -10,7 +10,7 @@ import TrustStrip from "@/components/home/TrustStrip";
 import CtaTracker from "@/components/home/CtaTracker";
 import MobileProBar from "@/components/home/MobileProBar";
 import MatchedForYou from "@/components/home/MatchedForYou";
-import PostCollabButton from "@/components/home/PostCollabButton";
+import OpenCollabs from "@/components/home/OpenCollabs";
 import ProfileStrength from "@/components/home/ProfileStrength";
 import GridStories from "@/components/grid/GridStories";
 import GridComposer, { type SavedPost } from "@/components/grid/GridComposer";
@@ -49,20 +49,6 @@ export default function HomePage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [postToast, setPostToast] = useState(false);
   const [newPost, setNewPost] = useState<SavedPost | null>(null);
-
-  // Algorithmic Matches
-  const [matches, setMatches] = useState([
-    { id: 1, type: "COLLAB", title: "House Vocalist needed", poster: "Sarah J.", match: "98% match", reason: "Same genre (House) + 3 mutual collabs", color: "bg-pink-500" },
-    { id: 2, type: "BOOKING", title: "Opening slot at Ministry of Sound", poster: "The O2 Academy", match: "95% match", reason: "Your genre + London based", color: "bg-emerald-600" },
-    { id: 3, type: "COLLAB", title: "Techno remix swap", poster: "Alex Rivera", match: "89% match", reason: "Same BPM range + techno focus", color: "bg-indigo-500" },
-  ]);
-  const [dismissedMatches, setDismissedMatches] = useState<number[]>([]);
-
-  const dismissMatch = (id: number) => {
-    setDismissedMatches([...dismissedMatches, id]);
-  };
-
-  const visibleMatches = matches.filter(m => !dismissedMatches.includes(m.id));
 
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen relative">
@@ -133,10 +119,8 @@ export default function HomePage() {
           {/* STORIES */}
           <GridStories />
 
-          {/* ALGORITHMIC MATCHES */}
-          {visibleMatches.length > 0 && (
-            <MatchedForYou />
-          )}
+          {/* Opportunities ranked for this user (/api/matches) */}
+          <MatchedForYou />
 
           {/* Composer (photo/video upload + posts) */}
           <GridComposer
@@ -177,26 +161,7 @@ export default function HomePage() {
         <aside className="col-span-12 lg:col-span-3 space-y-4">
           <ProTrialCard />
           <InviteCard />
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
-            <h3 className="font-bold text-gray-900 dark:text-white text-base mb-4">Open Collabs</h3>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3 group cursor-pointer" onClick={() => router.push('/jobs')}>
-                <MicIcon className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors">Vocalist needed for House track</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Posted by Sarah J. · 2h ago</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 group cursor-pointer" onClick={() => router.push('/jobs')}>
-                <SlidersIcon className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 transition-colors">Mixing &amp; Mastering Engineer</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Posted by Studio X · 5h ago</p>
-                </div>
-              </div>
-            </div>
-            <PostCollabButton />
-          </div>
+          <OpenCollabs />
 
           <SuggestedPeople />
         </aside>
