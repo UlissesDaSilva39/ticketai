@@ -151,7 +151,7 @@ export default function HomePage() {
           <OfferBanner />
           
           {/* STORIES */}
-          <GridStories />
+          <GridStories myName={myName} myAvatar={me?.profile.avatar_url ?? null} />
 
           {/* Opportunities ranked for this user (/api/matches) */}
           <MatchedForYou />
