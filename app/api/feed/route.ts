@@ -52,5 +52,17 @@ export async function GET(req: Request) {
   const eventsById = Object.fromEntries((events ?? []).map((e) => [e.id, e]));
   const postsWithEvents = list.map((p) => ({ ...p, event: p.event_id ? eventsById[p.event_id] ?? null : null }));
 
-  return NextResponse.json({ posts: postsWithEvents, authors, liked });
+  // Which of these authors the viewer already follows (for the Follow button).
+  const following: Record<string, boolean> = {};
+  if (user && authorIds.length) {
+    const { data: f } = await supabase
+      .from("follows")
+      .select("target_id")
+      .eq("follower_id", user.id)
+      .eq("target_type", "user")
+      .in("target_id", authorIds);
+    for (const row of f || []) following[row.target_id] = true;
+  }
+
+  return NextResponse.json({ posts: postsWithEvents, authors, liked, following, viewerId: user?.id ?? null });
 }

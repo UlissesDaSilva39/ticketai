@@ -145,19 +145,24 @@ export async function hasLiked(postId: string) {
   return !!data;
 }
 
+/** Count a share. Logged-in only; each user counts once per post per hour. */
 export async function incrementShare(postId: string) {
   const supabase = await createServerSupabase();
-  const { data: post } = await supabase
-    .from("posts")
-    .select("share_count")
-    .eq("id", postId)
-    .maybeSingle();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in" };
+
+  const admin = createAdminClient();
+  const { data: post } = await admin.from("posts").select("share_count").eq("id", postId).maybeSingle();
   if (!post) return { error: "Post not found" };
+
+  // Re-sharing the same post doesn't inflate the count.
+  if (!rateLimit(`share:${user.id}:${postId}`, 1, 60 * 60 * 1000).ok) {
+    return { ok: true, share_count: post.share_count || 0 };
+  }
+
+  // posts is only writable by its author under RLS, so the server saves the count.
   const next = (post.share_count || 0) + 1;
-  const { error } = await supabase
-    .from("posts")
-    .update({ share_count: next })
-    .eq("id", postId);
-  if (error) return { error: error.message };
+  const { error } = await admin.from("posts").update({ share_count: next }).eq("id", postId);
+  if (error) return { error: "Could not save" };
   return { ok: true, share_count: next };
 }

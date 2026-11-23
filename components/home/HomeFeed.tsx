@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { HypeIcon, ReplyIcon } from "@/components/MusicIcons";
-import { addComment, deleteComment, getComments, type FeedComment } from "@/app/home/actions";
+import { ReplyIcon } from "@/components/MusicIcons";
+import { addComment, deleteComment, getComments, incrementShare, type FeedComment } from "@/app/home/actions";
 import { eventDate, type SavedPost } from "@/components/grid/GridComposer";
 import { initials, roleLabel } from "@/lib/hooks/useMe";
 
@@ -33,6 +33,8 @@ export default function HomeFeed({ newPost, me }: { newPost: SavedPost | null; m
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [authors, setAuthors] = useState<Record<string, Author>>({});
   const [liked, setLiked] = useState<Record<string, boolean>>({});
+  const [following, setFollowing] = useState<Record<string, boolean>>({});
+  const [viewerId, setViewerId] = useState<string | null>(me?.id ?? null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
@@ -41,8 +43,33 @@ export default function HomeFeed({ newPost, me }: { newPost: SavedPost | null; m
   const load = useCallback(async (offset: number) => {
     const res = await fetch(`/api/feed?offset=${offset}&limit=${PAGE}`, { credentials: "include", cache: "no-store" });
     if (!res.ok) throw new Error("Could not load the feed.");
-    return (await res.json()) as { posts: FeedPost[]; authors: Record<string, Author>; liked: Record<string, boolean> };
+    return (await res.json()) as {
+      posts: FeedPost[];
+      authors: Record<string, Author>;
+      liked: Record<string, boolean>;
+      following?: Record<string, boolean>;
+      viewerId?: string | null;
+    };
   }, []);
+
+  // Follow / unfollow a post's author (updates every post by that author).
+  async function toggleFollow(authorId: string) {
+    const next = !following[authorId];
+    setFollowing((f) => ({ ...f, [authorId]: next }));
+    try {
+      const res = await fetch("/api/follows/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ targetType: "user", targetId: authorId, following: next }),
+      });
+      if (!res.ok) throw new Error();
+      const d = await res.json();
+      setFollowing((f) => ({ ...f, [authorId]: !!d.following }));
+    } catch {
+      setFollowing((f) => ({ ...f, [authorId]: !next }));
+    }
+  }
 
   useEffect(() => {
     let alive = true;
@@ -52,6 +79,8 @@ export default function HomeFeed({ newPost, me }: { newPost: SavedPost | null; m
         setPosts(d.posts);
         setAuthors(d.authors);
         setLiked(d.liked);
+        setFollowing(d.following ?? {});
+        if (d.viewerId) setViewerId(d.viewerId);
         setHasMore(d.posts.length === PAGE);
       })
       .catch((e) => alive && setError(e.message))
@@ -75,6 +104,7 @@ export default function HomeFeed({ newPost, me }: { newPost: SavedPost | null; m
       setPosts((cur) => [...cur, ...d.posts.filter((p) => !cur.some((c) => c.id === p.id))]);
       setAuthors((a) => ({ ...a, ...d.authors }));
       setLiked((l) => ({ ...l, ...d.liked }));
+      setFollowing((f) => ({ ...f, ...(d.following ?? {}) }));
       setHasMore(d.posts.length === PAGE);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not load more.");
@@ -153,6 +183,10 @@ export default function HomeFeed({ newPost, me }: { newPost: SavedPost | null; m
           onCommented={(count) =>
             setPosts((cur) => cur.map((p) => (p.id === post.id ? { ...p, comment_count: count ?? (p.comment_count ?? 0) + 1 } : p)))
           }
+          isMine={!!viewerId && post.author_id === viewerId}
+          following={!!following[post.author_id]}
+          onFollow={() => toggleFollow(post.author_id)}
+          onShared={(count) => setPosts((cur) => cur.map((p) => (p.id === post.id ? { ...p, share_count: count } : p)))}
         />
       ))}
 
@@ -176,13 +210,48 @@ function PostCard({
   liked,
   onHype,
   onCommented,
+  isMine,
+  following,
+  onFollow,
+  onShared,
 }: {
   post: FeedPost;
   author?: Author;
   liked: boolean;
   onHype: () => void;
   onCommented: (count?: number) => void;
+  isMine: boolean;
+  following: boolean;
+  onFollow: () => void;
+  onShared: (count: number) => void;
 }) {
+  const [shareNote, setShareNote] = useState<string | null>(null);
+
+  // Share: phone share sheet when available, otherwise copy the post link.
+  async function share() {
+    const url = `${window.location.origin}/post/${post.id}`;
+    let shared = false;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Post on GRID", text: post.body?.slice(0, 100) ?? "", url });
+        shared = true;
+      } else {
+        await navigator.clipboard.writeText(url);
+        shared = true;
+        setShareNote("Link copied ✓");
+        setTimeout(() => setShareNote(null), 2000);
+      }
+    } catch {
+      // Share sheet cancelled, or clipboard blocked.
+    }
+    if (!shared) return;
+    try {
+      const res = await incrementShare(post.id);
+      if ("share_count" in res && typeof res.share_count === "number") onShared(res.share_count);
+    } catch {
+      /* count not saved: the link was still shared */
+    }
+  }
   const [replyOpen, setReplyOpen] = useState(false);
   const [reply, setReply] = useState("");
   const [sending, setSending] = useState(false);
@@ -262,9 +331,25 @@ function PostCard({
       <div className="flex items-start gap-3">
         {profileHref ? <Link href={profileHref}>{avatar}</Link> : avatar}
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-gray-900 dark:text-white text-base truncate">
-            {profileHref ? <Link href={profileHref} className="hover:underline">{name}</Link> : name}
-          </p>
+          <div className="flex items-center gap-2 min-w-0">
+            <p className="font-bold text-gray-900 dark:text-white text-base truncate">
+              {profileHref ? <Link href={profileHref} className="hover:underline">{name}</Link> : name}
+            </p>
+            {!isMine && (
+              <button
+                type="button"
+                onClick={onFollow}
+                aria-pressed={following}
+                className={`flex-shrink-0 text-xs font-bold px-3 py-0.5 rounded-full transition-colors ${
+                  following
+                    ? "bg-gray-200 text-gray-700 dark:bg-zinc-700 dark:text-gray-300"
+                    : "border border-emerald-600 text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400"
+                }`}
+              >
+                {following ? "Following" : "+ Follow"}
+              </button>
+            )}
+          </div>
           <p className="text-xs text-gray-500">
             {roleLabel(author?.role, author?.genre)} · <time dateTime={post.created_at}>{timeAgo(post.created_at)}</time>
           </p>
@@ -317,9 +402,10 @@ function PostCard({
               type="button"
               onClick={onHype}
               aria-pressed={liked}
-              className={`flex items-center gap-2 text-sm font-semibold transition-colors ${liked ? "text-emerald-600" : "text-gray-600 dark:text-gray-400 hover:text-emerald-600"}`}
+              aria-label={liked ? "Unlike" : "Like"}
+              className={`flex items-center gap-2 text-sm font-semibold transition-colors ${liked ? "text-rose-600" : "text-gray-600 dark:text-gray-400 hover:text-rose-600"}`}
             >
-              <HypeIcon className="w-5 h-5" /> Hype{post.like_count ? ` (${post.like_count})` : ""}
+              <span aria-hidden="true" className="text-lg leading-none">{liked ? "♥" : "♡"}</span> Like{post.like_count ? ` (${post.like_count})` : ""}
             </button>
             <button
               type="button"
@@ -328,6 +414,16 @@ function PostCard({
               className={`flex items-center gap-2 text-sm font-semibold transition-colors ${replyOpen ? "text-emerald-600" : "text-gray-600 dark:text-gray-400 hover:text-emerald-600"}`}
             >
               <ReplyIcon className="w-5 h-5" /> Reply{post.comment_count ? ` (${post.comment_count})` : ""}
+            </button>
+            <button
+              type="button"
+              onClick={share}
+              className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors"
+            >
+              <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              {shareNote ?? `Share${post.share_count ? ` (${post.share_count})` : ""}`}
             </button>
           </div>
 
