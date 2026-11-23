@@ -12,6 +12,8 @@ import MobileProBar from "@/components/home/MobileProBar";
 import MatchedForYou from "@/components/home/MatchedForYou";
 import PostCollabButton from "@/components/home/PostCollabButton";
 import ProfileStrength from "@/components/home/ProfileStrength";
+import GridStories from "@/components/grid/GridStories";
+import GridComposer from "@/components/grid/GridComposer";
 
 const VerifiedIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
@@ -28,7 +30,6 @@ export default function HomePage() {
   const [hypeCount, setHypeCount] = useState(0);
   const [hasHyped, setHasHyped] = useState(false);
   const [followed, setFollowed] = useState<{[key: string]: boolean}>({});
-  const [postText, setPostText] = useState("");
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [postToast, setPostToast] = useState(false);
@@ -40,13 +41,6 @@ export default function HomePage() {
     { id: 3, type: "COLLAB", title: "Techno remix swap", poster: "Alex Rivera", match: "89% match", reason: "Same BPM range + techno focus", color: "bg-indigo-500" },
   ]);
   const [dismissedMatches, setDismissedMatches] = useState<number[]>([]);
-
-  const handlePublish = () => {
-    if (!postText.trim()) return;
-    setPostToast(true);
-    setPostText("");
-    setTimeout(() => setPostToast(false), 3000);
-  };
 
   const handleHype = () => {
     if (!hasHyped) {
@@ -119,43 +113,25 @@ export default function HomePage() {
           <MobileProBar />
           <OfferBanner />
           
+          {/* STORIES */}
+          <GridStories />
+
           {/* ALGORITHMIC MATCHES */}
           {visibleMatches.length > 0 && (
             <MatchedForYou />
           )}
 
-          {/* Composer */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 rounded-full bg-emerald-600 text-white grid place-items-center font-bold flex-shrink-0">U</div>
-              <div className="flex-1">
-                <input 
-                  type="text" 
-                  value={postText}
-                  onChange={(e) => setPostText(e.target.value)}
-                  placeholder="Share a track, an event, or an update..." 
-                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-full px-5 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
-                />
-                <div className="flex justify-between items-center mt-3">
-                  <div className="flex gap-2">
-                    <button onClick={() => alert("Audio upload coming soon!")} className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 px-3 py-1.5 rounded-md flex items-center gap-2 transition-colors">
-                      <NoteIcon className="w-4 h-4" /> Audio
-                    </button>
-                    <button onClick={() => alert("Event creation coming soon!")} className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 px-3 py-1.5 rounded-md flex items-center gap-2 transition-colors">
-                      <CalendarSVG className="w-4 h-4" /> Event
-                    </button>
-                  </div>
-                  <button 
-                    onClick={handlePublish}
-                    disabled={!postText.trim()}
-                    className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-2 rounded-md transition-colors"
-                  >
-                    Publish
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Composer (photo/video upload + posts) */}
+          <GridComposer
+            audioIcon={<NoteIcon className="w-4 h-4" />}
+            eventIcon={<CalendarSVG className="w-4 h-4" />}
+            onAudioClick={() => alert("Audio upload coming soon!")}
+            onEventClick={() => alert("Event creation coming soon!")}
+            onPublished={() => {
+              setPostToast(true);
+              setTimeout(() => setPostToast(false), 3000);
+            }}
+          />
 
           {/* Feed Post */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">

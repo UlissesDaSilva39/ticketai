@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -21,7 +21,7 @@ export default function PremiumPage() {
     { name: "Unlimited Direct Messages", free: false, pro: true },
     { name: "Advanced EPK Analytics", free: false, pro: true },
     { name: "Priority Ranking in Collab Feed", free: false, pro: true },
-    { name: "0% Escrow Fee on Transactions", free: false, pro: true },
+    { name: "0% Escrow Fee (Saves you 5%)", free: false, pro: true },
     { name: "Unlimited Split Sheets", free: "Up to 3", pro: true },
     { name: "Verified Artist Badge", free: false, pro: true },
   ];
@@ -57,7 +57,7 @@ export default function PremiumPage() {
               </svg>
             </div>
             <div className="flex-1">
-              <p className="font-bold text-red-900 dark:text-red-400 text-sm">Your free trial ends in 3 days</p>
+              <p className="font-bold text-red-900 dark:text-red-400 text-sm">Founding Member Offer: Lock in £10/month forever.</p>
               <p className="text-xs text-red-700 dark:text-red-500">Upgrade now to keep unlimited DMs and 0% escrow fees.</p>
             </div>
           </div>
@@ -92,17 +92,17 @@ export default function PremiumPage() {
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Basic</h2>
             <p className="text-sm text-gray-500 mb-6">For artists just starting out.</p>
             <div className="mb-6">
-              <span className="text-4xl font-bold text-gray-900 dark:text-white">£0</span>
+              <span className="text-4xl font-bold text-gray-900 dark:text-white">Â£0</span>
               <span className="text-gray-500">/month</span>
             </div>
             <button className="w-full border-2 border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-bold py-3 rounded-xl mb-8 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-default">
-              Current Plan
+              Manage Plan
             </button>
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><CheckIcon className="text-emerald-500" /> Standard Profile</li>
               <li className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><CheckIcon className="text-emerald-500" /> 5 DMs per day</li>
               <li className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><CheckIcon className="text-emerald-500" /> Up to 3 Split Sheets</li>
-              <li className="flex items-center gap-3 text-sm text-gray-400 dark:text-gray-500"><CrossIcon /> No Analytics</li>
+              <li className="flex items-center gap-3 text-sm text-gray-400 dark:text-gray-500"><CrossIcon /> 5% Escrow Fee<br/>No Analytics</li>
             </ul>
           </div>
 
@@ -114,7 +114,7 @@ export default function PremiumPage() {
             </h2>
             <p className="text-sm text-gray-400 mb-6">For serious professionals.</p>
             <div className="mb-6 flex items-end gap-1">
-              <span className="text-4xl font-bold text-white">{isAnnual ? "£8" : "£10"}</span>
+              <span className="text-4xl font-bold text-white">{isAnnual ? "Â£8" : "Â£10"}</span>
               <span className="text-gray-400 mb-1">/month</span>
             </div>
             <button onClick={() => setShowCheckout(true)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl mb-8 transition-colors shadow-lg shadow-emerald-600/30">
@@ -141,13 +141,13 @@ export default function PremiumPage() {
               {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" />)}
             </div>
             <p className="text-sm text-gray-700 dark:text-gray-300 flex-1 leading-relaxed">
-              "I landed a £2,000 sync deal within two weeks of joining GRID Pro. The priority ranking in the collab feed is a game-changer."
+              "I landed a Â£2,000 sync deal within two weeks of joining GRID Pro. The priority ranking in the collab feed is a game-changer."
             </p>
             <div className="flex items-center gap-3 mt-6">
               <div className="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-sm">SJ</div>
               <div>
                 <p className="font-bold text-gray-900 dark:text-white text-sm">Sarah Jenkins</p>
-                <p className="text-xs text-gray-500">Vocalist · London</p>
+                <p className="text-xs text-gray-500">Vocalist Â· London</p>
               </div>
             </div>
           </div>
@@ -163,7 +163,7 @@ export default function PremiumPage() {
               <div className="w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-sm">DC</div>
               <div>
                 <p className="font-bold text-gray-900 dark:text-white text-sm">David Chen</p>
-                <p className="text-xs text-gray-500">Producer · Berlin</p>
+                <p className="text-xs text-gray-500">Producer Â· Berlin</p>
               </div>
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function PremiumPage() {
               <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm">MC</div>
               <div>
                 <p className="font-bold text-gray-900 dark:text-white text-sm">The Midnight Collective</p>
-                <p className="text-xs text-gray-500">Indie Band · Manchester</p>
+                <p className="text-xs text-gray-500">Indie Band Â· Manchester</p>
               </div>
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function PremiumPage() {
                       <p className="font-bold text-gray-900 dark:text-white text-lg">GRID Pro</p>
                       <p className="text-sm text-gray-500">{isAnnual ? "Annual Subscription" : "Monthly Subscription"}</p>
                     </div>
-                    <p className="font-bold text-xl text-gray-900 dark:text-white">{isAnnual ? "£96.00" : "£10.00"}</p>
+                    <p className="font-bold text-xl text-gray-900 dark:text-white">{isAnnual ? "Â£96.00" : "Â£10.00"}</p>
                   </div>
 
                   <div className="space-y-4 mb-6">
@@ -264,7 +264,7 @@ export default function PremiumPage() {
                   </div>
 
                   <button onClick={handleSubscribe} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-colors shadow-sm">
-                    Pay {isAnnual ? "£96.00" : "£10.00"}
+                    Pay {isAnnual ? "Â£96.00" : "Â£10.00"}
                   </button>
                   <p className="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-1">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
@@ -276,6 +276,9 @@ export default function PremiumPage() {
           </div>
         </div>
       )}
-    </div>
+            <p className="text-center text-xs text-gray-500 mt-12 max-w-2xl mx-auto">
+          Subscriptions renew automatically. Cancel anytime. By upgrading, you agree to our <a href="/legal/terms" className="underline hover:text-gray-900">Terms of Service</a> and <a href="/legal/refund" className="underline hover:text-gray-900">Refund Policy</a>.
+        </p>
+</div>
   );
 }
