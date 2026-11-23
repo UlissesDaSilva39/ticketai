@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PlayIcon, MicIcon, SlidersIcon, NoteIcon, CalendarSVG, MarketIcon, BookmarkIcon, UsersIcon, HypeIcon, ReplyIcon } from "@/components/MusicIcons";
@@ -47,6 +47,13 @@ export default function HomePage() {
   const { me, loading: meLoading } = useMe();
   const myName = displayName(me?.profile, me?.user.email);
   const [isPlaying, setIsPlaying] = useState(false);
+  const trackRef = useRef<HTMLAudioElement>(null);
+  function toggleTrack() {
+    const a = trackRef.current;
+    if (!a) return;
+    if (a.paused) void a.play().catch(() => setIsPlaying(false));
+    else a.pause();
+  }
   const [postToast, setPostToast] = useState(false);
   const [newPost, setNewPost] = useState<SavedPost | null>(null);
 
@@ -87,9 +94,36 @@ export default function HomePage() {
               )}
               
               <div className="mt-5 space-y-2">
-                <button onClick={() => setIsPlaying(!isPlaying)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
-                  <PlayIcon className="w-3.5 h-3.5" /> {isPlaying ? "Pause Track" : "Play Latest Track"}
-                </button>
+                {me?.latestTrack ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={toggleTrack}
+                      aria-pressed={isPlaying}
+                      title={me.latestTrack.title}
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2"
+                    >
+                      <PlayIcon className="w-3.5 h-3.5" /> {isPlaying ? "Pause Track" : "Play Latest Track"}
+                    </button>
+                    <audio
+                      ref={trackRef}
+                      src={me.latestTrack.url}
+                      preload="none"
+                      onEnded={() => setIsPlaying(false)}
+                      onPause={() => setIsPlaying(false)}
+                      onPlay={() => setIsPlaying(true)}
+                    />
+                    {isPlaying && <p className="text-xs text-gray-500 truncate">&#9835; {me.latestTrack.title}</p>}
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => document.getElementById("composer")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2"
+                  >
+                    <PlayIcon className="w-3.5 h-3.5" /> Share your first track
+                  </button>
+                )}
                 <Link href="/epk" className="w-full border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-bold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors block text-center">View EPK</Link>
               </div>
 
@@ -122,15 +156,14 @@ export default function HomePage() {
           {/* Opportunities ranked for this user (/api/matches) */}
           <MatchedForYou />
 
-          {/* Composer (photo/video upload + posts) */}
+          {/* Composer (photo/video/audio/event posts) */}
+          <div id="composer" />
           <GridComposer
             userName={myName}
             userInitial={me ? initials(myName) : ""}
             userAvatar={me?.profile.avatar_url ?? null}
             audioIcon={<NoteIcon className="w-4 h-4" />}
             eventIcon={<CalendarSVG className="w-4 h-4" />}
-            onAudioClick={() => alert("Audio upload coming soon!")}
-            onEventClick={() => alert("Event creation coming soon!")}
             onPublished={(post) => {
               setNewPost(post);
               setPostToast(true);

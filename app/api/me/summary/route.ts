@@ -12,7 +12,7 @@ export async function GET() {
   // Logged out is a normal state on public pages: answer quietly, not with an error.
   if (!user) return NextResponse.json({ user: null });
 
-  const [profileRes, followersRes, followingRes, notifRes, convRes] = await Promise.all([
+  const [profileRes, followersRes, followingRes, notifRes, convRes, trackRes] = await Promise.all([
     supabase
       .from("profiles")
       .select("id, username, full_name, role, avatar_url, cover_image, bio, city, genre, label, website, instagram, twitter, spotify, youtube, soundcloud")
@@ -37,6 +37,15 @@ export async function GET() {
       .select("id, participant_a, participant_b, participant_a_last_read, participant_b_last_read")
       .or(`participant_a.eq.${user.id},participant_b.eq.${user.id}`)
       .limit(50),
+    // Latest track = the user's newest post with audio.
+    supabase
+      .from("posts")
+      .select("id, audio_url, audio_title, created_at")
+      .eq("author_id", user.id)
+      .not("audio_url", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
   ]);
 
   // Unread messages = messages from the other person newer than my last-read time.
@@ -67,6 +76,9 @@ export async function GET() {
   return NextResponse.json({
     user: { id: user.id, email: user.email },
     profile,
+    latestTrack: trackRes.data
+      ? { postId: trackRes.data.id, url: trackRes.data.audio_url, title: trackRes.data.audio_title ?? "Untitled track" }
+      : null,
     counts: {
       followers: followersRes.count ?? 0,
       following: followingRes.count ?? 0,

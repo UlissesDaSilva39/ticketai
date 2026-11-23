@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { HypeIcon, ReplyIcon } from "@/components/MusicIcons";
 import { addComment } from "@/app/home/actions";
-import type { SavedPost } from "@/components/grid/GridComposer";
+import { eventDate, type SavedPost } from "@/components/grid/GridComposer";
 import { initials, roleLabel } from "@/lib/hooks/useMe";
 
 type Author = { name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null };
@@ -244,6 +244,28 @@ function PostCard({
               )}
               <audio src={post.audio_url} controls preload="none" className="w-full" />
             </div>
+          )}
+
+          {post.event && (
+            <Link
+              href={`/events/${post.event.id}`}
+              className="mt-3 flex overflow-hidden rounded-xl border border-gray-200 dark:border-zinc-700 hover:border-emerald-400 transition-colors"
+            >
+              {post.event.hero_image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={post.event.hero_image} alt="" className="w-28 object-cover bg-gray-100 dark:bg-zinc-800" />
+              ) : (
+                <span className="w-28 grid place-items-center bg-emerald-100 text-emerald-800 text-2xl">&#128197;</span>
+              )}
+              <span className="flex-1 min-w-0 p-3">
+                <span className="block text-[11px] font-bold uppercase tracking-wide text-emerald-700">{eventDate(post.event.start_date)}</span>
+                <span className="block font-semibold text-gray-900 dark:text-white truncate">{post.event.title}</span>
+                <span className="block text-xs text-gray-500 truncate">
+                  {[post.event.venue_name, post.event.venue_city].filter(Boolean).join(", ")}
+                </span>
+                <span className="mt-1 inline-block text-xs font-semibold text-emerald-700">View event &rarr;</span>
+              </span>
+            </Link>
           )}
 
           <div className="flex gap-8 mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">

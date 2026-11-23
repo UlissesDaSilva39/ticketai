@@ -1,7 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { kindOf, uploadMedia, validateFile, type MediaKind, type UploadedMedia } from "./media";
+import { kindOf, uploadMedia, validateAudio, validateFile, type MediaKind, type UploadedMedia } from "./media";
+
+export type ShareableEvent = {
+  id: string;
+  title: string;
+  start_date: string;
+  venue_name: string | null;
+  venue_city: string | null;
+  hero_image: string | null;
+};
+
+export function eventDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
 
 interface Pending {
   id: string;
@@ -20,6 +33,8 @@ export interface SavedPost {
   audio_url: string | null;
   audio_title?: string | null;
   audio_artist?: string | null;
+  event_id?: string | null;
+  event?: ShareableEvent | null;
   like_count: number | null;
   comment_count: number | null;
   share_count: number | null;
@@ -55,7 +70,11 @@ export default function GridComposer({
   const [pending, setPending] = useState<Pending[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [audio, setAudio] = useState<{ file: File; title: string } | null>(null);
+  const [event, setEvent] = useState<ShareableEvent | null>(null);
+  const [pickingEvent, setPickingEvent] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const audioRef = useRef<HTMLInputElement>(null);
   const pendingRef = useRef(pending);
   pendingRef.current = pending;
 
@@ -88,7 +107,15 @@ export default function GridComposer({
     setError(null);
   }
 
-  const canPublish = (text.trim().length > 0 || pending.length > 0) && text.length <= MAX_TEXT && !busy;
+  function pickAudio(file: File) {
+    const problem = validateAudio(file);
+    if (problem) return setError(problem);
+    setError(null);
+    setAudio({ file, title: file.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").slice(0, 120) });
+  }
+
+  const hasContent = text.trim().length > 0 || pending.length > 0 || !!audio || !!event;
+  const canPublish = hasContent && text.length <= MAX_TEXT && !busy && (!audio || audio.title.trim().length > 0);
 
   async function publish() {
     if (!canPublish) return;
@@ -96,9 +123,13 @@ export default function GridComposer({
     setError(null);
     try {
       // 1) upload the photo/video (if any) to Supabase Storage
-      const media: UploadedMedia[] = await Promise.all(pending.map((p) => uploadMedia(p.file)));
+      const media: UploadedMedia[] = await Promise.all([
+        ...pending.map((p) => uploadMedia(p.file)),
+        ...(audio ? [uploadMedia(audio.file)] : []),
+      ]);
       const image = media.find((m) => m.kind === "image");
       const video = media.find((m) => m.kind === "video");
+      const track = media.find((m) => m.kind === "audio");
 
       // 2) save the post
       const res = await fetch("/api/posts/create", {
@@ -109,6 +140,10 @@ export default function GridComposer({
           body: text.trim(),
           image_url: image?.url ?? null,
           video_url: video?.url ?? null,
+          audio_url: track?.url ?? null,
+          audio_title: audio?.title.trim() || null,
+          audio_artist: track ? userName : null,
+          event_id: event?.id ?? null,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -117,7 +152,10 @@ export default function GridComposer({
       pending.forEach((p) => URL.revokeObjectURL(p.previewUrl));
       setPending([]);
       setText("");
-      onPublished?.(data.post as SavedPost);
+      setAudio(null);
+      const sharedEvent = event;
+      setEvent(null);
+      onPublished?.({ ...(data.post as SavedPost), event: sharedEvent });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not publish. Try again.");
     } finally {
@@ -182,6 +220,42 @@ export default function GridComposer({
               </div>
             )}
 
+            {audio && (
+              <div className="mt-3 flex items-center gap-3 rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 p-3">
+                <span aria-hidden="true" className="text-emerald-600 text-lg">&#9835;</span>
+                <div className="flex-1 min-w-0">
+                  <label className="block text-[11px] font-bold uppercase tracking-wide text-gray-500">Track title</label>
+                  <input
+                    value={audio.title}
+                    maxLength={120}
+                    onChange={(e) => setAudio({ ...audio, title: e.target.value })}
+                    className="w-full bg-transparent text-sm font-semibold text-gray-900 dark:text-white focus:outline-none border-b border-transparent focus:border-emerald-500"
+                  />
+                  <p className="text-[11px] text-gray-500 truncate">{audio.file.name} · {(audio.file.size / 1024 / 1024).toFixed(1)} MB</p>
+                </div>
+                <button type="button" onClick={() => setAudio(null)} aria-label="Remove track" className="h-6 w-6 rounded-full bg-black/60 text-white text-sm leading-none hover:bg-black/80">
+                  &times;
+                </button>
+              </div>
+            )}
+
+            {event && (
+              <div className="mt-3 flex items-center gap-3 rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 p-3">
+                <span aria-hidden="true" className="text-emerald-600 text-lg">&#128197;</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{event.title}</p>
+                  <p className="text-[11px] text-gray-500 truncate">
+                    {eventDate(event.start_date)}
+                    {event.venue_name ? ` · ${event.venue_name}` : ""}
+                    {event.venue_city ? `, ${event.venue_city}` : ""}
+                  </p>
+                </div>
+                <button type="button" onClick={() => setEvent(null)} aria-label="Remove event" className="h-6 w-6 rounded-full bg-black/60 text-white text-sm leading-none hover:bg-black/80">
+                  &times;
+                </button>
+              </div>
+            )}
+
             {error && (
               <p role="alert" className="mt-2 text-xs text-red-600">
                 {error}
@@ -196,7 +270,7 @@ export default function GridComposer({
                   </svg>{" "}
                   Photo / video
                 </button>
-                <button type="button" className={toolBtn} onClick={onAudioClick}>
+                <button type="button" className={toolBtn} onClick={() => (onAudioClick ? onAudioClick() : audioRef.current?.click())}>
                   {audioIcon ?? (
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
@@ -204,7 +278,7 @@ export default function GridComposer({
                   )}{" "}
                   Audio
                 </button>
-                <button type="button" className={toolBtn} onClick={onEventClick}>
+                <button type="button" className={toolBtn} onClick={() => (onEventClick ? onEventClick() : setPickingEvent(true))}>
                   {eventIcon ?? (
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -234,7 +308,93 @@ export default function GridComposer({
             e.target.value = "";
           }}
         />
+        <input
+          ref={audioRef}
+          type="file"
+          hidden
+          accept="audio/mpeg,audio/wav,audio/x-wav,audio/mp4,audio/x-m4a,audio/aac,audio/ogg,audio/flac,.mp3,.wav,.m4a,.aac,.ogg,.flac"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) pickAudio(f);
+            e.target.value = "";
+          }}
+        />
       </div>
+
+      {pickingEvent && (
+        <EventPicker
+          onClose={() => setPickingEvent(false)}
+          onPick={(ev) => {
+            setEvent(ev);
+            setPickingEvent(false);
+          }}
+        />
+      )}
     </>
+  );
+}
+
+function EventPicker({ onClose, onPick }: { onClose: () => void; onPick: (e: ShareableEvent) => void }) {
+  const [q, setQ] = useState("");
+  const [events, setEvents] = useState<ShareableEvent[] | null>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      fetch("/api/events/shareable?q=" + encodeURIComponent(q), { credentials: "include", cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : { events: [] }))
+        .then((d) => setEvents(d.events ?? []))
+        .catch(() => setEvents([]));
+    }, 250);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="pick-event-title">
+      <div className="w-full max-w-md rounded-2xl bg-white dark:bg-zinc-900 p-5 shadow-xl">
+        <div className="flex items-center justify-between">
+          <h2 id="pick-event-title" className="text-lg font-bold text-gray-900 dark:text-white">Share an event</h2>
+          <button type="button" onClick={onClose} aria-label="Close" className="text-gray-500 text-xl leading-none">&times;</button>
+        </div>
+        <input
+          autoFocus
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Search events, venues or cities"
+          aria-label="Search events"
+          className="mt-3 w-full rounded-lg border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+        />
+        <ul className="mt-3 max-h-80 overflow-y-auto space-y-1">
+          {events === null ? (
+            <li className="p-3 text-sm text-gray-500">Loading…</li>
+          ) : events.length === 0 ? (
+            <li className="p-3 text-sm text-gray-500">No upcoming events{q ? ` matching “${q}”` : ""}.</li>
+          ) : (
+            events.map((ev) => (
+              <li key={ev.id}>
+                <button
+                  type="button"
+                  onClick={() => onPick(ev)}
+                  className="w-full flex items-center gap-3 rounded-lg p-2 text-left hover:bg-emerald-50 dark:hover:bg-zinc-800"
+                >
+                  {ev.hero_image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={ev.hero_image} alt="" className="h-10 w-10 rounded object-cover flex-shrink-0" />
+                  ) : (
+                    <span className="h-10 w-10 rounded bg-emerald-100 text-emerald-800 grid place-items-center flex-shrink-0">&#128197;</span>
+                  )}
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold text-gray-900 dark:text-white truncate">{ev.title}</span>
+                    <span className="block text-xs text-gray-500 truncate">
+                      {eventDate(ev.start_date)}
+                      {ev.venue_city ? ` · ${ev.venue_city}` : ""}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
+    </div>
   );
 }

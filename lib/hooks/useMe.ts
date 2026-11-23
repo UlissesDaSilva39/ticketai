@@ -23,6 +23,7 @@ export type MeProfile = {
 export type Me = {
   user: { id: string; email: string | null };
   profile: MeProfile;
+  latestTrack: { postId: string; url: string; title: string } | null;
   counts: { followers: number; following: number; unreadNotifications: number; unreadMessages: number };
 };
 
@@ -87,13 +88,25 @@ const ROLE_LABELS: Record<string, string> = {
   artist: "Artist / Producer",
   industry: "Venue / A&R",
   fan: "Music fan",
-  admin: "Admin",
+  attendee: "Music fan",
+  admin: "GRID team",
   promoter: "Promoter",
   venue: "Venue",
+  a_and_r: "A&R",
+  label: "Label",
+  dj: "DJ",
+  producer: "Producer",
+  manager: "Manager",
 };
 
+/** Readable role name; unknown codes like "sound_engineer" become "Sound engineer". */
 export function roleLabel(role?: string | null, genre?: string | null) {
-  const base = role ? ROLE_LABELS[role] ?? role[0].toUpperCase() + role.slice(1) : "Member";
+  let base = "Member";
+  if (role) {
+    const key = role.toLowerCase();
+    const pretty = key.replace(/_and_/g, " & ").replace(/[_-]+/g, " ").trim();
+    base = ROLE_LABELS[key] ?? (pretty ? pretty[0].toUpperCase() + pretty.slice(1) : "Member");
+  }
   return genre ? `${base} · ${genre}` : base;
 }
 

@@ -41,7 +41,7 @@ export default function SuggestedPeople() {
 
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 className="font-bold text-gray-900 dark:text-white text-base mb-4">Artists to Follow</h3>
+      <h3 className="font-bold text-gray-900 dark:text-white text-base mb-4">People to Follow</h3>
 
       {people === null ? (
         <div className="space-y-4" aria-label="Loading suggestions">

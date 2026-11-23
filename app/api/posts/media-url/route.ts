@@ -7,11 +7,14 @@ export const dynamic = "force-dynamic";
 
 // (Route files may only export handlers/config, so these stay module-private.)
 const POST_MEDIA_BUCKET = "post-media";
-const MAX_BYTES = { image: 10 * 1024 * 1024, video: 50 * 1024 * 1024 } as const;
+const MAX_BYTES = { image: 10 * 1024 * 1024, video: 50 * 1024 * 1024, audio: 30 * 1024 * 1024 } as const;
 const EXT: Record<string, string> = {
   "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif", "image/avif": "avif",
   "video/mp4": "mp4", "video/webm": "webm", "video/quicktime": "mov",
+  "audio/mpeg": "mp3", "audio/mp3": "mp3", "audio/wav": "wav", "audio/x-wav": "wav", "audio/wave": "wav",
+  "audio/mp4": "m4a", "audio/x-m4a": "m4a", "audio/aac": "aac", "audio/ogg": "ogg", "audio/flac": "flac", "audio/x-flac": "flac",
 };
+const LIMIT_TEXT = { image: "Photos must be under 10 MB.", video: "Videos must be under 50 MB.", audio: "Audio must be under 30 MB." } as const;
 
 // Returns a one-time signed upload link so the browser can upload a photo/video
 // straight to Supabase Storage (no big files through our server).
@@ -35,12 +38,12 @@ export async function POST(req: NextRequest) {
   const contentType = String(body.contentType ?? "");
   const size = Number(body.size ?? 0);
   const ext = EXT[contentType];
-  const kind = contentType.startsWith("image/") ? "image" : contentType.startsWith("video/") ? "video" : null;
+  const kind = contentType.startsWith("image/") ? "image" : contentType.startsWith("video/") ? "video" : contentType.startsWith("audio/") ? "audio" : null;
   if (!ext || !kind) {
-    return NextResponse.json({ error: "Only JPG, PNG, WebP, GIF, AVIF photos and MP4, WebM, MOV videos." }, { status: 400 });
+    return NextResponse.json({ error: "Supported: JPG, PNG, WebP, GIF, AVIF photos; MP4, WebM, MOV videos; MP3, WAV, M4A, AAC, OGG, FLAC audio." }, { status: 400 });
   }
   if (!size || size > MAX_BYTES[kind]) {
-    return NextResponse.json({ error: kind === "image" ? "Photos must be under 10 MB." : "Videos must be under 50 MB." }, { status: 400 });
+    return NextResponse.json({ error: LIMIT_TEXT[kind] }, { status: 400 });
   }
 
   const path = `${user.id}/${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;

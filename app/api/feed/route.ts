@@ -11,7 +11,7 @@ export async function GET(req: Request) {
 
   const { data: posts } = await supabase
     .from("posts")
-    .select("id, body, author_id, author_type, image_url, video_url, audio_url, audio_title, audio_artist, like_count, comment_count, share_count, created_at")
+    .select("id, body, author_id, author_type, image_url, video_url, audio_url, audio_title, audio_artist, event_id, like_count, comment_count, share_count, created_at")
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
@@ -44,5 +44,13 @@ export async function GET(req: Request) {
     for (const l of userLikes || []) liked[l.post_id] = true;
   }
 
-  return NextResponse.json({ posts: list, authors, liked });
+  // Attach shared events (title, date, venue, image) for event cards.
+  const eventIds = [...new Set(list.map((p) => p.event_id).filter(Boolean))] as string[];
+  const { data: events } = eventIds.length
+    ? await supabase.from("events").select("id, title, start_date, venue_name, venue_city, hero_image").in("id", eventIds)
+    : { data: [] };
+  const eventsById = Object.fromEntries((events ?? []).map((e) => [e.id, e]));
+  const postsWithEvents = list.map((p) => ({ ...p, event: p.event_id ? eventsById[p.event_id] ?? null : null }));
+
+  return NextResponse.json({ posts: postsWithEvents, authors, liked });
 }

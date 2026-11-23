@@ -25,6 +25,10 @@ export async function POST(req: NextRequest) {
   }
   const { event_id, artist_slug } = payload as { event_id?: string; artist_slug?: string };
   const body = typeof payload.body === "string" ? payload.body.trim() : "";
+  const audio_title = typeof payload.audio_title === "string" ? payload.audio_title.trim().slice(0, 120) || null : null;
+  const audio_artist = typeof payload.audio_artist === "string" ? payload.audio_artist.trim().slice(0, 120) || null : null;
+  const eventId = typeof event_id === "string" && /^[0-9a-f-]{36}$/i.test(event_id) ? event_id : null;
+  if (event_id && !eventId) return NextResponse.json({ error: "Invalid event" }, { status: 400 });
 
   const image_url = ownStorageUrl(payload.image_url);
   const video_url = ownStorageUrl(payload.video_url);
@@ -35,7 +39,7 @@ export async function POST(req: NextRequest) {
   if (body.length > MAX_BODY) {
     return NextResponse.json({ error: `Posts can be up to ${MAX_BODY} characters.` }, { status: 400 });
   }
-  if (!body && !event_id && !image_url && !video_url && !audio_url) {
+  if (!body && !eventId && !image_url && !video_url && !audio_url) {
     return NextResponse.json({ error: "Post needs text, a photo, a video, audio, or an event" }, { status: 400 });
   }
 
@@ -46,6 +50,11 @@ export async function POST(req: NextRequest) {
   // Anti-spam: 10 posts per 10 minutes per user.
   if (!rateLimit(`post-create:${user.id}`, 10, 10 * 60 * 1000).ok) {
     return NextResponse.json({ error: "You're posting too fast. Try again in a few minutes." }, { status: 429 });
+  }
+
+  if (eventId) {
+    const { data: ev } = await supabase.from("events").select("id").eq("id", eventId).eq("status", "published").maybeSingle();
+    if (!ev) return NextResponse.json({ error: "That event isn't available to share." }, { status: 400 });
   }
 
   const { data: profile } = await supabase
@@ -82,10 +91,12 @@ export async function POST(req: NextRequest) {
       author_type: insertAuthorType,
       artist_slug: insertArtistSlug,
       body: body || null,
-      event_id: event_id ?? null,
+      event_id: eventId,
       image_url,
       video_url,
       audio_url,
+      audio_title: audio_url ? audio_title : null,
+      audio_artist: audio_url ? audio_artist : null,
     })
     .select("id, author_id, author_type, artist_slug, body, event_id, image_url, video_url, audio_url, audio_title, audio_artist, like_count, comment_count, share_count, created_at")
     .single();

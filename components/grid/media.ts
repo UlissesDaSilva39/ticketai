@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 
-export type MediaKind = "image" | "video";
+export type MediaKind = "image" | "video" | "audio";
 
 export interface UploadedMedia {
   id: string;
@@ -15,9 +15,19 @@ export const MAX_IMAGE_MB = 10;
 export const MAX_VIDEO_MB = 50;
 export const MAX_VIDEO_SECONDS = 60;
 
+export const MAX_AUDIO_MB = 30;
+
 export function kindOf(file: File): MediaKind | null {
   if (file.type.startsWith("image/")) return "image";
   if (file.type.startsWith("video/")) return "video";
+  if (file.type.startsWith("audio/")) return "audio";
+  return null;
+}
+
+/** Checks an audio file for the Audio button. Returns an error message or null. */
+export function validateAudio(file: File): string | null {
+  if (kindOf(file) !== "audio") return `${file.name}: please choose an audio file (MP3, WAV, M4A…).`;
+  if (file.size / 1024 / 1024 > MAX_AUDIO_MB) return `${file.name}: audio must be under ${MAX_AUDIO_MB} MB.`;
   return null;
 }
 
@@ -41,7 +51,7 @@ export function getVideoDuration(file: File): Promise<number> {
 /** Returns an error message, or null if the file is fine. */
 export async function validateFile(file: File): Promise<string | null> {
   const kind = kindOf(file);
-  if (!kind) return `${file.name}: only photos and videos are supported.`;
+  if (!kind || kind === "audio") return `${file.name}: only photos and videos here (use the Audio button for tracks).`;
   const mb = file.size / 1024 / 1024;
   if (kind === "image" && mb > MAX_IMAGE_MB)
     return `${file.name}: photos must be under ${MAX_IMAGE_MB} MB.`;
