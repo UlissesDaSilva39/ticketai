@@ -1,5 +1,5 @@
 // Columns that logged-out visitors (the public "anon" key) are allowed to read.
-// Must match the GRANT lists in supabase/security/hide-private-columns.sql.
+// Must match the GRANT lists in supabase/migrations/20261123230000_hide_private_columns.sql.
 // Public pages should select these instead of "*", which would fail for
 // visitors once the private columns are hidden.
 
@@ -10,7 +10,7 @@ export const PUBLIC_ARTIST_COLUMNS =
   "id, owner_id, slug, name, handle, genre, artist_type, secondary_genres, city, country, bio, website, spotify, instagram, avatar_url, status, created_at, updated_at, cover_image, verified, external_id, source";
 
 export const PUBLIC_FEATURED_COLUMNS =
-  "id, artist_id, artist_name, placement_type, starts_at, ends_at, created_at";
+  "id, artist_id, artist_name, placement_type, starts_at, ends_at, payment_status, created_at";
 
 export const PUBLIC_PROMOTER_COLUMNS =
   "id, user_id, display_name, bio, instagram, tiktok, youtube, city, verified, created_at, next_event, event_count, tickets_sold, photos, slug";
