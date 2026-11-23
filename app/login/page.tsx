@@ -3,6 +3,7 @@
 import { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 // Only allow same-site redirects like /home (blocks //evil.com and full URLs)
 function safeRedirect(value: string | null): string {
@@ -81,14 +82,22 @@ function LoginForm() {
           <h1 className="mt-6 lg:mt-0 text-3xl font-bold">Log in</h1>
           <p className="mt-2 text-sm text-neutral-600">
             New to GRID?{" "}
-            <Link href="/join" className="font-semibold text-emerald-700 underline hover:text-emerald-800">
+            <Link href="/signup" className="font-semibold text-emerald-700 underline hover:text-emerald-800">
               Create your account
             </Link>
           </p>
 
           <button
             type="button"
-            onClick={() => setError("Google sign-in is not connected yet. Please use your email for now.")}
+            onClick={async () => {
+              setError(null);
+              const params = new URLSearchParams({ next: redirectTo });
+              const { error } = await createClient().auth.signInWithOAuth({
+                provider: "google",
+                options: { redirectTo: `${window.location.origin}/auth/callback?${params}` },
+              });
+              if (error) setError("Google sign-in isn't available right now. Please use your email.");
+            }}
             className="mt-6 w-full border border-neutral-300 rounded-lg px-3 py-2.5 text-sm font-medium hover:border-emerald-300 hover:bg-emerald-50"
           >
             Continue with Google
@@ -118,9 +127,14 @@ function LoginForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-1">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="password" className="block text-sm font-medium">
+                  Password
+                </label>
+                <Link href="/forgot-password" className="text-xs font-medium text-emerald-700 hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   id="password"
@@ -143,6 +157,11 @@ function LoginForm() {
               </div>
             </div>
 
+            {!error && params.get("reset") === "1" && (
+              <p role="status" className="text-sm text-emerald-700">
+                Password updated. Log in with your new password.
+              </p>
+            )}
             {error && (
               <p role="alert" className="text-sm text-red-600">
                 {error}

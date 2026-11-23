@@ -1,7 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signUp } from "./actions";
+import { createClient } from "@/lib/supabase/client";
 
 const CheckIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -16,19 +18,66 @@ export default function SignupPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, startTransition] = useTransition();
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState<string | null>(null);
+
+  // "Venue / A&R" maps to the "industry" role in the profiles table.
+  const profileRole = role === "venue" ? "industry" : "artist";
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!role || !email || !password) return;
-    setIsLoading(true);
-    
-    // Simulate signup (no database yet)
-    setTimeout(() => {
-      // Route to onboarding wizard
+    setError("");
+    if (!role) return setError("Please choose Artist / Producer or Venue / A&R.");
+    if (!fullName.trim()) return setError("Please enter your full name.");
+    if (password.length < 8) return setError("Password must be at least 8 characters.");
+
+    startTransition(async () => {
+      const res = await signUp({ email, password, full_name: fullName, role: profileRole });
+      if ("error" in res && res.error) {
+        setError(res.error);
+        return;
+      }
+      if ("needsConfirmation" in res && res.needsConfirmation) {
+        setConfirmEmail(email.trim().toLowerCase());
+        return;
+      }
       router.push("/onboarding");
-    }, 1500);
+      router.refresh();
+    });
   };
+
+  const handleGoogle = async () => {
+    setError("");
+    setGoogleLoading(true);
+    const next = `/onboarding`;
+    const params = new URLSearchParams({ next, ...(role ? { role: profileRole } : {}) });
+    const { error } = await createClient().auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth/callback?${params}` },
+    });
+    if (error) {
+      setError("Google sign-up isn't available right now. Please use your email.");
+      setGoogleLoading(false);
+    }
+  };
+
+  if (confirmEmail) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-6 bg-[#f4f2ee] dark:bg-black">
+        <div className="w-full max-w-md text-center">
+          <Link href="/" className="block text-2xl font-bold text-emerald-600 mb-8">GRID</Link>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Check your email</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            We sent a confirmation link to <span className="font-semibold text-gray-900 dark:text-white">{confirmEmail}</span>.
+            Click it to activate your account, then log in.
+          </p>
+          <Link href="/login" className="inline-block mt-8 text-emerald-600 font-semibold hover:underline">Go to log in →</Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -77,8 +126,10 @@ export default function SignupPage() {
 
           {/* Google OAuth Button */}
           <button
-            onClick={() => router.push("/onboarding")}
-            className="w-full flex items-center justify-center gap-3 border-2 border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors mb-6"
+            type="button"
+            onClick={handleGoogle}
+            disabled={googleLoading}
+            className="w-full flex items-center justify-center gap-3 disabled:opacity-50 border-2 border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors mb-6"
           >
             <GoogleIcon /> Continue with Google
           </button>
@@ -158,6 +209,12 @@ export default function SignupPage() {
                 className="w-full bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
               />
             </div>
+
+            {error && (
+              <p role="alert" className="text-sm text-red-600 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl px-4 py-3">
+                {error}
+              </p>
+            )}
 
             {/* Submit Button */}
             <button

@@ -3,20 +3,19 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signUp } from "@/app/signup/actions";
+import { signUp, type ProfileRole } from "@/app/signup/actions";
 
-const ROLES: Array<{ value: "artist" | "promoter" | "venue" | "attendee"; label: string }> = [
-  { value: "attendee", label: "Fan" },
+const ROLES: Array<{ value: ProfileRole; label: string }> = [
+  { value: "fan", label: "Fan" },
   { value: "artist", label: "Artist" },
-  { value: "promoter", label: "Promoter" },
-  { value: "venue", label: "Venue" },
+  { value: "industry", label: "Venue / Promoter" },
 ];
 
 export default function SignupForm() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
-  const [role, setRole] = useState<"artist" | "promoter" | "venue" | "attendee">("attendee");
+  const [role, setRole] = useState<ProfileRole>("fan");
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,7 +32,7 @@ export default function SignupForm() {
         city: String(form.get("city") || ""),
       });
 
-      if (res.error) {
+      if ("error" in res && res.error) {
         setError(res.error);
         return;
       }
