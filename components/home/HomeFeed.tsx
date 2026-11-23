@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { HypeIcon, ReplyIcon } from "@/components/MusicIcons";
-import { addComment } from "@/app/home/actions";
+import { addComment, deleteComment, getComments, type FeedComment } from "@/app/home/actions";
 import { eventDate, type SavedPost } from "@/components/grid/GridComposer";
 import { initials, roleLabel } from "@/lib/hooks/useMe";
 
@@ -187,22 +187,66 @@ function PostCard({
   const [reply, setReply] = useState("");
   const [sending, setSending] = useState(false);
   const [replyError, setReplyError] = useState<string | null>(null);
-  const [sent, setSent] = useState(false);
+  const [comments, setComments] = useState<FeedComment[] | null>(null);
+  const [loadingComments, setLoadingComments] = useState(false);
 
   const name = author?.name ?? "GRID member";
   const profileHref = author?.username ? `/u/${author.username}` : null;
+
+  const FAILED = "Couldn't reach the server. Refresh the page and try again.";
+
+  async function loadComments() {
+    setLoadingComments(true);
+    try {
+      const res = await getComments(post.id);
+      if ("comments" in res) setComments(res.comments);
+      else setReplyError(res.error);
+    } catch {
+      setReplyError(FAILED);
+      setComments([]);
+    } finally {
+      setLoadingComments(false);
+    }
+  }
+
+  // Reply button: open the box and show the existing replies.
+  function toggleReplies() {
+    const open = !replyOpen;
+    setReplyOpen(open);
+    if (open && comments === null) void loadComments();
+  }
 
   async function sendReply() {
     if (!reply.trim()) return;
     setSending(true);
     setReplyError(null);
-    const res = await addComment(post.id, reply);
+    let res: Awaited<ReturnType<typeof addComment>>;
+    try {
+      res = await addComment(post.id, reply);
+    } catch {
+      setSending(false);
+      return setReplyError(FAILED);
+    }
     setSending(false);
     if ("error" in res && res.error) return setReplyError(res.error);
     setReply("");
-    setReplyOpen(false);
-    setSent(true);
-    setTimeout(() => setSent(false), 2500);
+    if ("comment" in res && res.comment) {
+      const c = res.comment;
+      setComments((cur) => [...(cur ?? []), c]);
+    }
+    onCommented("comment_count" in res ? res.comment_count : undefined);
+  }
+
+  async function removeComment(id: string) {
+    if (!window.confirm("Delete this reply?")) return;
+    let res: Awaited<ReturnType<typeof deleteComment>>;
+    try {
+      res = await deleteComment(id);
+    } catch {
+      return setReplyError(FAILED);
+    }
+    if ("error" in res && res.error) return setReplyError(res.error);
+    setComments((cur) => (cur ?? []).filter((c) => c.id !== id));
     onCommented("comment_count" in res ? res.comment_count : undefined);
   }
 
@@ -279,14 +323,48 @@ function PostCard({
             </button>
             <button
               type="button"
-              onClick={() => setReplyOpen((o) => !o)}
+              onClick={toggleReplies}
               aria-expanded={replyOpen}
-              className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors"
+              className={`flex items-center gap-2 text-sm font-semibold transition-colors ${replyOpen ? "text-emerald-600" : "text-gray-600 dark:text-gray-400 hover:text-emerald-600"}`}
             >
               <ReplyIcon className="w-5 h-5" /> Reply{post.comment_count ? ` (${post.comment_count})` : ""}
             </button>
-            {sent && <span className="text-xs font-semibold text-emerald-600 self-center">Reply sent ✓</span>}
           </div>
+
+          {replyOpen && (
+            <ul className="mt-3 space-y-3" aria-label="Replies">
+              {loadingComments && <li className="text-xs text-gray-500">Loading replies…</li>}
+              {comments?.map((c) => (
+                <li key={c.id} className="flex items-start gap-2">
+                  {c.author.avatar ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={c.author.avatar} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                  ) : (
+                    <span className="w-8 h-8 rounded-full bg-emerald-700 text-white grid place-items-center text-[11px] font-bold flex-shrink-0">
+                      {initials(c.author.name)}
+                    </span>
+                  )}
+                  <div className="min-w-0 flex-1 rounded-xl bg-gray-50 dark:bg-zinc-800 px-3 py-2">
+                    <p className="text-xs">
+                      {c.author.username ? (
+                        <Link href={`/u/${c.author.username}`} className="font-semibold text-gray-900 dark:text-white hover:underline">{c.author.name}</Link>
+                      ) : (
+                        <span className="font-semibold text-gray-900 dark:text-white">{c.author.name}</span>
+                      )}
+                      <span className="text-gray-500"> · {timeAgo(c.created_at)}</span>
+                      {c.mine && (
+                        <button type="button" onClick={() => removeComment(c.id)} className="ml-2 text-gray-400 hover:text-red-600">
+                          Delete
+                        </button>
+                      )}
+                    </p>
+                    <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap break-words">{c.body}</p>
+                  </div>
+                </li>
+              ))}
+              {comments?.length === 0 && !loadingComments && <li className="text-xs text-gray-500">No replies yet. Be the first.</li>}
+            </ul>
+          )}
 
           {replyOpen && (
             <div className="mt-3">
@@ -302,7 +380,7 @@ function PostCard({
               {replyError && <p role="alert" className="text-xs text-red-600 mt-1">{replyError}</p>}
               <div className="flex justify-end gap-2 mt-2">
                 <button type="button" onClick={() => setReplyOpen(false)} className="text-sm font-semibold text-gray-600 dark:text-gray-400 px-3 py-1.5">
-                  Cancel
+                  Hide replies
                 </button>
                 <button
                   type="button"
