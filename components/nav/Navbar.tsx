@@ -1,11 +1,29 @@
 ﻿"use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    try {
+      // Server route clears the session cookies; the browser client clears its own copy.
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      await createClient().auth.signOut();
+    } catch (err) {
+      console.error("[sign out]", err);
+    }
+    setMeOpen(false);
+    router.push("/login");
+    router.refresh();
+    setSigningOut(false);
+  }
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   
@@ -136,7 +154,14 @@ export default function Navbar() {
                   <Link href="/admin/curators" className="block px-2 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md font-semibold">Admin: Curator Verify</Link>
                 </div>
                 <div className="p-2 border-t border-gray-100 dark:border-zinc-800">
-                  <button className="w-full text-left px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Sign out</button>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    disabled={signingOut}
+                    className="w-full text-left px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md disabled:opacity-50"
+                  >
+                    {signingOut ? "Signing out…" : "Sign out"}
+                  </button>
                 </div>
               </div>
             )}
