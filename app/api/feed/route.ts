@@ -11,22 +11,26 @@ export async function GET(req: Request) {
 
   const { data: posts } = await supabase
     .from("posts")
-    .select("id, body, author_id, author_type, image_url, audio_url, like_count, comment_count, share_count, created_at")
+    .select("id, body, author_id, author_type, image_url, video_url, audio_url, audio_title, audio_artist, like_count, comment_count, share_count, created_at")
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
   const list = posts || [];
   const authorIds = [...new Set(list.map((p) => p.author_id))];
   const { data: profiles } = authorIds.length
-    ? await supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", authorIds)
+    ? await supabase.from("profiles").select("id, full_name, username, avatar_url, role, genre").in("id", authorIds)
     : { data: [] };
 
-  const authors: Record<string, any> = {};
+  const authors: Record<string, { name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null }> = {};
   for (const p of profiles || []) {
+    // Some older accounts saved their email as the name; never show emails publicly.
+    const realName = p.full_name && !p.full_name.includes("@") ? p.full_name : null;
     authors[p.id] = {
-      name: p.full_name || p.username || "Someone",
+      name: realName || p.username || "GRID member",
       username: p.username,
       avatar: p.avatar_url,
+      role: p.role,
+      genre: p.genre,
     };
   }
 

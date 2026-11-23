@@ -13,7 +13,9 @@ import MatchedForYou from "@/components/home/MatchedForYou";
 import PostCollabButton from "@/components/home/PostCollabButton";
 import ProfileStrength from "@/components/home/ProfileStrength";
 import GridStories from "@/components/grid/GridStories";
-import GridComposer from "@/components/grid/GridComposer";
+import GridComposer, { type SavedPost } from "@/components/grid/GridComposer";
+import HomeFeed from "@/components/home/HomeFeed";
+import SuggestedPeople from "@/components/home/SuggestedPeople";
 import { useMe, displayName, initials, roleLabel, compactNumber, type MeProfile } from "@/lib/hooks/useMe";
 
 // Profile-strength checklist built from the real profile. Edits happen on /profile/edit.
@@ -45,12 +47,8 @@ export default function HomePage() {
   const { me, loading: meLoading } = useMe();
   const myName = displayName(me?.profile, me?.user.email);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hypeCount, setHypeCount] = useState(0);
-  const [hasHyped, setHasHyped] = useState(false);
-  const [followed, setFollowed] = useState<{[key: string]: boolean}>({});
-  const [showReplyModal, setShowReplyModal] = useState(false);
-  const [replyText, setReplyText] = useState("");
   const [postToast, setPostToast] = useState(false);
+  const [newPost, setNewPost] = useState<SavedPost | null>(null);
 
   // Algorithmic Matches
   const [matches, setMatches] = useState([
@@ -59,27 +57,6 @@ export default function HomePage() {
     { id: 3, type: "COLLAB", title: "Techno remix swap", poster: "Alex Rivera", match: "89% match", reason: "Same BPM range + techno focus", color: "bg-indigo-500" },
   ]);
   const [dismissedMatches, setDismissedMatches] = useState<number[]>([]);
-
-  const handleHype = () => {
-    if (!hasHyped) {
-      setHypeCount(hypeCount + 1);
-      setHasHyped(true);
-    } else {
-      setHypeCount(hypeCount - 1);
-      setHasHyped(false);
-    }
-  };
-
-  const handleReply = () => {
-    setShowReplyModal(false);
-    setReplyText("");
-    setPostToast(true);
-    setTimeout(() => setPostToast(false), 2000);
-  };
-
-  const handleFollow = (name: string) => {
-    setFollowed(prev => ({ ...prev, [name]: !prev[name] }));
-  };
 
   const dismissMatch = (id: number) => {
     setDismissedMatches([...dismissedMatches, id]);
@@ -163,59 +140,36 @@ export default function HomePage() {
 
           {/* Composer (photo/video upload + posts) */}
           <GridComposer
+            userName={myName}
+            userInitial={me ? initials(myName) : ""}
+            userAvatar={me?.profile.avatar_url ?? null}
             audioIcon={<NoteIcon className="w-4 h-4" />}
             eventIcon={<CalendarSVG className="w-4 h-4" />}
             onAudioClick={() => alert("Audio upload coming soon!")}
             onEventClick={() => alert("Event creation coming soon!")}
-            onPublished={() => {
+            onPublished={(post) => {
+              setNewPost(post);
               setPostToast(true);
               setTimeout(() => setPostToast(false), 3000);
             }}
           />
 
-          {/* Feed Post */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 rounded-full bg-blue-600 text-white grid place-items-center font-bold flex-shrink-0 text-lg">D</div>
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-bold text-gray-900 dark:text-white text-base flex items-center gap-1.5">
-                      Demo Producer <VerifiedIcon className="text-emerald-500" />
-                    </p>
-                    <p className="text-xs text-gray-500">Music Producer · 2h</p>
-                  </div>
-                  <button className="text-gray-400 hover:text-gray-600 font-bold tracking-widest px-2">•••</button>
-                </div>
-                
-                <p className="text-[15px] text-gray-800 dark:text-gray-200 mt-4 mb-4">Just dropped a new beat. Let me know what you think!</p>
-                
-                <div className="bg-gray-50 dark:bg-zinc-800/50 rounded-xl p-3 flex items-center gap-3 border border-gray-100 dark:border-zinc-800">
-                  <button onClick={() => setIsPlaying(!isPlaying)} className="w-10 h-10 rounded-full bg-emerald-600 text-white grid place-items-center hover:bg-emerald-700 transition-colors flex-shrink-0 shadow-sm">
-                    <PlayIcon className="w-5 h-5 ml-1" />
-                  </button>
-                  <div className="flex-1 h-8 flex items-center gap-1 opacity-80">
-                    {[10, 30, 50, 80, 60, 40, 20, 70, 90, 50, 30, 60, 80, 40, 20, 60, 90, 70, 50, 30, 60, 80, 40, 20, 70, 90, 50, 30, 60, 80, 40, 20, 60, 90, 70, 50, 30, 60, 80, 40].map((h, i) => (
-                      <div key={i} className="flex-1 bg-emerald-500 rounded-full" style={{height: `${h}%`}}></div>
-                    ))}
-                  </div>
-                  <span className="text-xs font-semibold text-gray-500">3:45</span>
-                </div>
-
-                <div className="flex gap-8 mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
-                  <button 
-                    onClick={handleHype} 
-                    className={`flex items-center gap-2 text-sm font-semibold transition-colors ${hasHyped ? "text-emerald-600" : "text-gray-600 dark:text-gray-400 hover:text-emerald-600"}`}
-                  >
-                    <HypeIcon className="w-5 h-5" /> {hypeCount > 0 ? `Hype (${hypeCount})` : "Hype"}
-                  </button>
-                  <button onClick={() => setShowReplyModal(true)} className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-600 transition-colors">
-                    <ReplyIcon className="w-5 h-5" /> Reply
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Real feed from the posts table */}
+          <HomeFeed
+            newPost={newPost}
+            me={
+              me
+                ? {
+                    id: me.user.id,
+                    name: myName,
+                    username: me.profile.username,
+                    avatar: me.profile.avatar_url ?? null,
+                    role: me.profile.role,
+                    genre: me.profile.genre ?? null,
+                  }
+                : null
+            }
+          />
 
         </main>
 
@@ -244,75 +198,13 @@ export default function HomePage() {
             <PostCollabButton />
           </div>
 
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
-            <h3 className="font-bold text-gray-900 dark:text-white text-base mb-4">Artists to Follow</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-pink-500 text-white grid place-items-center font-bold text-sm">SJ</div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1">Sarah Jenkins <VerifiedIcon className="text-emerald-500" /></p>
-                    <p className="text-xs text-gray-500">Vocalist</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => handleFollow("sarah")}
-                  className={`text-xs font-bold px-4 py-1.5 rounded-full transition-colors ${
-                    followed["sarah"] 
-                      ? "bg-gray-200 text-gray-700 dark:bg-zinc-700 dark:text-gray-300" 
-                      : "border border-emerald-600 text-emerald-600 hover:bg-emerald-50"
-                  }`}
-                >
-                  {followed["sarah"] ? "Following" : "Follow"}
-                </button>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-500 text-white grid place-items-center font-bold text-sm">DC</div>
-                  <div>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white">David Chen</p>
-                    <p className="text-xs text-gray-500">DJ / Producer</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => handleFollow("david")}
-                  className={`text-xs font-bold px-4 py-1.5 rounded-full transition-colors ${
-                    followed["david"] 
-                      ? "bg-gray-200 text-gray-700 dark:bg-zinc-700 dark:text-gray-300" 
-                      : "border border-emerald-600 text-emerald-600 hover:bg-emerald-50"
-                  }`}
-                >
-                  {followed["david"] ? "Following" : "Follow"}
-                </button>
-              </div>
-            </div>
-          </div>
+          <SuggestedPeople />
         </aside>
       </div>
 
-      {/* REPLY MODAL */}
-      {showReplyModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Reply to Demo Producer</h2>
-            <textarea 
-              rows={4}
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-              placeholder="Write your reply..." 
-              className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 resize-none mb-4" 
-            />
-            <div className="flex gap-3">
-              <button onClick={() => setShowReplyModal(false)} className="flex-1 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-2 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
-              <button onClick={handleReply} disabled={!replyText.trim()} className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold py-2 rounded-lg transition-colors">Send Reply</button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* PUBLISH TOAST */}
       {postToast && (
-        <div className="fixed bottom-8 right-8 z-50 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl">
+        <div role="status" className="fixed bottom-8 right-8 z-50 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl">
           <p className="font-bold">✓ Success!</p>
           <p className="text-xs text-gray-400">Your update has been posted.</p>
         </div>

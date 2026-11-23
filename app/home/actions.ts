@@ -2,6 +2,7 @@
 
 import { createServerSupabase } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function toggleLike(postId: string) {
   const supabase = await createServerSupabase();
@@ -39,7 +40,11 @@ export async function addComment(postId: string, body: string) {
 
   const trimmed = body.trim();
   if (!trimmed) return { error: "Empty comment" };
-  if (trimmed.length > 500) return { error: "Too long" };
+  if (trimmed.length > 500) return { error: "Too long (max 500 characters)" };
+
+  if (!rateLimit(`comment:${user.id}`, 20, 10 * 60 * 1000).ok) {
+    return { error: "You're replying too fast. Try again in a few minutes." };
+  }
 
   const { error } = await supabase.from("post_comments").insert({
     post_id: postId,
@@ -48,8 +53,17 @@ export async function addComment(postId: string, body: string) {
   });
   if (error) return { error: error.message };
 
+  // Keep posts.comment_count in step with the real number of comments.
+  const { count } = await supabase
+    .from("post_comments")
+    .select("id", { count: "exact", head: true })
+    .eq("post_id", postId);
+  if (typeof count === "number") {
+    await supabase.from("posts").update({ comment_count: count }).eq("id", postId);
+  }
+
   revalidatePath("/home");
-  return { ok: true };
+  return { ok: true, comment_count: count ?? undefined };
 }
 
 export async function hasLiked(postId: string) {
