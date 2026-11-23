@@ -4,10 +4,13 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { createClient } from "@/lib/supabase/client";
+import { useMe, invalidateMe, displayName, initials, roleLabel } from "@/lib/hooks/useMe";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { me } = useMe();
+  const myName = displayName(me?.profile, me?.user.email);
   const [signingOut, setSigningOut] = useState(false);
 
   async function handleSignOut() {
@@ -19,6 +22,7 @@ export default function Navbar() {
     } catch (err) {
       console.error("[sign out]", err);
     }
+    invalidateMe();
     setMeOpen(false);
     router.push("/login");
     router.refresh();
@@ -46,12 +50,14 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Red badges show real unread counts (hidden when zero or logged out).
+  const badge = (n?: number) => (n && n > 0 ? (n > 99 ? "99+" : String(n)) : null);
   const navItems = [
-    { name: "Home", path: "/home", icon: HomeIcon, badge: "1" },
-    { name: "Network", path: "/network", icon: NetworkIcon, badge: "3" },
+    { name: "Home", path: "/home", icon: HomeIcon, badge: null },
+    { name: "Network", path: "/network", icon: NetworkIcon, badge: null },
     { name: "Jobs", path: "/jobs", icon: JobsIcon, badge: null },
-    { name: "Messaging", path: "/messaging", icon: MessagingIcon, badge: "2" },
-    { name: "Notifications", path: "/notifications", icon: NotificationsIcon, badge: "7" },
+    { name: "Messaging", path: "/messaging", icon: MessagingIcon, badge: badge(me?.counts.unreadMessages) },
+    { name: "Notifications", path: "/notifications", icon: NotificationsIcon, badge: badge(me?.counts.unreadNotifications) },
   ];
 
   const moreItems = [
@@ -118,17 +124,30 @@ export default function Navbar() {
         <div className="flex items-center h-full flex-shrink-0 gap-4">
           <div className="relative h-full flex" ref={meRef}>
             <button onClick={() => setMeOpen(!meOpen)} className={`flex flex-col items-center justify-center h-full group outline-none ${meOpen ? 'text-emerald-600' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}>
-              <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-zinc-700 overflow-hidden flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">U</div>
+              <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-zinc-700 overflow-hidden flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">
+                {me?.profile.avatar_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={me.profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  me ? initials(myName) : ""
+                )}
+              </div>
               <span className="text-[10px] mt-1 flex items-center gap-0.5">Me <svg className={`w-2.5 h-2.5 transition-transform ${meOpen ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg></span>
             </button>
             {meOpen && (
               <div className="absolute top-14 right-0 w-72 bg-white dark:bg-zinc-900 rounded-lg shadow-xl border border-gray-200 dark:border-zinc-800 overflow-hidden z-50">
                 <div className="p-4 border-b border-gray-100 dark:border-zinc-800">
                   <div className="flex gap-3">
-                    <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">U</div>
-                    <div>
-                      <p className="font-bold text-gray-900 dark:text-white text-sm">Ulisses Silva</p>
-                      <p className="text-xs text-gray-500 mt-0.5">Music Producer &amp; DJ</p>
+                    {me?.profile.avatar_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={me.profile.avatar_url} alt="" className="w-12 h-12 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">{initials(myName)}</div>
+                    )}
+                    <div className="min-w-0">
+                      <p className="font-bold text-gray-900 dark:text-white text-sm truncate">{myName}</p>
+                      {me?.profile.username && <p className="text-xs text-gray-500 truncate">@{me.profile.username}</p>}
+                      <p className="text-xs text-gray-500 mt-0.5">{roleLabel(me?.profile.role, me?.profile.genre)}</p>
                     </div>
                   </div>
                   <div className="flex gap-2 mt-3">
@@ -151,7 +170,9 @@ export default function Navbar() {
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Settings</p>
                   <Link href="/legal" className="block px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-md">Legal &amp; Privacy</Link>
-                  <Link href="/admin/curators" className="block px-2 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md font-semibold">Admin: Curator Verify</Link>
+                  {me?.profile.role === "admin" && (
+                    <Link href="/admin/curators" className="block px-2 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md font-semibold">Admin: Curator Verify</Link>
+                  )}
                 </div>
                 <div className="p-2 border-t border-gray-100 dark:border-zinc-800">
                   <button

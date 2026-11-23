@@ -14,6 +14,22 @@ import PostCollabButton from "@/components/home/PostCollabButton";
 import ProfileStrength from "@/components/home/ProfileStrength";
 import GridStories from "@/components/grid/GridStories";
 import GridComposer from "@/components/grid/GridComposer";
+import { useMe, displayName, initials, roleLabel, compactNumber, type MeProfile } from "@/lib/hooks/useMe";
+
+// Profile-strength checklist built from the real profile. Edits happen on /profile/edit.
+function profileStrengthItems(p: MeProfile) {
+  const edit = "/profile/edit";
+  const hasName = !!p.full_name && !p.full_name.includes("@");
+  const hasLink = !!(p.website || p.instagram || p.twitter || p.spotify || p.youtube || p.soundcloud);
+  return [
+    { label: "Add your name", done: hasName, href: edit },
+    { label: "Add a profile photo", done: !!p.avatar_url, href: edit },
+    { label: "Write a short bio", done: !!p.bio, href: edit },
+    { label: "Add your city", done: !!p.city, href: edit },
+    { label: "Add your genre", done: !!p.genre, href: edit },
+    { label: "Link your music or socials", done: hasLink, href: edit },
+  ];
+}
 
 const VerifiedIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
@@ -26,6 +42,8 @@ const SparkleIcon = ({ className = "w-5 h-5" }) => (
 
 export default function HomePage() {
   const router = useRouter();
+  const { me, loading: meLoading } = useMe();
+  const myName = displayName(me?.profile, me?.user.email);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hypeCount, setHypeCount] = useState(0);
   const [hasHyped, setHasHyped] = useState(false);
@@ -76,12 +94,34 @@ export default function HomePage() {
         {/* LEFT COLUMN */}
         <aside className="col-span-12 lg:col-span-3 space-y-3">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-            <div className="h-20 bg-gradient-to-r from-emerald-600 to-emerald-500" />
+            {me?.profile.cover_image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={me.profile.cover_image} alt="" className="h-20 w-full object-cover" />
+            ) : (
+              <div className="h-20 bg-gradient-to-r from-emerald-600 to-emerald-500" />
+            )}
             <div className="p-5 -mt-10 text-center relative">
-              <div className="w-20 h-20 mx-auto rounded-full bg-emerald-800 text-white grid place-items-center font-bold text-2xl ring-4 ring-white dark:ring-zinc-900 mb-3">U</div>
-              <p className="font-bold text-gray-900 dark:text-white text-lg">Ulisses Silva</p>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Music Producer &amp; DJ</p>
-              <p className="text-xs text-gray-500 mt-1">London, UK</p>
+              {me?.profile.avatar_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={me.profile.avatar_url} alt={myName} className="w-20 h-20 mx-auto rounded-full object-cover ring-4 ring-white dark:ring-zinc-900 mb-3 bg-emerald-800" />
+              ) : (
+                <div className="w-20 h-20 mx-auto rounded-full bg-emerald-800 text-white grid place-items-center font-bold text-2xl ring-4 ring-white dark:ring-zinc-900 mb-3">
+                  {meLoading ? "" : initials(myName)}
+                </div>
+              )}
+              {meLoading ? (
+                <div className="space-y-2" aria-label="Loading your profile">
+                  <div className="h-5 w-32 mx-auto rounded bg-gray-200 dark:bg-zinc-800 animate-pulse" />
+                  <div className="h-4 w-24 mx-auto rounded bg-gray-100 dark:bg-zinc-800 animate-pulse" />
+                </div>
+              ) : (
+                <>
+                  <p className="font-bold text-gray-900 dark:text-white text-lg">{myName}</p>
+                  {me?.profile.username && <p className="text-xs text-gray-500">@{me.profile.username}</p>}
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{roleLabel(me?.profile.role, me?.profile.genre)}</p>
+                  {me?.profile.city && <p className="text-xs text-gray-500 mt-1">{me.profile.city}</p>}
+                </>
+              )}
               
               <div className="mt-5 space-y-2">
                 <button onClick={() => setIsPlaying(!isPlaying)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">
@@ -91,12 +131,12 @@ export default function HomePage() {
               </div>
 
               <div className="grid grid-cols-2 gap-2 mt-6 pt-5 border-t border-gray-100 dark:border-zinc-800 text-center">
-                <div><p className="font-bold text-gray-900 dark:text-white text-base">124</p><p className="text-[11px] text-gray-500 uppercase tracking-wide">Connections</p></div>
-                <div><p className="font-bold text-gray-900 dark:text-white text-base">2.4K</p><p className="text-[11px] text-gray-500 uppercase tracking-wide">Followers</p></div>
+                <div><p className="font-bold text-gray-900 dark:text-white text-base">{me ? compactNumber(me.counts.following) : "–"}</p><p className="text-[11px] text-gray-500 uppercase tracking-wide">Following</p></div>
+                <div><p className="font-bold text-gray-900 dark:text-white text-base">{me ? compactNumber(me.counts.followers) : "–"}</p><p className="text-[11px] text-gray-500 uppercase tracking-wide">Followers</p></div>
               </div>
             </div>
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
-              <ProfileStrength />
+              {me && <ProfileStrength items={profileStrengthItems(me.profile)} />}
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <li><Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></Link></li>
                 <li><Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></Link></li>
