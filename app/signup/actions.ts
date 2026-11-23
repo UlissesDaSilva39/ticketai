@@ -1,68 +1,60 @@
 ﻿"use server";
 
+import { headers } from "next/headers";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { ensureProfile, toProfileRole } from "@/lib/auth/ensure-profile";
 
-type SignupInput = {
-  email: string;
-  password: string;
-  full_name: string;
-  username: string;
-  role: "artist" | "promoter" | "venue" | "attendee";
-  city: string;
-};
+export type SignupState =
+  | { status: "idle" }
+  | { status: "error"; message: string; field?: "full_name" | "email" | "password" }
+  | { status: "check_email"; email: string }
+  | { status: "redirect"; to: string };
 
-export async function signUp(input: SignupInput) {
-  const email = input.email.trim().toLowerCase();
-  const password = input.password;
-  const full_name = input.full_name.trim();
-  const username = input.username.trim().toLowerCase();
-  const role = input.role;
-  const city = input.city.trim();
+async function siteOrigin(): Promise<string> {
+  const h = await headers();
+  const origin = h.get("origin");
+  if (origin) return origin;
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+  const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
+  return `${proto}://${host}`;
+}
 
-  if (!email || !password) return { error: "Email and password required" };
-  if (password.length < 8) return { error: "Password must be at least 8 characters" };
-  if (!full_name) return { error: "Full name required" };
-  if (!username) return { error: "Username required" };
-  if (!/^[a-z0-9_.-]+$/.test(username)) {
-    return { error: "Username may only contain letters, numbers, dot, dash, underscore" };
-  }
-  if (username.length > 30) return { error: "Username too long" };
+export async function signUp(_prev: SignupState, formData: FormData): Promise<SignupState> {
+  const full_name = String(formData.get("full_name") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const password = String(formData.get("password") ?? "");
+  const role = toProfileRole(formData.get("role"));
+
+  if (full_name.length < 2) return { status: "error", field: "full_name", message: "Enter your full name." };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return { status: "error", field: "email", message: "Enter a valid email address." };
+  if (password.length < 8)
+    return { status: "error", field: "password", message: "Password must be at least 8 characters." };
 
   const supabase = await createServerSupabase();
-
-  // Check username availability
-  const { data: existing } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("username", username)
-    .maybeSingle();
-
-  if (existing) return { error: "Username already taken" };
-
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { full_name, username },
+      // Saved on the auth user so the profile can be created after email confirmation.
+      data: { full_name, role },
+      emailRedirectTo: `${await siteOrigin()}/auth/callback?next=/onboarding`,
     },
   });
 
-  if (error) return { error: error.message };
-  if (!data.user) return { error: "Could not create account" };
-
-  // Create profile row
-  const { error: profileError } = await supabase.from("profiles").insert({
-    id: data.user.id,
-    username,
-    full_name,
-    role,
-    city: city || null,
-    is_public: true,
-  });
-
-  if (profileError) {
-    return { error: "Account created but profile setup failed: " + profileError.message };
+  if (error) {
+    const msg = /already registered|already exists/i.test(error.message)
+      ? "An account with this email already exists. Try logging in."
+      : error.message;
+    return { status: "error", field: "email", message: msg };
   }
 
-  return { ok: true };
+  // Email confirmation is on: the profile is created in /auth/callback once they click the link.
+  if (!data.session || !data.user) return { status: "check_email", email };
+
+  const { error: profileError } = await ensureProfile(supabase, data.user);
+  if (profileError) {
+    return { status: "error", message: "Your account was created but we couldn't set up your profile. Please log in to retry." };
+  }
+  return { status: "redirect", to: "/onboarding" };
 }
