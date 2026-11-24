@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { updateProfile } from "@/app/profile/actions";
 import { kindOf, uploadMedia, validateFile } from "@/components/grid/media";
 import { refreshMe } from "@/lib/hooks/useMe";
+import { OPEN_TO } from "@/lib/open-to";
 
 type Profile = {
   id: string;
@@ -25,6 +26,8 @@ type Profile = {
   youtube: string | null;
   soundcloud: string | null;
   is_public: boolean | null;
+  headline?: string | null;
+  open_to?: string[] | null;
 };
 
 /** Upload button for profile/cover photos (same secure upload as posts). */
@@ -153,6 +156,32 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
       </div>
 
       <div>
+        <label htmlFor="headline" className="block text-sm font-medium mb-1">Headline</label>
+        <input
+          id="headline"
+          name="headline"
+          type="text"
+          maxLength={120}
+          defaultValue={profile.headline || ""}
+          placeholder="e.g. House producer & DJ | Resident @ Fabric | 2M streams"
+          className="w-full px-3 py-2 mb-1 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
+        />
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Shown under your name on cards across GRID. Max 120 characters.</p>
+
+        <fieldset className="mb-4">
+          <legend className="block text-sm font-medium mb-1">Open to…</legend>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Adds a green ring and badge to your photo so the right people reach out.</p>
+          <input type="hidden" name="open_to_present" value="1" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {OPEN_TO.map((o) => (
+              <label key={o.value} className="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-3 py-2 text-sm cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 dark:has-[:checked]:bg-emerald-900/20">
+                <input type="checkbox" name="open_to" value={o.value} defaultChecked={!!profile.open_to?.includes(o.value)} className="h-4 w-4 accent-emerald-600" />
+                {o.label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         <label htmlFor="bio" className="block text-sm font-medium mb-1">Bio</label>
         <textarea
           id="bio"

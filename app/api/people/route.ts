@@ -5,7 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const dynamic = "force-dynamic";
 
 const PAGE = 24;
-const PERSON_COLUMNS = "id, full_name, username, avatar_url, role, genre, city, bio";
+const PERSON_COLUMNS = "id, full_name, username, avatar_url, role, genre, city, bio, headline, open_to";
 
 // GET /api/people?tab=discover|following|followers&q=&role=&city=&offset=
 export async function GET(req: Request) {
@@ -75,6 +75,8 @@ export async function GET(req: Request) {
     genre: p.genre,
     city: p.city,
     bio: p.bio ? String(p.bio).slice(0, 140) : null,
+    headline: p.headline || (p.bio ? String(p.bio).split("\n")[0].slice(0, 100) : null),
+    openTo: (p.open_to as string[] | null) ?? [],
     following: followingSet.has(p.id),
     tier: tiers[p.id] ?? null,
   }));

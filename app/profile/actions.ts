@@ -3,6 +3,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { cleanOpenTo } from "@/lib/open-to";
 
 const MAX_LEN = {
   full_name: 80,
@@ -18,6 +19,7 @@ const MAX_LEN = {
   soundcloud: 200,
   avatar_url: 500,
   cover_image: 500,
+  headline: 120,
 } as const;
 
 type Field = keyof typeof MAX_LEN;
@@ -35,6 +37,11 @@ export async function updateProfile(formData: FormData) {
     const value = String(raw).trim();
     if (value.length > max) return { error: key + " is too long (max " + max + ")" };
     patch[key] = value === "" ? null : value;
+  }
+
+  // "Open to…" badges (checkboxes). The marker field tells us the section was on the form.
+  if (formData.get("open_to_present") !== null) {
+    patch.open_to = cleanOpenTo(formData.getAll("open_to"));
   }
 
   const isPublicRaw = formData.get("is_public");

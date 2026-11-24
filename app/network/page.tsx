@@ -5,7 +5,9 @@ import Link from "next/link";
 import MessageButton from "@/components/MessageButton";
 import ProBadge from "@/components/ProBadge";
 import PersonActions, { type Connection } from "@/components/network/PersonActions";
-import { initials, roleLabel } from "@/lib/display";
+import PersonAvatar from "@/components/network/PersonAvatar";
+import { roleLabel } from "@/lib/display";
+import { openToLabels } from "@/lib/open-to";
 
 // My Network: connection requests, music-focused suggestions, and the people
 // directory (Discover / Connections / Following / Followers). Real data only.
@@ -18,12 +20,16 @@ type Suggested = {
   role: string | null;
   genre: string | null;
   city: string | null;
+  headline: string | null;
+  openTo: string[];
+  mutualCount: number;
+  mutualFirst: string | null;
   connection: Connection;
   following: boolean;
   requestedAt?: string | null;
 };
 type NetworkData = {
-  counts: { connections: number; following: number; followers: number; invitations: number; sent: number };
+  counts: { connections: number; following: number; followers: number; invitations: number; sent: number; events: number; pages: number };
   invitations: Suggested[];
   groups: { id: string; title: string; people: Suggested[] }[];
   newNearby: Suggested[];
@@ -32,19 +38,47 @@ type NetworkData = {
 
 type View = "grow" | "catchup" | "discover" | "connections" | "following" | "followers";
 
-const SIDEBAR: { id: View; label: string; icon: string; count?: keyof NetworkData["counts"] }[] = [
-  { id: "connections", label: "Connections", icon: "🤝", count: "connections" },
-  { id: "following", label: "Following", icon: "➕", count: "following" },
-  { id: "followers", label: "Followers", icon: "👥", count: "followers" },
-  { id: "discover", label: "Find people", icon: "🔎" },
+// Outline icons in the style of the rest of GRID's UI.
+const Icon = ({ d }: { d: string }) => (
+  <svg className="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.7} viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" d={d} />
+  </svg>
+);
+const ICONS = {
+  connections: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z",
+  follow: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
+  groups: "M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198v.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z",
+  events: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",
+  pages: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
+  search: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
+};
+
+type SidebarItem = { label: string; icon: string; count?: (c: NetworkData["counts"]) => number; view?: View; href?: string; soon?: boolean };
+const SIDEBAR: SidebarItem[] = [
+  { label: "Connections", icon: ICONS.connections, count: (c) => c.connections, view: "connections" },
+  { label: "Following & followers", icon: ICONS.follow, count: (c) => c.following + c.followers, view: "following" },
+  { label: "Groups", icon: ICONS.groups, soon: true },
+  { label: "Events", icon: ICONS.events, count: (c) => c.events, href: "/events" },
+  { label: "Artists & venues", icon: ICONS.pages, count: (c) => c.pages, href: "/discover" },
+  { label: "Find people", icon: ICONS.search, view: "discover" },
 ];
 
-function Avatar({ p, size = "h-14 w-14" }: { p: { name: string; avatar: string | null }; size?: string }) {
-  return p.avatar ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={p.avatar} alt="" className={`${size} rounded-full object-cover flex-shrink-0`} />
-  ) : (
-    <span className={`${size} grid flex-shrink-0 place-items-center rounded-full bg-emerald-700 font-bold text-white`}>{initials(p.name)}</span>
+function Avatar({ p, size = 56 }: { p: { name: string; avatar: string | null; openTo?: string[] }; size?: number }) {
+  return <PersonAvatar name={p.name} src={p.avatar} openTo={p.openTo} size={size} />;
+}
+
+/** "Hassan and 2 other mutual connections" */
+function Mutuals({ count, first }: { count: number; first: string | null }) {
+  if (!count || !first) return null;
+  const rest = count - 1;
+  return (
+    <span className="mt-1 flex items-center justify-center gap-1 text-[11px] text-gray-500">
+      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d={ICONS.connections} />
+      </svg>
+      {first}
+      {rest > 0 ? ` and ${rest} other mutual connection${rest === 1 ? "" : "s"}` : " is a mutual connection"}
+    </span>
   );
 }
 
@@ -78,21 +112,37 @@ export default function NetworkPage() {
         <aside className="col-span-12 md:col-span-4 lg:col-span-3 space-y-3">
           <nav aria-label="Manage my network" className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
             <p className="px-4 py-3 font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-zinc-800">Manage my network</p>
-            <ul>
-              {SIDEBAR.map((s) => (
-                <li key={s.id}>
-                  <button
-                    type="button"
-                    onClick={() => setView(s.id)}
-                    aria-current={view === s.id}
-                    className={`flex w-full items-center gap-3 px-4 py-2.5 text-sm ${view === s.id ? "bg-emerald-50 dark:bg-emerald-900/20 font-semibold text-emerald-800 dark:text-emerald-300" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}
-                  >
-                    <span aria-hidden="true" className="w-5 text-center">{s.icon}</span>
+            <ul className="py-1">
+              {SIDEBAR.map((s) => {
+                const active = !!s.view && view === s.view;
+                const cls = `flex w-full items-center gap-3 px-4 py-3 text-[15px] ${
+                  active ? "bg-emerald-50 dark:bg-emerald-900/20 font-semibold text-emerald-800 dark:text-emerald-300" : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"
+                } ${s.soon ? "cursor-default opacity-70" : ""}`;
+                const inner = (
+                  <>
+                    <Icon d={s.icon} />
                     <span className="flex-1 text-left">{s.label}</span>
-                    {s.count && data && <span className="text-xs text-gray-500">{data.counts[s.count]}</span>}
-                  </button>
-                </li>
-              ))}
+                    {s.soon ? (
+                      <span className="rounded bg-gray-100 dark:bg-zinc-800 px-1.5 text-[10px] font-bold uppercase text-gray-500">Soon</span>
+                    ) : s.count && data ? (
+                      <span className="text-sm text-gray-500">{s.count(data.counts).toLocaleString("en-GB")}</span>
+                    ) : null}
+                  </>
+                );
+                return (
+                  <li key={s.label}>
+                    {s.href ? (
+                      <Link href={s.href} className={cls}>
+                        {inner}
+                      </Link>
+                    ) : (
+                      <button type="button" onClick={() => s.view && setView(s.view)} aria-current={active} disabled={s.soon} className={cls}>
+                        {inner}
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
           {data && !data.hasProfileBasics && (
@@ -143,16 +193,16 @@ export default function NetworkPage() {
                     {data.invitations.map((p) => (
                       <li key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-zinc-800">
                         <Link href={`/u/${p.username}`}>
-                          <Avatar p={p} />
+                          <Avatar p={p} size={64} />
                         </Link>
                         <div className="min-w-0 flex-1">
                           <p className="text-sm text-gray-900 dark:text-white">
                             <Link href={`/u/${p.username}`} className="font-semibold hover:underline">{p.name}</Link> wants to connect
                           </p>
-                          <p className="truncate text-xs text-gray-500">
-                            {roleLabel(p.role, p.genre)}
-                            {p.city ? ` · ${p.city}` : ""}
-                          </p>
+                          <p className="line-clamp-1 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</p>
+                          <div className="[&>span]:justify-start">
+                            <Mutuals count={p.mutualCount} first={p.mutualFirst} />
+                          </div>
                         </div>
                         <div className="flex gap-2">
                           <button type="button" onClick={() => respond(p.id, "ignore")} className="rounded-full px-4 py-1.5 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800">
@@ -181,16 +231,24 @@ export default function NetworkPage() {
                       </div>
                       <ul className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {g.people.map((p) => (
-                          <li key={p.id} className="flex flex-col items-center rounded-xl border border-gray-200 dark:border-zinc-800 p-3 text-center">
-                            <Link href={`/u/${p.username}`} className="flex flex-col items-center">
-                              <Avatar p={p} size="h-16 w-16" />
+                          <li key={p.id} className="relative flex flex-col items-center overflow-hidden rounded-xl border border-gray-200 dark:border-zinc-800 text-center transition-shadow hover:shadow-md">
+                            {/* banner strip, green when the person is "Open to…" */}
+                            <div className={`h-14 w-full ${p.openTo.length ? "bg-gradient-to-r from-emerald-600 to-emerald-400" : "bg-gradient-to-r from-zinc-200 to-zinc-100 dark:from-zinc-800 dark:to-zinc-700"}`} />
+                            <Link href={`/u/${p.username}`} className="-mt-9 flex flex-col items-center px-3">
+                              <span className="rounded-full bg-white dark:bg-zinc-900 p-1">
+                                <Avatar p={p} size={72} />
+                              </span>
                               <span className="mt-2 line-clamp-1 text-sm font-semibold text-gray-900 dark:text-white hover:underline">{p.name}</span>
                             </Link>
-                            <span className="line-clamp-2 min-h-[2rem] text-xs text-gray-500">
-                              {roleLabel(p.role, p.genre)}
-                              {p.city ? ` · ${p.city}` : ""}
-                            </span>
-                            <div className="mt-2">
+                            <span className="line-clamp-2 min-h-[2rem] px-3 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</span>
+                            {p.city && <span className="text-[11px] text-gray-400">{p.city}</span>}
+                            {openToLabels(p.openTo)[0] && (
+                              <span className="mt-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">
+                                {openToLabels(p.openTo)[0].label}
+                              </span>
+                            )}
+                            <Mutuals count={p.mutualCount} first={p.mutualFirst} />
+                            <div className="mt-auto w-full px-3 pb-3 pt-3">
                               <PersonActions personId={p.id} connection={p.connection} following={p.following} compact />
                             </div>
                           </li>
@@ -216,16 +274,14 @@ export default function NetworkPage() {
                   {data.newNearby.map((p) => (
                     <li key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-zinc-800">
                       <Link href={`/u/${p.username}`}>
-                        <Avatar p={p} size="h-12 w-12" />
+                        <Avatar p={p} size={52} />
                       </Link>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm text-gray-900 dark:text-white">
                           <Link href={`/u/${p.username}`} className="font-semibold hover:underline">{p.name}</Link> joined GRID
                         </p>
-                        <p className="truncate text-xs text-gray-500">
-                          {roleLabel(p.role, p.genre)}
-                          {p.city ? ` · ${p.city}` : ""}
-                        </p>
+                        <p className="line-clamp-1 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</p>
+                        {p.city && <p className="text-[11px] text-gray-400">{p.city}</p>}
                       </div>
                       <PersonActions personId={p.id} connection={p.connection} following={p.following} />
                     </li>
@@ -255,6 +311,8 @@ type Person = {
   genre: string | null;
   city: string | null;
   bio: string | null;
+  headline: string | null;
+  openTo: string[];
   following: boolean;
   tier: "pro" | "premium" | null;
 };
@@ -384,20 +442,28 @@ function PeopleDirectory({ tab, onBack }: { tab: "discover" | "connections" | "f
             {people.map((p) => (
               <li key={p.id} className="flex flex-col rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm">
                 <Link href={`/u/${p.username}`} className="flex items-center gap-3 group">
-                  <Avatar p={p} />
+                  <Avatar p={p} size={60} />
                   <span className="min-w-0">
                     <span className="flex items-center gap-1.5">
                       <span className="truncate font-bold text-gray-900 dark:text-white group-hover:underline">{p.name}</span>
                       {p.tier && <ProBadge tier={p.tier} />}
                     </span>
-                    <span className="block truncate text-xs text-gray-500">@{p.username}</span>
-                    <span className="block truncate text-xs text-gray-600 dark:text-gray-400">
-                      {roleLabel(p.role, p.genre)}
+                    <span className="block line-clamp-2 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</span>
+                    <span className="block truncate text-[11px] text-gray-400">
+                      @{p.username}
                       {p.city ? ` · ${p.city}` : ""}
                     </span>
                   </span>
                 </Link>
-                {p.bio && <p className="mt-3 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{p.bio}</p>}
+                {openToLabels(p.openTo).length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1">
+                    {openToLabels(p.openTo).map((o) => (
+                      <span key={o.value} className="rounded-full bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">
+                        {o.label}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 <div className="mt-auto pt-4 flex items-start gap-2">
                   <button
                     type="button"

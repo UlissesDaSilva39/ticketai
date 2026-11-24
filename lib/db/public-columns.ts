@@ -4,7 +4,7 @@
 // visitors once the private columns are hidden.
 
 export const PUBLIC_PROFILE_COLUMNS =
-  "id, full_name, role, created_at, bio, avatar_url, city, website, instagram, twitter, username, is_public, cover_image, genre, label, spotify, youtube, soundcloud";
+  "id, full_name, role, created_at, bio, avatar_url, city, website, instagram, twitter, username, is_public, cover_image, genre, label, spotify, youtube, soundcloud, headline, open_to";
 
 export const PUBLIC_ARTIST_COLUMNS =
   "id, owner_id, slug, name, handle, genre, artist_type, secondary_genres, city, country, bio, website, spotify, instagram, avatar_url, status, created_at, updated_at, cover_image, verified, external_id, source";
