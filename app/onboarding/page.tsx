@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { saveOnboarding } from "./actions";
+import { refreshMe } from "@/lib/hooks/useMe";
 
 const CheckIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -20,15 +22,28 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [role, setRole] = useState("");
   const [genre, setGenre] = useState("");
+  const [city, setCity] = useState("");
   const [links, setLinks] = useState({ spotify: "", beatport: "" });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFinish = () => {
-    // In a real app, you would save this to the database here.
-    // For now, we redirect to the appropriate dashboard.
-    if (role === "venue") {
-      router.push("/business");
-    } else {
+  // Saves role, genre, city and links to the profile, then opens GRID.
+  const handleFinish = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await saveOnboarding({ choice: role, genre, city, spotify: links.spotify, other: links.beatport });
+      if ("error" in res && res.error) {
+        setError(res.error);
+        setSaving(false);
+        return;
+      }
+      refreshMe();
       router.push("/home");
+      router.refresh();
+    } catch {
+      setError("Couldn't reach the server. Please try again.");
+      setSaving(false);
     }
   };
 
@@ -89,6 +104,19 @@ export default function OnboardingPage() {
                 ))}
               </div>
 
+              <div className="mb-8">
+                <label htmlFor="onb-city" className="block text-xs font-bold text-gray-500 uppercase mb-2">Your city</label>
+                <input
+                  id="onb-city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  maxLength={80}
+                  placeholder="e.g. London"
+                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">Used to match you with local gigs and people.</p>
+              </div>
+
               <div className="flex gap-3">
                 <button onClick={() => setStep(1)} className="w-1/3 border-2 border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-bold py-3.5 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">Back</button>
                 <button onClick={() => setStep(3)} disabled={!genre} className="w-2/3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition-colors">Continue</button>
@@ -108,15 +136,17 @@ export default function OnboardingPage() {
                   <input type="url" value={links.spotify} onChange={(e) => setLinks({...links, spotify: e.target.value})} placeholder="https://open.spotify.com/artist/..." className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Beatport Profile (Optional)</label>
-                  <input type="url" value={links.beatport} onChange={(e) => setLinks({...links, beatport: e.target.value})} placeholder="https://www.beatport.com/artist/..." className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500" />
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-2">SoundCloud, YouTube or website (optional)</label>
+                  <input type="url" value={links.beatport} onChange={(e) => setLinks({...links, beatport: e.target.value})} placeholder="https://soundcloud.com/..." className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500" />
                 </div>
               </div>
 
+              {error && <p role="alert" className="mb-4 text-sm text-red-600">{error}</p>}
+
               <div className="flex gap-3">
                 <button onClick={() => setStep(2)} className="w-1/3 border-2 border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-bold py-3.5 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">Back</button>
-                <button onClick={handleFinish} className="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
-                  <CheckIcon /> Finish & Enter GRID
+                <button onClick={handleFinish} disabled={saving} className="w-2/3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                  <CheckIcon /> {saving ? "Saving…" : "Finish & Enter GRID"}
                 </button>
               </div>
             </div>
