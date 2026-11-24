@@ -100,6 +100,7 @@ function ProPageInner() {
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
+  const [confirming, setConfirming] = useState<"pro" | "premium" | null>(null);
 
   // Current plan. Falls back to the subscription's plan if an older cached
   // response has no "tier" (that made an active Pro member look Free).
@@ -138,18 +139,26 @@ function ProPageInner() {
       return;
     }
     if (paid) {
-      // Existing subscribers: the card is already on file, so the plan changes
-      // in place (no Stripe page). Stripe adjusts the next invoice.
-      const ok = window.confirm(
-        `Switch to ${name} (${plan === "premium" ? "£15" : "£5"}/month)? ` +
-          (pro?.trialing ? "Your free trial continues until it ends." : "Stripe adjusts your next invoice for the rest of this month.")
-      );
-      if (!ok) return;
+      // Existing subscribers: ask in our own box (the browser's pop-up looked
+      // like an error), then change the plan in place — no Stripe page needed.
+      setConfirming(plan);
+      return;
     }
     setBusy(plan);
-    const err = paid ? await changePlan(plan) : await goToProCheckout(plan);
+    const err = await goToProCheckout(plan);
     if (err) setError(err);
-    else if (paid) setBanner(`Done — you're now on ${name}. 🎉`);
+    setBusy(null);
+  }
+
+  async function confirmSwitch() {
+    const plan = confirming;
+    if (!plan) return;
+    const name = plan === "premium" ? "Premium" : "Pro";
+    setConfirming(null);
+    setBusy(plan);
+    const err = await changePlan(plan);
+    if (err) setError(err);
+    else setBanner(`Done — you're now on ${name}. 🎉`);
     setBusy(null);
   }
 
@@ -313,6 +322,39 @@ function ProPageInner() {
           </Link>
         </div>
       </div>
+
+      {confirming && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="switch-title">
+          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-xl">
+            <h2 id="switch-title" className="text-lg font-bold text-gray-900 dark:text-white">
+              Switch to {confirming === "premium" ? "Premium" : "Pro"}?
+            </h2>
+            <p className="mt-2 text-sm text-gray-600 dark:text-zinc-400">
+              {confirming === "premium" ? "£15" : "£5"}/month.{" "}
+              {pro?.trialing
+                ? `Your free trial continues until ${fmtDate(pro.until)} — nothing is charged before then.`
+                : "Stripe adjusts your next invoice for the rest of this month."}{" "}
+              Your saved card is used, so you won&apos;t see a payment page.
+            </p>
+            <div className="mt-5 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirming(null)}
+                className="flex-1 rounded-lg border border-gray-300 dark:border-zinc-700 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmSwitch}
+                className={`flex-1 rounded-lg py-2 text-sm font-semibold text-white ${confirming === "premium" ? "bg-violet-600 hover:bg-violet-700" : "bg-amber-500 hover:bg-amber-600"}`}
+              >
+                Yes, switch
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

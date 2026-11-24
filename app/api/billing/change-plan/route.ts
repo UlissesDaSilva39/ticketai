@@ -32,21 +32,28 @@ export async function POST(req: NextRequest) {
   const { data: row } = await createAdminClient().from("subscriptions").select("stripe_subscription_id").eq("user_id", user.id).maybeSingle();
   if (!row?.stripe_subscription_id) return NextResponse.json({ error: "Subscription not found" }, { status: 404 });
 
-  const sub = await stripe.subscriptions.retrieve(row.stripe_subscription_id);
-  const item = sub.items.data[0];
-  if (!item) return NextResponse.json({ error: "Subscription has no items" }, { status: 400 });
+  try {
+    const sub = await stripe.subscriptions.retrieve(row.stripe_subscription_id);
+    const item = sub.items.data[0];
+    if (!item) return NextResponse.json({ error: "Subscription has no items" }, { status: 400 });
 
-  const updated = await stripe.subscriptions.update(sub.id, {
-    items: [
-      {
-        id: item.id,
-        price_data: { currency: "gbp", unit_amount: PLANS[plan].pence, recurring: { interval: "month" }, product: await ensurePlanProduct(plan) },
-      },
-    ],
-    proration_behavior: "create_prorations",
-    metadata: { ...sub.metadata, type: "pro", plan, user_id: user.id },
-  });
+    const updated = await stripe.subscriptions.update(sub.id, {
+      items: [
+        {
+          id: item.id,
+          price_data: { currency: "gbp", unit_amount: PLANS[plan].pence, recurring: { interval: "month" }, product: await ensurePlanProduct(plan) },
+        },
+      ],
+      proration_behavior: "create_prorations",
+      metadata: { ...sub.metadata, type: "pro", plan, user_id: user.id },
+    });
 
-  await syncSubscription(updated, user.id);
-  return NextResponse.json({ pro: await getProStatus(user.id) });
+    await syncSubscription(updated, user.id);
+    return NextResponse.json({ pro: await getProStatus(user.id) });
+  } catch (e) {
+    // Surface Stripe's reason instead of a blank 500.
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("[billing/change-plan] Stripe error:", msg);
+    return NextResponse.json({ error: `Stripe couldn't switch your plan: ${msg}` }, { status: 502 });
+  }
 }
