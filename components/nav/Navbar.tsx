@@ -57,7 +57,7 @@ export default function Navbar() {
     { name: "Home", path: "/home", icon: HomeIcon, badge: null },
     { name: "Network", path: "/network", icon: NetworkIcon, badge: null },
     { name: "Jobs", path: "/jobs", icon: JobsIcon, badge: null },
-    { name: "Messaging", path: "/messaging", icon: MessagingIcon, badge: badge(me?.counts.unreadMessages) },
+    { name: "Messaging", path: "/messages", icon: MessagingIcon, badge: badge(me?.counts.unreadMessages) },
     { name: "Notifications", path: "/notifications", icon: NotificationsIcon, badge: badge(me?.counts.unreadNotifications) },
   ];
 
@@ -148,7 +148,7 @@ export default function Navbar() {
                     <div className="min-w-0">
                       <p className="font-bold text-gray-900 dark:text-white text-sm truncate flex items-center gap-1.5">
                         <span className="truncate">{myName}</span>
-                        {me?.pro?.active && <ProBadge />}
+                        {me?.pro?.active && <ProBadge tier={me.pro.tier} />}
                       </p>
                       {me?.profile.username && <p className="text-xs text-gray-500 truncate">@{me.profile.username}</p>}
                       <p className="text-xs text-gray-500 mt-0.5">{roleLabel(me?.profile.role, me?.profile.genre)}</p>
@@ -163,7 +163,9 @@ export default function Navbar() {
                 <div className="p-2">
                   <Link href="/pro" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 text-amber-600 font-semibold text-sm">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    {me?.pro?.active ? "Your GRID Pro" : me?.pro?.hadSubscription ? "Get GRID Pro" : "Try GRID Pro free for 30 days"}
+                    {me?.pro?.active
+                      ? me.pro.tier === "premium" ? "Your GRID Premium" : "Your GRID Pro"
+                      : me?.pro?.hadSubscription ? "See GRID plans" : "Try GRID Pro or Premium free"}
                   </Link>
                   <div className="h-px bg-gray-100 dark:bg-zinc-800 my-2"></div>
                   <p className="px-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 mt-2">Manage</p>
@@ -233,7 +235,7 @@ export default function Navbar() {
 
           <Link href="/pro" className="flex flex-col items-center justify-center cursor-pointer text-amber-600 hover:text-amber-700 group h-full hidden lg:flex">
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <span className="text-[10px] mt-1 text-gray-500 group-hover:text-amber-600 whitespace-nowrap">{me?.pro?.active ? "Pro" : "Try Pro"}</span>
+            <span className="text-[10px] mt-1 text-gray-500 group-hover:text-amber-600 whitespace-nowrap">{me?.pro?.active ? (me.pro.tier === "premium" ? "Premium" : "Pro") : "Plans"}</span>
           </Link>
         </div>
       </div>

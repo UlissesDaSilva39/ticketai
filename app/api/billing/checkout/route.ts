@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getProStatus, PRO_PRICE_PENCE, PRO_TRIAL_DAYS } from "@/lib/pro";
+import { ensurePlanProduct, getProStatus, isPlan, PLANS, PRO_TRIAL_DAYS, type Plan } from "@/lib/pro";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
-// Start GRID Pro: creates a Stripe Checkout session (subscription, £5/month,
-// 30-day free trial the first time) and returns its URL.
+// Start GRID Pro (£5) or Premium (£15): creates a Stripe Checkout session
+// (monthly subscription, 30-day free trial the first time) and returns its URL.
 export async function POST(req: NextRequest) {
   const supabase = await createServerSupabase();
   const {
@@ -20,9 +20,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Too many attempts. Try again later." }, { status: 429 });
   }
 
+  const { plan: rawPlan } = await req.json().catch(() => ({}));
+  const plan: Plan = isPlan(rawPlan) ? rawPlan : "pro";
+
   const pro = await getProStatus(user.id);
   if (pro.active && pro.source === "subscription") {
-    return NextResponse.json({ error: "You already have GRID Pro." }, { status: 400 });
+    return NextResponse.json({ error: "You already have a plan. Use “Switch plan” instead." }, { status: 400 });
   }
 
   // Reuse (or create) this member's Stripe customer.
@@ -49,20 +52,20 @@ export async function POST(req: NextRequest) {
         quantity: 1,
         price_data: {
           currency: "gbp",
-          unit_amount: PRO_PRICE_PENCE,
+          unit_amount: PLANS[plan].pence,
           recurring: { interval: "month" },
-          product_data: { name: "GRID Pro", description: "Unlimited applications, priority matching, analytics and a Pro badge." },
+          product: await ensurePlanProduct(plan),
         },
       },
     ],
     subscription_data: {
-      metadata: { type: "pro", user_id: user.id },
+      metadata: { type: "pro", plan, user_id: user.id },
       // Free trial only the first time someone subscribes.
       ...(pro.hadSubscription ? {} : { trial_period_days: PRO_TRIAL_DAYS }),
     },
     payment_method_collection: "always",
     allow_promotion_codes: true,
-    metadata: { type: "pro", user_id: user.id },
+    metadata: { type: "pro", plan, user_id: user.id },
     success_url: `${origin}/pro?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/pro?checkout=cancelled`,
   });

@@ -38,10 +38,15 @@ function readApplicationsThisWeek(): number {
   }
 }
 
-/** Sends the browser to Stripe Checkout for GRID Pro. Returns an error message on failure. */
-export async function goToProCheckout(): Promise<string | null> {
+/** Sends the browser to Stripe Checkout for Pro or Premium. Returns an error message on failure. */
+export async function goToProCheckout(plan: "pro" | "premium" = "pro"): Promise<string | null> {
   try {
-    const res = await fetch("/api/billing/checkout", { method: "POST", credentials: "include" });
+    const res = await fetch("/api/billing/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ plan }),
+    });
     const d = await res.json().catch(() => ({}));
     if (res.status === 401) {
       window.location.href = "/login?redirect=/pro";
@@ -49,6 +54,24 @@ export async function goToProCheckout(): Promise<string | null> {
     }
     if (!res.ok || !d.url) return d.error || "Could not start checkout. Try again.";
     window.location.href = d.url;
+    return null;
+  } catch {
+    return "Could not reach the server. Try again.";
+  }
+}
+
+/** Switch an existing subscription between Pro and Premium. Returns an error message on failure. */
+export async function changePlan(plan: "pro" | "premium"): Promise<string | null> {
+  try {
+    const res = await fetch("/api/billing/change-plan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ plan }),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) return d.error || "Could not switch plan.";
+    refreshMe();
     return null;
   } catch {
     return "Could not reach the server. Try again.";

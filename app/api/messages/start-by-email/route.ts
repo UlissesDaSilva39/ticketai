@@ -1,6 +1,8 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { checkNewChatAllowance, chatLimitMessage } from "@/lib/chat-limits";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,6 +15,11 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+    }
+
+    // Limit email lookups (they reveal whether an address has an account).
+    if (!rateLimit(`chat-by-email:${user.id}`, 10, 60 * 60 * 1000).ok) {
+      return NextResponse.json({ error: "Too many lookups. Try again later." }, { status: 429 });
     }
 
     // Look up the recipient user by email
@@ -58,9 +65,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ conversationId: existing.id });
     }
 
+    // New conversation: weekly limit by plan (Free 5, Pro 30, Premium unlimited).
+    const allowance = await checkNewChatAllowance(user.id);
+    if (!allowance.ok) {
+      return NextResponse.json({ error: chatLimitMessage(allowance), upgrade: "/pro", limit: allowance }, { status: 402 });
+    }
+
     const { data: created, error } = await supabase
       .from("conversations")
-      .insert({ participant_a: a, participant_b: b })
+      .insert({ participant_a: a, participant_b: b, started_by: user.id })
       .select("id")
       .single();
 

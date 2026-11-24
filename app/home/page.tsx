@@ -90,7 +90,7 @@ export default function HomePage() {
                 <>
                   <p className="font-bold text-gray-900 dark:text-white text-lg flex items-center justify-center gap-1.5">
                     {myName}
-                    {isPro && <ProBadge />}
+                    {isPro && <ProBadge tier={me?.pro?.tier} />}
                   </p>
                   {me?.profile.username && <p className="text-xs text-gray-500">@{me.profile.username}</p>}
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{roleLabel(me?.profile.role, me?.profile.genre)}</p>
@@ -188,6 +188,7 @@ export default function HomePage() {
                     avatar: me.profile.avatar_url ?? null,
                     role: me.profile.role,
                     genre: me.profile.genre ?? null,
+                    tier: (me.pro?.tier as "free" | "pro" | "premium" | undefined) ?? "free",
                   }
                 : null
             }

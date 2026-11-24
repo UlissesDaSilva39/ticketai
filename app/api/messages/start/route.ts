@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { checkNewChatAllowance, chatLimitMessage } from "@/lib/chat-limits";
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,9 +24,15 @@ export async function POST(req: NextRequest) {
 
     if (existing) return NextResponse.json({ conversationId: existing.id });
 
+    // New conversation: weekly limit by plan (Free 5, Pro 30, Premium unlimited).
+    const allowance = await checkNewChatAllowance(user.id);
+    if (!allowance.ok) {
+      return NextResponse.json({ error: chatLimitMessage(allowance), upgrade: "/pro", limit: allowance }, { status: 402 });
+    }
+
     const { data: created, error } = await supabase
       .from("conversations")
-      .insert({ participant_a: a, participant_b: b })
+      .insert({ participant_a: a, participant_b: b, started_by: user.id })
       .select("id")
       .single();
 

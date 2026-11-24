@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isOpen, scoreOpportunity, type Opportunity } from "@/lib/matching";
 
 export const dynamic = "force-dynamic";
@@ -35,9 +36,20 @@ export async function GET(req: Request) {
   const now = Date.now();
   const open = ((rows ?? []) as Opportunity[]).filter((o) => isOpen(o, now) && o.created_by !== user.id);
 
+  // Premium perk: listings from Premium members get priority placement.
+  const posterIds = [...new Set(open.map((o) => o.created_by).filter(Boolean))] as string[];
+  const { data: premiumSubs } = posterIds.length
+    ? await createAdminClient().from("subscriptions").select("user_id").in("user_id", posterIds).eq("plan", "premium").in("status", ["trialing", "active", "past_due"])
+    : { data: [] as { user_id: string }[] };
+  const premiumPosters = new Set((premiumSubs ?? []).map((s) => s.user_id));
+  const scored = (o: Opportunity) => {
+    const s = scoreOpportunity(o, profile, now);
+    return o.created_by && premiumPosters.has(o.created_by) ? { ...s, score: Math.min(99, s.score + 8), reasons: [...s.reasons, "Featured poster"] } : s;
+  };
+
   const matches = category
-    ? open.slice(0, limit).map((o) => scoreOpportunity(o, profile, now)) // newest first
-    : open.map((o) => scoreOpportunity(o, profile, now)).sort((a, b) => b.score - a.score).slice(0, limit);
+    ? open.slice(0, limit).map(scored) // newest first
+    : open.map(scored).sort((a, b) => b.score - a.score).slice(0, limit);
 
   // The poster's id is only used server-side for Apply; don't hand it out.
   return NextResponse.json({

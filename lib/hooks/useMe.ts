@@ -26,6 +26,8 @@ export type Me = {
   latestTrack: { postId: string; url: string; title: string } | null;
   pro: {
     active: boolean;
+    tier: "free" | "pro" | "premium";
+    plan: "pro" | "premium" | null;
     source: "subscription" | "grant" | null;
     status: string | null;
     trialing: boolean;

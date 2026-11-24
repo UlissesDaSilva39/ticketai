@@ -9,8 +9,8 @@ import { addComment, deleteComment, getComments, incrementShare, type FeedCommen
 import { eventDate, type SavedPost } from "@/components/grid/GridComposer";
 import { initials, roleLabel } from "@/lib/hooks/useMe";
 
-type Author = { name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null; pro?: boolean };
-type FeedPost = SavedPost & { author_type?: string | null };
+type Author = { name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null; pro?: boolean; tier?: "pro" | "premium" };
+type FeedPost = SavedPost & { author_type?: string | null; boosted?: boolean };
 
 const PAGE = 10;
 
@@ -26,7 +26,7 @@ function timeAgo(iso: string) {
   return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }
 
-export type FeedMe = { id: string; name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null };
+export type FeedMe = { id: string; name: string; username: string | null; avatar: string | null; role: string | null; genre: string | null; tier?: "free" | "pro" | "premium" };
 
 /**
  * The home feed. `newPost` is a post the user just published; it's added to the top.
@@ -186,6 +186,8 @@ export default function HomeFeed({ newPost, me }: { newPost: SavedPost | null; m
             setPosts((cur) => cur.map((p) => (p.id === post.id ? { ...p, comment_count: count ?? (p.comment_count ?? 0) + 1 } : p)))
           }
           isMine={!!viewerId && post.author_id === viewerId}
+          canBoost={!!viewerId && post.author_id === viewerId && me?.tier === "premium" && !post.boosted}
+          onBoosted={() => setPosts((cur) => [{ ...post, boosted: true }, ...cur.filter((p) => p.id !== post.id)])}
           following={!!following[post.author_id]}
           onFollow={() => toggleFollow(post.author_id)}
           onShared={(count) => setPosts((cur) => cur.map((p) => (p.id === post.id ? { ...p, share_count: count } : p)))}
@@ -216,7 +218,11 @@ function PostCard({
   following,
   onFollow,
   onShared,
+  canBoost,
+  onBoosted,
 }: {
+  canBoost: boolean;
+  onBoosted: () => void;
   post: FeedPost;
   author?: Author;
   liked: boolean;
@@ -227,6 +233,20 @@ function PostCard({
   onFollow: () => void;
   onShared: (count: number) => void;
 }) {
+  const [boostNote, setBoostNote] = useState<string | null>(null);
+  async function boost() {
+    if (!window.confirm("Boost this post? It will be pinned at the top of everyone's feed for 24 hours. You get 1 boost per month with Premium.")) return;
+    try {
+      const res = await fetch(`/api/posts/${post.id}/boost`, { method: "POST", credentials: "include" });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) return setBoostNote(d.error || "Could not boost.");
+      setBoostNote("Boosted for 24 hours 📌");
+      onBoosted();
+    } catch {
+      setBoostNote("Couldn't reach the server. Try again.");
+    }
+  }
+
   // Count a share once the user copies the link or picks a destination.
   async function countShare() {
     try {
@@ -311,7 +331,8 @@ function PostCard({
   );
 
   return (
-    <article className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-5 shadow-sm">
+    <article className={`bg-white dark:bg-zinc-900 rounded-xl border p-5 shadow-sm ${post.boosted ? "border-violet-300 dark:border-violet-800" : "border-gray-200 dark:border-zinc-800"}`}>
+      {post.boosted && <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-violet-700 dark:text-violet-400">📌 Boosted</p>}
       <div className="flex items-start gap-3">
         {profileHref ? <Link href={profileHref}>{avatar}</Link> : avatar}
         <div className="flex-1 min-w-0">
@@ -319,7 +340,7 @@ function PostCard({
             <p className="font-bold text-gray-900 dark:text-white text-base truncate">
               {profileHref ? <Link href={profileHref} className="hover:underline">{name}</Link> : name}
             </p>
-            {author?.pro && <ProBadge />}
+            {author?.pro && <ProBadge tier={author.tier} />}
             {!isMine && (
               <button
                 type="button"
@@ -406,7 +427,13 @@ function PostCard({
               label={`Share${post.share_count ? ` (${post.share_count})` : ""}`}
               onShared={countShare}
             />
+            {canBoost && (
+              <button type="button" onClick={boost} className="ml-auto text-sm font-semibold text-violet-700 dark:text-violet-400 hover:underline">
+                📌 Boost
+              </button>
+            )}
           </div>
+          {boostNote && <p role="status" className="mt-2 text-xs font-semibold text-violet-700 dark:text-violet-400">{boostNote}</p>}
 
           {replyOpen && (
             <ul className="mt-3 space-y-3" aria-label="Replies">

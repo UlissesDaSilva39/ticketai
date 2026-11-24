@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,15 @@ export async function GET() {
     .order("created_at", { ascending: false })
     .limit(60);
 
-  const score = (p: { role: string | null; city: string | null; genre: string | null; avatar_url: string | null }) =>
+  // Premium perk: Premium members are suggested first.
+  const candidateIds = (candidates ?? []).map((p) => p.id);
+  const { data: premiumSubs } = candidateIds.length
+    ? await createAdminClient().from("subscriptions").select("user_id").in("user_id", candidateIds).eq("plan", "premium").in("status", ["trialing", "active", "past_due"])
+    : { data: [] as { user_id: string }[] };
+  const premium = new Set((premiumSubs ?? []).map((s) => s.user_id));
+
+  const score = (p: { id: string; role: string | null; city: string | null; genre: string | null; avatar_url: string | null }) =>
+    (premium.has(p.id) ? 6 : 0) +
     (p.role === "artist" ? 4 : 0) +
     (me?.city && p.city && p.city.toLowerCase() === me.city.toLowerCase() ? 2 : 0) +
     (me?.genre && p.genre && p.genre.toLowerCase() === me.genre.toLowerCase() ? 2 : 0) +
