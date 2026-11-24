@@ -240,7 +240,7 @@ export default function NetworkPage() {
               </section>
 
               {/* Who viewed your profile (Premium shows who; others see blurred hints) */}
-              {data?.viewers && data.viewers.count > 0 && <ProfileViewers v={data.viewers} />}
+              {data?.viewers && <ProfileViewers v={data.viewers} />}
 
               {/* Suggestion groups */}
               {!data
@@ -344,10 +344,16 @@ function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
             <span aria-hidden="true" className="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-violet-500 to-amber-400" /> Premium
           </p>
           <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-            {v.count} {v.count === 1 ? "person" : "people"} viewed your profile <span className="font-normal text-gray-500">· last 90 days</span>
+            {v.count > 0 ? (
+              <>
+                {v.count} {v.count === 1 ? "person" : "people"} viewed your profile <span className="font-normal text-gray-500">· last 90 days</span>
+              </>
+            ) : (
+              "People who viewed your profile"
+            )}
           </h2>
         </div>
-        <div className="flex gap-1">
+        <div className={`flex gap-1 ${v.count > 2 ? "" : "invisible"}`}>
           <button type="button" onClick={() => scroll(-1)} aria-label="Scroll left" className="grid h-8 w-8 place-items-center rounded-full border border-gray-300 dark:border-zinc-700 text-gray-600 hover:bg-gray-100 dark:hover:bg-zinc-800">
             &lsaquo;
           </button>
@@ -357,7 +363,22 @@ function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
         </div>
       </div>
 
-      <ul ref={scroller} className="mt-3 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {v.count === 0 && (
+        <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-zinc-700 p-4">
+          <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full bg-gray-100 dark:bg-zinc-800 text-xl">👀</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-gray-900 dark:text-white">No profile views yet</p>
+            <p className="text-xs text-gray-500">
+              Get discovered: add a headline, tick “Open to…”, and post a track. Visits from the last 90 days appear here.
+            </p>
+          </div>
+          <Link href="/profile/edit" className="rounded-full border border-emerald-600 px-4 py-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-zinc-800">
+            Improve profile
+          </Link>
+        </div>
+      )}
+
+      <ul ref={scroller} className={`mt-3 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${v.count === 0 ? "hidden" : ""}`}>
         {v.items.map((p, i) => (
           <li key={p.id ?? i} className="flex w-60 flex-shrink-0 items-center gap-3 rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
             {v.premium && p.username ? (
@@ -387,7 +408,9 @@ function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
 
       {!v.premium && (
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-violet-50 dark:bg-violet-900/20 px-3 py-2">
-          <p className="text-sm text-violet-900 dark:text-violet-200">See exactly who viewed you — and reach out first.</p>
+          <p className="text-sm text-violet-900 dark:text-violet-200">
+            {v.count > 0 ? "See exactly who viewed you — and reach out first." : "With Premium you'll see exactly who views your profile."}
+          </p>
           <Link href="/pro" className="rounded-full bg-violet-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-violet-700">
             Upgrade to see who
           </Link>
