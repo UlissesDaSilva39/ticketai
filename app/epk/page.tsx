@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { roleLabel } from "@/lib/hooks/useMe";
+import { roleLabel } from "@/lib/display";
 import CopyLinkButton from "./CopyLinkButton";
 
 // "My EPK": the member's real electronic press kit from their profile and posts.
