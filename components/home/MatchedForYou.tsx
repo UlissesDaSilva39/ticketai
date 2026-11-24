@@ -197,7 +197,7 @@ export default function MatchedForYou({ isPro = false, freeLimit = 3 }: Props) {
   );
 }
 
-function ApplyDialog({ match, onClose, onSent }: { match: Match; onClose: () => void; onSent: () => void }) {
+export function ApplyDialog({ match, onClose, onSent }: { match: Pick<Match, "id" | "title" | "org" | "summary">; onClose: () => void; onSent: () => void }) {
   const [note, setNote] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);

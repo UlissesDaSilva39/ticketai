@@ -17,16 +17,17 @@ export default async function PublicProfilePage({
   const { username } = await params;
   const supabase = await createServerSupabase();
 
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data: profile } = await supabase
     .from("profiles")
     .select(PUBLIC_PROFILE_COLUMNS)
     .ilike("username", username)
-    .eq("is_public", true)
     .maybeSingle();
 
-  if (!profile) return notFound();
+  // Private profiles are only visible to their owner.
+  if (!profile || (!profile.is_public && profile.id !== user?.id)) return notFound();
 
-  const { data: { user } } = await supabase.auth.getUser();
   const isOwnProfile = user?.id === profile.id;
 
   let friendship: string | null = null;
