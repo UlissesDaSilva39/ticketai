@@ -29,6 +29,15 @@ export async function GET(req: Request) {
 
   let ids: string[] | null = null;
   if (tab === "following") ids = [...followingSet];
+  if (tab === "connections") {
+    const { data: fr } = await supabase
+      .from("friendships")
+      .select("user_id, friend_id")
+      .eq("status", "accepted")
+      .or(`user_id.eq.${user.id},friend_id.eq.${user.id}`)
+      .limit(1000);
+    ids = [...new Set((fr ?? []).map((f) => (f.user_id === user.id ? f.friend_id : f.user_id) as string))];
+  }
   if (tab === "followers") {
     const { data: fans } = await supabase.from("follows").select("follower_id").eq("target_type", "user").eq("target_id", user.id).limit(500);
     ids = [...new Set((fans ?? []).map((f) => f.follower_id as string))];
