@@ -101,8 +101,10 @@ function ProPageInner() {
   const [error, setError] = useState<string | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
 
-  const tier: PlanId = (pro?.tier as PlanId) ?? "free";
-  const paid = pro?.source === "subscription" && pro.active;
+  // Current plan. Falls back to the subscription's plan if an older cached
+  // response has no "tier" (that made an active Pro member look Free).
+  const tier: PlanId = pro?.active ? ((pro.tier as PlanId | undefined) ?? (pro.plan as PlanId | null) ?? "pro") : "free";
+  const paid = pro?.source === "subscription" && !!pro.active;
 
   // Back from Stripe Checkout: confirm the subscription so the plan switches on at once.
   useEffect(() => {
@@ -128,11 +130,26 @@ function ProPageInner() {
   }, [params]);
 
   async function choose(plan: "pro" | "premium") {
-    setBusy(plan);
+    const name = plan === "premium" ? "Premium" : "Pro";
     setError(null);
+    setBanner(null);
+    if (plan === tier) {
+      setBanner(`You're already on ${name}.`);
+      return;
+    }
+    if (paid) {
+      // Existing subscribers: the card is already on file, so the plan changes
+      // in place (no Stripe page). Stripe adjusts the next invoice.
+      const ok = window.confirm(
+        `Switch to ${name} (${plan === "premium" ? "£15" : "£5"}/month)? ` +
+          (pro?.trialing ? "Your free trial continues until it ends." : "Stripe adjusts your next invoice for the rest of this month.")
+      );
+      if (!ok) return;
+    }
+    setBusy(plan);
     const err = paid ? await changePlan(plan) : await goToProCheckout(plan);
     if (err) setError(err);
-    else if (paid) setBanner(`You're now on ${plan === "premium" ? "Premium" : "Pro"}.`);
+    else if (paid) setBanner(`Done — you're now on ${name}. 🎉`);
     setBusy(null);
   }
 

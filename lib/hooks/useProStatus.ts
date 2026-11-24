@@ -62,19 +62,27 @@ export async function goToProCheckout(plan: "pro" | "premium" = "pro"): Promise<
 
 /** Switch an existing subscription between Pro and Premium. Returns an error message on failure. */
 export async function changePlan(plan: "pro" | "premium"): Promise<string | null> {
+  // Don't leave the button spinning forever if Stripe or the server is slow.
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 30_000);
   try {
     const res = await fetch("/api/billing/change-plan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ plan }),
+      signal: ctrl.signal,
     });
     const d = await res.json().catch(() => ({}));
     if (!res.ok) return d.error || "Could not switch plan.";
     refreshMe();
     return null;
-  } catch {
-    return "Could not reach the server. Try again.";
+  } catch (e) {
+    return e instanceof DOMException && e.name === "AbortError"
+      ? "Switching is taking too long. Refresh the page in a minute to check your plan."
+      : "Could not reach the server. Try again.";
+  } finally {
+    clearTimeout(timer);
   }
 }
 
