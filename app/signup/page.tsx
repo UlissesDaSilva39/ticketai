@@ -41,8 +41,8 @@ export default function SignupPage() {
   }, []);
   const [confirmEmail, setConfirmEmail] = useState<string | null>(null);
 
-  // "Venue / A&R" maps to the "industry" role in the profiles table.
-  const profileRole = role === "venue" ? "industry" : "artist";
+  // "Venue / A&R" starts as "venue"; members can refine it (A&R, promoter, label) in onboarding.
+  const profileRole = role === "venue" ? "venue" : "artist";
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();

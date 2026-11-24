@@ -7,8 +7,9 @@ import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { passwordProblem } from "@/lib/auth/password-policy";
 import { recordReferral } from "@/lib/referrals";
 
-// Matches the check constraint on public.profiles.role ('fan','artist','industry').
-export type ProfileRole = "fan" | "artist" | "industry";
+// Must match the live check constraint on public.profiles.role:
+// attendee, promoter, venue, artist, a_and_r, record_company (admin is staff-only).
+export type ProfileRole = "attendee" | "artist" | "venue" | "promoter" | "a_and_r" | "record_company";
 
 type SignupInput = {
   email: string;
@@ -25,7 +26,7 @@ export type SignupResult =
   | { ok: true; needsConfirmation: boolean }
   | { ok?: false; error: string };
 
-const ROLES: ProfileRole[] = ["fan", "artist", "industry"];
+const ROLES: ProfileRole[] = ["attendee", "artist", "venue", "promoter", "a_and_r", "record_company"];
 
 function slugify(value: string) {
   return value

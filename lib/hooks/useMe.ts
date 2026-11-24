@@ -109,6 +109,7 @@ export function initials(name: string) {
 const ROLE_LABELS: Record<string, string> = {
   artist: "Artist / Producer",
   industry: "Venue / A&R",
+  record_company: "Record label",
   fan: "Music fan",
   attendee: "Music fan",
   admin: "GRID team",

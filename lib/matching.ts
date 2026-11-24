@@ -21,10 +21,20 @@ export type ScoredMatch = Opportunity & { score: number; reasons: string[] };
 // Which opportunity categories suit which profile role.
 const ROLE_CATEGORIES: Record<string, string[]> = {
   artist: ["gig", "booking", "collab", "session", "remix"],
-  industry: ["collab", "job", "booking"],
+  a_and_r: ["collab", "job", "booking"],
+  record_company: ["collab", "job", "remix"],
   promoter: ["booking", "gig", "job"],
   venue: ["booking", "gig"],
-  fan: ["job"],
+  attendee: ["job"],
+};
+
+const ROLE_PLURAL: Record<string, string> = {
+  artist: "artists",
+  a_and_r: "A&R",
+  record_company: "labels",
+  promoter: "promoters",
+  venue: "venues",
+  attendee: "fans",
 };
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -48,7 +58,7 @@ export function scoreOpportunity(o: Opportunity, me: MatchProfile, now = Date.no
   const suited = me.role ? ROLE_CATEGORIES[me.role] : undefined;
   if (o.category && suited?.includes(o.category)) {
     score += 10;
-    reasons.push(`${o.category[0].toUpperCase()}${o.category.slice(1)} for ${me.role === "industry" ? "industry" : me.role}s`);
+    reasons.push(`${o.category[0].toUpperCase()}${o.category.slice(1)} for ${ROLE_PLURAL[me.role ?? ""] ?? "you"}`);
   }
   if (o.compensation) {
     score += 3;

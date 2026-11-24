@@ -6,16 +6,16 @@ import Link from "next/link";
 import { signUp, type ProfileRole } from "@/app/signup/actions";
 
 const ROLES: Array<{ value: ProfileRole; label: string }> = [
-  { value: "fan", label: "Fan" },
+  { value: "attendee", label: "Fan" },
   { value: "artist", label: "Artist" },
-  { value: "industry", label: "Venue / Promoter" },
+  { value: "venue", label: "Venue / Promoter" },
 ];
 
 export default function SignupForm() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
-  const [role, setRole] = useState<ProfileRole>("fan");
+  const [role, setRole] = useState<ProfileRole>("attendee");
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

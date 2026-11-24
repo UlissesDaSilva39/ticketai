@@ -14,7 +14,9 @@ export async function GET(req: Request) {
   const code = url.searchParams.get("code");
   const next = safeNext(url.searchParams.get("next"));
   const roleParam = url.searchParams.get("role");
-  const role = roleParam === "industry" || roleParam === "artist" ? roleParam : "fan";
+  // Must be a role the profiles table allows (see app/signup/actions.ts).
+  const ALLOWED = ["artist", "venue", "promoter", "a_and_r", "record_company", "attendee"];
+  const role = roleParam && ALLOWED.includes(roleParam) ? roleParam : "attendee";
 
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=missing_code", url.origin));
@@ -49,7 +51,7 @@ export async function GET(req: Request) {
         id: user.id,
         username,
         full_name,
-        role: meta.role === "industry" || meta.role === "artist" ? meta.role : role,
+        role: typeof meta.role === "string" && ALLOWED.includes(meta.role) ? meta.role : role,
         is_public: true,
       },
       { onConflict: "id" }
