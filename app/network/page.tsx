@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import MessageButton from "@/components/MessageButton";
 import ProBadge from "@/components/ProBadge";
@@ -24,6 +24,7 @@ type Suggested = {
   openTo: string[];
   mutualCount: number;
   mutualFirst: string | null;
+  mutualAvatars?: { name: string; avatar: string | null }[];
   connection: Connection;
   following: boolean;
   requestedAt?: string | null;
@@ -34,6 +35,12 @@ type NetworkData = {
   groups: { id: string; title: string; people: Suggested[] }[];
   newNearby: Suggested[];
   hasProfileBasics: boolean;
+  viewers?: {
+    premium: boolean;
+    count: number;
+    total: number;
+    items: { id: string | null; name: string | null; username: string | null; avatar: string | null; headline: string; viewedAt?: string }[];
+  };
 };
 
 type View = "grow" | "catchup" | "discover" | "connections" | "following" | "followers";
@@ -67,15 +74,23 @@ function Avatar({ p, size = 56 }: { p: { name: string; avatar: string | null; op
   return <PersonAvatar name={p.name} src={p.avatar} openTo={p.openTo} size={size} />;
 }
 
-/** "Hassan and 2 other mutual connections" */
-function Mutuals({ count, first }: { count: number; first: string | null }) {
+/** "Hassan and 2 other mutual connections", with tiny photos when available. */
+function Mutuals({ count, first, avatars }: { count: number; first: string | null; avatars?: { name: string; avatar: string | null }[] }) {
   if (!count || !first) return null;
   const rest = count - 1;
   return (
     <span className="mt-1 flex items-center justify-center gap-1 text-[11px] text-gray-500">
-      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d={ICONS.connections} />
-      </svg>
+      {avatars && avatars.length > 0 ? (
+        <span className="mr-1 flex -space-x-1.5">
+          {avatars.map((m, i) => (
+            <PersonAvatar key={i} name={m.name} src={m.avatar} size={18} />
+          ))}
+        </span>
+      ) : (
+        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d={ICONS.connections} />
+        </svg>
+      )}
       {first}
       {rest > 0 ? ` and ${rest} other mutual connection${rest === 1 ? "" : "s"}` : " is a mutual connection"}
     </span>
@@ -86,6 +101,7 @@ export default function NetworkPage() {
   const [view, setView] = useState<View>("grow");
   const [data, setData] = useState<NetworkData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showAllInvites, setShowAllInvites] = useState(false);
 
   const load = useCallback(() => {
     fetch("/api/network", { credentials: "include", cache: "no-store" })
@@ -181,16 +197,21 @@ export default function NetworkPage() {
             <>
               {/* Invitations */}
               <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm">
-                <h2 className="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-zinc-800">
-                  Invitations {data ? `(${data.invitations.length})` : ""}
-                </h2>
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-zinc-800">
+                  <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Invitations {data ? `(${data.invitations.length})` : ""}</h2>
+                  {data && data.invitations.length > 3 && (
+                    <button type="button" onClick={() => setShowAllInvites((s) => !s)} className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-700">
+                      {showAllInvites ? "Show less" : "Show all"}
+                    </button>
+                  )}
+                </div>
                 {!data ? (
                   <div className="h-20 animate-pulse" />
                 ) : data.invitations.length === 0 ? (
                   <p className="px-4 py-4 text-sm text-gray-500">No pending invitations.</p>
                 ) : (
                   <ul>
-                    {data.invitations.map((p) => (
+                    {(showAllInvites ? data.invitations : data.invitations.slice(0, 3)).map((p) => (
                       <li key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-zinc-800">
                         <Link href={`/u/${p.username}`}>
                           <Avatar p={p} size={64} />
@@ -201,7 +222,7 @@ export default function NetworkPage() {
                           </p>
                           <p className="line-clamp-1 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</p>
                           <div className="[&>span]:justify-start">
-                            <Mutuals count={p.mutualCount} first={p.mutualFirst} />
+                            <Mutuals count={p.mutualCount} first={p.mutualFirst} avatars={p.mutualAvatars} />
                           </div>
                         </div>
                         <div className="flex gap-2">
@@ -217,6 +238,9 @@ export default function NetworkPage() {
                   </ul>
                 )}
               </section>
+
+              {/* Who viewed your profile (Premium shows who; others see blurred hints) */}
+              {data?.viewers && data.viewers.count > 0 && <ProfileViewers v={data.viewers} />}
 
               {/* Suggestion groups */}
               {!data
@@ -297,6 +321,79 @@ export default function NetworkPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+// ---------------- Who viewed your profile ----------------
+
+function viewedAgo(iso?: string) {
+  if (!iso) return "";
+  const d = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  return d <= 0 ? "today" : d === 1 ? "yesterday" : `${d}d ago`;
+}
+
+function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
+  const scroller = useRef<HTMLUListElement>(null);
+  const scroll = (dir: number) => scroller.current?.scrollBy({ left: dir * 240, behavior: "smooth" });
+
+  return (
+    <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="flex items-center gap-1.5 text-xs font-semibold text-violet-700 dark:text-violet-400">
+            <span aria-hidden="true" className="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-violet-500 to-amber-400" /> Premium
+          </p>
+          <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+            {v.count} {v.count === 1 ? "person" : "people"} viewed your profile <span className="font-normal text-gray-500">· last 90 days</span>
+          </h2>
+        </div>
+        <div className="flex gap-1">
+          <button type="button" onClick={() => scroll(-1)} aria-label="Scroll left" className="grid h-8 w-8 place-items-center rounded-full border border-gray-300 dark:border-zinc-700 text-gray-600 hover:bg-gray-100 dark:hover:bg-zinc-800">
+            &lsaquo;
+          </button>
+          <button type="button" onClick={() => scroll(1)} aria-label="Scroll right" className="grid h-8 w-8 place-items-center rounded-full border border-gray-300 dark:border-zinc-700 text-gray-600 hover:bg-gray-100 dark:hover:bg-zinc-800">
+            &rsaquo;
+          </button>
+        </div>
+      </div>
+
+      <ul ref={scroller} className="mt-3 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {v.items.map((p, i) => (
+          <li key={p.id ?? i} className="flex w-60 flex-shrink-0 items-center gap-3 rounded-xl border border-gray-200 dark:border-zinc-800 p-3">
+            {v.premium && p.username ? (
+              <>
+                <Link href={`/u/${p.username}`}>
+                  <PersonAvatar name={p.name ?? ""} src={p.avatar} size={44} />
+                </Link>
+                <div className="min-w-0 flex-1">
+                  <Link href={`/u/${p.username}`} className="block truncate text-sm font-semibold text-gray-900 dark:text-white hover:underline">{p.name}</Link>
+                  <p className="line-clamp-1 text-xs text-gray-500">{p.headline}</p>
+                  <p className="text-[11px] text-gray-400">Viewed {viewedAgo(p.viewedAt)}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Anonymised for non-Premium members */}
+                <span aria-hidden="true" className="h-11 w-11 flex-shrink-0 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 dark:from-zinc-600 dark:to-zinc-700 blur-[2px]" />
+                <div className="min-w-0 flex-1">
+                  <p className="line-clamp-2 text-sm font-semibold text-gray-900 dark:text-white">{p.headline}</p>
+                  <p className="text-[11px] text-gray-400">Viewed {viewedAgo(p.viewedAt)}</p>
+                </div>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {!v.premium && (
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-violet-50 dark:bg-violet-900/20 px-3 py-2">
+          <p className="text-sm text-violet-900 dark:text-violet-200">See exactly who viewed you — and reach out first.</p>
+          <Link href="/pro" className="rounded-full bg-violet-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-violet-700">
+            Upgrade to see who
+          </Link>
+        </div>
+      )}
+    </section>
   );
 }
 

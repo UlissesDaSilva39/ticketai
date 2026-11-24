@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getTier } from "@/lib/pro";
+import { roleLabel } from "@/lib/display";
 
 export const dynamic = "force-dynamic";
 
@@ -110,8 +113,39 @@ export async function GET() {
     }
   }
   const mutualIds = [...new Set([...theirConnections.values()].flatMap((s) => [...s]))];
-  const { data: mutualPeople } = mutualIds.length ? await supabase.from("profiles").select("id, full_name, username").in("id", mutualIds) : { data: [] };
+  const { data: mutualPeople } = mutualIds.length ? await supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", mutualIds) : { data: [] };
   const mutualName = Object.fromEntries((mutualPeople ?? []).map((p) => [p.id, nameOf(p)]));
+  const mutualAvatar = Object.fromEntries((mutualPeople ?? []).map((p) => [p.id, p.avatar_url as string | null]));
+
+  // "Who viewed your profile" (last 90 days). Premium sees who; others get anonymised hints.
+  const tier = await getTier(user.id);
+  const since = new Date(Date.now() - 90 * 86_400_000).toISOString();
+  const admin = createAdminClient();
+  const { data: viewRows, count: viewCount } = await admin
+    .from("profile_views")
+    .select("viewer_id, viewed_at", { count: "exact" })
+    .eq("viewed_id", user.id)
+    .gte("viewed_at", since)
+    .order("viewed_at", { ascending: false })
+    .limit(50);
+  const latestByViewer = new Map<string, string>();
+  for (const v of viewRows ?? []) if (!latestByViewer.has(v.viewer_id)) latestByViewer.set(v.viewer_id, v.viewed_at);
+  const viewerIds = [...latestByViewer.keys()].slice(0, 10);
+  const { data: viewerProfiles } = viewerIds.length
+    ? await admin.from("profiles").select("id, full_name, username, avatar_url, headline, role, genre, city").in("id", viewerIds)
+    : { data: [] };
+  const vp = Object.fromEntries((viewerProfiles ?? []).map((p) => [p.id, p]));
+  const premium = tier === "premium";
+  const viewers = viewerIds
+    .filter((id) => vp[id])
+    .map((id) => {
+      const p = vp[id];
+      const role = roleLabel(p.role).replace(" / ", "/");
+      const hint = `${p.role ? role : "Someone"}${p.city ? ` in ${p.city}` : " on GRID"}`;
+      return premium
+        ? { id, name: nameOf(p), username: p.username, avatar: p.avatar_url, headline: p.headline || hint, viewedAt: latestByViewer.get(id) }
+        : { id: null, name: null, username: null, avatar: null, headline: hint, viewedAt: latestByViewer.get(id) }; // anonymised
+    });
 
   const status = (id: string) => (connected.has(id) ? "connected" : sent.has(id) ? "sent" : incomingIds.includes(id) ? "received" : "none");
   const toPerson = (p: Row) => {
@@ -128,6 +162,7 @@ export async function GET() {
       openTo: p.open_to ?? [],
       mutualCount: mutual.length,
       mutualFirst: mutual[0] ? mutualName[mutual[0]] ?? null : null,
+      mutualAvatars: mutual.slice(0, 2).map((m) => ({ name: mutualName[m] ?? "", avatar: mutualAvatar[m] ?? null })),
       connection: status(p.id),
       following: followingSet.has(p.id),
     };
@@ -147,5 +182,6 @@ export async function GET() {
     groups: rawGroups.map((g) => ({ id: g.id, title: g.title, people: g.rows.map(toPerson) })),
     newNearby: newNearbyRows.map(toPerson),
     hasProfileBasics: !!(me?.genre && me?.city),
+    viewers: { premium, count: latestByViewer.size, total: viewCount ?? 0, items: viewers },
   });
 }

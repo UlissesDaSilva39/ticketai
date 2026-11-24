@@ -68,9 +68,9 @@ const TIERS: {
       "Unlimited messaging",
       "1 post Boost every month (pinned at the top of the feed for 24h)",
       "Priority placement in matches and suggestions",
+      "See who viewed your profile",
       "Premium badge on your profile and posts",
     ],
-    soon: ["See who viewed your profile"],
     accent: "border-violet-600",
   },
 ];
