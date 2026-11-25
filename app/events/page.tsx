@@ -1,9 +1,14 @@
-"use client";
+﻿"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon, TicketIcon, NoteIcon } from "@/components/MusicIcons";
+import { FEATURES } from "@/lib/features";
+import { COMING_SOON } from "@/lib/copy";
+import { ComingSoon } from "@/components/ComingSoon";
 
-export default function Page() {
+
+function PageInner() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const events = [
@@ -27,7 +32,7 @@ export default function Page() {
       location: "Virtual Stream (GRID Live)",
       type: "Virtual",
       host: "Sarah J.",
-      price: "£5.00",
+      price: "Â£5.00",
       color: "bg-purple-800",
       icon: <MicIcon className="w-8 h-8 text-purple-400" />
     },
@@ -39,7 +44,7 @@ export default function Page() {
       location: "Berlin Studio X",
       type: "Workshop",
       host: "Studio X",
-      price: "£45.00",
+      price: "Â£45.00",
       color: "bg-blue-800",
       icon: <NoteIcon className="w-8 h-8 text-blue-400" />
     },
@@ -51,7 +56,7 @@ export default function Page() {
       location: "Secret Location, LA",
       type: "In-Person",
       host: "GRID Official",
-      price: "£25.00",
+      price: "Â£25.00",
       color: "bg-amber-800",
       icon: <PlayIcon className="w-8 h-8 text-amber-400" />
     }
@@ -94,7 +99,23 @@ export default function Page() {
           {/* Header */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="font-bold text-gray-900 dark:text-white text-2xl flex items-center gap-2">
+              {/* URGENCY BANNER */}
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-bold text-red-900 dark:text-red-400 text-sm">Only 12 tickets left for tonight's London Producer Meetup</p>
+                <p className="text-xs text-red-700 dark:text-red-500">Secure your spot before it's sold out</p>
+              </div>
+            </div>
+            <Link href="/events" className="bg-red-500 hover:bg-red-600 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-colors whitespace-nowrap">Get Ticket â†’</Link>
+          </div>
+
+          <h1 className="font-bold text-gray-900 dark:text-white text-2xl flex items-center gap-2">
                 <CalendarSVG className="w-6 h-6 text-emerald-600" /> Upcoming Events
               </h1>
               <p className="text-sm text-gray-500 mt-1">Discover gigs, meetups, and virtual streams happening in your network.</p>
@@ -135,7 +156,7 @@ export default function Page() {
                   
                   <div className="flex flex-col gap-2 mb-4 mt-auto">
                     <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
-                      <CalendarSVG className="w-4 h-4 text-emerald-600" /> {e.date} · {e.time}
+                      <CalendarSVG className="w-4 h-4 text-emerald-600" /> {e.date} Â· {e.time}
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
                       <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -157,4 +178,9 @@ export default function Page() {
       </div>
     </div>
   );
+}
+
+export default function Page() {
+  if (!FEATURES.ticketing) return <ComingSoon {...COMING_SOON.ticketing} />;
+  return <PageInner />;
 }

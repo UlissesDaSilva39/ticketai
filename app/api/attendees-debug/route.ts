@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  // Debug tool: exposes attendee names, so admins only.
+  const gate = await requireAdmin();
+  if ("response" in gate) return gate.response;
+
   const eventId = req.nextUrl.searchParams.get("eventId");
   if (!eventId) return NextResponse.json({ error: "eventId required" }, { status: 400 });
 

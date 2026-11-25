@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import type { PromoterEvent } from '@/lib/promoters';
 
 export function PromoterNextEvent({ event }: { event?: PromoterEvent }) {
@@ -14,7 +14,7 @@ export function PromoterNextEvent({ event }: { event?: PromoterEvent }) {
           <div>
             <p className="text-lg font-black tracking-tight">{event.title}</p>
             <p className="mt-1 text-sm text-neutral-600">
-              {event.venue} Â· {event.date}
+              {event.venue} · {event.date}
             </p>
             <p className="mt-1 text-sm font-semibold">{event.priceFrom}</p>
           </div>
@@ -48,7 +48,7 @@ export function PromoterUpcomingEvents({ events }: { events?: PromoterEvent[] })
             <div className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-neutral-100" />
             <p className="mt-3 truncate text-sm font-semibold">{e.title}</p>
             <p className="text-xs text-neutral-500">
-              {e.venue} Â· {e.date}
+              {e.venue} · {e.date}
             </p>
             <p className="mt-2 text-sm font-semibold">{e.priceFrom}</p>
             <p className="mt-2 text-xs font-semibold text-neutral-700 group-hover:text-black">

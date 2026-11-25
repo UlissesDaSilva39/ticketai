@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 
@@ -81,7 +81,7 @@ export default async function PromoterAnalytics() {
         </div>
         <div className="bg-[#00FF87] rounded-lg p-6">
           <p className="text-xs uppercase tracking-widest mb-2">Earned</p>
-          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>Â£{totalRevenue.toFixed(2)}</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{totalRevenue.toFixed(2)}</p>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ export default async function PromoterAnalytics() {
                     </div>
                     <div>
                       <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Earned</p>
-                      <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>Â£{Number(pe.revenue).toFixed(2)}</p>
+                      <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{Number(pe.revenue).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>

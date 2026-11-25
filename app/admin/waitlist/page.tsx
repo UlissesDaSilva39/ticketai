@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 
@@ -51,8 +51,8 @@ export default function AdminWaitlistPage() {
            <div key={e.id} className="border border-gray-200 dark:border-gray-800 rounded-lg p-3 flex justify-between items-center">
              <div>
                <p className="font-semibold">{e.full_name || e.email}</p>
-               <p className="text-xs text-gray-500 dark:text-gray-400">{e.email} Â· {e.role} Â· {e.city}</p>
-               <p className="text-xs text-gray-400">Status: {e.status} Â· {new Date(e.created_at).toLocaleDateString()}</p>
+               <p className="text-xs text-gray-500 dark:text-gray-400">{e.email} · {e.role} · {e.city}</p>
+               <p className="text-xs text-gray-400">Status: {e.status} · {new Date(e.created_at).toLocaleDateString()}</p>
              </div>
              <div className="flex gap-2">
                <button onClick={() => setStatus(e.id, "approved")} className="px-3 py-1 bg-green-600 text-white rounded text-xs">Approve</button>

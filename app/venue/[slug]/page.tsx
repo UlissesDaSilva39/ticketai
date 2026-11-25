@@ -1,4 +1,5 @@
 ﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { PUBLIC_VENUE_COLUMNS } from "@/lib/db/public-columns";
 import { EventCard } from "@/components/EventCard";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -68,7 +69,7 @@ export default async function VenuePage({
 
   const { data: venue } = await supabase
     .from("venues")
-    .select("*")
+    .select(PUBLIC_VENUE_COLUMNS)
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();

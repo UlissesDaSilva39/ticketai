@@ -12,6 +12,10 @@ export async function GET(req: NextRequest) {
   const provided =
     (authHeader && authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null) ||
     querySecret;
+  // Without CRON_SECRET the job is only open in local development; production must set it.
+  if (!process.env.CRON_SECRET && process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "CRON_SECRET not configured" }, { status: 503 });
+  }
   if (process.env.CRON_SECRET && provided !== expected) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

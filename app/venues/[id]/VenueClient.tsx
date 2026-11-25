@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
@@ -36,7 +36,7 @@ export default function VenueClient({ id }: { id: string }) {
           <img src={venue.image} alt={venue.name} className="w-40 h-40 md:w-48 md:h-48 rounded-2xl object-cover border-4 border-white shadow-xl bg-white dark:bg-gray-900" />
           <div className="mb-2">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100">{venue.name}</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">{venue.city} Â· {venue.address}</p>
+            <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">{venue.city} · {venue.address}</p>
           </div>
         </div>
 

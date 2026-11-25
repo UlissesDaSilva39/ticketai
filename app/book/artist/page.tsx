@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -203,7 +203,7 @@ export default function BookArtistPage() {
                         </div>
 
                         <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                          {[m.artist_type, m.genre, m.city].filter(Boolean).join(" Â· ")}
+                          {[m.artist_type, m.genre, m.city].filter(Boolean).join(" · ")}
                         </div>
 
                         {m.reasons.length > 0 && (

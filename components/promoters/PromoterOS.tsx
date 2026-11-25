@@ -1,14 +1,14 @@
-﻿const PILLARS = [
-  { tag: '01 Â· SUPPLY', title: 'Find and book venues',
+const PILLARS = [
+  { tag: '01 · SUPPLY', title: 'Find and book venues',
     body: 'Real-time availability across 400+ rooms in the UK and EU. Filter by capacity, curfew, tech spec, and cost. Message the venue manager directly.',
     cta: 'Browse venues â†’', href: '/venues' },
-  { tag: '02 Â· TALENT', title: 'Book artists in minutes',
+  { tag: '02 · TALENT', title: 'Book artists in minutes',
     body: 'Search by genre, fee range, and availability. See who is already playing your city that weekend and stack lineups that sell.',
     cta: 'Find artists â†’', href: '/artists' },
-  { tag: '03 Â· DEMAND', title: 'Sell tickets and fill the room',
+  { tag: '03 · DEMAND', title: 'Sell tickets and fill the room',
     body: 'Built-in checkout, promo codes, affiliate links, and a distribution engine that pushes your event to fans already searching in your city.',
     cta: 'See how distribution works â†’', href: '/how-it-works' },
-  { tag: '04 Â· MONEY', title: 'Get paid the same day',
+  { tag: '04 · MONEY', title: 'Get paid the same day',
     body: '3% per ticket, no monthly fee. Payouts land the morning after the event. Split revenue with artists and venues automatically.',
     cta: 'See pricing â†’', href: '/pricing' },
 ];

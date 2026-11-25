@@ -1,63 +1,63 @@
-﻿'use client';
+﻿"use client";
 
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function MessageButton({ targetUserId }: { targetUserId: string }) {
-  const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [messages, setMessages] = useState([{ id: '1', text: 'Hey! Thanks for reaching out.', sender: 'them' }]);
-  const [input, setInput] = useState('');
+// "Message" on a profile: starts (or reopens) a real conversation and opens it.
+// Replaces a fake chat window that auto-replied without sending anything.
+export default function MessageButton({ otherUserId, targetUserId }: { otherUserId?: string; targetUserId?: string }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [upgrade, setUpgrade] = useState(false);
+  const id = otherUserId ?? targetUserId;
 
-  useEffect(() => { setMounted(true); }, []);
-
-  function handleSend(e: React.FormEvent) {
-    e.preventDefault();
-    if (!input.trim()) return;
-    setMessages(prev => [...prev, { id: Date.now().toString(), text: input, sender: 'me' }]);
-    setInput('');
-    setTimeout(() => {
-      setMessages(prev => [...prev, { id: Date.now().toString(), text: 'Got it! I will get back to you soon.', sender: 'them' }]);
-    }, 1000);
+  async function start() {
+    if (!id) return;
+    setBusy(true);
+    setError(null);
+    setUpgrade(false);
+    try {
+      const res = await fetch("/api/messages/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ otherUserId: id }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (res.status === 401) return router.push("/login");
+      if (!res.ok || !d.conversationId) {
+        setUpgrade(res.status === 402);
+        throw new Error(d.error || "Could not start the conversation.");
+      }
+      router.push(`/messages/${d.conversationId}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not start the conversation.");
+      setBusy(false);
+    }
   }
 
-  if (!mounted) return null;
-
-  const chatModal = (
-    <div style={{
-      position: 'fixed', bottom: '20px', right: '20px',
-      width: '340px', height: '450px',
-      background: '#fff', borderRadius: '16px',
-      boxShadow: '0 12px 48px rgba(0,0,0,0.3)',
-      display: 'flex', flexDirection: 'column',
-      zIndex: 2147483647,
-      transform: 'translateZ(0)', // Forces a new stacking context above all cards
-      border: '1px solid #e5e5e5', overflow: 'hidden'
-    }}>
-      <div style={{ padding: '16px', borderBottom: '1px solid #e5e5e5', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff' }}>
-        <div style={{ fontWeight: 600, fontSize: 14 }}>New Message</div>
-        <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#888', lineHeight: 1 }}>×</button>
-      </div>
-      <div style={{ flex: 1, padding: '16px', overflowY: 'auto', background: '#fafafa', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {messages.map(m => (
-          <div key={m.id} style={{ alignSelf: m.sender === 'me' ? 'flex-end' : 'flex-start', background: m.sender === 'me' ? '#111' : '#e5e5e5', color: m.sender === 'me' ? '#fff' : '#111', padding: '8px 12px', borderRadius: 12, fontSize: 14, maxWidth: '80%' }}>
-            {m.text}
-          </div>
-        ))}
-      </div>
-      <form onSubmit={handleSend} style={{ padding: '12px', borderTop: '1px solid #e5e5e5', display: 'flex', gap: 8, background: '#fff' }}>
-        <input value={input} onChange={e => setInput(e.target.value)} placeholder="Type a message..." style={{ flex: 1, padding: '10px 14px', borderRadius: 20, border: '1px solid #ccc', outline: 'none', fontSize: 14 }} />
-        <button type="submit" style={{ padding: '10px 16px', borderRadius: 20, border: 'none', background: '#111', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: 14 }}>Send</button>
-      </form>
-    </div>
-  );
-
   return (
-    <>
-      <button type="button" onClick={() => setOpen(true)} style={{ padding: '6px 16px', borderRadius: '999px', border: '1px solid #cccccc', background: '#ffffff', color: '#111111', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
-        Message
+    <span className="inline-flex flex-col items-start gap-1">
+      <button
+        type="button"
+        onClick={start}
+        disabled={busy}
+        className="rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-1.5 text-[13px] font-semibold text-gray-900 dark:text-white hover:border-gray-900 disabled:opacity-60"
+      >
+        {busy ? "Opening…" : "Message"}
       </button>
-      {open && createPortal(chatModal, document.body)}
-    </>
+      {error && (
+        <span role="alert" className="max-w-xs text-xs text-red-600">
+          {error}{" "}
+          {upgrade && (
+            <Link href="/pro" className="font-semibold underline">
+              See plans
+            </Link>
+          )}
+        </span>
+      )}
+    </span>
   );
 }

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef, useState } from "react";
 
@@ -104,7 +104,7 @@ export default function AvatarUploader({
           >
             {busy ? "Uploading..." : url ? "Replace" : "Upload"}
           </button>
-          <p className="mt-2 text-gray-500 dark:text-gray-400">JPG, PNG, WebP Â· max 4 MB</p>
+          <p className="mt-2 text-gray-500 dark:text-gray-400">JPG, PNG, WebP · max 4 MB</p>
         </div>
       </div>
 

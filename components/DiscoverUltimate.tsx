@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
@@ -22,7 +22,7 @@ function CarouselRow({ title, link, items, type }: { title: string, link: string
           {title}
           {title === 'Events' && <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide">Trending</span>}
         </h2>
-        <Link href={link} className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:underline">See all â†’</Link>
+        <Link href={link} className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:underline">See all →</Link>
       </div>
 
       <button onClick={() => scroll('left')} className="absolute left-2 top-1/2 mt-4 -translate-y-1/2 z-10 bg-white/90 dark:bg-gray-900/90 shadow-lg rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
@@ -55,7 +55,7 @@ function CarouselRow({ title, link, items, type }: { title: string, link: string
                   )}
                   {item.price && (
                     <span className="absolute bottom-2 right-2 bg-white/90 dark:bg-gray-900/90 text-black dark:text-white text-xs font-bold px-2 py-1 rounded shadow-sm">
-                      From Â£{item.price}
+                      From £{item.price}
                     </span>
                   )}
                 </div>
@@ -160,7 +160,7 @@ export default function DiscoverUltimate() {
           {showAdvanced && (
             <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl max-w-3xl">
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Max Price (Â£{maxPrice || 'Any'})</label>
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Max Price (£{maxPrice || 'Any'})</label>
                 <span className="text-xs text-gray-500 dark:text-gray-400">Drag to filter events</span>
               </div>
               <input 

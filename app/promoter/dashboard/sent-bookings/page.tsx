@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -231,7 +231,7 @@ export default async function SentBookingsPage({
                           <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                             {[b.artists.artist_type, b.artists.genre, b.artists.city]
                               .filter(Boolean)
-                              .join(" Â· ")}
+                              .join(" · ")}
                           </div>
                         )}
                       </div>

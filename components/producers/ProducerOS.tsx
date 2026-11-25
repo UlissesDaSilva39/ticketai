@@ -1,14 +1,14 @@
-﻿const PILLARS = [
-  { tag: '01 Â· REACH', title: 'Get your beats heard',
+const PILLARS = [
+  { tag: '01 · REACH', title: 'Get your beats heard',
     body: 'Streaming previews that convert to sales. Curated drops that push your catalogue to listeners already searching your style, BPM, and key.',
     cta: 'See how reach works â†’', href: '/how-it-works' },
-  { tag: '02 Â· COLLAB', title: 'Find vocalists and studios',
+  { tag: '02 · COLLAB', title: 'Find vocalists and studios',
     body: 'Search by city, genre, key, BPM, and budget. Book sessions directly through GRID or message to collaborate async.',
     cta: 'Find collaborators â†’', href: '/artists' },
-  { tag: '03 Â· SELL', title: 'Sell beats with instant delivery',
+  { tag: '03 · SELL', title: 'Sell beats with instant delivery',
     body: 'Built-in checkout, licensing tiers (lease, premium, exclusive), affiliate codes, and automatic contracts. No BeatStars fees.',
     cta: 'See pricing â†’', href: '/pricing' },
-  { tag: '04 Â· MONEY', title: 'Get paid the same day',
+  { tag: '04 · MONEY', title: 'Get paid the same day',
     body: '3% per sale, no monthly fee. Payouts land the morning after the sale. Split revenue with collaborators and sample-holders automatically.',
     cta: 'See how splits work â†’', href: '/how-it-works#splits' },
 ];

@@ -1,19 +1,22 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { ensureProfile } from "@/lib/auth/ensure-profile";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { recordReferral } from "@/lib/referrals";
 
-/**
- * Finishes Google sign-in and email-confirmation links:
- * swaps the one-time code for a session, creates the profile if needed,
- * then sends the user on to `next`.
- */
-export async function GET(request: NextRequest) {
-  const url = request.nextUrl;
+// Google (OAuth) and email-confirmation links land here with a one-time ?code=.
+// We swap it for a session cookie, make sure a profile row exists, then redirect.
+function safeNext(value: string | null) {
+  return value && value.startsWith("/") && !value.startsWith("//") ? value : "/home";
+}
+
+export async function GET(req: Request) {
+  const url = new URL(req.url);
   const code = url.searchParams.get("code");
-  const role = url.searchParams.get("role");
-  const nextParam = url.searchParams.get("next") ?? "/home";
-  // Only allow same-site paths, never an external URL.
-  const next = nextParam.startsWith("/") && !nextParam.startsWith("//") ? nextParam : "/home";
+  const next = safeNext(url.searchParams.get("next"));
+  const roleParam = url.searchParams.get("role");
+  // Must be a role the profiles table allows (see app/signup/actions.ts).
+  const ALLOWED = ["artist", "venue", "promoter", "a_and_r", "record_company", "attendee"];
+  const role = roleParam && ALLOWED.includes(roleParam) ? roleParam : "attendee";
 
   if (!code) {
     return NextResponse.redirect(new URL("/login?error=missing_code", url.origin));
@@ -22,9 +25,49 @@ export async function GET(request: NextRequest) {
   const supabase = await createServerSupabase();
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
   if (error || !data.user) {
-    return NextResponse.redirect(new URL("/login?error=link_expired", url.origin));
+    return NextResponse.redirect(new URL("/login?error=auth_failed", url.origin));
   }
 
-  await ensureProfile(supabase, data.user, role);
+  const user = data.user;
+  const admin = createAdminClient();
+  const { data: existing } = await admin
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (!existing) {
+    const meta = user.user_metadata ?? {};
+    const full_name: string = meta.full_name || meta.name || user.email?.split("@")[0] || "";
+    const base =
+      (meta.username || full_name || user.email?.split("@")[0] || "user")
+        .toLowerCase()
+        .replace(/[^a-z0-9_.-]+/g, "")
+        .slice(0, 24) || "user";
+    const username = `${base}${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const { error: profileError } = await admin.from("profiles").upsert(
+      {
+        id: user.id,
+        username,
+        full_name,
+        role: typeof meta.role === "string" && ALLOWED.includes(meta.role) ? meta.role : role,
+        is_public: true,
+      },
+      { onConflict: "id" }
+    );
+    if (profileError) console.error("[auth/callback] profile upsert failed:", profileError);
+
+    // New Google sign-up through an invite link (/signup?ref=CODE).
+    const ref = url.searchParams.get("ref");
+    if (ref) {
+      try {
+        await recordReferral(user.id, ref, full_name);
+      } catch (e) {
+        console.error("[auth/callback] referral not recorded:", e);
+      }
+    }
+  }
+
   return NextResponse.redirect(new URL(next, url.origin));
 }

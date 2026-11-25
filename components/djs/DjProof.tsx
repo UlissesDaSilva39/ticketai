@@ -1,12 +1,12 @@
-﻿const LOGOS = ['Fabric', 'Printworks', 'Village Underground', 'Motion', 'YES', 'Brudenell'];
+const LOGOS = ['Fabric', 'Printworks', 'Village Underground', 'Motion', 'YES', 'Brudenell'];
 
 const TESTIMONIALS = [
   { quote: 'Sold my last club tour through GRID. No agents, no middlemen.',
-    name: 'DJ Proxy', role: 'House Â· London', stat: 'Â£42k bookings' },
+    name: 'DJ Proxy', role: 'House · London', stat: '£42k bookings' },
   { quote: 'Three festival bookings through GRID. No middlemen.',
-    name: 'Nightshift Nina', role: 'Techno Â· Manchester', stat: '3 festival slots' },
+    name: 'Nightshift Nina', role: 'Techno · Manchester', stat: '3 festival slots' },
   { quote: 'First year where I actually made money. The splits tool saved us.',
-    name: 'Selecta Jade', role: 'DnB Â· London', stat: 'Â£18k this year' },
+    name: 'Selecta Jade', role: 'DnB · London', stat: '£18k this year' },
 ];
 
 export function DjProof() {

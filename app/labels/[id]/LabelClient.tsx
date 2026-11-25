@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
@@ -47,7 +47,7 @@ export default function LabelClient({ id }: { id: string }) {
                 <svg className="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
               )}
             </div>
-            <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">{label.city} Â· Record Label</p>
+            <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">{label.city} · Record Label</p>
           </div>
         </div>
 

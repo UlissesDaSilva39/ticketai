@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import type { Event } from "@/lib/types";
@@ -120,7 +120,7 @@ export default async function OrganizerAnalytics() {
         </div>
         <div className="bg-black text-white rounded-lg p-6">
           <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Revenue</p>
-          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>Â£{totalRevenue.toFixed(2)}</p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{totalRevenue.toFixed(2)}</p>
         </div>
       </div>
 
@@ -158,7 +158,7 @@ export default async function OrganizerAnalytics() {
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Revenue</p>
-                    <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>Â£{stat.revenue.toFixed(2)}</p>
+                    <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-antonio)" }}>£{stat.revenue.toFixed(2)}</p>
                   </div>
                 </div>
               </div>

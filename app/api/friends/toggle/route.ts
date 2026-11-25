@@ -58,9 +58,9 @@ export async function POST(req: NextRequest) {
     await notifyServer({
       userId: friendId,
       type: "friend_request",
-      title: "New friend request",
-      body: senderName + " wants to be friends",
-      href: "/friends/requests",
+      title: senderName + " wants to connect",
+      body: "Accept or ignore in My Network.",
+      href: "/network",
     });
 
     // Email (fire-and-forget)

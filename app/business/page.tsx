@@ -1,27 +1,49 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon } from "@/components/MusicIcons";
+import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon, NoteIcon } from "@/components/MusicIcons";
 
 const ShieldIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-  </svg>
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
 );
 const StarIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-  </svg>
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+);
+const WalletIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
 );
 
-export default function Page() {
-  const [isPlaying, setIsPlaying] = useState(false);
+export default function BusinessDashboard() {
+  const [selectedArtist, setSelectedArtist] = useState<any>(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [bookingDate, setBookingDate] = useState("");
+  const [bookingFee, setBookingFee] = useState(500);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   const artists = [
     { id: 1, name: "Sarah Jenkins", role: "Vocalist · House", location: "London, UK", draw: "1.2K past tickets", match: "98% match", color: "bg-pink-500", verified: true },
     { id: 2, name: "David Chen", role: "DJ / Producer", location: "Berlin, DE", draw: "3.4K past tickets", match: "95% match", color: "bg-indigo-500", verified: true },
-    { id: 3, name: "The Midnight Collective", role: "Indie Band", location: "Manchester, UK", draw: "850 past tickets", match: "89% match", color: "bg-amber-500", verified: false }
+    { id: 3, name: "The Midnight Collective", role: "Indie Band", location: "Manchester, UK", draw: "850 past tickets", match: "89% match", color: "bg-amber-500", verified: false },
   ];
+
+  const handleBookNow = (artist: any) => {
+    setSelectedArtist(artist);
+    setShowBookingModal(true);
+    setBookingSuccess(false);
+  };
+
+  const handleConfirmBooking = () => {
+    setBookingSuccess(true);
+    setTimeout(() => {
+      setShowBookingModal(false);
+      setBookingSuccess(false);
+      setBookingDate("");
+      setBookingFee(500);
+    }, 3000);
+  };
+
+  const platformFee = bookingFee * 0.05;
+  const totalCost = bookingFee + platformFee;
 
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
@@ -44,16 +66,11 @@ export default function Page() {
                 </div>
                 <p className="text-xs text-gray-600 dark:text-gray-400">Unlimited bookings & full EPK access.</p>
               </div>
-
-              <div className="mt-4 space-y-2">
-                <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors flex items-center justify-center gap-2">Post a Gig</button>
-              </div>
             </div>
-
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <li><Link href="/business" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Artist Roster</span></Link></li>
-                <li><Link href="/business" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Venue Calendar</span></Link></li>
+                <li><Link href="/calendar" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Venue Calendar</span></Link></li>
                 <li><Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Artists</span></Link></li>
               </ul>
             </div>
@@ -100,7 +117,7 @@ export default function Page() {
                     
                     <div className="flex gap-2">
                       <Link href="/epk" className="border border-emerald-600 text-emerald-700 dark:text-emerald-400 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">View EPK</Link>
-                      <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">Book Now</button>
+                      <button onClick={() => handleBookNow(a)} className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">Book Now</button>
                     </div>
                   </div>
                 </div>
@@ -109,6 +126,64 @@ export default function Page() {
           </div>
         </main>
       </div>
+
+      {/* BOOKING / ESCROW MODAL */}
+      {showBookingModal && selectedArtist && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            
+            {bookingSuccess ? (
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Booking Confirmed!</h2>
+                <p className="text-sm text-gray-500">£{totalCost.toFixed(2)} has been locked in Escrow. {selectedArtist.name} has been notified.</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50">
+                  <h3 className="font-bold text-gray-900 dark:text-white text-lg">Book {selectedArtist.name}</h3>
+                  <button onClick={() => setShowBookingModal(false)} className="text-gray-500 hover:text-gray-900 dark:hover:text-white">&times;</button>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-100 dark:border-zinc-800">
+                    <div className={`w-12 h-12 rounded-full ${selectedArtist.color} text-white grid place-items-center font-bold text-lg`}>{selectedArtist.name[0]}</div>
+                    <div>
+                      <p className="font-bold text-gray-900 dark:text-white text-sm">{selectedArtist.name}</p>
+                      <p className="text-xs text-gray-500">{selectedArtist.role}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 mb-6">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Booking Date</label>
+                      <input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)} className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Artist Fee (£)</label>
+                      <input type="number" value={bookingFee} onChange={(e) => setBookingFee(Number(e.target.value))} className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500" />
+                    </div>
+                  </div>
+
+                  {/* Payment Breakdown */}
+                  <div className="bg-gray-50 dark:bg-zinc-800/50 rounded-lg p-4 mb-6 space-y-2">
+                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Artist Fee:</span><span>£{bookingFee.toFixed(2)}</span></div>
+                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>GRID Escrow Fee (5%):</span><span>£{platformFee.toFixed(2)}</span></div>
+                    <div className="flex justify-between text-sm font-bold text-gray-900 dark:text-white pt-2 border-t border-gray-200 dark:border-zinc-700"><span>Total Deposit:</span><span>£{totalCost.toFixed(2)}</span></div>
+                  </div>
+
+                  <button onClick={handleConfirmBooking} disabled={!bookingDate || bookingFee <= 0} className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
+                    <WalletIcon className="w-5 h-5" /> Deposit £{totalCost.toFixed(2)} into Escrow
+                  </button>
+                  <p className="text-center text-xs text-gray-500 mt-3">Funds are held securely until the performance is complete.</p>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

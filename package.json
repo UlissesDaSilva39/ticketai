@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev --webpack",
+        "dev": "next dev -p 3001 --webpack",
         "build": "next build --webpack",
         "start": "next start",
         "lint": "eslint",
@@ -69,6 +69,7 @@
         "eslint-config-next": "16.3.5",
         "postcss": "^8.5.32",
         "start-server-and-test": "^3.0.13",
+        "supabase": "^3.3.0",
         "tailwindcss": "^4.3.5",
         "tsx": "^4.23.15",
         "typescript": "5.9.3"
@@ -79,3 +80,4 @@
         "esbuild": true
     }
 }
+

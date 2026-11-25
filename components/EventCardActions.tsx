@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef } from "react";
 
@@ -156,7 +156,7 @@ export default function EventCardActions({
           )}
         </svg>
         {following ? "Following" : "Follow"}
-        {followerCount > 0 && <span className="opacity-70">Â· {followerCount}</span>}
+        {followerCount > 0 && <span className="opacity-70">· {followerCount}</span>}
       </button>
     </div>
   );

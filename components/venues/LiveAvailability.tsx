@@ -1,9 +1,9 @@
-﻿const SAMPLE = [
-  { venue: 'Village Underground', city: 'London',     cap: 700,  deal: 'Â£1,200 flat',         tech: 'Full PA + engineer', status: 'open' },
-  { venue: 'Fabric',              city: 'London',     cap: 1600, deal: 'Â£4,500 + bar split', tech: 'Full spec',          status: 'open' },
-  { venue: 'Hidden',              city: 'Manchester', cap: 600,  deal: 'Â£900 flat',           tech: 'PA + lights',        status: 'open' },
-  { venue: 'Motion',              city: 'Bristol',    cap: 3000, deal: 'Â£3,200 + bar split', tech: 'Full rig',           status: 'open' },
-  { venue: 'YES',                 city: 'Manchester', cap: 500,  deal: 'Â£750 flat',           tech: 'PA + backline',      status: 'waitlist' },
+const SAMPLE = [
+  { venue: 'Village Underground', city: 'London',     cap: 700,  deal: '£1,200 flat',         tech: 'Full PA + engineer', status: 'open' },
+  { venue: 'Fabric',              city: 'London',     cap: 1600, deal: '£4,500 + bar split', tech: 'Full spec',          status: 'open' },
+  { venue: 'Hidden',              city: 'Manchester', cap: 600,  deal: '£900 flat',           tech: 'PA + lights',        status: 'open' },
+  { venue: 'Motion',              city: 'Bristol',    cap: 3000, deal: '£3,200 + bar split', tech: 'Full rig',           status: 'open' },
+  { venue: 'YES',                 city: 'Manchester', cap: 500,  deal: '£750 flat',           tech: 'PA + backline',      status: 'waitlist' },
 ];
 
 export function LiveAvailability() {
@@ -64,7 +64,7 @@ export function LiveAvailability() {
             </tbody>
           </table>
           <div className="border-t border-neutral-100 bg-neutral-50 px-5 py-3 text-xs text-neutral-500">
-            Availability refreshed 2 minutes ago Â· Powered by GRID Venues
+            Availability refreshed 2 minutes ago · Powered by GRID Venues
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -40,13 +40,13 @@ export default function MerchGrid({ artistId }: { artistId: string }) {
                 />
               ) : (
                 <span className="text-3xl font-bold text-gray-300">
-                  {"Â£" + (m.price_pence / 100).toFixed(0)}
+                  {"£" + (m.price_pence / 100).toFixed(0)}
                 </span>
               )}
             </div>
             <p className="text-sm font-medium mt-3 truncate">{m.title}</p>
             <p className="text-sm font-bold mt-0.5">
-              {"Â£" + (m.price_pence / 100).toFixed(2)}
+              {"£" + (m.price_pence / 100).toFixed(2)}
             </p>
           </li>
         ))}

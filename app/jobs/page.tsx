@@ -1,210 +1,196 @@
 "use client";
-import { useState } from "react";
+
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { MicIcon, SlidersIcon, MatchIcon, NoteIcon } from "@/components/MusicIcons";
+import ApplyGate from "@/components/ApplyGate";
+import PostCollabButton from "@/components/home/PostCollabButton";
+import { ApplyDialog, type Match } from "@/components/home/MatchedForYou";
+import { useProStatus } from "@/lib/hooks/useProStatus";
 
-export default function Page() {
-  const [isPlaying, setIsPlaying] = useState(false);
+// Real opportunities board (table: opportunities). Replaces a hard-coded mock-up.
 
-  const [gigs, setGigs] = useState([
-    { id:1, type:"COLLAB", title:"Session Vocalist needed — House track (royalty split)", poster:"Sarah J.", role:"Vocalist · House", loc:"London · Remote", pay:"Royalty split 50/50", match:"Strong match — 3 mutual collaborators", posted:"2h ago", icon:<MicIcon className="w-4 h-4"/>, saved:false },
-    { id:2, type:"BOOKING", title:"Mixing & Mastering Engineer for EP", poster:"Studio X", role:"Engineer · Pop/R&B", loc:"London · On-site", pay:"Paid · £400/track", match:"Strong match — 2 mutual collaborators", posted:"5h ago", icon:<SlidersIcon className="w-4 h-4"/>, saved:false },
-    { id:3, type:"COLLAB", title:"Drummer needed for Indie Band", poster:"The Midnight Collective", role:"Drummer · Indie", loc:"Manchester · On-site", pay:"Revenue share", match:"Strong match — 1 mutual collaborator", posted:"1d ago", icon:<MicIcon className="w-4 h-4"/>, saved:false },
-  ]);
+const FILTERS = [
+  { value: "", label: "All" },
+  { value: "collab", label: "Collabs" },
+  { value: "gig", label: "Gigs" },
+  { value: "booking", label: "Bookings" },
+  { value: "session", label: "Session work" },
+  { value: "remix", label: "Remixes" },
+  { value: "job", label: "Jobs" },
+];
 
-  const [showPostModal, setShowPostModal] = useState(false);
-  const [showPitchModal, setShowPitchModal] = useState(false);
-  const [selectedGig, setSelectedGig] = useState<any>(null);
-  const [filters, setFilters] = useState<string[]>([]);
-  const [postSuccess, setPostSuccess] = useState(false);
-  const [pitchSuccess, setPitchSuccess] = useState(false);
+const APPLIED_KEY = "grid:matches:applied"; // shared with Matched For You
 
-  const handleSave = (id: number) => {
-    setGigs(gigs.map(g => g.id === id ? { ...g, saved: !g.saved } : g));
-  };
+function readApplied(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(APPLIED_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
 
-  const handleQuickPitch = (gig: any) => {
-    setSelectedGig(gig);
-    setShowPitchModal(true);
-  };
+function deadlineText(iso: string | null) {
+  if (!iso) return null;
+  const days = Math.ceil((new Date(iso).getTime() - Date.now()) / 86_400_000);
+  if (days <= 0) return "Closes today";
+  if (days === 1) return "Closes tomorrow";
+  if (days <= 7) return `Closes in ${days} days`;
+  return `Closes ${new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`;
+}
 
-  const handlePitchSubmit = () => {
-    setPitchSuccess(true);
-    setTimeout(() => {
-      setPitchSuccess(false);
-      setShowPitchModal(false);
-    }, 2000);
-  };
+export default function JobsPage() {
+  const { recordApplication, hasHitLimit, isPro, freeApplicationsLeft } = useProStatus();
+  const [filter, setFilter] = useState("");
+  const [items, setItems] = useState<Match[] | null>(null);
+  const [applied, setApplied] = useState<string[]>([]);
+  const [applying, setApplying] = useState<Match | null>(null);
+  const [showGate, setShowGate] = useState(false);
 
-  const handlePostSubmit = () => {
-    setPostSuccess(true);
-    setTimeout(() => {
-      setPostSuccess(false);
-      setShowPostModal(false);
-    }, 2000);
-  };
+  const load = useCallback(() => {
+    setItems(null);
+    const url = filter ? `/api/matches?category=${filter}&limit=20` : "/api/matches?limit=20";
+    fetch(url, { credentials: "include", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { matches: [] }))
+      .then((d) => setItems(d.matches ?? []))
+      .catch(() => setItems([]));
+  }, [filter]);
 
-  const toggleFilter = (role: string) => {
-    setFilters(prev => prev.includes(role) ? prev.filter(f => f !== role) : [...prev, role]);
-  };
+  useEffect(load, [load]);
+  useEffect(() => setApplied(readApplied()), []);
 
-  // Filter logic
-  const filteredGigs = gigs.filter(g => {
-    if (filters.length === 0) return true;
-    return filters.some(f => g.role.toLowerCase().includes(f.toLowerCase()));
-  });
+  function startApply(m: Match) {
+    if (hasHitLimit) return setShowGate(true);
+    setApplying(m);
+  }
 
   return (
     <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
       <div className="mx-auto max-w-[1128px] px-4 py-6 grid grid-cols-12 gap-6">
-
-        {/* LEFT SIDEBAR */}
+        {/* LEFT */}
         <aside className="col-span-12 lg:col-span-3 space-y-3">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-            <div className="h-20 bg-gradient-to-r from-emerald-600 to-emerald-500" />
-            <div className="p-5 -mt-10 text-center relative">
-              <div className="w-20 h-20 mx-auto rounded-full bg-emerald-800 text-white grid place-items-center font-bold text-2xl ring-4 ring-white dark:ring-zinc-900 mb-3">U</div>
-              <p className="font-bold text-gray-900 dark:text-white text-lg">Ulisses Silva</p>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Music Producer &amp; DJ</p>
-              <p className="text-xs text-gray-500 mt-1">London, UK</p>
-            </div>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
+            <h3 className="font-bold text-gray-900 dark:text-white text-base">Looking for someone?</h3>
+            <p className="text-xs text-gray-500 mt-1">Post a gig or collab. Applications arrive in your Messages.</p>
+            <PostCollabButton onPosted={load} />
           </div>
 
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <button onClick={() => setShowPostModal(true)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 rounded-full transition-colors mb-2">Post a Gig</button>
-            <button onClick={() => setShowPostModal(true)} className="w-full border border-emerald-600 text-emerald-700 dark:text-emerald-500 text-sm font-semibold py-2 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">Post a Collab Call</button>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <p className="text-xs font-bold text-gray-500 uppercase mb-3">Filter by role</p>
-            <div className="space-y-1">
-              {["Vocalist","Producer","Engineer","Songwriter","DJ","A&R","Label"].map(r => (
-                <label key={r} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 py-1 cursor-pointer hover:text-emerald-600 transition-colors">
-                  <input 
-                    type="checkbox" 
-                    checked={filters.includes(r)} 
-                    onChange={() => toggleFilter(r)}
-                    className="accent-emerald-600 rounded" 
-                  /> {r}
-                </label>
+            <h3 className="font-bold text-gray-900 dark:text-white text-base mb-3">Filter by type</h3>
+            <div className="flex flex-wrap gap-2 lg:flex-col lg:gap-1">
+              {FILTERS.map((f) => (
+                <button
+                  key={f.value}
+                  type="button"
+                  onClick={() => setFilter(f.value)}
+                  aria-pressed={filter === f.value}
+                  className={`text-left text-sm font-semibold px-3 py-2 rounded-lg transition-colors ${
+                    filter === f.value
+                      ? "bg-emerald-600 text-white"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-emerald-700"
+                  }`}
+                >
+                  {f.label}
+                </button>
               ))}
             </div>
           </div>
+
+          {!isPro && (
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm">
+              <p className="font-bold text-amber-900 dark:text-amber-300">
+                {Number.isFinite(freeApplicationsLeft) ? `${freeApplicationsLeft} free applications left this week` : ""}
+              </p>
+              <Link href="/pro" className="mt-1 inline-block text-xs font-bold text-amber-800 dark:text-amber-400 underline">
+                Unlimited with GRID Pro →
+              </Link>
+            </div>
+          )}
         </aside>
 
-        {/* CENTER: Gigs Feed */}
+        {/* LIST */}
         <main className="col-span-12 lg:col-span-9 space-y-4">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
-            <h1 className="font-bold text-gray-900 dark:text-white text-2xl">Gigs &amp; opportunities</h1>
-            <p className="text-sm text-gray-500 mt-1">Based on your role, genre, and mutual collaborators.</p>
+            <h1 className="font-bold text-gray-900 dark:text-white text-lg">Gigs &amp; opportunities</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              {filter ? "Newest first." : "Ranked for you by genre, city, role and pay. Add your genre and city on your profile for better matches."}
+            </p>
           </div>
 
-          {filteredGigs.length === 0 ? (
+          {items === null ? (
+            [0, 1, 2].map((i) => <div key={i} className="h-36 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 animate-pulse" />)
+          ) : items.length === 0 ? (
             <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-12 text-center shadow-sm">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No gigs match your filter</h3>
-              <p className="text-gray-500">Try removing some filters to see more results.</p>
+              <h2 className="text-base font-bold text-gray-900 dark:text-white mb-2">No open opportunities{filter ? " of this type" : ""} right now</h2>
+              <p className="text-gray-500 text-sm">Be the first: post a gig or collab with the button on the left.</p>
             </div>
           ) : (
-            filteredGigs.map(g => (
-              <div key={g.id} className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm hover:border-emerald-400 transition-colors">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <span className={`inline-block text-[10px] font-bold tracking-wide px-2 py-0.5 rounded mb-2 ${g.type === "COLLAB" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"}`}>
-                      {g.type}
-                    </span>
-                    <h2 className="font-bold text-gray-900 dark:text-white text-lg flex items-center gap-2">
-                      <span className="text-emerald-600">{g.icon}</span> {g.title}
-                    </h2>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{g.poster} · {g.role}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{g.loc} · {g.pay}</p>
-                    <div className="flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-400 mt-3 font-medium bg-emerald-50 dark:bg-emerald-900/20 w-fit px-2 py-1 rounded-md">
-                      <MatchIcon className="w-4 h-4" /> {g.match}
+            items.map((m) => {
+              const done = applied.includes(m.id);
+              const closes = deadlineText(m.deadline);
+              return (
+                <article key={m.id} className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm hover:border-emerald-400 transition-colors">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      {m.category && (
+                        <span className="inline-block text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded mb-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                          {m.category}
+                        </span>
+                      )}
+                      <h2 className="font-bold text-gray-900 dark:text-white text-base">{m.title}</h2>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-0.5">{m.org}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {[m.remote ? "Remote" : m.location, m.compensation].filter(Boolean).join(" · ")}
+                      </p>
+                      {m.summary && <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">{m.summary}</p>}
+                      {!filter && (
+                        <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-3 font-medium bg-emerald-50 dark:bg-emerald-900/20 w-fit px-2 py-1 rounded-md">
+                          {m.score}% match · {m.reasons.join(" + ")}
+                        </p>
+                      )}
                     </div>
+                    {closes && <span className="text-xs font-semibold text-amber-700 dark:text-amber-400 whitespace-nowrap">{closes}</span>}
                   </div>
-                  <span className="text-xs text-gray-400 whitespace-nowrap">{g.posted}</span>
-                </div>
-                <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
-                  <button onClick={() => handleQuickPitch(g)} className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-5 py-1.5 rounded-full inline-flex items-center gap-1.5 transition-colors">
-                    <NoteIcon className="w-4 h-4" /> Quick Pitch
-                  </button>
-                  <button onClick={() => handleSave(g.id)} className={`border text-sm font-semibold px-5 py-1.5 rounded-full transition-colors ${g.saved ? "border-emerald-600 text-emerald-600 bg-emerald-50" : "border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
-                    {g.saved ? "✓ Saved" : "Save"}
-                  </button>
-                </div>
-              </div>
-            ))
+                  <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
+                    {m.canApply ? (
+                      <button
+                        type="button"
+                        onClick={() => startApply(m)}
+                        disabled={done}
+                        className={`text-sm font-semibold px-5 py-1.5 rounded-full transition-colors ${
+                          done ? "bg-gray-200 text-gray-600 dark:bg-zinc-700 dark:text-gray-300" : "bg-emerald-600 hover:bg-emerald-700 text-white"
+                        }`}
+                      >
+                        {done ? "Applied ✓" : "Apply"}
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-500 self-center">This older listing can&apos;t take applications.</span>
+                    )}
+                  </div>
+                </article>
+              );
+            })
           )}
         </main>
       </div>
 
-      {/* POST GIG MODAL */}
-      {showPostModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
-            {postSuccess ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Gig Posted!</h2>
-                <p className="text-sm text-gray-500">Your gig is now live in the Jobs feed.</p>
-              </div>
-            ) : (
-              <>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Post a New Gig</h2>
-                <div className="space-y-3 mb-6">
-                  <input type="text" placeholder="Gig Title (e.g., Session Vocalist for House track)" className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500" />
-                  <select className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500">
-                    <option>Type: Collab</option>
-                    <option>Type: Booking</option>
-                  </select>
-                  <input type="text" placeholder="Location (e.g., London · Remote)" className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500" />
-                  <input type="text" placeholder="Payment (e.g., Royalty split 50/50)" className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500" />
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={() => setShowPostModal(false)} className="flex-1 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-2 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
-                  <button onClick={handlePostSubmit} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors">Post Gig</button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+      {applying && (
+        <ApplyDialog
+          match={applying}
+          onClose={() => setApplying(null)}
+          onSent={() => {
+            recordApplication();
+            const next = [...readApplied(), applying.id];
+            try {
+              localStorage.setItem(APPLIED_KEY, JSON.stringify(next.slice(-200)));
+            } catch {
+              /* storage unavailable */
+            }
+            setApplied(next);
+            setApplying(null);
+          }}
+        />
       )}
-
-      {/* QUICK PITCH MODAL */}
-      {showPitchModal && selectedGig && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
-            {pitchSuccess ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Pitch Sent!</h2>
-                <p className="text-sm text-gray-500">Your pitch has been delivered to {selectedGig.poster}.</p>
-              </div>
-            ) : (
-              <>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Quick Pitch</h2>
-                <p className="text-sm text-gray-500 mb-4">Applying to: <strong>{selectedGig.title}</strong></p>
-                <div className="space-y-3 mb-6">
-                  <select className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500">
-                    <option>Select your track</option>
-                    <option>Midnight City (Original Mix)</option>
-                    <option>Neon Lights (Demo)</option>
-                  </select>
-                  <textarea rows={3} placeholder="Why are you a good fit?" className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:border-emerald-500" />
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={() => setShowPitchModal(false)} className="flex-1 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold py-2 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
-                  <button onClick={handlePitchSubmit} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors">Send Pitch</button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
+      <ApplyGate open={showGate} onClose={() => setShowGate(false)} />
     </div>
   );
 }

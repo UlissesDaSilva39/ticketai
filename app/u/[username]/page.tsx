@@ -1,4 +1,6 @@
 ﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { PUBLIC_PROFILE_COLUMNS } from "@/lib/db/public-columns";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { EventCard } from "@/components/EventCard";
 import FriendButton from "@/components/FriendButton";
 import MessageButton from "@/components/MessageButton";
@@ -16,17 +18,27 @@ export default async function PublicProfilePage({
   const { username } = await params;
   const supabase = await createServerSupabase();
 
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data: profile } = await supabase
     .from("profiles")
-    .select("*")
+    .select(PUBLIC_PROFILE_COLUMNS)
     .ilike("username", username)
-    .eq("is_public", true)
     .maybeSingle();
 
-  if (!profile) return notFound();
+  // Private profiles are only visible to their owner.
+  if (!profile || (!profile.is_public && profile.id !== user?.id)) return notFound();
 
-  const { data: { user } } = await supabase.auth.getUser();
   const isOwnProfile = user?.id === profile.id;
+
+  // Record the visit for "Who viewed your profile" (logged-in visitors only,
+  // once per viewer per day; never blocks the page).
+  if (user && !isOwnProfile) {
+    await createAdminClient()
+      .from("profile_views")
+      .upsert({ viewer_id: user.id, viewed_id: profile.id }, { onConflict: "viewer_id,viewed_id,viewed_on", ignoreDuplicates: true })
+      .then(({ error }) => error && console.error("[profile_views]", error.message), () => undefined);
+  }
 
   let friendship: string | null = null;
   let friendshipIsIncoming = false;

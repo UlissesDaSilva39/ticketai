@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -110,12 +110,12 @@ export default function FollowButton({
       {following ? (
         <>
           <UserCheck className="h-4 w-4" />
-          Following Â· {count}
+          Following · {count}
         </>
       ) : (
         <>
           <UserPlus className="h-4 w-4" />
-          {showLabel} Â· {count}
+          {showLabel} · {count}
         </>
       )}
     </button>

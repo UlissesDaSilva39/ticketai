@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -68,7 +68,7 @@ export default function MiniFollowButton({
           : "border border-gray-300 text-gray-700 dark:text-gray-300 hover:border-black hover:text-black dark:hover:text-white")
       }
     >
-      {following ? "Following" : "Follow organizer"} Â· {count}
+      {following ? "Following" : "Follow organizer"} · {count}
     </button>
   );
 }

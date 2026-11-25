@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerSupabase } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/auth/require-admin';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 export const dynamic = 'force-dynamic';
@@ -14,11 +14,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       return NextResponse.json({ error: 'status must be approved or rejected' }, { status: 400 });
     }
 
-    const supabase = await createServerSupabase();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Not signed in' }, { status: 401 });
-    }
+    // Only admins may approve or reject ownership claims.
+    const gate = await requireAdmin();
+    if ('response' in gate) return gate.response;
+    const user = gate.user;
 
     const admin = createAdminClient();
 

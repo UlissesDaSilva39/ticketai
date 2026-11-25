@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 type SavedEvent = {
   id: string;
@@ -46,7 +46,7 @@ export function SavedEventCard({ event }: { event: SavedEvent }) {
         </Link>
         <p className="mt-1 text-sm text-neutral-600">
           {formatDate(event.start_date)}
-          {event.venue_name ? ` Â· ${event.venue_name}` : ""}
+          {event.venue_name ? ` · ${event.venue_name}` : ""}
           {event.city ? `, ${event.city}` : ""}
         </p>
         <div className="mt-3 flex items-center gap-3 text-sm">

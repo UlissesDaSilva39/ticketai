@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "@/app/profile/actions";
+import { kindOf, uploadMedia, validateFile } from "@/components/grid/media";
+import { refreshMe } from "@/lib/hooks/useMe";
+import { OPEN_TO } from "@/lib/open-to";
 
 type Profile = {
   id: string;
@@ -23,7 +26,41 @@ type Profile = {
   youtube: string | null;
   soundcloud: string | null;
   is_public: boolean | null;
+  headline?: string | null;
+  open_to?: string[] | null;
 };
+
+/** Upload button for profile/cover photos (same secure upload as posts). */
+function PhotoUpload({ label, onUploaded, onError }: { label: string; onUploaded: (url: string) => void; onError: (msg: string) => void }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <label className={`cursor-pointer rounded-full border border-gray-300 dark:border-gray-700 px-4 py-1.5 text-sm font-medium hover:border-gray-800 ${busy ? "opacity-60 pointer-events-none" : ""}`}>
+      {busy ? "Uploading…" : label}
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+        className="sr-only"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          e.target.value = "";
+          if (!file) return;
+          const problem = await validateFile(file);
+          if (problem || kindOf(file) !== "image") return onError(problem || "Please choose a photo.");
+          setBusy(true);
+          try {
+            const up = await uploadMedia(file);
+            onUploaded(up.url);
+            onError("");
+          } catch (err) {
+            onError(err instanceof Error ? err.message : "Upload failed. Try again.");
+          } finally {
+            setBusy(false);
+          }
+        }}
+      />
+    </label>
+  );
+}
 
 export default function EditProfileForm({ profile }: { profile: Profile }) {
   const router = useRouter();
@@ -47,6 +84,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
         return;
       }
       setOk(true);
+      refreshMe(); // update the navbar/home card with the new name and photo
       router.refresh();
       setTimeout(() => setOk(false), 2000);
     });
@@ -55,37 +93,40 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
   return (
     <form onSubmit={onSubmit} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 space-y-5">
       <div>
-        <label htmlFor="avatar_url" className="block text-sm font-medium mb-1">Avatar URL</label>
-        <input
-          id="avatar_url"
-          name="avatar_url"
-          type="url"
-          defaultValue={profile.avatar_url || ""}
-          onChange={(e) => setAvatar(e.target.value)}
-          placeholder="https://..."
-          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
-        />
-        {avatar ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={avatar} alt="" className="w-16 h-16 rounded-full object-cover mt-2" />
-        ) : null}
+        <span className="block text-sm font-medium mb-1">Profile photo</span>
+        <div className="flex items-center gap-3">
+          {avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatar} alt="" className="w-16 h-16 rounded-full object-cover" />
+          ) : (
+            <span className="grid w-16 h-16 place-items-center rounded-full bg-gray-100 dark:bg-gray-800 text-xs text-gray-500">No photo</span>
+          )}
+          <PhotoUpload label={avatar ? "Change photo" : "Upload photo"} onUploaded={setAvatar} onError={setError} />
+          {avatar && (
+            <button type="button" onClick={() => setAvatar("")} className="text-xs text-gray-500 hover:text-red-600">
+              Remove
+            </button>
+          )}
+        </div>
+        {/* The uploaded image's address is saved with the form. */}
+        <input type="hidden" name="avatar_url" value={avatar} />
       </div>
 
       <div>
-        <label htmlFor="cover_image" className="block text-sm font-medium mb-1">Cover image URL</label>
-        <input
-          id="cover_image"
-          name="cover_image"
-          type="url"
-          defaultValue={profile.cover_image || ""}
-          onChange={(e) => setCover(e.target.value)}
-          placeholder="https://..."
-          className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
-        />
+        <span className="block text-sm font-medium mb-1">Cover image</span>
         {cover ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={cover} alt="" className="w-full h-24 object-cover rounded-xl mt-2" />
+          <img src={cover} alt="" className="w-full h-24 object-cover rounded-xl mb-2" />
         ) : null}
+        <div className="flex items-center gap-3">
+          <PhotoUpload label={cover ? "Change cover" : "Upload cover"} onUploaded={setCover} onError={setError} />
+          {cover && (
+            <button type="button" onClick={() => setCover("")} className="text-xs text-gray-500 hover:text-red-600">
+              Remove
+            </button>
+          )}
+        </div>
+        <input type="hidden" name="cover_image" value={cover} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -115,6 +156,32 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
       </div>
 
       <div>
+        <label htmlFor="headline" className="block text-sm font-medium mb-1">Headline</label>
+        <input
+          id="headline"
+          name="headline"
+          type="text"
+          maxLength={120}
+          defaultValue={profile.headline || ""}
+          placeholder="e.g. House producer & DJ | Resident @ Fabric | 2M streams"
+          className="w-full px-3 py-2 mb-1 border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:border-black focus:outline-none"
+        />
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Shown under your name on cards across GRID. Max 120 characters.</p>
+
+        <fieldset className="mb-4">
+          <legend className="block text-sm font-medium mb-1">Open to…</legend>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Adds a green ring and badge to your photo so the right people reach out.</p>
+          <input type="hidden" name="open_to_present" value="1" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {OPEN_TO.map((o) => (
+              <label key={o.value} className="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-3 py-2 text-sm cursor-pointer has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50 dark:has-[:checked]:bg-emerald-900/20">
+                <input type="checkbox" name="open_to" value={o.value} defaultChecked={!!profile.open_to?.includes(o.value)} className="h-4 w-4 accent-emerald-600" />
+                {o.label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         <label htmlFor="bio" className="block text-sm font-medium mb-1">Bio</label>
         <textarea
           id="bio"

@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DjMixesList }   from '@/components/djs/DjMixesList';
 import { DjNextSets }    from '@/components/djs/DjNextSets';
@@ -37,8 +37,8 @@ export default async function DjProfilePage({ params }: Params) {
         </div>
         <p className="mt-1 text-sm text-neutral-500">@{dj.slug}</p>
         <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-          {dj.city}{dj.timezone ? ` Â· ${dj.timezone} ` : ''} Â· DJ
-          {dj.djSince && <> Â· Since {dj.djSince}</>}
+          {dj.city}{dj.timezone ? ` · ${dj.timezone} ` : ''} · DJ
+          {dj.djSince && <> · Since {dj.djSince}</>}
         </p>
         <p className="mt-3 max-w-2xl text-base text-neutral-700">{dj.bio}</p>
         <div className="mt-3 flex flex-wrap gap-1.5">

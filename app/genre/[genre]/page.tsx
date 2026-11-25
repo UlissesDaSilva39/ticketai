@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -113,7 +113,7 @@ export default async function GenrePage({ params }: Props) {
                     <div className="font-semibold text-sm truncate">{a.name}</div>
                     <div className="text-xs text-gray-500 dark:text-gray-400 truncate">@{a.handle}</div>
                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                      {a.artist_type}{a.city ? " Â· " + a.city : ""}
+                      {a.artist_type}{a.city ? " · " + a.city : ""}
                     </div>
                   </div>
                 </Link>

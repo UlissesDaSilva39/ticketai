@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -39,7 +39,7 @@ export default function BoostButtons({ eventId, currentFeatured }: { eventId: st
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#00FF87] text-xs font-bold rounded-full">POPULAR</span>
             )}
             <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">{t.days} days</p>
-            <p className="text-4xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>Â£{t.price.toFixed(2)}</p>
+            <p className="text-4xl font-bold mb-4" style={{ fontFamily: "var(--font-antonio)" }}>£{t.price.toFixed(2)}</p>
             <button
               onClick={() => boost(t.id)}
               disabled={processing !== null}

@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 
 type Set = { date: string; venue: string; city: string; setTime: string; ticketUrl: string };
 
@@ -15,7 +15,7 @@ export function DjNextSets({ sets }: { sets?: Set[] }) {
           <li key={i} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
             <div>
               <p className="text-sm font-semibold">
-                {s.date} Â· {s.venue}, {s.city}
+                {s.date} · {s.venue}, {s.city}
               </p>
               <p className="text-xs text-neutral-500">{s.setTime} set</p>
             </div>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -111,7 +111,7 @@ export default function PersonCard({ person }: { person: PersonCardData }) {
     person.city,
     person.genre,
     person.label,
-  ].filter(Boolean).join(" Â· ");
+  ].filter(Boolean).join(" · ");
 
   return (
     <>

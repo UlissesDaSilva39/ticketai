@@ -1,192 +1,162 @@
-"use client";
-import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { PlayIcon, MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, MicIcon, NoteIcon } from "@/components/MusicIcons";
+import type { Metadata } from "next";
+import { createServerSupabase } from "@/lib/supabase/server";
 
-const SearchIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-);
+// Real search across people, posts, opportunities and events. Replaces mock data.
+// Only public columns are read, so it also works for logged-out visitors.
 
-// Mock Data
-const allPeople = [
-  { name: "Sarah Jenkins", role: "Vocalist · House", location: "London", color: "bg-pink-500", verified: true },
-  { name: "David Chen", role: "DJ / Producer", location: "Berlin", color: "bg-indigo-500", verified: true },
-  { name: "The Midnight Collective", role: "Indie Band", location: "Manchester", color: "bg-amber-500", verified: false },
-  { name: "Alex Rivera", role: "Techno Producer", location: "Madrid", color: "bg-emerald-500", verified: true },
-];
+export const metadata: Metadata = { title: "Search" };
+export const dynamic = "force-dynamic";
 
-const allTracks = [
-  { title: "Midnight City (Original Mix)", artist: "Ulisses Silva", plays: "45.2K" },
-  { title: "Neon Lights", artist: "David Chen", plays: "12.8K" },
-  { title: "Warehouse Techno", artist: "Alex Rivera", plays: "8.4K" },
-];
+type Props = { searchParams: Promise<{ q?: string }> };
 
-const allGigs = [
-  { title: "Vocalist needed for House track", poster: "Sarah J.", pay: "Royalty Split" },
-  { title: "Techno DJ for Berlin Club", poster: "Club Matrix", pay: "£500" },
-];
+const clean = (v: string) => v.trim().slice(0, 60).replace(/[%,()*\\]/g, " ").trim();
 
-function SearchResults() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") || "";
-  const [activeTab, setActiveTab] = useState("Top Results");
-
-  // Filter logic
-  const filteredPeople = allPeople.filter(p => 
-    p.name.toLowerCase().includes(query.toLowerCase()) || 
-    p.role.toLowerCase().includes(query.toLowerCase())
-  );
-  
-  const filteredTracks = allTracks.filter(t => 
-    t.title.toLowerCase().includes(query.toLowerCase()) || 
-    t.artist.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const filteredGigs = allGigs.filter(g => 
-    g.title.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const totalResults = filteredPeople.length + filteredTracks.length + filteredGigs.length;
-
+function Section({ title, count, children }: { title: string; count: number; children: React.ReactNode }) {
+  if (count === 0) return null;
   return (
-    <div className="bg-[#f4f2ee] dark:bg-black min-h-screen">
-      <div className="mx-auto max-w-[1280px] px-4 py-6 grid grid-cols-12 gap-6">
-
-        <aside className="col-span-12 lg:col-span-3 space-y-3 hidden lg:block">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-            <div className="h-20 bg-gradient-to-r from-emerald-600 to-emerald-500" />
-            <div className="p-5 -mt-10 text-center relative">
-              <div className="w-20 h-20 mx-auto rounded-full bg-emerald-800 text-white grid place-items-center font-bold text-2xl ring-4 ring-white dark:ring-zinc-900 mb-3">U</div>
-              <p className="font-bold text-gray-900 dark:text-white text-lg">Ulisses Silva</p>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Music Producer &amp; DJ</p>
-              <p className="text-xs text-gray-500 mt-1">London, UK</p>
-            </div>
-            <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
-              <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <li><Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></Link></li>
-                <li><Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></Link></li>
-                <li><Link href="/groups" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span></Link></li>
-                <li><Link href="/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Events</span></Link></li>
-              </ul>
-            </div>
-          </div>
-        </aside>
-
-        <main className="col-span-12 lg:col-span-9 space-y-4">
-          
-          {/* Header */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
-            <h1 className="font-bold text-gray-900 dark:text-white text-2xl flex items-center gap-2">
-              <SearchIcon className="w-6 h-6 text-emerald-600" /> Search Results for "{query}"
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">Found {totalResults} results matching your search.</p>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {["Top Results", "People", "Tracks", "Gigs"].map((tab) => (
-              <button 
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors whitespace-nowrap ${
-                  activeTab === tab 
-                    ? "bg-emerald-600 text-white" 
-                    : "bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          {/* Results - People */}
-          {filteredPeople.length > 0 && (
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-              <div className="p-5 border-b border-gray-100 dark:border-zinc-800">
-                <h2 className="font-bold text-gray-900 dark:text-white text-lg">People</h2>
-              </div>
-              <div className="divide-y divide-gray-100 dark:divide-zinc-800">
-                {filteredPeople.map((p, i) => (
-                  <div key={i} className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-full ${p.color} text-white flex items-center justify-center font-bold text-lg`}>{p.name[0]}</div>
-                      <div>
-                        <p className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-1.5">
-                          {p.name}
-                          {p.verified && <svg className="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>}
-                        </p>
-                        <p className="text-xs text-gray-500">{p.role} · {p.location}</p>
-                      </div>
-                    </div>
-                    <Link href="/epk" className="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-xs font-bold px-4 py-1.5 rounded-full transition-colors">View EPK</Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Results - Tracks */}
-          {filteredTracks.length > 0 && (
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-              <div className="p-5 border-b border-gray-100 dark:border-zinc-800">
-                <h2 className="font-bold text-gray-900 dark:text-white text-lg">Tracks</h2>
-              </div>
-              <div className="divide-y divide-gray-100 dark:divide-zinc-800">
-                {filteredTracks.map((t, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer group">
-                    <div className="w-12 h-12 rounded-md bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 flex-shrink-0"><NoteIcon /></div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-gray-900 dark:text-white text-sm truncate">{t.title}</p>
-                      <p className="text-xs text-gray-500 truncate">{t.artist} · {t.plays} plays</p>
-                    </div>
-                    <div className="text-gray-400 group-hover:text-emerald-600 transition-colors"><PlayIcon className="w-5 h-5" /></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Results - Gigs */}
-          {filteredGigs.length > 0 && (
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-              <div className="p-5 border-b border-gray-100 dark:border-zinc-800">
-                <h2 className="font-bold text-gray-900 dark:text-white text-lg">Gigs &amp; Collabs</h2>
-              </div>
-              <div className="divide-y divide-gray-100 dark:divide-zinc-800">
-                {filteredGigs.map((g, i) => (
-                  <div key={i} className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600"><MicIcon className="w-5 h-5" /></div>
-                      <div>
-                        <p className="font-bold text-gray-900 dark:text-white text-sm">{g.title}</p>
-                        <p className="text-xs text-gray-500">Posted by {g.poster} · {g.pay}</p>
-                      </div>
-                    </div>
-                    <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-colors">Quick Pitch</button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {totalResults === 0 && (
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-12 text-center shadow-sm">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No results found</h2>
-              <p className="text-gray-500">We couldn't find anything for "{query}". Try searching for "Sarah", "Techno", or "Vocalist".</p>
-            </div>
-          )}
-
-        </main>
-      </div>
-    </div>
+    <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm">
+      <h2 className="px-5 pt-4 pb-2 text-sm font-bold uppercase tracking-wide text-gray-500">
+        {title} <span className="font-normal">({count})</span>
+      </h2>
+      <ul className="divide-y divide-gray-100 dark:divide-zinc-800">{children}</ul>
+    </section>
   );
 }
 
-export default function SearchPage() {
+export default async function SearchPage({ searchParams }: Props) {
+  const { q: raw = "" } = await searchParams;
+  const q = clean(raw);
+  const supabase = await createServerSupabase();
+
+  let people: { id: string; full_name: string | null; username: string | null; avatar_url: string | null; role: string | null; city: string | null }[] = [];
+  let posts: { id: string; body: string | null; created_at: string }[] = [];
+  let opps: { id: string; title: string; org: string; location: string | null; deadline: string | null }[] = [];
+  let events: { id: string; title: string; start_date: string; venue_name: string | null; venue_city: string | null }[] = [];
+
+  if (q.length >= 2) {
+    const like = `%${q}%`;
+    const [p, po, o, e] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("id, full_name, username, avatar_url, role, city")
+        .eq("is_public", true)
+        .not("username", "is", null)
+        .or(`full_name.ilike.${like},username.ilike.${like},city.ilike.${like},genre.ilike.${like}`)
+        .limit(10),
+      supabase.from("posts").select("id, body, created_at").ilike("body", like).order("created_at", { ascending: false }).limit(10),
+      supabase.from("opportunities").select("id, title, org, location, deadline").or(`title.ilike.${like},org.ilike.${like},description.ilike.${like}`).limit(10),
+      supabase
+        .from("events")
+        .select("id, title, start_date, venue_name, venue_city")
+        .eq("status", "published")
+        .or(`title.ilike.${like},venue_name.ilike.${like},venue_city.ilike.${like}`)
+        .order("start_date", { ascending: false })
+        .limit(10),
+    ]);
+    people = p.data ?? [];
+    posts = po.data ?? [];
+    const today = Date.now();
+    opps = (o.data ?? []).filter((x) => !x.deadline || new Date(x.deadline).getTime() + 86_400_000 > today);
+    events = e.data ?? [];
+  }
+
+  const total = people.length + posts.length + opps.length + events.length;
+  const nameOf = (p: (typeof people)[number]) => (p.full_name && !p.full_name.includes("@") ? p.full_name : p.username) || "GRID member";
+
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-500">Loading search...</div>}>
-      <SearchResults />
-    </Suspense>
+    <div className="bg-[#f4f2ee] dark:bg-black min-h-[calc(100vh-56px)]">
+      <div className="mx-auto max-w-3xl px-4 py-6 space-y-4">
+        <form action="/search" method="GET" className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm flex gap-2">
+          <input
+            name="q"
+            defaultValue={raw}
+            autoFocus
+            placeholder="Search people, posts, gigs and events"
+            aria-label="Search"
+            className="flex-1 rounded-lg border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+          />
+          <button type="submit" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+            Search
+          </button>
+        </form>
+
+        {q.length < 2 ? (
+          <p className="text-center text-sm text-gray-500">Type at least 2 characters.</p>
+        ) : total === 0 ? (
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-10 text-center">
+            <p className="font-semibold text-gray-900 dark:text-white">No results for “{q}”</p>
+            <p className="mt-1 text-sm text-gray-500">Try a name, @username, city, genre, venue or event.</p>
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-gray-500">
+              {total} result{total === 1 ? "" : "s"} for “{q}”
+            </p>
+
+            <Section title="People" count={people.length}>
+              {people.map((p) => (
+                <li key={p.id}>
+                  <Link href={`/u/${p.username}`} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800/60">
+                    {p.avatar_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.avatar_url} alt="" className="h-10 w-10 rounded-full object-cover" />
+                    ) : (
+                      <span className="grid h-10 w-10 place-items-center rounded-full bg-emerald-700 font-bold text-white">{nameOf(p).slice(0, 1).toUpperCase()}</span>
+                    )}
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-semibold text-gray-900 dark:text-white">{nameOf(p)}</span>
+                      <span className="block truncate text-xs text-gray-500">
+                        @{p.username}
+                        {p.city ? ` · ${p.city}` : ""}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </Section>
+
+            <Section title="Opportunities" count={opps.length}>
+              {opps.map((o) => (
+                <li key={o.id}>
+                  <Link href="/jobs" className="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800/60">
+                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">{o.title}</span>
+                    <span className="block text-xs text-gray-500">
+                      {o.org}
+                      {o.location ? ` · ${o.location}` : ""}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </Section>
+
+            <Section title="Events" count={events.length}>
+              {events.map((e) => (
+                <li key={e.id}>
+                  <Link href={`/events/${e.id}`} className="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800/60">
+                    <span className="block text-sm font-semibold text-gray-900 dark:text-white">{e.title}</span>
+                    <span className="block text-xs text-gray-500">
+                      {new Date(e.start_date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                      {[e.venue_name, e.venue_city].filter(Boolean).length ? ` · ${[e.venue_name, e.venue_city].filter(Boolean).join(", ")}` : ""}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </Section>
+
+            <Section title="Posts" count={posts.length}>
+              {posts.map((p) => (
+                <li key={p.id}>
+                  <Link href={`/post/${p.id}`} className="block px-5 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800/60">
+                    <span className="block text-sm text-gray-800 dark:text-gray-200 line-clamp-2">{p.body}</span>
+                    <span className="block text-xs text-gray-500 mt-0.5">{new Date(p.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>
+                  </Link>
+                </li>
+              ))}
+            </Section>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

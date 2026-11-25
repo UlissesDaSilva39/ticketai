@@ -1,4 +1,4 @@
-﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ResaleCheckoutButton from "./ResaleCheckoutButton";
@@ -58,7 +58,7 @@ export default async function ResalePage({
           </div>
           <div>
             <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">Face Value Price</p>
-            <p className="font-bold text-xl">Â£{Number(ticket.price).toFixed(2)}</p>
+            <p className="font-bold text-xl">£{Number(ticket.price).toFixed(2)}</p>
           </div>
         </div>
         {expired ? (

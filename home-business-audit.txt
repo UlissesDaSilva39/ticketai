@@ -1,0 +1,125 @@
+=== 1. CURRENT app/home/page.tsx ===
+Lines: 325
+  [ no]  Pro upsell card (sidebar)
+  [YES]  Top banner / slider
+  [ no]  Sticky / scroll behaviour
+  [ no]  Banner CTA button
+  [ no]  Urgency / countdown
+  [ no]  Social proof strip
+  [YES]  Matched For You + filters
+  [ no]  Boost Post
+  [ no]  Refer and Earn
+  [ no]  Recently Viewed
+  [ no]  Escrow / Book Now
+  [ no]  Licensing / Billboard
+  [YES]  Verified badge
+  [ no]  Seller / Venue dashboard
+
+=== 2. Components imported by the page ===
+  ok       components/MusicIcons
+
+=== 3. Business-looking components on disk ===
+  .attic\.before_artist_restore_20261028_104346\components\artist\ArtistCoverBanner.tsx
+  .attic\.before_artist_restore_20261028_104346\components\artist\CoverBanner.tsx
+  .attic\.before_artist_restore_20261028_104346\components\artists\ArtistBottomCTA.tsx
+  .attic\.before_artist_restore_20261028_104346\components\artists\ArtistDualCTA.tsx
+  .attic\_backup_fixes_20261026_092723\lib__promoters.ts
+  .attic\_backup_supafix_20261026_143027\app__promoter__dashboard__layout.tsx
+  app\discover\promoters\PromotersClient.tsx
+  app\organizer\campaigns\[id]\PromoCodes.tsx
+  app\organizer\events\[id]\boost\BoostButtons.tsx
+  app\promoters\[id]\PromoterClient.tsx
+  app\promoters\promoters.ts
+  app\promoters\PromotersClient.tsx
+  components\artist\ArtistBookingCTA.tsx
+  components\artist\ArtistCoverBanner.tsx
+  components\artist\CoverBanner.tsx
+  components\artists\ArtistBottomCTA.tsx
+  components\artists\ArtistDualCTA.tsx
+  components\bands\BandDualCTA.tsx
+  components\demo\DemoBanner.tsx
+  components\djs\DjDualCTA.tsx
+  components\events\TicketCTA.tsx
+  components\producers\ProducerDualCTA.tsx
+  components\promoter\PromoterBookingSection.tsx
+  components\promoter\PromoterLookingFor.tsx
+  components\promoter\PromoterMessageButton.tsx
+  components\promoters\DualCTA.tsx
+  components\promoters\PromoterCard.tsx
+  components\promoters\PromoterCTA.tsx
+  components\promoters\PromoterDemoCTA.tsx
+  components\promoters\PromoterEditForm.tsx
+  components\promoters\PromoterEvents.tsx
+  components\promoters\PromoterFilters.tsx
+  components\promoters\PromoterGrid.tsx
+  components\promoters\PromoterHero.tsx
+  components\promoters\PromoterOS.tsx
+  components\promoters\PromoterResidentDjs.tsx
+  components\promoters\PromoterReviews.tsx
+  components\promoters\PromoterVenuesWorked.tsx
+  components\royalties\RoyaltyRegistrationCTA.tsx
+  components\shop\ShopCTA.tsx
+  components\venues\VenueDualCTA.tsx
+  components\vocalists\VocalistDualCTA.tsx
+  components\NotificationPreferencesForm.tsx
+  components\ReferralBanner.tsx
+  components\ReferralCard.tsx
+  components\TopAdBanner.tsx
+  grid\grid\src\components\promote\PromoteMerchModal.tsx
+  grid\grid\src\components\sidebar\PromotedMerch.tsx
+  grid\src\components\promote\PromoteMerchModal.tsx
+  grid\src\components\sidebar\PromotedMerch.tsx
+  lib\hooks\useReferral.ts
+  lib\preferences.ts
+  lib\promoters.ts
+
+=== 4. Business components that exist ONLY in git history ===
+  LOST: app/api/promo/[id]/route.ts   (last seen d064268 02 Oct)
+  LOST: app/api/promoters/[id]/bookings/route.ts   (last seen 96decb7 19 Oct)
+  LOST: app/api/promoters/[id]/message/route.ts   (last seen 96decb7 19 Oct)
+  LOST: app/api/promoters/[id]/route.ts   (last seen c890072 24 Oct)
+  LOST: app/organizer/campaigns/[id]/PromoCodes.tsx   (last seen f9e98c1 16 Nov)
+  LOST: app/organizer/events/[id]/boost/BoostButtons.tsx   (last seen f9e98c1 16 Nov)
+  LOST: app/organizer/events/[id]/boost/page.tsx   (last seen 3860e1b 30 Oct)
+  LOST: app/promoter/dashboard/page.tsx.bak   (last seen 37f8902 11 Oct)
+  LOST: app/promoter/dashboard/page.tsx.bak.whitetext   (last seen 523ce87 06 Nov)
+  LOST: app/promoter/dashboard/page.tsx.bak2   (last seen 523ce87 06 Nov)
+  LOST: app/promoters/[id]/page.tsx   (last seen c24a8d1 26 Oct)
+  LOST: app/promoters/[id]/page.tsx.mojibake-bak   (last seen bcaca3f 22 Oct)
+  LOST: app/promoters/[id]/page.tsx.pre-rebuild   (last seen bcaca3f 22 Oct)
+  LOST: app/promoters/[id]/PromoterClient.tsx   (last seen 3860e1b 30 Oct)
+  LOST: app/promoters/[slug]/join/page.tsx   (last seen 96c690f 26 Oct)
+  LOST: app/promoters/[slug]/page.tsx   (last seen 96c690f 26 Oct)
+  LOST: app/promoters/[slug]/page.tsx.bak.claim   (last seen 96c690f 26 Oct)
+  LOST: app/promoters/[slug]/page.tsx.bak.claim2   (last seen 96c690f 26 Oct)
+  LOST: app/promoters/[slug]/page.tsx.bak.claim3   (last seen 96c690f 26 Oct)
+  LOST: app/venue/[slug]/page.tsx.pre-upgrade   (last seen d721b54 11 Oct)
+  LOST: components/promoter/PromoterMessageButton.tsx.bak.textfix   (last seen 523ce87 06 Nov)
+  LOST: components/promoters/MessageModal.tsx.bak.textfix   (last seen 523ce87 06 Nov)
+
+=== 5. Which commit had which feature ===
+  Feature                       caaaee3  b34ed03  f6da2dc  bc61cdd  ef0a8a6  3e321fc  NOW
+  Pro upsell card (sidebar)     YES      -        -        -        -        -        -
+  Top banner / slider           YES      YES      YES      YES      YES      YES      YES
+  Sticky / scroll behaviour     -        -        -        -        -        -        -
+  Banner CTA button             YES      YES      YES      -        -        -        -
+  Urgency / countdown           YES      YES      YES      -        -        -        -
+  Social proof strip            YES      YES      YES      YES      YES      -        -
+  Matched For You + filters     YES      YES      YES      YES      YES      YES      YES
+  Boost Post                    YES      YES      YES      YES      YES      -        -
+  Refer and Earn                YES      YES      YES      YES      YES      -        -
+  Recently Viewed               YES      YES      YES      YES      -        -        -
+  Escrow / Book Now             -        -        -        -        -        -        -
+  Licensing / Billboard         YES      YES      -        -        -        -        -
+  Verified badge                YES      YES      YES      YES      YES      YES      YES
+  Seller / Venue dashboard      -        -        -        -        -        -        -
+
+  '?' = commit not found in this repo copy.
+
+=== 6. Banner in Navbar or layout? ===
+  components\nav\Navbar.tsx: 5 matching lines
+     line 38: <nav className="w-full bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-50">
+     line 94: <Link href="/premium" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 text-amber-600 font-semibold text-sm">
+     line 96: Try GRID Pro for £0
+     line 157: <Link href="/premium" className="flex flex-col items-center justify-center cursor-pointer text-amber-600 hover:text-amber-700 group h-full hidden lg:flex">
+  app\layout.tsx: 0 matching lines

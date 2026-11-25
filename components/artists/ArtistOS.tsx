@@ -1,14 +1,14 @@
-﻿const PILLARS = [
-  { tag: '01 Â· REACH', title: 'Get your tracks heard',
+const PILLARS = [
+  { tag: '01 · REACH', title: 'Get your tracks heard',
     body: 'Streaming previews that convert to bookings. Curated drops that push your profile to A&Rs, producers, and labels already searching your style.',
     cta: 'See how reach works â†’', href: '/how-it-works' },
-  { tag: '02 Â· SESSIONS', title: 'Find producers, studios, and collaborators',
+  { tag: '02 · SESSIONS', title: 'Find producers, studios, and collaborators',
     body: 'Search by city, genre, key, and budget. Book sessions through GRID or message to collaborate async.',
     cta: 'Find sessions â†’', href: '/producers' },
-  { tag: '03 Â· FEATURES', title: 'Sell features, hooks, and verses',
+  { tag: '03 · FEATURES', title: 'Sell features, hooks, and verses',
     body: 'Built-in checkout, licensing tiers (hook, verse, exclusive), affiliate codes, and automatic contracts. No middlemen.',
     cta: 'See pricing â†’', href: '/pricing' },
-  { tag: '04 Â· MONEY', title: 'Get paid the same day',
+  { tag: '04 · MONEY', title: 'Get paid the same day',
     body: '3% per booking, no monthly fee. Payouts land the morning after the session. Split revenue with producers and writers automatically.',
     cta: 'See how splits work â†’', href: '/how-it-works#splits' },
 ];

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -96,7 +96,7 @@ export function ArtistProfileHeader({
         <p className="mt-1 text-sm text-neutral-500">@{handle}</p>
 
         <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-neutral-500">
-          {city}{timezone ? ` Â· ${timezone}` : ''} Â· {role}
+          {city}{timezone ? ` · ${timezone}` : ''} · {role}
         </p>
 
         <p className="mt-3 max-w-2xl text-base text-neutral-700">{bio}</p>
@@ -118,7 +118,7 @@ export function ArtistProfileHeader({
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
                 <span className="text-emerald-700">Available for new projects</span>
               </span>
-              {responseTime && <span className="text-neutral-400">Â· Responds in {responseTime}</span>}
+              {responseTime && <span className="text-neutral-400">· Responds in {responseTime}</span>}
             </>
           ) : (
             <>
@@ -126,7 +126,7 @@ export function ArtistProfileHeader({
               <span className="text-amber-700">Currently booked</span>
             </>
           )}
-          {memberSince && <span className="text-neutral-400">Â· Member since {memberSince}</span>}
+          {memberSince && <span className="text-neutral-400">· Member since {memberSince}</span>}
         </div>
 
         {socials.length > 0 && (

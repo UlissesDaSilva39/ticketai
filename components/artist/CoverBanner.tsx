@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -31,7 +31,7 @@ export default function CoverBanner({ artist, followerCount, isFollowing, isOwne
     .slice(0, 2)
     .toUpperCase();
 
-  const subtitle = [artist.genre, artist.city].filter(Boolean).join(" Â· ");
+  const subtitle = [artist.genre, artist.city].filter(Boolean).join(" · ");
 
   const toggleFollow = async () => {
     if (busy) return;

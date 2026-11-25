@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { ArrowRight, MapPin, Users, Verified, Flame, Clock, Ticket } from "@/components/icons";
 
 type EventArtist = {
@@ -107,10 +107,10 @@ export function EventCardV2({ event, variant = "default" }: Props) {
 
         <p className="mt-2 text-sm text-neutral-600">
           {event.date}
-          {event.time && <span className="text-neutral-400"> Â· {event.time}</span>}
+          {event.time && <span className="text-neutral-400"> · {event.time}</span>}
           {event.venue && (
             <>
-              {" Â· "}
+              {" · "}
               <Link
                 href={`/venue/${event.venue.slug}`}
                 className="inline-flex items-center gap-0.5 hover:text-black dark:hover:text-white hover:underline"
@@ -160,7 +160,7 @@ export function EventCardV2({ event, variant = "default" }: Props) {
           <p className="mt-2 inline-flex items-center gap-1 text-xs text-neutral-500">
             <Users size={11} />
             {event.goingCount ?? 0} going
-            {event.friendsGoing ? ` Â· ${event.friendsGoing} friends` : ""}
+            {event.friendsGoing ? ` · ${event.friendsGoing} friends` : ""}
           </p>
         )}
 
@@ -185,7 +185,7 @@ export function EventCardV2({ event, variant = "default" }: Props) {
               </p>
               {!event.soldOut && event.priceFrom != null && (
                 <p className="text-lg font-black">
-                  {event.currency ?? "Â£"}
+                  {event.currency ?? "£"}
                   {event.priceFrom.toFixed(2)}
                 </p>
               )}

@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -148,11 +148,11 @@ export default async function TicketDetailPage({ params }: Props) {
                     {event?.title || "Event"}
                   </h1>
                   <p className="text-white/70 mt-2 text-sm">
-                    {dateStr}{timeStr ? " Â· " + timeStr : ""}
+                    {dateStr}{timeStr ? " · " + timeStr : ""}
                   </p>
                   {venue ? (
                     <p className="text-white/50 text-sm mt-1">
-                      {venue.name}{venue.city ? " Â· " + venue.city : ""}
+                      {venue.name}{venue.city ? " · " + venue.city : ""}
                     </p>
                   ) : null}
                 </div>
@@ -183,7 +183,7 @@ export default async function TicketDetailPage({ params }: Props) {
                   Show this at the door. Each QR is unique to this ticket.
                 </p>
                 <p className="text-[10px] font-mono text-gray-400 mt-1 break-all text-center max-w-xs">
-                  {t.id.slice(0, 8)} Â· {t.qr_token ? t.qr_token.slice(0, 12) : "no-token"}
+                  {t.id.slice(0, 8)} · {t.qr_token ? t.qr_token.slice(0, 12) : "no-token"}
                 </p>
               </div>
 
@@ -232,7 +232,7 @@ export default async function TicketDetailPage({ params }: Props) {
                     <div className="flex justify-between py-2.5">
                       <dt className="text-gray-500 dark:text-gray-400">Paid</dt>
                       <dd className="font-semibold text-right">
-                        Â£{(t.price_pence / 100).toFixed(2)}
+                        £{(t.price_pence / 100).toFixed(2)}
                       </dd>
                     </div>
                   ) : null}

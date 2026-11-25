@@ -1,12 +1,12 @@
-﻿const LOGOS = ['Village Underground', 'Fabric', 'Motion', 'Hidden', 'YES', 'Brudenell'];
+const LOGOS = ['Village Underground', 'Fabric', 'Motion', 'Hidden', 'YES', 'Brudenell'];
 
 const TESTIMONIALS = [
   { quote: 'Moved our whole calendar to GRID. Cut admin time by 60%.',
-    name: 'Village Underground', role: 'Warehouse Â· London', stat: 'Â£18k saved in admin' },
+    name: 'Village Underground', role: 'Warehouse · London', stat: '£18k saved in admin' },
   { quote: 'Filled 12 off-peak nights in three months. Deposits always collected.',
-    name: 'Hidden', role: 'Club Â· Manchester', stat: '12 nights filled' },
+    name: 'Hidden', role: 'Club · Manchester', stat: '12 nights filled' },
   { quote: 'First season where we actually made money. The bar split auto-calculated.',
-    name: 'Motion', role: 'Club Â· Bristol', stat: 'Â£24k this season' },
+    name: 'Motion', role: 'Club · Bristol', stat: '£24k this season' },
 ];
 
 export function VenueProof() {

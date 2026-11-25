@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { CATEGORY_PHOTOS } from '@/lib/category-photos';
 
 const TRUST = ["DJ Poxy","Basement 44","Voice Records","Pompeii Odyssey","Ulisses Booking","Demo Ticket"];
@@ -489,7 +489,7 @@ THREE STEPS. THAT IS IT.
   <div className="mb-16">
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-2xl font-bold">Featured artists</h3>
-      <a href="/demo/artists" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 45,000+ â†’</a>
+      <a href="/demo/artists" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 45,000+ →</a>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
@@ -514,7 +514,7 @@ THREE STEPS. THAT IS IT.
   <div className="mb-16">
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-2xl font-bold">Featured venues</h3>
-      <a href="/demo/venues" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 8,000+ â†’</a>
+      <a href="/demo/venues" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 8,000+ →</a>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[
@@ -539,7 +539,7 @@ THREE STEPS. THAT IS IT.
   <div>
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-2xl font-bold">Featured promoters</h3>
-      <a href="/demo/promoters" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 12,000+ â†’</a>
+      <a href="/demo/promoters" className="text-sm font-medium text-violet-600 hover:text-violet-700">View all 12,000+ →</a>
     </div>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {[

@@ -2,59 +2,145 @@
 
 import { headers } from "next/headers";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { ensureProfile, toProfileRole } from "@/lib/auth/ensure-profile";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { passwordProblem } from "@/lib/auth/password-policy";
+import { recordReferral } from "@/lib/referrals";
 
-export type SignupState =
-  | { status: "idle" }
-  | { status: "error"; message: string; field?: "full_name" | "email" | "password" }
-  | { status: "check_email"; email: string }
-  | { status: "redirect"; to: string };
+// Must match the live check constraint on public.profiles.role:
+// attendee, promoter, venue, artist, a_and_r, record_company (admin is staff-only).
+export type ProfileRole = "attendee" | "artist" | "venue" | "promoter" | "a_and_r" | "record_company";
 
-async function siteOrigin(): Promise<string> {
-  const h = await headers();
-  const origin = h.get("origin");
-  if (origin) return origin;
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-  const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  return `${proto}://${host}`;
+type SignupInput = {
+  email: string;
+  password: string;
+  full_name: string;
+  role: ProfileRole;
+  username?: string;
+  city?: string;
+  /** Invite code from /signup?ref=CODE */
+  ref?: string | null;
+};
+
+export type SignupResult =
+  | { ok: true; needsConfirmation: boolean }
+  | { ok?: false; error: string };
+
+const ROLES: ProfileRole[] = ["attendee", "artist", "venue", "promoter", "a_and_r", "record_company"];
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9_.-]+/g, "")
+    .slice(0, 24);
 }
 
-export async function signUp(_prev: SignupState, formData: FormData): Promise<SignupState> {
-  const full_name = String(formData.get("full_name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const password = String(formData.get("password") ?? "");
-  const role = toProfileRole(formData.get("role"));
+/** Picks a free username based on the requested one, the name or the email. */
+async function pickUsername(
+  admin: ReturnType<typeof createAdminClient>,
+  preferred: string
+) {
+  const base = slugify(preferred) || "user";
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const candidate =
+      attempt === 0 ? base : `${base}${Math.floor(1000 + Math.random() * 9000)}`;
+    const { data } = await admin
+      .from("profiles")
+      .select("id")
+      .eq("username", candidate)
+      .maybeSingle();
+    if (!data) return candidate;
+  }
+  return `${base}${Date.now().toString(36)}`;
+}
 
-  if (full_name.length < 2) return { status: "error", field: "full_name", message: "Enter your full name." };
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    return { status: "error", field: "email", message: "Enter a valid email address." };
-  if (password.length < 8)
-    return { status: "error", field: "password", message: "Password must be at least 8 characters." };
+export async function signUp(input: SignupInput): Promise<SignupResult> {
+  const email = input.email.trim().toLowerCase();
+  const password = input.password;
+  const full_name = input.full_name.trim();
+  const role = input.role;
+  const city = (input.city ?? "").trim();
+
+  if (!email || !password) return { error: "Email and password are required." };
+  const weak = passwordProblem(password, email);
+  if (weak) return { error: weak };
+  if (!full_name) return { error: "Please enter your full name." };
+  if (!ROLES.includes(role)) return { error: "Please choose who you are." };
+
+  const requested = (input.username ?? "").trim().toLowerCase();
+  if (requested && !/^[a-z0-9_.-]{1,30}$/.test(requested)) {
+    return { error: "Username may only contain letters, numbers, dot, dash, underscore." };
+  }
+
+  const admin = createAdminClient();
+  const username = await pickUsername(admin, requested || full_name || email.split("@")[0]);
+
+  // Signing up through the cookie-aware client logs the user in straight away
+  // when email confirmation is off in Supabase.
+  // The confirmation email links back here, so it works on any port/domain.
+  const h = await headers();
+
+  // Stop sign-up spam: 5 sign-ups per IP per hour.
+  if (!rateLimit(`signup:ip:${clientIp(h)}`, 5, 60 * 60 * 1000).ok) {
+    return { error: "Too many sign-up attempts. Please try again later." };
+  }
+  const origin =
+    h.get("origin") ??
+    `${h.get("x-forwarded-proto") ?? "http"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
 
   const supabase = await createServerSupabase();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      // Saved on the auth user so the profile can be created after email confirmation.
-      data: { full_name, role },
-      emailRedirectTo: `${await siteOrigin()}/auth/callback?next=/onboarding`,
+      data: { full_name, username, role },
+      emailRedirectTo: `${origin}/auth/callback?next=/onboarding`,
     },
   });
 
   if (error) {
-    const msg = /already registered|already exists/i.test(error.message)
-      ? "An account with this email already exists. Try logging in."
-      : error.message;
-    return { status: "error", field: "email", message: msg };
+    // Don't reveal which emails have accounts: answer exactly like a new sign-up.
+    if (error.code === "user_already_exists" || /already registered/i.test(error.message)) {
+      return { ok: true, needsConfirmation: true };
+    }
+    return { error: error.message };
+  }
+  if (!data.user) return { error: "Could not create your account. Please try again." };
+
+  // Supabase returns a user with no identities when the email is already registered.
+  // Same answer as a new sign-up so the page can't be used to discover accounts.
+  if (data.user.identities && data.user.identities.length === 0) {
+    return { ok: true, needsConfirmation: true };
   }
 
-  // Email confirmation is on: the profile is created in /auth/callback once they click the link.
-  if (!data.session || !data.user) return { status: "check_email", email };
+  // Service role: works even before the user has a session (email confirmation on),
+  // and upsert keeps it safe if a database trigger already created the row.
+  const { error: profileError } = await admin.from("profiles").upsert(
+    {
+      id: data.user.id,
+      username,
+      full_name,
+      role,
+      city: city || null,
+      is_public: true,
+    },
+    { onConflict: "id" }
+  );
 
-  const { error: profileError } = await ensureProfile(supabase, data.user);
   if (profileError) {
-    return { status: "error", message: "Your account was created but we couldn't set up your profile. Please log in to retry." };
+    console.error("[signup] profile upsert failed:", profileError);
+    return { error: "Your account was created, but setting up your profile failed. Please contact support." };
   }
-  return { status: "redirect", to: "/onboarding" };
+
+  // Joined through someone's invite link: record it and notify the inviter.
+  if (input.ref) {
+    try {
+      await recordReferral(data.user.id, input.ref, full_name);
+    } catch (e) {
+      console.error("[signup] referral not recorded:", e);
+    }
+  }
+
+  return { ok: true, needsConfirmation: !data.session };
 }

@@ -1,12 +1,12 @@
-﻿const LOGOS = ['Beggars', 'AWAL', 'Ninja Tune', '!K7', 'Secretly', 'Domino'];
+const LOGOS = ['Beggars', 'AWAL', 'Ninja Tune', '!K7', 'Secretly', 'Domino'];
 
 const TESTIMONIALS = [
   { quote: 'Moved my whole booking sheet to GRID. Cut my admin time by 60%.',
-    name: 'Aaliyah J.', role: 'Topliner Â· London', stat: '12 paid bookings' },
+    name: 'Aaliyah J.', role: 'Topliner · London', stat: '12 paid bookings' },
   { quote: 'Three sync briefs in the first two weeks. Landed two on a Netflix ad.',
-    name: 'Marcus K.', role: 'Session Â· Manchester', stat: 'Â£8k sync payouts' },
+    name: 'Marcus K.', role: 'Session · Manchester', stat: '£8k sync payouts' },
   { quote: 'First month on GRID: 8 paid sessions, no cold DMs, no chasing.',
-    name: 'Nova R.', role: 'Hookwriter Â· Berlin', stat: 'Â£2,400 / month' },
+    name: 'Nova R.', role: 'Hookwriter · Berlin', stat: '£2,400 / month' },
 ];
 
 export function VocalistProof() {

@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -108,7 +108,7 @@ export default function ForVenuesPage() {
             </thead>
             <tbody>
               {[
-                ["Listing fee", "Ã‚Â£100+ / month", "Ã‚Â£0"],
+                ["Listing fee", "Ã‚£100+ / month", "Ã‚£0"],
                 ["Contract", "12 months", "None"],
                 ["Revenue share", "Platform keeps it", "You earn it"],
                 ["Direct promoter contact", "No", "Yes"],

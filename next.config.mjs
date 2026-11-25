@@ -1,5 +1,6 @@
-﻿/** @type {import('next').NextConfig} */
-const nextConfig = { reactStrictMode: true };
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  outputFileTracingRoot: process.cwd(), reactStrictMode: true };
 
 export const gridRedirects = async () => [
   { source: "/home",       destination: "/",          permanent: false },

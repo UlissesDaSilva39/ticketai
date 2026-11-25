@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// In-memory fixed-window rate limiting. Good for a single server / local dev.
+// On serverless hosting (several instances) swap the Map for a shared store
+// such as Upstash Redis (@upstash/ratelimit).
+
 type Bucket = { count: number; resetAt: number };
 const buckets = new Map<string, Bucket>();
 
@@ -36,9 +40,33 @@ export function rateLimitResponse(resetAt: number) {
 }
 
 export function getClientKey(req: NextRequest, userId: string | null, action: string) {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown";
-  return action + ":" + (userId || "anon:" + ip);
+  return action + ":" + (userId || "anon:" + clientIp(req.headers));
+}
+
+// ---- Helpers used by auth routes (login / sign-up) ----
+
+export type RateLimitResult = { ok: boolean; remaining: number; retryAfterSec: number };
+
+/** Counts one hit for `key`; allows `limit` hits per `windowMs`. */
+export function rateLimit(key: string, limit: number, windowMs: number): RateLimitResult {
+  const r = checkRateLimit({ key, limit, windowMs });
+  if (buckets.size > 10_000) {
+    const now = Date.now();
+    for (const [k, b] of buckets) if (b.resetAt < now) buckets.delete(k);
+  }
+  return { ok: r.ok, remaining: r.remaining, retryAfterSec: Math.max(1, Math.ceil((r.resetAt - Date.now()) / 1000)) };
+}
+
+/** Clears a key, e.g. after a successful login. */
+export function resetRateLimit(key: string) {
+  buckets.delete(key);
+}
+
+/** Best-effort client IP from proxy headers. */
+export function clientIp(headers: Headers) {
+  return (
+    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headers.get("x-real-ip") ||
+    "unknown"
+  );
 }

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -74,7 +74,7 @@ export default function MessageRow({ message }: { message: InboxMessage }) {
             </span>
             <span className="text-[11px] uppercase tracking-wider text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-2 py-0.5">
               {SOURCE_LABEL[message.source] ?? message.source}
-              {message.context ? " Â· " + message.context : ""}
+              {message.context ? " · " + message.context : ""}
             </span>
             <span className="text-xs text-gray-400">{timeAgo(message.created_at)}</span>
           </div>

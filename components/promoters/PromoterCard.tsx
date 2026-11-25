@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import type { Promoter } from '@/lib/promoters';
 import { MessageButton } from './MessageButton';
 
@@ -37,7 +37,7 @@ export function PromoterCard({
           </p>
           <p className="mt-1 text-sm font-semibold text-neutral-900">{next.title}</p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            {next.date} Ã¢â‚¬Å¡Â· {next.venue}
+            {next.date} Ã¢â‚¬Å¡· {next.venue}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <span className="text-sm font-semibold text-neutral-900">{next.priceFrom}</span>
