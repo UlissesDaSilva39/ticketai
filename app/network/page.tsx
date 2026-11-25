@@ -128,16 +128,16 @@ export default function NetworkPage() {
         {/* LEFT: Manage my network */}
         <aside className="col-span-12 md:col-span-4 lg:col-span-3 space-y-3">
           <nav aria-label="Manage my network" className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-            <p className="px-4 py-3 font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-zinc-800">Manage my network</p>
+            <p className="px-4 py-3 text-base font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-zinc-800">Manage my network</p>
             <ul className="py-1">
               {SIDEBAR.map((s) => {
                 const active = !!s.view && view === s.view;
-                const cls = `flex w-full items-center gap-3 px-4 py-3 text-[15px] ${
-                  active ? "bg-emerald-50 dark:bg-emerald-900/20 font-semibold text-emerald-800 dark:text-emerald-300" : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"
+                const cls = `flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold transition-colors ${
+                  active ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-emerald-700"
                 } ${s.soon ? "cursor-default opacity-70" : ""}`;
                 const inner = (
                   <>
-                    <Icon d={s.icon} />
+                    <span className="text-emerald-600 dark:text-emerald-400"><Icon d={s.icon} /></span>
                     <span className="flex-1 text-left">{s.label}</span>
                     {s.soon ? (
                       <span className="rounded bg-gray-100 dark:bg-zinc-800 px-1.5 text-[10px] font-bold uppercase text-gray-500">Soon</span>
@@ -164,7 +164,7 @@ export default function NetworkPage() {
           </nav>
           {data && !data.hasProfileBasics && (
             <div className="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-800 p-4 text-sm">
-              <p className="font-semibold text-amber-900 dark:text-amber-300">Get better suggestions</p>
+              <p className="font-bold text-amber-900 dark:text-amber-300">Get better suggestions</p>
               <p className="mt-1 text-amber-800 dark:text-amber-400">Add your genre and city so we can introduce you to the right people.</p>
               <Link href="/profile/edit" className="mt-2 inline-block font-semibold text-amber-900 dark:text-amber-300 underline">
                 Update profile →
@@ -199,7 +199,7 @@ export default function NetworkPage() {
               {/* Invitations */}
               <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-zinc-800">
-                  <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Invitations {data ? `(${data.invitations.length})` : ""}</h2>
+                  <h2 className="text-base font-bold text-gray-900 dark:text-white">Invitations {data ? `(${data.invitations.length})` : ""}</h2>
                   {data && data.invitations.length > 3 && (
                     <button type="button" onClick={() => setShowAllInvites((s) => !s)} className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-700">
                       {showAllInvites ? "Show less" : "Show all"}
@@ -219,7 +219,7 @@ export default function NetworkPage() {
                         </Link>
                         <div className="min-w-0 flex-1">
                           <p className="text-sm text-gray-900 dark:text-white">
-                            <Link href={`/u/${p.username}`} className="font-semibold hover:underline">{p.name}</Link> wants to connect
+                            <Link href={`/u/${p.username}`} className="font-bold hover:underline">{p.name}</Link> wants to connect
                           </p>
                           <p className="line-clamp-1 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</p>
                           <div className="[&>span]:justify-start">
@@ -227,10 +227,10 @@ export default function NetworkPage() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <button type="button" onClick={() => respond(p.id, "ignore")} className="rounded-full px-4 py-1.5 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                          <button type="button" onClick={() => respond(p.id, "ignore")} className="rounded-full px-4 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800">
                             Ignore
                           </button>
-                          <button type="button" onClick={() => respond(p.id, "accept")} className="rounded-full border border-emerald-600 px-4 py-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-zinc-800">
+                          <button type="button" onClick={() => respond(p.id, "accept")} className="rounded-full border border-emerald-600 px-4 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-zinc-800">
                             Accept
                           </button>
                         </div>
@@ -249,7 +249,7 @@ export default function NetworkPage() {
                 : data.groups.map((g) => (
                     <section key={g.id} className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm p-4">
                       <div className="flex items-center justify-between">
-                        <h2 className="text-sm font-semibold text-gray-900 dark:text-white">{g.title}</h2>
+                        <h2 className="text-base font-bold text-gray-900 dark:text-white">{g.title}</h2>
                         <button type="button" onClick={() => setView("discover")} className="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-emerald-700">
                           See all
                         </button>
@@ -263,7 +263,7 @@ export default function NetworkPage() {
                               <span className="rounded-full bg-white dark:bg-zinc-900 p-1">
                                 <Avatar p={p} size={72} />
                               </span>
-                              <span className="mt-2 line-clamp-1 text-sm font-semibold text-gray-900 dark:text-white hover:underline">{p.name}</span>
+                              <span className="mt-2 line-clamp-1 text-sm font-bold text-gray-900 dark:text-white hover:underline">{p.name}</span>
                             </Link>
                             <span className="line-clamp-2 min-h-[2rem] px-3 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</span>
                             {p.city && <span className="text-[11px] text-gray-400">{p.city}</span>}
@@ -317,7 +317,7 @@ function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
           <p className="flex items-center gap-1.5 text-xs font-semibold text-violet-700 dark:text-violet-400">
             <span aria-hidden="true" className="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-violet-500 to-amber-400" /> Premium
           </p>
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+          <h2 className="text-base font-bold text-gray-900 dark:text-white">
             {v.count > 0 ? (
               <>
                 {v.count} {v.count === 1 ? "person" : "people"} viewed your profile <span className="font-normal text-gray-500">· last 90 days</span>
@@ -346,12 +346,12 @@ function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
             </svg>
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-gray-900 dark:text-white">No profile views yet</p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">No profile views yet</p>
             <p className="text-xs text-gray-500">
               Get discovered: add a headline, tick “Open to…”, and post a track. Visits from the last 90 days appear here.
             </p>
           </div>
-          <Link href="/profile/edit" className="rounded-full border border-emerald-600 px-4 py-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-zinc-800">
+          <Link href="/profile/edit" className="rounded-full border border-emerald-600 px-4 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-zinc-800">
             Improve profile
           </Link>
         </div>
@@ -366,7 +366,7 @@ function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
                   <PersonAvatar name={p.name ?? ""} src={p.avatar} size={44} />
                 </Link>
                 <div className="min-w-0 flex-1">
-                  <Link href={`/u/${p.username}`} className="block truncate text-sm font-semibold text-gray-900 dark:text-white hover:underline">{p.name}</Link>
+                  <Link href={`/u/${p.username}`} className="block truncate text-sm font-bold text-gray-900 dark:text-white hover:underline">{p.name}</Link>
                   <p className="line-clamp-1 text-xs text-gray-500">{p.headline}</p>
                   <p className="text-[11px] text-gray-400">Viewed {viewedAgo(p.viewedAt)}</p>
                 </div>
@@ -390,7 +390,7 @@ function ProfileViewers({ v }: { v: NonNullable<NetworkData["viewers"]> }) {
           <p className="text-sm text-violet-900 dark:text-violet-200">
             {v.count > 0 ? "See exactly who viewed you — and reach out first." : "With Premium you'll see exactly who views your profile."}
           </p>
-          <Link href="/pro" className="rounded-full bg-violet-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-violet-700">
+          <Link href="/pro" className="rounded-full bg-violet-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-violet-700">
             Upgrade to see who
           </Link>
         </div>
@@ -530,7 +530,7 @@ function PeopleDirectory({ tab, onBack }: { tab: "discover" | "connections" | "f
         </div>
       ) : people.length === 0 ? (
         <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-10 text-center">
-          <p className="font-semibold text-gray-900 dark:text-white">
+          <p className="font-bold text-gray-900 dark:text-white">
             {tab === "connections" ? "No connections yet" : tab === "following" ? "You're not following anyone yet" : tab === "followers" ? "No followers yet" : "No one matches those filters"}
           </p>
           <p className="mt-1 text-sm text-gray-500">{tab === "discover" ? "Try a different name, role or city." : "Go to Grow to find people to connect with."}</p>
@@ -568,7 +568,7 @@ function PeopleDirectory({ tab, onBack }: { tab: "discover" | "connections" | "f
                     type="button"
                     onClick={() => toggleFollow(p)}
                     aria-pressed={p.following}
-                    className={`rounded-full px-4 py-1.5 text-[13px] font-semibold ${p.following ? "bg-gray-200 text-gray-700 dark:bg-zinc-700 dark:text-gray-200" : "bg-emerald-600 text-white hover:bg-emerald-700"}`}
+                    className={`rounded-full px-4 py-1.5 text-xs font-bold ${p.following ? "bg-gray-200 text-gray-700 dark:bg-zinc-700 dark:text-gray-200" : "bg-emerald-600 text-white hover:bg-emerald-700"}`}
                   >
                     {p.following ? "Following" : "Follow"}
                   </button>

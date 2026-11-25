@@ -71,7 +71,7 @@ export default function PersonActions({
     }
   }
 
-  const pill = "rounded-full px-4 py-1.5 text-[13px] font-semibold disabled:opacity-60";
+  const pill = "rounded-full px-4 py-1.5 text-xs font-bold disabled:opacity-60";
   return (
     <div className={`flex ${compact ? "flex-col" : "flex-wrap"} gap-2`}>
       {connection === "connected" ? (
