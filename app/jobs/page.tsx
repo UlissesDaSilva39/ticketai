@@ -69,13 +69,13 @@ export default function JobsPage() {
         {/* LEFT */}
         <aside className="col-span-12 lg:col-span-3 space-y-3">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <p className="text-sm font-bold text-gray-900 dark:text-white">Looking for someone?</p>
+            <h3 className="font-bold text-gray-900 dark:text-white text-base">Looking for someone?</h3>
             <p className="text-xs text-gray-500 mt-1">Post a gig or collab. Applications arrive in your Messages.</p>
             <PostCollabButton onPosted={load} />
           </div>
 
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-4 shadow-sm">
-            <p className="text-xs font-bold text-gray-500 uppercase mb-3">Type</p>
+            <h3 className="font-bold text-gray-900 dark:text-white text-base mb-3">Filter by type</h3>
             <div className="flex flex-wrap gap-2 lg:flex-col lg:gap-1">
               {FILTERS.map((f) => (
                 <button
@@ -83,10 +83,10 @@ export default function JobsPage() {
                   type="button"
                   onClick={() => setFilter(f.value)}
                   aria-pressed={filter === f.value}
-                  className={`text-left text-sm px-3 py-1.5 rounded-lg transition-colors ${
+                  className={`text-left text-sm font-semibold px-3 py-2 rounded-lg transition-colors ${
                     filter === f.value
-                      ? "bg-emerald-600 text-white font-semibold"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"
+                      ? "bg-emerald-600 text-white"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-emerald-700"
                   }`}
                 >
                   {f.label}
@@ -97,10 +97,10 @@ export default function JobsPage() {
 
           {!isPro && (
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm">
-              <p className="font-semibold text-amber-900 dark:text-amber-300">
+              <p className="font-bold text-amber-900 dark:text-amber-300">
                 {Number.isFinite(freeApplicationsLeft) ? `${freeApplicationsLeft} free applications left this week` : ""}
               </p>
-              <Link href="/pro" className="mt-1 inline-block text-xs font-semibold text-amber-800 dark:text-amber-400 underline">
+              <Link href="/pro" className="mt-1 inline-block text-xs font-bold text-amber-800 dark:text-amber-400 underline">
                 Unlimited with GRID Pro →
               </Link>
             </div>
@@ -110,7 +110,7 @@ export default function JobsPage() {
         {/* LIST */}
         <main className="col-span-12 lg:col-span-9 space-y-4">
           <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-6 shadow-sm">
-            <h1 className="font-bold text-gray-900 dark:text-white text-2xl">Gigs &amp; opportunities</h1>
+            <h1 className="font-bold text-gray-900 dark:text-white text-lg">Gigs &amp; opportunities</h1>
             <p className="text-sm text-gray-500 mt-1">
               {filter ? "Newest first." : "Ranked for you by genre, city, role and pay. Add your genre and city on your profile for better matches."}
             </p>
@@ -120,7 +120,7 @@ export default function JobsPage() {
             [0, 1, 2].map((i) => <div key={i} className="h-36 rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 animate-pulse" />)
           ) : items.length === 0 ? (
             <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 p-12 text-center shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No open opportunities{filter ? " of this type" : ""} right now</h2>
+              <h2 className="text-base font-bold text-gray-900 dark:text-white mb-2">No open opportunities{filter ? " of this type" : ""} right now</h2>
               <p className="text-gray-500 text-sm">Be the first: post a gig or collab with the button on the left.</p>
             </div>
           ) : (
@@ -136,8 +136,8 @@ export default function JobsPage() {
                           {m.category}
                         </span>
                       )}
-                      <h2 className="font-bold text-gray-900 dark:text-white text-lg">{m.title}</h2>
-                      <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{m.org}</p>
+                      <h2 className="font-bold text-gray-900 dark:text-white text-base">{m.title}</h2>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-0.5">{m.org}</p>
                       <p className="text-xs text-gray-500 mt-0.5">
                         {[m.remote ? "Remote" : m.location, m.compensation].filter(Boolean).join(" · ")}
                       </p>
