@@ -4,6 +4,7 @@ import { sendTicketEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { handleBillingEvent } from "@/lib/pro";
 import { handleMarketplaceEvent } from "@/lib/marketplace";
+import { handleLicenceEvent } from "@/lib/licensing/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -31,6 +32,8 @@ export async function POST(req: NextRequest) {
     if (await handleBillingEvent(event)) return NextResponse.json({ received: true });
     // GRID Marketplace purchases.
     if (await handleMarketplaceEvent(event)) return NextResponse.json({ received: true });
+    // GRID Licensing deals (payment, expiry, refunds and chargebacks).
+    if (await handleLicenceEvent(event)) return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Pro billing webhook failed:", err);
     return NextResponse.json({ error: "Pro billing failed" }, { status: 500 });

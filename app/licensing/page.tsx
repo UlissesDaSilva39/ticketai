@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -49,7 +49,7 @@ export default function LicensingPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-12 px-4">
       <div className="max-w-5xl mx-auto">
         <Link href="/" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-6 inline-block">
-          â† Back to GRID
+          ← Back to GRID
         </Link>
 
         <div className="text-center mb-12">
@@ -62,6 +62,26 @@ export default function LicensingPage() {
           <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
             Get paid when your tracks are streamed on GRID Billboard. We accept independent artists, labels, and producers with master ownership.
           </p>
+        </div>
+
+        {/* Licence deals: members licensing their own tracks to each other */}
+        <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white rounded-2xl p-6 sm:p-8 mb-6 flex flex-col md:flex-row md:items-center gap-6 justify-between">
+          <div className="max-w-xl">
+            <p className="text-xs font-bold uppercase tracking-wide text-emerald-200">New: GRID Licence Deals</p>
+            <h2 className="text-2xl font-bold mt-1">Licence your tracks to creators, brands and filmmakers</h2>
+            <p className="text-emerald-50/90 mt-2 text-sm">
+              Set a price for creator, commercial and sync use. Buyers sign the GRID Standard Music Licence and pay by card;
+              you keep the full licence fee and ownership of your music.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row md:flex-col gap-2 flex-none">
+            <Link href="/licensing/new" className="text-center px-5 py-3 rounded-xl font-bold bg-white text-emerald-800 hover:bg-emerald-50">
+              List a track
+            </Link>
+            <Link href="/licensing/tracks" className="text-center px-5 py-3 rounded-xl font-bold border border-white/60 hover:bg-white/10">
+              Browse &amp; licence music
+            </Link>
+          </div>
         </div>
 
         {/* Requirements */}
@@ -116,7 +136,7 @@ export default function LicensingPage() {
                 <p className="text-xs text-gray-600 dark:text-zinc-400 mt-2">{c.description}</p>
                 <div className="mt-2 flex gap-3 text-xs">
                   <a href={c.url} target="_blank" rel="noopener noreferrer" className="text-emerald-600 font-semibold hover:underline">
-                    Website â†’
+                    Website →
                   </a>
                   {c.email && (
                     <a href={`mailto:${c.email}`} className="text-emerald-600 font-semibold hover:underline">
@@ -195,7 +215,7 @@ export default function LicensingPage() {
                 </div>
               )}
               <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors">
-                Submit for review â†’
+                Submit for review →
               </button>
               <p className="text-[10px] text-gray-400 text-center">
                 Or email licensing@grid.app directly with your details.

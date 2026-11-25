@@ -18,11 +18,13 @@ export type SellerBalance = {
 };
 
 export async function sellerBalance(db: SupabaseClient, sellerId: string): Promise<SellerBalance> {
-  const [{ data: orders }, payoutsRes] = await Promise.all([
+  const [{ data: orders }, payoutsRes, licencesRes] = await Promise.all([
     db.from("marketplace_orders").select("id, listing_id, amount_pence, paid_at").eq("seller_id", sellerId).eq("status", "paid"),
     db.from("marketplace_payouts").select("id, amount_pence, status, created_at, paid_at").eq("seller_id", sellerId).order("created_at", { ascending: false }),
+    // Licence deals earn into the same balance (table may not exist yet: treat as none).
+    db.from("licence_deals").select("id, listing_id, amount_pence, paid_at").eq("seller_id", sellerId).eq("status", "active"),
   ]);
-  const paid = orders ?? [];
+  const paid = [...(orders ?? []), ...(licencesRes.error ? [] : licencesRes.data ?? [])];
   const payouts = payoutsRes.error ? [] : payoutsRes.data ?? [];
 
   const now = Date.now();
