@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import TrustStrip from "./TrustStrip";
+import { BriefcaseIcon, MicIcon, MusicNoteIcon, SlidersIcon, SparkleIcon, StarIcon, SwapIcon } from "@/components/MusicIcons";
 import { track } from "../../lib/cta-track";
 
 export type Match = {
@@ -22,7 +23,19 @@ export type Match = {
 
 type Profile = { role: string | null; city: string | null; genre: string | null };
 
-const ICONS: Record<string, string> = { collab: "⇄", gig: "♫", booking: "★", session: "\u{1F3A4}", remix: "\u{1F39B}", job: "\u{1F4BC}" };
+// Category icons (outline SVGs, same style as the rest of the home page).
+const ICONS: Record<string, (p: { className?: string }) => ReactNode> = {
+  collab: SwapIcon,
+  gig: MusicNoteIcon,
+  booking: StarIcon,
+  session: MicIcon,
+  remix: SlidersIcon,
+  job: BriefcaseIcon,
+};
+function CategoryIcon({ category }: { category: string | null }) {
+  const I = ICONS[category ?? ""] ?? SparkleIcon;
+  return <I className="w-5 h-5" />;
+}
 
 // Per-browser memory of hidden/applied matches (no database table for these yet).
 function useStoredList(key: string) {
@@ -108,8 +121,8 @@ export default function MatchedForYou({ isPro = false, freeLimit = 3 }: Props) {
             const done = applied.includes(m.id);
             return (
               <li key={m.id} className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3">
-                <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-lg text-emerald-800">
-                  {ICONS[m.category ?? ""] ?? "✦"}
+                <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800">
+                  <CategoryIcon category={m.category} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{m.title}</p>

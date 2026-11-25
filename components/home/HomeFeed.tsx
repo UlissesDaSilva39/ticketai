@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { ReplyIcon } from "@/components/MusicIcons";
+import { HeartIcon, ReplyIcon, RocketIcon } from "@/components/MusicIcons";
 import ShareMenu from "./ShareMenu";
 import ProBadge from "@/components/ProBadge";
 import { addComment, deleteComment, getComments, incrementShare, type FeedComment } from "@/app/home/actions";
@@ -234,16 +234,21 @@ function PostCard({
   onShared: (count: number) => void;
 }) {
   const [boostNote, setBoostNote] = useState<string | null>(null);
+  const [confirmBoost, setConfirmBoost] = useState(false);
+  const [boosting, setBoosting] = useState(false);
   async function boost() {
-    if (!window.confirm("Boost this post? It will be pinned at the top of everyone's feed for 24 hours. You get 1 boost per month with Premium.")) return;
+    setConfirmBoost(false);
+    setBoosting(true);
     try {
       const res = await fetch(`/api/posts/${post.id}/boost`, { method: "POST", credentials: "include" });
       const d = await res.json().catch(() => ({}));
       if (!res.ok) return setBoostNote(d.error || "Could not boost.");
-      setBoostNote("Boosted for 24 hours 📌");
+      setBoostNote("Boosted: pinned to the top of the feed for 24 hours.");
       onBoosted();
     } catch {
       setBoostNote("Couldn't reach the server. Try again.");
+    } finally {
+      setBoosting(false);
     }
   }
 
@@ -332,7 +337,7 @@ function PostCard({
 
   return (
     <article className={`bg-white dark:bg-zinc-900 rounded-xl border p-5 shadow-sm ${post.boosted ? "border-violet-300 dark:border-violet-800" : "border-gray-200 dark:border-zinc-800"}`}>
-      {post.boosted && <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-violet-700 dark:text-violet-400">📌 Boosted</p>}
+      {post.boosted && <p className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-violet-700 dark:text-violet-400"><RocketIcon className="w-3.5 h-3.5" /> Boosted</p>}
       <div className="flex items-start gap-3">
         {profileHref ? <Link href={profileHref}>{avatar}</Link> : avatar}
         <div className="flex-1 min-w-0">
@@ -411,7 +416,7 @@ function PostCard({
               aria-label={liked ? "Unlike" : "Like"}
               className={`flex items-center gap-2 text-sm font-semibold transition-colors ${liked ? "text-rose-600" : "text-gray-600 dark:text-gray-400 hover:text-rose-600"}`}
             >
-              <span aria-hidden="true" className="text-lg leading-none">{liked ? "♥" : "♡"}</span> Like{post.like_count ? ` (${post.like_count})` : ""}
+              <HeartIcon filled={liked} /> Like{post.like_count ? ` (${post.like_count})` : ""}
             </button>
             <button
               type="button"
@@ -428,9 +433,29 @@ function PostCard({
               onShared={countShare}
             />
             {canBoost && (
-              <button type="button" onClick={boost} className="ml-auto text-sm font-semibold text-violet-700 dark:text-violet-400 hover:underline">
-                📌 Boost
-              </button>
+              <div className="ml-auto flex items-center gap-2">
+                {confirmBoost ? (
+                  <>
+                    <span className="hidden sm:inline text-xs text-gray-500">Pin for 24h? Uses your 1 monthly boost.</span>
+                    <button type="button" onClick={() => setConfirmBoost(false)} className="rounded-full px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                      Cancel
+                    </button>
+                    <button type="button" onClick={boost} className="inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-violet-700">
+                      <RocketIcon className="w-3.5 h-3.5" /> Confirm boost
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setConfirmBoost(true)}
+                    disabled={boosting}
+                    title="Pin this post to the top of everyone's feed for 24 hours (Premium: 1 per month)"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-4 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-violet-700 disabled:opacity-60"
+                  >
+                    <RocketIcon className="w-3.5 h-3.5" /> {boosting ? "Boosting…" : "Boost post"}
+                  </button>
+                )}
+              </div>
             )}
           </div>
           {boostNote && <p role="status" className="mt-2 text-xs font-semibold text-violet-700 dark:text-violet-400">{boostNote}</p>}
