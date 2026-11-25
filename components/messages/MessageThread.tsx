@@ -19,6 +19,7 @@ type Props = {
   currentUserId: string;
   otherName: string;
   initialMessages: Message[];
+  initialDraft?: string;
 };
 
 function timeShort(iso: string) {
@@ -46,9 +47,10 @@ export default function MessageThread({
   currentUserId,
   otherName,
   initialMessages,
+  initialDraft = "",
 }: Props) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [text, setText] = useState("");
+  const [text, setText] = useState(initialDraft);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);

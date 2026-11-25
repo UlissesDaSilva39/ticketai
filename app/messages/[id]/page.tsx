@@ -8,13 +8,16 @@ import { initials, roleLabel } from "@/lib/display";
 
 // Right-hand panel: one conversation (the list on the left comes from ../layout.tsx).
 
-type Props = { params: Promise<{ id: string }> };
+type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ draft?: string }> };
 
 export const metadata: Metadata = { title: "Conversation" };
 export const dynamic = "force-dynamic";
 
-export default async function ConversationPage({ params }: Props) {
+export default async function ConversationPage({ params, searchParams }: Props) {
   const { id } = await params;
+  // Optional pre-typed message (e.g. from Network → Catch up). Never sent automatically.
+  const { draft } = await searchParams;
+  const initialDraft = typeof draft === "string" ? draft.slice(0, 500) : "";
   const supabase = await createServerSupabase();
 
   // The layout already sends logged-out visitors to /login.
@@ -82,7 +85,7 @@ export default async function ConversationPage({ params }: Props) {
         )}
       </header>
 
-      <MessageThread conversationId={id} currentUserId={user.id} otherName={otherName} initialMessages={messages ?? []} />
+      <MessageThread conversationId={id} currentUserId={user.id} otherName={otherName} initialMessages={messages ?? []} initialDraft={initialDraft} />
       <RefreshUnread conversationId={id} />
     </div>
   );

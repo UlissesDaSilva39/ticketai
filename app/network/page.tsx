@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -6,6 +6,7 @@ import MessageButton from "@/components/MessageButton";
 import ProBadge from "@/components/ProBadge";
 import PersonActions, { type Connection } from "@/components/network/PersonActions";
 import PersonAvatar from "@/components/network/PersonAvatar";
+import CatchUp from "@/components/network/CatchUp";
 import { roleLabel } from "@/lib/display";
 import { openToLabels } from "@/lib/open-to";
 
@@ -286,34 +287,7 @@ export default function NetworkPage() {
             </>
           )}
 
-          {view === "catchup" && (
-            <section className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm">
-              <h2 className="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-zinc-800">New on GRID near you</h2>
-              {!data ? (
-                <div className="h-24 animate-pulse" />
-              ) : data.newNearby.length === 0 ? (
-                <p className="px-4 py-4 text-sm text-gray-500">Nobody new nearby this month. Check back soon.</p>
-              ) : (
-                <ul>
-                  {data.newNearby.map((p) => (
-                    <li key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-zinc-800">
-                      <Link href={`/u/${p.username}`}>
-                        <Avatar p={p} size={52} />
-                      </Link>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm text-gray-900 dark:text-white">
-                          <Link href={`/u/${p.username}`} className="font-semibold hover:underline">{p.name}</Link> joined GRID
-                        </p>
-                        <p className="line-clamp-1 text-xs text-gray-600 dark:text-gray-400">{p.headline || roleLabel(p.role, p.genre)}</p>
-                        {p.city && <p className="text-[11px] text-gray-400">{p.city}</p>}
-                      </div>
-                      <PersonActions personId={p.id} connection={p.connection} following={p.following} />
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          )}
+          {view === "catchup" && <CatchUp onFindPeople={() => setView("discover")} />}
 
           {(view === "discover" || view === "connections" || view === "following" || view === "followers") && (
             <PeopleDirectory tab={view} onBack={() => setView("grow")} />
