@@ -437,10 +437,10 @@ function PostCard({
                 {confirmBoost ? (
                   <>
                     <span className="hidden sm:inline text-xs text-gray-500">Pin for 24h? Uses your 1 monthly boost.</span>
-                    <button type="button" onClick={() => setConfirmBoost(false)} className="rounded-full px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800">
+                    <button type="button" onClick={() => setConfirmBoost(false)} className="px-4 py-2 rounded-md text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
                       Cancel
                     </button>
-                    <button type="button" onClick={boost} className="inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-violet-700">
+                    <button type="button" onClick={boost} className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-2 rounded-md transition-colors">
                       <RocketIcon className="w-3.5 h-3.5" /> Confirm boost
                     </button>
                   </>
@@ -450,7 +450,7 @@ function PostCard({
                     onClick={() => setConfirmBoost(true)}
                     disabled={boosting}
                     title="Pin this post to the top of everyone's feed for 24 hours (Premium: 1 per month)"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-4 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-violet-700 disabled:opacity-60"
+                    className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-2 rounded-md transition-colors"
                   >
                     <RocketIcon className="w-3.5 h-3.5" /> {boosting ? "Boosting…" : "Boost post"}
                   </button>
