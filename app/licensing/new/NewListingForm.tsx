@@ -12,7 +12,7 @@ const input =
   "w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500";
 const label = "block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5";
 
-export default function NewListingForm() {
+export default function NewListingForm({ embedded = false }: { embedded?: boolean } = {}) {
   const router = useRouter();
   const [form, setForm] = useState({
     trackTitle: "",
@@ -83,17 +83,19 @@ export default function NewListingForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-8 sm:py-12 px-4">
-      <form onSubmit={submit} className="max-w-2xl mx-auto space-y-6">
+    <div className={embedded ? "" : "min-h-screen bg-gray-50 dark:bg-zinc-950 py-8 sm:py-12 px-4"}>
+      <form onSubmit={submit} className={embedded ? "space-y-6" : "max-w-2xl mx-auto space-y-6"}>
+        {!embedded && (
         <div>
-          <Link href="/licensing/tracks" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-4 inline-block">
-            ← Licence music
+          <Link href="/licensing?tab=sell" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-4 inline-block">
+            ← GRID Licensing
           </Link>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">List a track for licensing</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
             Set your prices once. Buyers sign the GRID Standard Music Licence and pay by card; you earn the full licence fee.
           </p>
         </div>
+        )}
 
         <section className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-5 sm:p-6 space-y-4">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white">Track details</h2>

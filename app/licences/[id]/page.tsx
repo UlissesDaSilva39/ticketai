@@ -50,7 +50,7 @@ export default async function LicencePage({
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-8 sm:py-12 px-4 print:bg-white print:py-0">
       <div className="max-w-3xl mx-auto">
-        <Link href="/licences" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-6 inline-block print:hidden">
+        <Link href="/licensing?tab=mine" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-6 inline-block print:hidden">
           ← My licences
         </Link>
 

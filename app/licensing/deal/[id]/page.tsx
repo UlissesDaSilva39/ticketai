@@ -36,8 +36,8 @@ export default async function LicenceDealPage({
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-8 sm:py-12 px-4">
       <div className="max-w-5xl mx-auto">
-        <Link href="/licensing/tracks" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-6 inline-block">
-          ← All tracks to licence
+        <Link href="/licensing" className="text-xs font-semibold text-gray-500 hover:text-emerald-600 mb-6 inline-block">
+          ← GRID Licensing
         </Link>
 
         {sp.cancelled === "1" && (
