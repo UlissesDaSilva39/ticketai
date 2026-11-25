@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe";
 import { sendTicketEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { handleBillingEvent } from "@/lib/pro";
+import { handleMarketplaceEvent } from "@/lib/marketplace";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -28,6 +29,8 @@ export async function POST(req: NextRequest) {
   // GRID Pro subscriptions (checkout + subscription created/updated/deleted).
   try {
     if (await handleBillingEvent(event)) return NextResponse.json({ received: true });
+    // GRID Marketplace purchases.
+    if (await handleMarketplaceEvent(event)) return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Pro billing webhook failed:", err);
     return NextResponse.json({ error: "Pro billing failed" }, { status: 500 });

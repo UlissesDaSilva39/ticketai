@@ -4,6 +4,7 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { stripe } from "@/lib/stripe";
 import { sendTicketEmail } from "@/lib/email";
 import { handleBillingEvent } from "@/lib/pro";
+import { handleMarketplaceEvent } from "@/lib/marketplace";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -37,6 +38,8 @@ export async function POST(req: NextRequest) {
   // GRID Pro subscriptions (same handler as /api/stripe/webhook).
   try {
     if (await handleBillingEvent(event)) return NextResponse.json({ received: true });
+    // GRID Marketplace purchases.
+    if (await handleMarketplaceEvent(event)) return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Pro billing webhook failed:", err);
     return NextResponse.json({ error: "Pro billing failed" }, { status: 500 });
