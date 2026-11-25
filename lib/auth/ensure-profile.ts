@@ -1,13 +1,28 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
-/** Roles allowed by the profiles.role check constraint. */
-export type ProfileRole = "fan" | "artist" | "industry";
+/**
+ * Roles allowed by the live profiles_role_check constraint:
+ * attendee, promoter, venue, artist, a_and_r, record_company, admin.
+ * (admin is never assignable at sign-up.)
+ */
+export type ProfileRole = "attendee" | "promoter" | "venue" | "artist" | "a_and_r" | "record_company";
 
 export function toProfileRole(value: unknown): ProfileRole {
-  if (value === "artist" || value === "producer") return "artist";
-  // Venues, promoters, labels and A&R all sign up as "industry".
-  if (value === "industry" || value === "venue" || value === "promoter" || value === "label") return "industry";
-  return "fan";
+  switch (value) {
+    case "artist":
+    case "producer":
+      return "artist";
+    case "venue":
+      return "venue";
+    case "promoter":
+      return "promoter";
+    case "a_and_r":
+    case "label":
+    case "record_company":
+      return "a_and_r";
+    default:
+      return "attendee";
+  }
 }
 
 function slugify(name: string): string {

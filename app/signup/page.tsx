@@ -1,6 +1,6 @@
 ﻿import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
-import SignupForm from "./SignupForm";
+import SignupForm, { type SignupRole } from "./SignupForm";
 
 export const metadata = { title: "Create your account | GRID" };
 
@@ -27,7 +27,12 @@ export default async function SignupPage({
   }
 
   const roleParam = (await searchParams).role;
-  const initialRole = roleParam === "venue" || roleParam === "promoter" || roleParam === "industry" ? "industry" : "artist";
+  const initialRole: SignupRole =
+    roleParam === "venue" || roleParam === "promoter"
+      ? "venue"
+      : roleParam === "a_and_r" || roleParam === "label"
+        ? "a_and_r"
+        : "artist";
 
   return (
     <div className="min-h-[calc(100vh-4rem)] grid lg:grid-cols-2 bg-[#f4f2ee] dark:bg-black text-gray-900 dark:text-gray-100">

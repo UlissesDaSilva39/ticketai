@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -31,10 +32,15 @@ export async function POST(
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   
   if (!stripeKey) {
-    // FALLBACK: If no Stripe key, create membership directly (dev mode)
+    // Never hand out free memberships on the live site.
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json({ error: "Payments are not configured" }, { status: 503 });
+    }
+    // DEV MODE (local only): no Stripe key, so create the membership directly.
+    // Users can't write memberships themselves (RLS), so use the server key.
     console.warn("STRIPE_SECRET_KEY not set — using direct membership (dev mode)");
-    
-    const { data: membership, error } = await supabase
+
+    const { error } = await createAdminClient()
       .from("user_memberships")
       .upsert({
         user_id: user.id,

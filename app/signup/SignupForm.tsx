@@ -6,11 +6,14 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { signUp, type SignupState } from "./actions";
 
-type Role = "artist" | "industry";
+export type SignupRole = "artist" | "venue" | "a_and_r";
+type Role = SignupRole;
 
+// Values must match the profiles_role_check constraint in Supabase.
 const ROLES: { id: Role; label: string; hint: string }[] = [
   { id: "artist", label: "Artist / Producer", hint: "Find gigs and collabs" },
-  { id: "industry", label: "Venue / A&R", hint: "Book and sign talent" },
+  { id: "venue", label: "Venue / Promoter", hint: "Book talent for nights" },
+  { id: "a_and_r", label: "Label / A&R", hint: "Discover and sign talent" },
 ];
 
 const inputClass =
@@ -103,11 +106,11 @@ export default function SignupForm({ initialRole }: { initialRole: Role }) {
       <form action={formAction} noValidate className="space-y-5">
         <fieldset>
           <legend className="block text-sm font-semibold mb-2">I am a…</legend>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {ROLES.map((r) => (
               <label
                 key={r.id}
-                className={`cursor-pointer rounded-xl border-2 p-3 text-center transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-purple-500 ${
+                className={`cursor-pointer rounded-xl border-2 p-2 sm:p-3 text-center transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-purple-500 ${
                   role === r.id
                     ? "border-purple-600 bg-purple-50 dark:bg-purple-900/20"
                     : "border-gray-200 dark:border-gray-700 hover:border-gray-400"
