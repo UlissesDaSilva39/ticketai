@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: NextRequest) {
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json({ error: "AI captions aren't set up yet." }, { status: 503 });
+  }
+  // Created per request so the app builds and runs without an OpenAI key.
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   try {
     const { eventTitle, eventDate, eventCity, eventDescription, platforms } = await req.json();
     const platformList = platforms.join(", ");

@@ -38,7 +38,7 @@ export function DjCard({ dj }: { dj: DJ }) {
             {set.date} Ã¢â‚¬Å¡· Set {set.setTime} Ã¢â‚¬Å¡· {set.city}
           </p>
           <div className="mt-3 flex items-center justify-between gap-3">
-            <span className="text-sm font-semibold text-neutral-900">{set.price}</span>
+            <span className="text-sm font-semibold text-neutral-900">{(set as { price?: string }).price}</span>
             <Link href={`/djs/${dj.slug}/book`}
               className="rounded-full bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-neutral-800">
               BOOK NOW

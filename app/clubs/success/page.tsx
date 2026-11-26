@@ -1,9 +1,10 @@
 'use client';
+import { Suspense } from "react";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-export default function ClubSuccessPage() {
+function ClubSuccessPageContent() {
   const params = useSearchParams();
   const sessionId = params?.get('session_id');
   const tier = params?.get('tier');
@@ -73,5 +74,14 @@ export default function ClubSuccessPage() {
         )}
       </div>
     </div>
+  );
+}
+
+// useSearchParams() needs a Suspense boundary for the production build.
+export default function ClubSuccessPage() {
+  return (
+    <Suspense fallback={null}>
+      <ClubSuccessPageContent />
+    </Suspense>
   );
 }

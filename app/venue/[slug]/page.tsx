@@ -1,4 +1,4 @@
-﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { PUBLIC_VENUE_COLUMNS } from "@/lib/db/public-columns";
 import { EventCard } from "@/components/EventCard";
 import { notFound } from "next/navigation";
@@ -75,7 +75,7 @@ export default async function VenuePage({
     .maybeSingle();
 
   if (!venue) return notFound();
-  const v = venue as Venue;
+  const v = venue as unknown as Venue;
 
   // All events at this venue
   const { data: events } = await supabase

@@ -3,7 +3,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || "re_not_configured"); // placeholder: app builds without email set up; sends fail until RESEND_API_KEY is added
 
 export async function POST(req: NextRequest) {
   try {

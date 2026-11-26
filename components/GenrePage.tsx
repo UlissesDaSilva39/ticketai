@@ -85,9 +85,9 @@ export async function GenreEventsPage({ genre }: { genre: GenreMeta }) {
             {list.map((e) => (
               <EventCard
               key={e.id} event={e}
-              artists={event.artists || []}
-              venue={event.venue || null}
-              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+              artists={e.artists || []}
+              venue={e.venue || null}
+              promoter={e.organizer ? { slug: e.organizer.slug ?? '', name: e.organizer.name ?? '' } : null}
             />
             ))}
           </div>

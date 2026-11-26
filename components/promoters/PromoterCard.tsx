@@ -67,7 +67,7 @@ export function PromoterCard({
 
       {promoter.photos.length > 0 && (
         <div className="mt-3 flex gap-1.5">
-          {promoter.photos.slice(0, 4).map((src, i) => (
+          {promoter.photos.slice(0, 4).map((src: string, i: number) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={i} src={src} alt="" className="h-10 w-10 rounded-md object-cover" />
           ))}

@@ -176,6 +176,7 @@ export function useRevenue() {
     marketplaceRevenuePence: sales.reduce((s, x) => s + x.commissionPence, 0),
     bookingRevenuePence: bookings.filter((b) => b.status === "confirmed").reduce((s, x) => s + x.commissionPence, 0),
     featuredRevenuePence: featured.reduce((s, x) => s + x.paidPence, 0),
+    platformTotalPence: 0,
   };
   totals.platformTotalPence = totals.marketplaceRevenuePence + totals.bookingRevenuePence + totals.featuredRevenuePence;
 

@@ -1,4 +1,4 @@
-import SearchOverview from '../../components/SearchOverview'
+import SearchOverview from '@/components/SearchOverview'
 
 export default function SearchPage() {
   return <SearchOverview />

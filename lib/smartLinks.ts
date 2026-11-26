@@ -1,4 +1,4 @@
-﻿// ============================================================
+// ============================================================
 // GRID Smart Links — one link, every platform
 // ============================================================
 import { PlatformId } from "./platforms";
@@ -105,6 +105,7 @@ export function trackClick(linkId: string, platform: any) {
   const all = listSmartLinks();
   const link = all.find(l => l.id === linkId);
   if (!link) return;
-  link.clicks[platform] = (link.clicks[platform] ?? 0) + 1;
+  const clicks = link.clicks as Record<string, number>;
+  clicks[platform] = (clicks[platform] ?? 0) + 1;
   localStorage.setItem(LINKS_KEY, JSON.stringify(all));
 }

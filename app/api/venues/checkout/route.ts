@@ -1,7 +1,7 @@
 ﻿import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_not_configured", { // placeholder: payments fail until STRIPE_SECRET_KEY is added
   apiVersion: '2024-06-20' as any,
 });
 

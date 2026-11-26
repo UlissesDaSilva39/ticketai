@@ -55,6 +55,13 @@
                     "node_modules",
                     ".next",
                     "backup-*",
-                    "**/backup-*"
+                    "**/backup-*",
+                    "backups",
+                    "grid-app",
+                    "grid-network",
+                    "GRID-Discover",
+                    "scripts",
+                    "testautomation",
+                    "lib/api/__mocks__"
                 ]
 }

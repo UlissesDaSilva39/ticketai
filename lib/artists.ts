@@ -272,6 +272,7 @@ export async function getProfileByUsername(username: string): Promise<Artist | n
       responseTime: "",
       memberSince: "",
       earnedTotal: "",
+      social: {},
     };
   } catch {
     return null;

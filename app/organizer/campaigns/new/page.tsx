@@ -1,4 +1,5 @@
-﻿ "use client";
+ "use client";
+import { Suspense } from "react";
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
@@ -22,7 +23,7 @@ const channelOptions = [
   "Organic",
 ];
 
-export default function NewCampaignPage() {
+function NewCampaignPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -590,5 +591,14 @@ export default function NewCampaignPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+// useSearchParams() needs a Suspense boundary for the production build.
+export default function NewCampaignPage() {
+  return (
+    <Suspense fallback={null}>
+      <NewCampaignPageContent />
+    </Suspense>
   );
 }

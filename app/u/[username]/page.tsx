@@ -1,4 +1,4 @@
-﻿import { createServerSupabase } from "@/lib/supabase/server";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { PUBLIC_PROFILE_COLUMNS } from "@/lib/db/public-columns";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { EventCard } from "@/components/EventCard";
@@ -148,9 +148,9 @@ export default async function PublicProfilePage({
               .map((e) => (
                 <EventCard
               key={e.id} event={e}
-              artists={event.artists || []}
-              venue={event.venue || null}
-              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+              artists={e.artists || []}
+              venue={e.venue || null}
+              promoter={e.organizer ? { slug: e.organizer.slug ?? '', name: e.organizer.name ?? '' } : null}
             />
               ))}
           </div>
@@ -171,9 +171,9 @@ export default async function PublicProfilePage({
               .map((e) => (
                 <EventCard
               key={e.id} event={e}
-              artists={event.artists || []}
-              venue={event.venue || null}
-              promoter={event.organizer ? { slug: event.organizer.slug ?? '', name: event.organizer.name ?? '' } : null}
+              artists={e.artists || []}
+              venue={e.venue || null}
+              promoter={e.organizer ? { slug: e.organizer.slug ?? '', name: e.organizer.name ?? '' } : null}
             />
               ))}
           </div>

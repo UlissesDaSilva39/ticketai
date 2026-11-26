@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export default function SmartLinkPage() {
 
   const handlePlatformClick = (platform: any) => {
     trackClick(link.id, platform);
-    const url = link.platforms[platform];
+    const url = (link.platforms as Record<string, string | undefined>)[platform];
     if (url) window.open(url, "_blank");
   };
 

@@ -5,7 +5,7 @@ import { Bell, MapPin, Users } from "lucide-react";
 import { CardSaveButton } from "@/components/wallet/CardSaveButton";
 
 type EventArtist = { slug: string; name: string };
-type EventVenue = { slug: string; name: string; city?: string };
+type EventVenue = { slug: string; name: string; city?: string | null };
 type EventPromoter = { slug: string; name: string };
 
 export function EventCard({

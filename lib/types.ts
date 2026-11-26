@@ -104,7 +104,8 @@ export interface Event {
   created_at: string;
   venue?: { id: string; slug: string; name: string; city: string | null; membership_url?: string | null } | null;
   promoter?: { id: string; slug: string; name: string } | null;
-  artists?: { slug: string; name: string; verified?: boolean }[];
+  artists?: { id?: string; slug: string; name: string; verified?: boolean; role?: string }[];
+  organizer?: { slug: string | null; name: string | null } | null;
   membership_url?: string | null;
   age_restriction?: string | null;
   doors_open_at?: string | null;
