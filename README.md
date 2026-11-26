@@ -23,7 +23,7 @@ Built with **Next.js 16** (App Router), **Supabase** (auth, Postgres, storage), 
 | Split sheets | Agree ownership splits before release | `/splits` |
 | Seller balance | Earnings from sales and licences, 7-day hold, withdrawals | `/seller` |
 | Events & tickets | Discover events, buy tickets, club memberships | `/events`, `/clubs/...` |
-| In-app guide | "Remi" explains GRID and gives a guided tour (content in `lib/guide/content.ts`) | bottom-left button |
+| In-app guide | "Remi" explains GRID and gives a guided tour (content in `lib/guide/content.ts`) | bottom-right button |
 | GRID Pro / Premium | Paid plans with higher limits and priority in matches | `/pro` |
 
 ---
