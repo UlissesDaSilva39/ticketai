@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div>
             <p className="text-white font-bold text-lg mb-3">GRID</p>
-            <p className="text-xs">The #1 music industry network. Find collaborators, book sessions, get paid.</p>
+            <p className="text-xs">The music industry network. Find collaborators, book sessions, get paid.</p>
           </div>
           <div>
             <p className="text-white font-bold text-sm mb-3">Product</p>

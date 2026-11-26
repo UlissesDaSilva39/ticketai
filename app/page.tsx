@@ -50,7 +50,7 @@ export default function LandingPage() {
         <div className="relative max-w-[1128px] mx-auto px-4 py-20 md:py-32">
           <div className="text-center max-w-3xl mx-auto">
             <span className="inline-block bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-3 py-1 rounded-full mb-6">
-              The #1 Music Industry Network
+              The music industry network
             </span>
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white tracking-tight leading-tight">
               Get booked. <br />
@@ -61,14 +61,14 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-3 mt-10">
               <Link href="/signup" className="bg-emerald-600 hover:bg-emerald-700 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors shadow-lg shadow-emerald-600/30">
-                Join Free — 30 Seconds
+                Join Free
               </Link>
               <Link href="/artists/ulisses-silva" className="border-2 border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 text-base font-bold px-8 py-4 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
                 See Example EPK
               </Link>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-500 mt-6 flex items-center justify-center gap-2">
-              <VerifiedIcon className="text-emerald-500" /> Trusted by 10,000+ artists worldwide
+              <CheckIcon className="w-4 h-4 text-emerald-500" /> Free to start · No credit card required
             </p>
           </div>
         </div>
@@ -133,42 +133,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
+      {/* WHAT YOU GET (real features, no invented numbers) */}
       <section className="max-w-[1128px] mx-auto px-4 py-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div><p className="text-4xl font-bold text-emerald-600">10K+</p><p className="text-sm text-gray-500 mt-1">Active Artists</p></div>
-          <div><p className="text-4xl font-bold text-emerald-600">£2.4M</p><p className="text-sm text-gray-500 mt-1">Paid via Escrow</p></div>
-          <div><p className="text-4xl font-bold text-emerald-600">500+</p><p className="text-sm text-gray-500 mt-1">Verified Venues</p></div>
-          <div><p className="text-4xl font-bold text-emerald-600">4.9★</p><p className="text-sm text-gray-500 mt-1">User Rating</p></div>
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Everything in one place</h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">The tools working musicians need, built in.</p>
         </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="bg-white dark:bg-zinc-950 py-20">
-        <div className="max-w-[1128px] mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Trusted by the industry</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { quote: "I landed a £2,000 sync deal within two weeks. The priority ranking in the collab feed is a game-changer.", name: "Sarah Jenkins", role: "Vocalist · London", color: "bg-pink-500" },
-              { quote: "The 0% escrow fee alone pays for the subscription. I've closed 4 mixing gigs this month.", name: "David Chen", role: "Producer · Berlin", color: "bg-indigo-500" },
-              { quote: "Unlimited split sheets saved my last collaboration. We released the track in the same day.", name: "The Midnight Collective", role: "Indie Band · Manchester", color: "bg-amber-500" },
-            ].map((t, i) => (
-              <div key={i} className="bg-[#f4f2ee] dark:bg-zinc-900 rounded-2xl p-6 border border-gray-200 dark:border-zinc-800">
-                <div className="text-amber-500 text-lg mb-3">★★★★★</div>
-                <p className="text-gray-700 dark:text-gray-300 text-sm mb-4 italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full ${t.color} text-white flex items-center justify-center font-bold text-sm`}>{t.name[0]}</div>
-                  <div>
-                    <p className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-1">{t.name} <VerifiedIcon className="text-emerald-500" /></p>
-                    <p className="text-xs text-gray-500">{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { title: "Escrow payments", body: "The client pays up front; you're paid when the work is delivered.", href: "/payments" },
+            { title: "Split sheets", body: "Agree who owns what before release, signed by everyone on the track.", href: "/splits" },
+            { title: "Licence deals", body: "License your tracks to creators and brands with a standard agreement.", href: "/licensing" },
+            { title: "Release builder", body: "Get your next release store-ready, with checks for artwork and metadata.", href: "/distribution" },
+          ].map((f) => (
+            <Link key={f.title} href={f.href} className="block bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-gray-200 dark:border-zinc-800 hover:border-emerald-500 transition-colors">
+              <p className="font-bold text-gray-900 dark:text-white">{f.title}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{f.body}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -176,7 +158,7 @@ export default function LandingPage() {
       <section className="max-w-[1128px] mx-auto px-4 py-20">
         <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-3xl p-8 md:p-16 text-center text-white">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Ready to get paid?</h2>
-          <p className="text-emerald-100 text-lg mb-8 max-w-2xl mx-auto">Join 10,000+ artists. Free to start. Upgrade to GRID Pro when you're ready to book gigs.</p>
+          <p className="text-emerald-100 text-lg mb-8 max-w-2xl mx-auto">Join artists, producers and venues on GRID. Free to start. Upgrade to GRID Pro when you're ready to book gigs.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Link href="/signup" className="bg-white text-emerald-700 font-bold px-8 py-4 rounded-xl hover:bg-emerald-50 transition-colors shadow-lg">
               Create Free Account
@@ -191,44 +173,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-white dark:bg-zinc-950 border-t border-gray-200 dark:border-zinc-800 py-12">
-        <div className="max-w-[1128px] mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <p className="font-bold text-gray-900 dark:text-white mb-3">GRID</p>
-              <p className="text-xs text-gray-500">The #1 Music Industry Network</p>
-            </div>
-            <div>
-              <p className="font-bold text-gray-900 dark:text-white mb-3 text-sm">Product</p>
-              <ul className="space-y-1 text-xs text-gray-500">
-                <li><Link href="/premium" className="hover:text-emerald-600">Pricing</Link></li>
-                <li><Link href="/marketplace" className="hover:text-emerald-600">Marketplace</Link></li>
-                <li><Link href="/promote" className="hover:text-emerald-600">Promote</Link></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-bold text-gray-900 dark:text-white mb-3 text-sm">Company</p>
-              <ul className="space-y-1 text-xs text-gray-500">
-                <li><Link href="/legal" className="hover:text-emerald-600">Legal</Link></li>
-                <li><a href="#" className="hover:text-emerald-600">About</a></li>
-                <li><a href="#" className="hover:text-emerald-600">Careers</a></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-bold text-gray-900 dark:text-white mb-3 text-sm">Follow</p>
-              <ul className="space-y-1 text-xs text-gray-500">
-                <li><a href="#" className="hover:text-emerald-600">Instagram</a></li>
-                <li><a href="#" className="hover:text-emerald-600">Twitter</a></li>
-                <li><a href="#" className="hover:text-emerald-600">TikTok</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-gray-100 dark:border-zinc-800 text-center text-xs text-gray-500">
-            GRID Corporation © 2026 · All rights reserved.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
