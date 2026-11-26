@@ -2,7 +2,8 @@ import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 
-export const runtime = "edge";
+// Node.js runtime: the Edge bundle (1.2 MB) was over the 1 MB Hobby limit, and Edge is deprecated.
+export const runtime = "nodejs";
 
 function priceFrom(types: Array<{ price: number }> | null) {
   if (!types || types.length === 0) return null;
