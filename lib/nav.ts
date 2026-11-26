@@ -37,7 +37,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { id: "studio", label: "Studio", href: "/studio", icon: "S", match: "prefix", mobile: true, description: "Record, arrange, mix" },
       { id: "tracks", label: "Tracks", href: "/tracks", icon: "T", match: "prefix", mobile: true, description: "Buy, sell, collaborate" },
       { id: "records", label: "Records", href: "/records", icon: "R", match: "prefix", mobile: true, description: "Virtual record label" },
-      { id: "distribution", label: "Distribution", href: "/distribution", icon: "D", match: "prefix", mobile: false, description: "Release to 150+ platforms" },
+      { id: "distribution", label: "Distribution", href: "/distribution", icon: "D", match: "prefix", mobile: false, description: "Get releases store-ready" },
     ],
   },
   {

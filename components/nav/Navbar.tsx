@@ -65,6 +65,8 @@ export default function Navbar() {
     { name: "Payments", path: "/payments", icon: PaymentsIcon },
     { name: "Splits", path: "/splits", icon: SplitsIcon },
     { name: "Newsletters", path: "/newsletters", icon: NewslettersIcon },
+    { name: "Distribution", path: "/distribution", icon: DistributionIcon },
+    { name: "Licensing", path: "/licensing", icon: LicensingIcon },
   ];
 
   return (
@@ -110,7 +112,7 @@ export default function Navbar() {
               <div className="absolute top-14 left-1/2 -translate-x-1/2 w-48 bg-white dark:bg-zinc-900 rounded-lg shadow-xl border border-gray-200 dark:border-zinc-800 py-2 z-50">
                 {moreItems.map((item) => {
                    const Icon = item.icon;
-                   const isActive = pathname === item.path;
+                   const isActive = pathname === item.path || pathname.startsWith(item.path + "/");
                    return (
                     <Link key={item.name} href={item.path} onClick={() => setMoreOpen(false)} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors text-sm text-gray-700 dark:text-gray-300">
                       <Icon isActive={isActive} />
@@ -284,5 +286,19 @@ const NotificationsIcon = ({ isActive }: { isActive: boolean }) => isActive ? (
 const NewslettersIcon = ({ isActive }: { isActive: boolean }) => (
   <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
     <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+  </svg>
+);
+
+const DistributionIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="2.5" />
+    <path strokeLinecap="round" d="M12 3v3M21 12h-3M12 21v-3M3 12h3" />
+  </svg>
+);
+
+const LicensingIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7 3h7l5 5v11a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
   </svg>
 );
