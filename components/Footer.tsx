@@ -25,8 +25,8 @@ export default function Footer() {
             <ul className="space-y-2 text-xs">
               <li><Link href="/about" className="hover:text-emerald-400 transition-colors">About</Link></li>
               <li><Link href="/licensing" className="hover:text-emerald-400 transition-colors">Licensing</Link></li>
-              <li><Link href="/join" className="hover:text-emerald-400 transition-colors">Join</Link></li>
-              <li><a href="mailto:hello@grid.app" className="hover:text-emerald-400 transition-colors">Contact</a></li>
+              <li><Link href="/signup" className="hover:text-emerald-400 transition-colors">Sign up</Link></li>
+              <li><Link href="/contact" className="hover:text-emerald-400 transition-colors">Contact</Link></li>
             </ul>
           </div>
           <div>
@@ -34,19 +34,13 @@ export default function Footer() {
             <ul className="space-y-2 text-xs">
               <li><Link href="/terms" className="hover:text-emerald-400 transition-colors">Terms</Link></li>
               <li><Link href="/privacy" className="hover:text-emerald-400 transition-colors">Privacy</Link></li>
-              <li><Link href="/cookies" className="hover:text-emerald-400 transition-colors">Cookies</Link></li>
-              <li><Link href="/gdpr" className="hover:text-emerald-400 transition-colors">GDPR</Link></li>
+              <li><Link href="/legal#cookies" className="hover:text-emerald-400 transition-colors">Cookies</Link></li>
             </ul>
           </div>
         </div>
         <div className="border-t border-zinc-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
           <p>© 2026 GRID Music Ltd. All rights reserved.</p>
-          <div className="flex gap-4">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">Instagram</a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">Twitter</a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">LinkedIn</a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">YouTube</a>
-          </div>
+          {/* Social links: add GRID's real profile URLs here when the accounts exist. */}
         </div>
       </div>
     </footer>

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isPublicPath } from "@/lib/access";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -37,26 +38,9 @@ const CSP = [
   ...(IS_PROD ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
-const PUBLIC_PATHS = ["/login", "/register", "/signup", "/forgot-password", "/reset-password", "/premium", "/faq", "/about", "/auth"];
-// Members-only areas: logged-out visitors are sent to /login?redirect=<page>.
-// Marketing, discovery (cities, genres, artists, events), pricing and legal pages stay public.
-const PROTECTED_PATHS = [
-  // feed & social
-  "/home", "/feed", "/network", "/connections", "/friends", "/following", "/people", "/groups", "/social",
-  // work & messages
-  "/jobs", "/opportunities", "/messaging", "/messages", "/inbox", "/notifications",
-  // the user's own stuff
-  "/profile", "/my-grid", "/my-tickets", "/epk", "/saved", "/settings", "/onboarding", "/artists/me",
-  // money
-  "/payments", "/wallet", "/splits", "/royalties", "/seller", "/upgrade",
-  // tools
-  "/dashboard", "/analytics", "/business", "/calendar", "/promote", "/upload", "/studio",
-  "/distribution", "/import", "/verify",
-  // owner dashboards (they read the owner's private columns)
-  "/organizer", "/venue/dashboard", "/promoter/dashboard", "/promoter/analytics",
-  // staff
-  "/admin",
-];
+// Which pages need login is decided by the allow list in lib/access.ts:
+// marketing, account, legal and shared links are public; everything else,
+// including any page added later, sends logged-out visitors to /login.
 
 function matches(pathname: string, paths: string[]) {
   return paths.some((p) => pathname === p || pathname.startsWith(p + "/"));
@@ -100,7 +84,7 @@ export async function proxy(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!matches(pathname, PUBLIC_PATHS) && matches(pathname, PROTECTED_PATHS) && !user) {
+  if (!user && !isPublicPath(pathname)) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("redirect", pathname);
     return withSecurityHeaders(NextResponse.redirect(loginUrl));
