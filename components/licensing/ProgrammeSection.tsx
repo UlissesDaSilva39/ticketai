@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { LICENSING_CONTACTS, LICENCE_REQUIREMENTS, PROGRAMME_STEPS, PRS_DIGITAL_LICENCE } from "@/lib/data/licensingInfo";
-import { useLicensing } from "@/lib/hooks/useLicensing";
 
 // "GRID Programme" tab of /licensing: licensing your catalogue to GRID itself
 // (Billboard streaming), plus the rights reference material. Moved unchanged
@@ -15,7 +14,6 @@ const CheckIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
 );
 
 export default function ProgrammeSection() {
-  const { submitApplication, applications, hydrated } = useLicensing();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     artistName: "",
@@ -27,17 +25,32 @@ export default function ProgrammeSection() {
     publisher: "",
     message: "",
   });
+  const [website, setWebsite] = useState(""); // honeypot, hidden from people
+  const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (!form.artistName.trim() || !form.email.includes("@") || !form.trackTitle.trim() || !form.masterOwner.trim() || !form.composer.trim()) {
       setError("Please fill in all required fields");
       return;
     }
-    submitApplication(form);
-    setSubmitted(true);
+    setSending(true);
+    try {
+      const res = await fetch("/api/licensing/catalogue", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...form, website }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "We couldn't send your submission.");
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "We couldn't send your submission.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -136,6 +149,12 @@ export default function ProgrammeSection() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
+                <label>
+                  Website
+                  <input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                </label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Artist / label name *</label>
@@ -179,8 +198,8 @@ export default function ProgrammeSection() {
                   <p className="text-xs text-red-800 dark:text-red-300">{error}</p>
                 </div>
               )}
-              <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors">
-                Submit for review →
+              <button type="submit" disabled={sending} className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-bold py-3 rounded-lg transition-colors">
+                {sending ? "Sending…" : "Submit for review →"}
               </button>
               <p className="text-[10px] text-gray-400 text-center">
                 Or email licensing@grid.app directly with your details.
@@ -189,11 +208,6 @@ export default function ProgrammeSection() {
           )}
         </div>
 
-        {hydrated && applications.length > 0 && (
-          <p className="text-center text-xs text-gray-500">
-            {applications.length} application{applications.length === 1 ? "" : "s"} submitted from this browser.
-          </p>
-        )}
     </div>
   );
 }
