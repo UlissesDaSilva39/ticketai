@@ -7,7 +7,7 @@ import "./theme-dark.css";
 import ThemeBinder from "@/components/ThemeBinder";
 
 export const metadata: Metadata = {
-  title: "GRID | The #1 Music Industry Network",
+  title: "GRID | The Music Industry Network",
   description: "Get booked. Get paid. Find collabs, book gigs, and get paid via secure Escrow.",
 };
 
