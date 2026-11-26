@@ -24,7 +24,7 @@ export default async function MyReleasesPage() {
   if (!user) redirect(`/login?redirect=${encodeURIComponent("/distribution/releases")}`);
 
   const { data, error } = await supabase
-    .from("releases")
+    .from("distribution_releases")
     .select("id, title, primary_artist, release_type, release_date, status, updated_at")
     .order("updated_at", { ascending: false })
     .limit(100);
