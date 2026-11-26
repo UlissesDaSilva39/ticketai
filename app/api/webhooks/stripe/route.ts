@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { createClient as createAdminClient, type SupabaseClient } from "@supabase/supabase-js";
 import { stripe } from "@/lib/stripe";
 import { sendTicketEmail } from "@/lib/email";
 import { handleBillingEvent } from "@/lib/pro";
@@ -9,10 +9,11 @@ import { handleMarketplaceEvent } from "@/lib/marketplace";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const admin = createAdminClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+// Created on first use, so the app can build without Supabase settings
+// (for example in preview builds).
+let adminClient: SupabaseClient | null = null;
+const getAdmin = () =>
+  (adminClient ??= createAdminClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!));
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -73,7 +74,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing metadata" }, { status: 400 });
   }
 
-  const { data: existing } = await admin
+  const { data: existing } = await getAdmin()
     .from("orders")
     .select("id")
     .eq("stripe_checkout_session_id", session.id)
@@ -85,7 +86,7 @@ export async function POST(req: NextRequest) {
   const ticketSelections = JSON.parse(rawTickets) as Array<{ name: string; qty: number }>;
   const seats = rawSeats ? (JSON.parse(rawSeats) as Array<{ label: string; seat_id?: string }>) : [];
 
-  const { data: eventRow, error: evErr } = await admin
+  const { data: eventRow, error: evErr } = await getAdmin()
     .from("events")
     .select("id, title, date, time, venue_name, city, ticket_types")
     .eq("id", eventId)
@@ -121,7 +122,7 @@ export async function POST(req: NextRequest) {
   const platformFee = +(totalAmount * 0.02).toFixed(2);
   const processingFee = +(totalAmount * 0.029).toFixed(2);
 
-  const { data: orderRow, error: orderErr } = await admin
+  const { data: orderRow, error: orderErr } = await getAdmin()
     .from("orders")
     .insert({
       user_id: userId,
@@ -157,7 +158,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const { data: insertedTickets, error: ticketsErr } = await admin
+  const { data: insertedTickets, error: ticketsErr } = await getAdmin()
     .from("tickets")
     .insert(ticketRows)
     .select("id, ticket_type, price, qr_code");
