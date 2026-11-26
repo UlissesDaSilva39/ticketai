@@ -163,7 +163,7 @@ export default function GuideAssistant() {
           role="dialog"
           aria-modal="false"
           aria-labelledby="grid-guide-title"
-          className="fixed z-50 left-4 right-4 bottom-40 sm:left-auto sm:w-[420px] max-h-[70vh] flex flex-col bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-zinc-800 focus:outline-none"
+          className="fixed z-40 left-4 right-4 bottom-40 sm:left-auto sm:w-[420px] max-h-[70vh] flex flex-col bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-zinc-800 focus:outline-none"
         >
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-zinc-800">
