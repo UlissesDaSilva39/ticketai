@@ -1,22 +1,24 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
+// Stores we plan to deliver to once a delivery partner is live. Shown as plans,
+// not as current coverage.
 const PLATFORMS = [
-  "Spotify", "Apple Music", "YouTube", "TikTok", "Amazon",
-  "Deezer", "Tidal", "SoundCloud", "Pandora", "iHeart",
+  "Spotify", "Apple Music", "YouTube Music", "TikTok", "Amazon Music",
+  "Deezer", "Tidal", "SoundCloud",
 ];
 
 const STEPS = [
-  { n: 1, title: "Upload", body: "Drop your tracks, cover art, and metadata. We check everything before delivery." },
-  { n: 2, title: "We deliver", body: "Your release goes to every store within 48 hours. Live dates and edits in one dashboard." },
-  { n: 3, title: "Get paid", body: "Monthly royalty statements, transparent splits, and payouts to your bank or PayPal." },
+  { n: 1, title: "Build your release", body: "Add your tracks, cover art, credits and release date in the GRID release builder. Available now." },
+  { n: 2, title: "Pass the store checks", body: "GRID checks artwork, audio and metadata against common store rules, so your release isn't rejected later." },
+  { n: 3, title: "Deliver when we launch", body: "When delivery opens, submit your ready release in one click. Royalties will flow into your GRID balance with your splits." },
 ];
 
 const FAQ = [
-  { q: "How long until my music is live?", a: "Most releases go live on Spotify and Apple within 48 hours. Some stores take up to 5 business days." },
-  { q: "Do I keep my rights?", a: "Yes. You keep 100% of your master rights and publishing. We never claim ownership." },
-  { q: "Can I switch distributors later?", a: "Yes, but your existing releases may be taken down during the switch. Plan a gap of 1-2 weeks." },
-  { q: "How do royalties get paid?", a: "Monthly statements, paid out once you cross $10. Bank transfer or PayPal." },
-  { q: "What about Content ID on YouTube?", a: "We register your tracks with YouTube Content ID by default. You can opt out per release." },
+  { q: "Can GRID put my music on Spotify today?", a: "Not yet. GRID distribution is in early access: you can build and check releases now, and we'll email you as soon as delivery to stores opens." },
+  { q: "Do I keep my rights?", a: "Yes. You keep 100% of your master rights and publishing. GRID never claims ownership of your music." },
+  { q: "What does it cost?", a: "Preparing releases is free. We'll confirm delivery pricing before it opens, and nothing is charged without you agreeing to it first." },
+  { q: "My music is already with another distributor. Can I move?", a: "When delivery opens you'll be able to move releases. Keep them live with your current distributor until your GRID release is live, so you don't lose streams." },
+  { q: "How will royalties be paid?", a: "Royalties will go into your GRID balance and be shared using your GRID split sheets. You'll be able to withdraw them like any other GRID earnings." },
 ];
 
 export default function DistributionPage() {
@@ -74,24 +76,25 @@ export default function DistributionPage() {
 
       <section className="dist-hero">
         <div className="dist-wrap">
-          <p className="dist-eyebrow">Music Distribution</p>
-          <h1 className="dist-h1">Get your music on<br />150+ platforms</h1>
+          <p className="dist-eyebrow">Music Distribution · Early access</p>
+          <h1 className="dist-h1">Get your next release<br />store-ready on GRID</h1>
           <p className="dist-p">
-            Spotify. Apple Music. TikTok. YouTube Music. All in one upload.
-            Keep 100% of your rights and your royalties - every stream, every month.
+            Build your release, pass the store checks and lock in your splits today.
+            When GRID delivery opens, send it to Spotify, Apple Music, TikTok and more in one click.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/distribution/start" className="dist-btn dist-btn-primary">Start distributing</Link>
-            <a href="#how" className="dist-btn dist-btn-ghost">See how it works</a>
+            <Link href="/distribution/releases/new" className="dist-btn dist-btn-primary">Start a release</Link>
+            <Link href="/distribution/releases" className="dist-btn dist-btn-ghost">My releases</Link>
           </div>
           <div className="dist-trust">
-            <span>150+ platforms</span><span>12M+ artists</span>
-            <span>99.9% uptime</span><span>48-hour delivery</span>
+            <span>Free to prepare</span><span>Store-ready checks</span>
+            <span>Split sheets built in</span><span>Keep 100% of your rights</span>
           </div>
         </div>
       </section>
 
       <div className="dist-wrap">
+        <p className="dist-eyebrow" style={{ textAlign: "center", margin: "0 0 4px" }}>Stores we plan to deliver to</p>
         <div className="dist-logos">
           {PLATFORMS.map((p) => <span key={p}>{p}</span>)}
         </div>
@@ -114,30 +117,30 @@ export default function DistributionPage() {
 
       <section className="dist-section">
         <div className="dist-wrap">
-          <h2 className="dist-h2">Simple pricing</h2>
+          <h2 className="dist-h2">Early access</h2>
           <div className="dist-pricing">
             <div className="dist-card">
-              <p className="dist-eyebrow" style={{ margin: 0 }}>Free</p>
-              <div className="dist-price">$0 <small>/ year</small></div>
+              <p className="dist-eyebrow" style={{ margin: 0 }}>Now</p>
+              <div className="dist-price">Free <small>to prepare</small></div>
               <ul>
-                <li>2 releases per year</li>
-                <li>100% royalties kept</li>
-                <li>All 150+ platforms</li>
-                <li>Basic analytics</li>
+                <li>Unlimited draft releases</li>
+                <li>Cover art and audio checks</li>
+                <li>Credits, ISRCs and release dates</li>
+                <li>Split sheets for every track</li>
               </ul>
-              <Link href="/distribution/start" className="dist-btn dist-btn-ghost">Get started</Link>
+              <Link href="/distribution/releases/new" className="dist-btn dist-btn-ghost">Start a release</Link>
             </div>
             <div className="dist-card pro">
-              <span className="dist-badge">POPULAR</span>
-              <p className="dist-eyebrow" style={{ margin: 0 }}>Pro</p>
-              <div className="dist-price">$19.99 <small>/ year</small></div>
+              <span className="dist-badge">COMING SOON</span>
+              <p className="dist-eyebrow" style={{ margin: 0 }}>At launch</p>
+              <div className="dist-price">Delivery <small>to stores</small></div>
               <ul>
-                <li>Unlimited releases</li>
-                <li>100% royalties kept</li>
-                <li>Advanced analytics + splits</li>
-                <li>Priority support</li>
+                <li>One-click delivery of ready releases</li>
+                <li>Release status and store links</li>
+                <li>Royalties into your GRID balance</li>
+                <li>Pricing confirmed before launch</li>
               </ul>
-              <Link href="/distribution/start" className="dist-btn dist-btn-primary">Go Pro</Link>
+              <Link href="/distribution/releases" className="dist-btn dist-btn-primary">Get notified</Link>
             </div>
           </div>
         </div>
@@ -156,9 +159,9 @@ export default function DistributionPage() {
       </section>
 
       <div className="dist-cta">
-        <h2 className="dist-h2">Your next release deserves<br />every platform.</h2>
-        <p className="dist-p">Free to start. No credit card. No rights taken.</p>
-        <Link href="/distribution/start" className="dist-btn dist-btn-primary">Start for free</Link>
+        <h2 className="dist-h2">Get your next release<br />ready today.</h2>
+        <p className="dist-p">Free to prepare. No credit card. No rights taken.</p>
+        <Link href="/distribution/releases/new" className="dist-btn dist-btn-primary">Start a release</Link>
       </div>
     </main>
   );
