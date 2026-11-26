@@ -1,6 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/nav/Navbar";
+import GuideAssistant from "@/components/guide/GuideAssistant";
 
 // Pages that hide the member navbar: landing and the account (log in / sign up / password) screens.
 const PUBLIC_ROUTES = ["/", "/login", "/signup", "/forgot-password", "/reset-password"];
@@ -18,6 +19,8 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <>
       {!isPublic && <Navbar />}
       {children}
+      {/* In-app guide on member pages only (not landing / log in / sign up) */}
+      {!isPublic && <GuideAssistant />}
     </>
   );
 }
