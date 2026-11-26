@@ -1,12 +1,14 @@
 -- ============================================================
 -- GRID Distribution (early access): release builder.
+-- Uses its own table names (distribution_*) so it never touches any
+-- other 'releases' table in the database.
 -- Artists prepare releases (details, artwork, tracks, credits) and
 -- run store checks now; delivery to stores comes with a partner later.
 -- New tables + one private bucket only. Safe to run more than once.
 -- ============================================================
 begin;
 
-create table if not exists public.releases (
+create table if not exists public.distribution_releases (
   id                  uuid primary key default gen_random_uuid(),
   owner_id            uuid not null references auth.users (id) on delete cascade,
   title               text not null default '' check (char_length(title) <= 200),
@@ -29,11 +31,11 @@ create table if not exists public.releases (
   created_at          timestamptz not null default now(),
   updated_at          timestamptz not null default now()
 );
-create index if not exists releases_owner_idx on public.releases (owner_id, updated_at desc);
+create index if not exists distribution_releases_owner_idx on public.distribution_releases (owner_id, updated_at desc);
 
-create table if not exists public.release_tracks (
+create table if not exists public.distribution_release_tracks (
   id               uuid primary key default gen_random_uuid(),
-  release_id       uuid not null references public.releases (id) on delete cascade,
+  release_id       uuid not null references public.distribution_releases (id) on delete cascade,
   position         integer not null check (position between 1 and 100),
   title            text not null default '' check (char_length(title) <= 200),
   version          text check (version is null or char_length(version) <= 100),  -- e.g. "Extended Mix"
@@ -47,21 +49,21 @@ create table if not exists public.release_tracks (
   created_at       timestamptz not null default now(),
   unique (release_id, position)
 );
-create index if not exists release_tracks_release_idx on public.release_tracks (release_id, position);
+create index if not exists distribution_release_tracks_release_idx on public.distribution_release_tracks (release_id, position);
 
-alter table public.releases       enable row level security;
-alter table public.release_tracks enable row level security;
+alter table public.distribution_releases       enable row level security;
+alter table public.distribution_release_tracks enable row level security;
 
 -- Owners can read their own releases and tracks. All writes go through the
 -- server (validated, service key), so there are no insert/update policies.
-drop policy if exists "releases own" on public.releases;
-create policy "releases own" on public.releases
+drop policy if exists "releases own" on public.distribution_releases;
+create policy "releases own" on public.distribution_releases
   for select to authenticated using (owner_id = auth.uid());
 
-drop policy if exists "release tracks own" on public.release_tracks;
-create policy "release tracks own" on public.release_tracks
+drop policy if exists "release tracks own" on public.distribution_release_tracks;
+create policy "release tracks own" on public.distribution_release_tracks
   for select to authenticated using (
-    exists (select 1 from public.releases r where r.id = release_id and r.owner_id = auth.uid())
+    exists (select 1 from public.distribution_releases r where r.id = release_id and r.owner_id = auth.uid())
   );
 
 -- Private bucket for artwork and master audio (50 MB per file on the free plan).
@@ -74,4 +76,4 @@ commit;
 -- Quick check: two rows, rls = true
 select relname as table_name, relrowsecurity as rls
 from pg_class
-where relnamespace = 'public'::regnamespace and relname in ('releases', 'release_tracks');
+where relnamespace = 'public'::regnamespace and relname in ('distribution_releases', 'distribution_release_tracks');

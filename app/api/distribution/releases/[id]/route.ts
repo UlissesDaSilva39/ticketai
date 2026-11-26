@@ -17,9 +17,10 @@ async function load(id: string) {
   if (!user) return { error: NextResponse.json({ error: "Not signed in" }, { status: 401 }) } as const;
   if (!UUID.test(id)) return { error: NextResponse.json({ error: "Release not found" }, { status: 404 }) } as const;
   // RLS: only the owner can read the release.
-  const { data: release } = await supabase.from("releases").select(RELEASE_COLUMNS).eq("id", id).maybeSingle();
+  const { data: release } = await supabase.from("distribution_releases").select(RELEASE_COLUMNS).eq("id", id).maybeSingle();
   if (!release) return { error: NextResponse.json({ error: "Release not found" }, { status: 404 }) } as const;
-  return { user, release: release as ReleaseRow } as const;
+  const row = release as ReleaseRow;
+  return { user, release: { ...row, status: row.status ?? "draft" } } as const;
 }
 
 // GET /api/distribution/releases/<id>: the release, its tracks, checks and an artwork preview link.
@@ -28,7 +29,7 @@ export async function GET(_req: NextRequest, { params }: Ctx) {
   const r = await load(id);
   if ("error" in r) return r.error;
   const admin = createAdminClient();
-  const { data: tracks } = await admin.from("release_tracks").select(TRACK_COLUMNS).eq("release_id", id).order("position");
+  const { data: tracks } = await admin.from("distribution_release_tracks").select(TRACK_COLUMNS).eq("release_id", id).order("position");
   const input = toInput(r.release, (tracks ?? []) as TrackRow[]);
   let artworkUrl: string | null = null;
   if (r.release.artwork_path) {
@@ -63,7 +64,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   const admin = createAdminClient();
 
   const { error } = await admin
-    .from("releases")
+    .from("distribution_releases")
     .update({
       title: input.title,
       primary_artist: input.primaryArtist,
@@ -91,9 +92,9 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   }
 
   // Replace the track list in order.
-  await admin.from("release_tracks").delete().eq("release_id", id);
+  await admin.from("distribution_release_tracks").delete().eq("release_id", id);
   if (input.tracks.length) {
-    const { error: tErr } = await admin.from("release_tracks").insert(
+    const { error: tErr } = await admin.from("distribution_release_tracks").insert(
       input.tracks.map((t, i) => ({
         release_id: id,
         position: i + 1,
@@ -126,9 +127,9 @@ export async function DELETE(_req: NextRequest, { params }: Ctx) {
     return NextResponse.json({ error: "Submitted releases can't be deleted here." }, { status: 409 });
   }
   const admin = createAdminClient();
-  const { data: tracks } = await admin.from("release_tracks").select("audio_path").eq("release_id", id);
+  const { data: tracks } = await admin.from("distribution_release_tracks").select("audio_path").eq("release_id", id);
   const paths = [r.release.artwork_path, ...(tracks ?? []).map((t) => t.audio_path)].filter((p): p is string => !!p);
-  await admin.from("releases").delete().eq("id", id).eq("owner_id", r.user.id);
+  await admin.from("distribution_releases").delete().eq("id", id).eq("owner_id", r.user.id);
   if (paths.length) await admin.storage.from(DISTRIBUTION_BUCKET).remove(paths).catch(() => undefined);
   return NextResponse.json({ deleted: true });
 }

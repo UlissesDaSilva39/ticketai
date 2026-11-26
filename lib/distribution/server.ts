@@ -45,8 +45,8 @@ export const TRACK_COLUMNS = "position, title, version, featured_artists, compos
 
 export function toInput(r: ReleaseRow, tracks: TrackRow[]): ReleaseInput {
   return {
-    title: r.title,
-    primaryArtist: r.primary_artist,
+    title: r.title ?? "",
+    primaryArtist: r.primary_artist ?? "",
     releaseType: isReleaseType(r.release_type) ? r.release_type : "single",
     genre: r.genre,
     language: r.language,
@@ -54,7 +54,7 @@ export function toInput(r: ReleaseRow, tracks: TrackRow[]): ReleaseInput {
     copyrightLine: r.copyright_line,
     releaseDate: r.release_date,
     upc: r.upc,
-    explicit: r.explicit,
+    explicit: !!r.explicit,
     artworkPath: r.artwork_path,
     artworkWidth: r.artwork_width,
     artworkHeight: r.artwork_height,
@@ -62,13 +62,13 @@ export function toInput(r: ReleaseRow, tracks: TrackRow[]): ReleaseInput {
     tracks: [...tracks]
       .sort((a, b) => a.position - b.position)
       .map((t) => ({
-        title: t.title,
+        title: t.title ?? "",
         version: t.version,
         featuredArtists: t.featured_artists,
         composers: t.composers,
         producers: t.producers,
         isrc: t.isrc,
-        explicit: t.explicit,
+        explicit: !!t.explicit,
         audioPath: t.audio_path,
         audioName: t.audio_name,
       })),

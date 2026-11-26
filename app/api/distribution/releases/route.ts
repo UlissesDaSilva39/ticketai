@@ -14,7 +14,7 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
   const { data, error } = await supabase
-    .from("releases")
+    .from("distribution_releases")
     .select("id, title, primary_artist, release_type, release_date, status, updated_at")
     .order("updated_at", { ascending: false })
     .limit(100);
@@ -22,7 +22,7 @@ export async function GET() {
 
   const ids = (data ?? []).map((r) => r.id);
   const { data: tracks } = ids.length
-    ? await supabase.from("release_tracks").select("release_id").in("release_id", ids)
+    ? await supabase.from("distribution_release_tracks").select("release_id").in("release_id", ids)
     : { data: [] as { release_id: string }[] };
   const counts = new Map<string, number>();
   for (const t of tracks ?? []) counts.set(t.release_id, (counts.get(t.release_id) ?? 0) + 1);
@@ -56,7 +56,7 @@ export async function POST() {
   const artist = (profile?.full_name && !profile.full_name.includes("@") ? profile.full_name : profile?.username) ?? "";
 
   const { data, error } = await createAdminClient()
-    .from("releases")
+    .from("distribution_releases")
     .insert({ owner_id: user.id, primary_artist: artist.slice(0, 200), copyright_line: artist ? `${new Date().getFullYear()} ${artist}`.slice(0, 200) : null })
     .select("id")
     .single();
