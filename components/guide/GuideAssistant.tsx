@@ -7,7 +7,7 @@ import { GUIDE_NAME, QUESTIONS, TOUR, WELCOME, type GuideAnswer } from "@/lib/gu
 
 // "Remi": GRID's in-app guide. Opens by itself on a member's first visit (and
 // as a gentle reminder every 7 days) unless they tick "Never remind me again".
-// The round button in the bottom-left corner reopens it any time.
+// The round button in the bottom-right corner reopens it any time.
 
 const KEY_NEVER = "grid:guide:never";
 const KEY_LAST = "grid:guide:lastShown";
@@ -144,7 +144,7 @@ export default function GuideAssistant() {
         aria-expanded={open}
         aria-controls="grid-guide"
         aria-label={open ? `Close ${GUIDE_NAME}, the GRID guide` : `Open ${GUIDE_NAME}, the GRID guide`}
-        className="fixed left-4 bottom-24 z-40 rounded-full shadow-lg ring-2 ring-white dark:ring-zinc-900 hover:scale-105 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500"
+        className="fixed right-4 bottom-24 z-40 rounded-full shadow-lg ring-2 ring-white dark:ring-zinc-900 hover:scale-105 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500"
       >
         <RemiAvatar size={52} />
         {!open && (
@@ -163,7 +163,7 @@ export default function GuideAssistant() {
           role="dialog"
           aria-modal="false"
           aria-labelledby="grid-guide-title"
-          className="fixed z-50 left-4 right-4 bottom-40 sm:right-auto sm:w-[420px] max-h-[70vh] flex flex-col bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-zinc-800 focus:outline-none"
+          className="fixed z-50 left-4 right-4 bottom-40 sm:left-auto sm:w-[420px] max-h-[70vh] flex flex-col bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-zinc-800 focus:outline-none"
         >
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-zinc-800">
