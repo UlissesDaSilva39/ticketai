@@ -30,7 +30,6 @@
         "@ai-sdk/react": "^4.0.162",
         "@ai-sdk/zai": "^3.0.44",
         "@google/generative-ai": "^0.24.1",
-        "@next/swc-win32-x64-msvc": "^16.4.5",
         "@prisma/client": "^5.22.0",
         "@stripe/stripe-js": "^9.16.0",
         "@supabase/ssr": "^0.12.7",
@@ -80,4 +79,3 @@
         "esbuild": true
     }
 }
-

@@ -1,0 +1,50 @@
+# GRID continuous integration.
+# Runs on every pull request and on every push to main or a feature branch:
+# clean install, type check, and a full production build (the same steps
+# Vercel runs). A red ❌ here means the change would break the deploy.
+#
+# Deploying is handled by Vercel's GitHub integration:
+#   - push to main            -> production (the public site)
+#   - any other branch / PR   -> its own preview URL
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: ["**"]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Type check and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Placeholders so the build doesn't need real secrets. Never put real keys here.
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: placeholder
+      SUPABASE_SERVICE_ROLE_KEY: placeholder
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies (clean, from package-lock.json)
+        run: npm ci --no-audit --no-fund
+
+      - name: Type check
+        run: npx tsc --noEmit -p .
+
+      - name: Production build
+        run: npm run build
