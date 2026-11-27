@@ -3,13 +3,14 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Gift, Radio, ShoppingBag } from "lucide-react";
 import { CoinIcon, LiveDot } from "@/components/live/icons";
-import { HOST_SHARE, liveCategoryLabel } from "@/lib/live/catalog";
+import LiveThumb from "@/components/live/LiveThumb";
+import { HOST_SHARE, liveCategoryLabel, snapshotBucket, snapshotUrl } from "@/lib/live/catalog";
 import { displayName } from "@/lib/live/server";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "GRID LIVE | Live music, DJ sets and studio sessions" };
 
-type Row = { id: string; host_id: string; title: string; category: string; status: string; scheduled_for: string | null; started_at: string | null; ended_at: string | null };
+type Row = { id: string; host_id: string; title: string; category: string; provider: "youtube" | "twitch"; provider_ref: string; status: string; scheduled_for: string | null; started_at: string | null; ended_at: string | null };
 
 const card = "bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800";
 
@@ -18,7 +19,7 @@ export default async function LiveHubPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const cols = "id, host_id, title, category, status, scheduled_for, started_at, ended_at";
+  const cols = "id, host_id, title, category, provider, provider_ref, status, scheduled_for, started_at, ended_at";
   const [liveRes, upcomingRes, mineRes] = await Promise.all([
     supabase.from("live_streams").select(cols).eq("status", "live").order("started_at", { ascending: false }).limit(24),
     supabase.from("live_streams").select(cols).eq("status", "scheduled").order("scheduled_for", { ascending: true }).limit(12),
@@ -37,6 +38,7 @@ export default async function LiveHubPage() {
     hostIds.length ? admin.from("profiles").select("id, full_name, username, avatar_url").in("id", hostIds) : Promise.resolve({ data: [] as { id: string; full_name: string | null; username: string | null; avatar_url: string | null }[] }),
     liveIds.length ? admin.from("gift_sends").select("stream_id, coins").in("stream_id", liveIds) : Promise.resolve({ data: [] as { stream_id: string; coins: number }[] }),
   ]);
+  const bucket = snapshotBucket();
   const hostById = new Map((hosts ?? []).map((h) => [h.id, h]));
   const raised = new Map<string, number>();
   for (const g of gifts ?? []) raised.set(g.stream_id, (raised.get(g.stream_id) ?? 0) + g.coins);
@@ -46,7 +48,9 @@ export default async function LiveHubPage() {
     return (
       <li>
         <Link href={`/live/${r.id}`} className={`${card} block overflow-hidden hover:border-emerald-400 transition-colors`}>
-          <div className="relative aspect-video bg-gradient-to-br from-emerald-600 to-zinc-900 flex items-center justify-center text-white">
+          <div className="relative aspect-video bg-gradient-to-br from-emerald-600 to-zinc-900 flex items-center justify-center text-white overflow-hidden">
+            {r.status === "live" && <LiveThumb src={snapshotUrl({ provider: r.provider, ref: r.provider_ref }, bucket)} className="z-10" />}
+            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" aria-hidden="true" />
             {h?.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={h.avatar_url} alt="" className="w-16 h-16 rounded-full object-cover ring-4 ring-white/30" />
@@ -54,15 +58,15 @@ export default async function LiveHubPage() {
               <span className="text-4xl font-bold">{displayName(h)[0]}</span>
             )}
             {r.status === "live" ? (
-              <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-red-600 text-xs font-bold inline-flex items-center gap-1.5"><LiveDot /> LIVE</span>
+              <span className="absolute z-20 top-2 left-2 px-2 py-0.5 rounded bg-red-600 text-xs font-bold inline-flex items-center gap-1.5"><LiveDot /> LIVE</span>
             ) : r.status === "scheduled" ? (
-              <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/60 text-xs font-bold">
+              <span className="absolute z-20 top-2 left-2 px-2 py-0.5 rounded bg-black/60 text-xs font-bold">
                 {r.scheduled_for ? new Date(r.scheduled_for).toLocaleString("en-GB", { weekday: "short", hour: "2-digit", minute: "2-digit" }) : "Soon"}
               </span>
             ) : (
-              <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/60 text-xs font-bold">Ended</span>
+              <span className="absolute z-20 top-2 left-2 px-2 py-0.5 rounded bg-black/60 text-xs font-bold">Ended</span>
             )}
-            {(raised.get(r.id) ?? 0) > 0 && <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur text-xs font-bold inline-flex items-center gap-1"><CoinIcon className="w-3.5 h-3.5" /> {raised.get(r.id)!.toLocaleString("en-GB")}</span>}
+            {(raised.get(r.id) ?? 0) > 0 && <span className="absolute z-20 bottom-2 right-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur text-xs font-bold inline-flex items-center gap-1"><CoinIcon className="w-3.5 h-3.5" /> {raised.get(r.id)!.toLocaleString("en-GB")}</span>}
           </div>
           <div className="p-3">
             <p className="font-bold text-gray-900 dark:text-white truncate">{r.title}</p>
