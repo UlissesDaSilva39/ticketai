@@ -1,5 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
+import CoinsReturn from "@/components/coins/CoinsReturn";
 import Navbar from "@/components/nav/Navbar";
 import GuestNav from "@/components/nav/GuestNav";
 import GuideAssistant from "@/components/guide/GuideAssistant";
@@ -25,6 +26,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       {children}
       {/* In-app guide for logged-in members only */}
       {!bare && me && <GuideAssistant />}
+      {me && <CoinsReturn />}
     </>
   );
 }

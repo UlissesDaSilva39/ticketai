@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import PromoteButton from "@/components/promote/PromoteButton";
+import TipButton from "@/components/coins/TipButton";
 import Link from "next/link";
 import { HeartIcon, ReplyIcon, RocketIcon } from "@/components/MusicIcons";
 import ShareMenu from "./ShareMenu";
@@ -433,6 +434,7 @@ function PostCard({
               label={`Share${post.share_count ? ` (${post.share_count})` : ""}`}
               onShared={countShare}
             />
+            {!isMine && <TipButton targetType="post" targetId={post.id} creatorName={name} />}
             {canBoost && (
               <div className="ml-auto flex items-center gap-2">
                 {confirmBoost ? (
