@@ -80,7 +80,7 @@ const FAQ = [
     q: "How does the free trial work?",
     a: `Your first ${PRO_LIMITS.trialDays} days of Pro or Premium are free. You add a card at checkout, but nothing is charged until the trial ends. Cancel before then and you pay nothing. The trial is for first-time subscribers.`,
   },
-  { q: "How much does it cost after the trial?", a: "Pro is £5 per month and Premium is £15 per month, billed monthly by Stripe. Prices include VAT where applicable." },
+  { q: "How much does it cost after the trial?", a: "Pro is £5 per month and Premium is £15 per month. Pay yearly and get 2 months free: Pro £50 a year, Premium £150 a year. Billed by Stripe; prices include VAT where applicable." },
   { q: "Can I switch between Pro and Premium?", a: "Yes, any time on this page. Stripe adjusts your next invoice for the days left in the month." },
   { q: "Can I cancel anytime?", a: "Yes. Use “Manage subscription” on this page. You keep your plan until the end of the period you've paid for." },
   {
@@ -89,6 +89,11 @@ const FAQ = [
   },
   { q: "Can I get Pro for free?", a: "Yes. Invite 3 friends with your personal link (on your home page). When the third one joins, you get a free month of Pro." },
 ];
+
+const YEARLY = {
+  pro: { price: "£50", was: "£60", perMonth: "£4.17" },
+  premium: { price: "£150", was: "£180", perMonth: "£12.50" },
+} as const;
 
 function fmtDate(iso: string | null | undefined) {
   return iso ? new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
@@ -101,6 +106,8 @@ function ProPageInner() {
   const [error, setError] = useState<string | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<"pro" | "premium" | null>(null);
+  // Yearly is shown first: 2 months free, paid up front.
+  const [billing, setBilling] = useState<"month" | "year">("year");
 
   // Current plan. Falls back to the subscription's plan if an older cached
   // response has no "tier" (that made an active Pro member look Free).
@@ -145,7 +152,7 @@ function ProPageInner() {
       return;
     }
     setBusy(plan);
-    const err = await goToProCheckout(plan);
+    const err = await goToProCheckout(plan, billing);
     if (err) setError(err);
     setBusy(null);
   }
@@ -181,6 +188,7 @@ function ProPageInner() {
   }
 
   const firstTime = !pro?.hadSubscription;
+  const yearly = billing === "year" && !paid;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 py-12 px-4">
@@ -210,7 +218,7 @@ function ProPageInner() {
                 {pro.source === "grant"
                   ? `Free Pro from your invites, until ${fmtDate(pro.until)}.`
                   : pro.trialing
-                    ? `Free trial until ${fmtDate(pro.until)}. ${pro.cancelAtPeriodEnd ? "It won't renew." : `Then ${tier === "premium" ? "£15" : "£5"}/month.`}`
+                    ? `Free trial until ${fmtDate(pro.until)}. ${pro.cancelAtPeriodEnd ? "It won't renew." : "Then your plan renews automatically."}`
                     : pro.cancelAtPeriodEnd
                       ? `Cancelled. Your plan stays on until ${fmtDate(pro.until)}.`
                       : pro.status === "past_due"
@@ -231,6 +239,26 @@ function ProPageInner() {
           )}
         </div>
 
+        {!paid && (
+          <div className="flex justify-center mb-8">
+            <div role="radiogroup" aria-label="Billing" className="inline-flex p-1 rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm">
+              {(["month", "year"] as const).map((b) => (
+                <button
+                  key={b}
+                  type="button"
+                  role="radio"
+                  aria-checked={billing === b}
+                  onClick={() => setBilling(b)}
+                  className={`px-5 py-2 rounded-full text-sm font-bold transition-colors flex items-center gap-2 ${billing === b ? "bg-emerald-600 text-white shadow" : "text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white"}`}
+                >
+                  {b === "month" ? "Monthly" : "Yearly"}
+                  {b === "year" && <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${billing === b ? "bg-white/20" : "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400"}`}>2 MONTHS FREE</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {TIERS.map((t) => {
             const current = t.id === tier;
@@ -245,8 +273,21 @@ function ProPageInner() {
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t.name}</h2>
                 <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">{t.tagline}</p>
                 <div className="my-6">
-                  <span className="text-4xl font-bold text-gray-900 dark:text-white">{t.price}</span>
-                  <span className="text-sm text-gray-500 ml-1">/ {t.id === "free" ? "forever" : "month"}</span>
+                  {t.id !== "free" && yearly ? (
+                    <>
+                      <span className="text-4xl font-bold text-gray-900 dark:text-white">{YEARLY[t.id as "pro" | "premium"].price}</span>
+                      <span className="text-sm text-gray-500 ml-1">/ year</span>
+                      <p className="text-xs mt-1">
+                        <span className="line-through text-gray-400">{YEARLY[t.id as "pro" | "premium"].was}</span>{" "}
+                        <span className="font-bold text-emerald-700 dark:text-emerald-400">Just {YEARLY[t.id as "pro" | "premium"].perMonth}/month, 2 months free</span>
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-4xl font-bold text-gray-900 dark:text-white">{t.price}</span>
+                      <span className="text-sm text-gray-500 ml-1">/ {t.id === "free" ? "forever" : "month"}</span>
+                    </>
+                  )}
                 </div>
                 <ul className="space-y-2 mb-3">
                   {t.features.map((f) => (
@@ -291,7 +332,11 @@ function ProPageInner() {
                   )}
                   {t.id !== "free" && !current && (
                     <p className="text-[11px] text-gray-500 text-center mt-2">
-                      {paid ? "Prorated on your next invoice" : firstTime ? `Card required · ${t.price}/month after the trial` : "Billed monthly · Cancel anytime"}
+                      {paid
+                        ? "Prorated on your next invoice"
+                        : firstTime
+                          ? `Card required · ${yearly ? `${YEARLY[t.id as "pro" | "premium"].price}/year` : `${t.price}/month`} after the trial`
+                          : `Billed ${yearly ? "yearly" : "monthly"} · Cancel anytime`}
                     </p>
                   )}
                 </div>
@@ -330,10 +375,10 @@ function ProPageInner() {
               Switch to {confirming === "premium" ? "Premium" : "Pro"}?
             </h2>
             <p className="mt-2 text-sm text-gray-600 dark:text-zinc-400">
-              {confirming === "premium" ? "£15" : "£5"}/month.{" "}
+              {confirming === "premium" ? "£15/month (or £150/year)" : "£5/month (or £50/year)"}, on your current billing cycle.{" "}
               {pro?.trialing
                 ? `Your free trial continues until ${fmtDate(pro.until)} — nothing is charged before then.`
-                : "Stripe adjusts your next invoice for the rest of this month."}{" "}
+                : "Stripe adjusts your next invoice for the rest of this billing period."}{" "}
               Your saved card is used, so you won&apos;t see a payment page.
             </p>
             <div className="mt-5 flex gap-3">

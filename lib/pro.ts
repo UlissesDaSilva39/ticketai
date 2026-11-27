@@ -6,10 +6,14 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export type Plan = "pro" | "premium";
 export type Tier = "free" | Plan;
 
-export const PLANS: Record<Plan, { name: string; pence: number }> = {
-  pro: { name: "GRID Pro", pence: 500 }, // £5 / month
-  premium: { name: "GRID Premium", pence: 1500 }, // £15 / month
+export const PLANS: Record<Plan, { name: string; pence: number; yearlyPence: number }> = {
+  pro: { name: "GRID Pro", pence: 500, yearlyPence: 5000 }, // £5 / month or £50 / year (2 months free)
+  premium: { name: "GRID Premium", pence: 1500, yearlyPence: 15000 }, // £15 / month or £150 / year
 };
+export type Billing = "month" | "year";
+export const isBilling = (v: unknown): v is Billing => v === "month" || v === "year";
+/** Price in pence for a plan on a billing interval. */
+export const planPrice = (plan: Plan, billing: Billing) => (billing === "year" ? PLANS[plan].yearlyPence : PLANS[plan].pence);
 export const PRO_PRICE_PENCE = PLANS.pro.pence;
 export const PRO_TRIAL_DAYS = 30;
 export const REFERRAL_REWARD_DAYS = 30;
@@ -112,11 +116,13 @@ export async function syncSubscription(sub: Stripe.Subscription, userIdHint?: st
   // Newer Stripe API versions keep the period end on the subscription item.
   const anySub = sub as unknown as {
     current_period_end?: number;
-    items?: { data?: { current_period_end?: number; price?: { unit_amount?: number | null } }[] };
+    items?: { data?: { current_period_end?: number; price?: { unit_amount?: number | null; recurring?: { interval?: string } | null } }[] };
   };
   const periodEnd = anySub.current_period_end ?? anySub.items?.data?.[0]?.current_period_end ?? null;
   // Plan from our metadata, or worked out from the price if metadata is missing.
-  const amount = anySub.items?.data?.[0]?.price?.unit_amount ?? 0;
+  const price = anySub.items?.data?.[0]?.price;
+  // Compare a monthly equivalent so a yearly Pro (£50) isn't mistaken for Premium.
+  const amount = (price?.unit_amount ?? 0) / (price?.recurring?.interval === "year" ? 10 : 1);
   const plan: Plan = isPlan(sub.metadata?.plan) ? (sub.metadata.plan as Plan) : amount >= PLANS.premium.pence ? "premium" : "pro";
 
   const { error } = await admin.from("subscriptions").upsert(

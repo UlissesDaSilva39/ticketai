@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { Gift, Radio, ShoppingBag } from "lucide-react";
 import { CoinIcon, LiveDot } from "@/components/live/icons";
 import LiveThumb from "@/components/live/LiveThumb";
+import { promotedIds } from "@/lib/promote/server";
 import { HOST_SHARE, liveCategoryLabel, snapshotBucket, snapshotUrl } from "@/lib/live/catalog";
 import { displayName } from "@/lib/live/server";
 
@@ -27,7 +28,8 @@ export default async function LiveHubPage() {
   ]);
   if (liveRes.error) return <div className="max-w-3xl mx-auto px-4 py-16 text-center text-gray-600 dark:text-gray-400">GRID LIVE is being set up. Please check back soon.</div>;
 
-  const live = (liveRes.data ?? []) as Row[];
+  const boosted = new Set(await promotedIds("live"));
+  const live = ([...(liveRes.data ?? [])] as Row[]).sort((a, b) => Number(boosted.has(b.id)) - Number(boosted.has(a.id)));
   const upcoming = (upcomingRes.data ?? []) as Row[];
   const mine = (mineRes.data ?? []) as Row[];
   const all = [...live, ...upcoming, ...mine];
@@ -66,6 +68,7 @@ export default async function LiveHubPage() {
             ) : (
               <span className="absolute z-20 top-2 left-2 px-2 py-0.5 rounded bg-black/60 text-xs font-bold">Ended</span>
             )}
+            {r.status === "live" && boosted.has(r.id) && <span className="absolute z-20 top-2 right-2 px-2 py-0.5 rounded bg-black/60 backdrop-blur text-xs font-bold">Promoted</span>}
             {(raised.get(r.id) ?? 0) > 0 && <span className="absolute z-20 bottom-2 right-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur text-xs font-bold inline-flex items-center gap-1"><CoinIcon className="w-3.5 h-3.5" /> {raised.get(r.id)!.toLocaleString("en-GB")}</span>}
           </div>
           <div className="p-3">

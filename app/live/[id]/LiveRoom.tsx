@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CalendarClock, ExternalLink, Gift as GiftGlyph, MessageCircle, Pin, Radio, Share2, ShoppingBag, Square, Target, Trophy, Wallet, X } from "lucide-react";
 import { CoinIcon, GiftIcon, LiveDot } from "@/components/live/icons";
+import PromoteButton from "@/components/promote/PromoteButton";
 import { COIN_PACKS, GIFTS, HOST_SHARE, coinsLabel, formatGbp, giftById, liveCategoryLabel, playerSrc, watchUrl } from "@/lib/live/catalog";
 
 type Stream = {
@@ -342,6 +343,7 @@ export default function LiveRoom({
                   </button>
                 )}
                 <Link href="/seller" className={btnGhost}><Wallet className="w-4 h-4" aria-hidden="true" /> My earnings</Link>
+                {status !== "ended" && <PromoteButton kind="live" refId={stream.id} label="Promote this live" className={btnPrimary} />}
               </div>
             </div>
           )}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
+import { promotedIds } from "@/lib/promote/server";
 import { DOWNLOADABLE, MAX_PRICE_PENCE, MIN_PRICE_PENCE, isKind } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
@@ -25,12 +26,27 @@ export async function GET(req: NextRequest) {
     .order("created_at", { ascending: false })
     .limit(60);
   if (isKind(kind)) q = q.eq("kind", kind);
-  const { data: rows, error } = await q;
+  const { data: newest, error } = await q;
   if (error) {
     // Table not created yet (migration not applied): show an empty marketplace.
     console.error("[marketplace/listings]", error.message);
     return NextResponse.json({ listings: [], setupPending: true });
   }
+
+  // Paid promotions ("GRID Boost") go first, with a Promoted label.
+  const boosted = await promotedIds("listing");
+  let promotedRows: NonNullable<typeof newest> = [];
+  if (boosted.length) {
+    let pq = supabase
+      .from("marketplace_listings")
+      .select("id, seller_id, kind, title, description, price_pence, pay_what_you_want, cover_url, sales_count, created_at")
+      .eq("status", "active")
+      .in("id", boosted);
+    if (isKind(kind)) pq = pq.eq("kind", kind);
+    promotedRows = (await pq).data ?? [];
+  }
+  const promotedSet = new Set(promotedRows.map((r) => r.id));
+  const rows = [...promotedRows, ...(newest ?? []).filter((r) => !promotedSet.has(r.id))];
 
   const sellerIds = [...new Set((rows ?? []).map((r) => r.seller_id))];
   const { data: sellers } = sellerIds.length
@@ -66,6 +82,7 @@ export async function GET(req: NextRequest) {
         createdAt: r.created_at,
         seller: { id: r.seller_id, name: nameOf(s), username: s?.username ?? null },
         mine: user?.id === r.seller_id,
+        promoted: promotedSet.has(r.id),
         owned: owned.has(r.id),
         orderId: orderByListing.get(r.id) ?? null,
         downloadable: (DOWNLOADABLE as string[]).includes(r.kind),

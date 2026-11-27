@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { promotedIds } from "@/lib/promote/server";
 
 export const dynamic = "force-dynamic";
 
@@ -19,13 +20,17 @@ export async function GET() {
   ]);
   const skip = new Set<string>([user.id, ...(follows ?? []).map((f) => f.target_id as string)]);
 
-  const { data: candidates } = await supabase
-    .from("profiles")
-    .select("id, full_name, username, avatar_url, role, genre, city")
-    .eq("is_public", true)
-    .not("username", "is", null)
-    .order("created_at", { ascending: false })
-    .limit(60);
+  const cols = "id, full_name, username, avatar_url, role, genre, city";
+  // Paid profile promotions ("GRID Boost") are suggested first, with a Promoted label.
+  const boostedIds = (await promotedIds("profile")).filter((id) => !skip.has(id));
+  const [{ data: newest }, { data: boostedProfiles }] = await Promise.all([
+    supabase.from("profiles").select(cols).eq("is_public", true).not("username", "is", null).order("created_at", { ascending: false }).limit(60),
+    boostedIds.length
+      ? createAdminClient().from("profiles").select(cols).in("id", boostedIds).eq("is_public", true).not("username", "is", null)
+      : Promise.resolve({ data: [] as never[] }),
+  ]);
+  const boosted = new Set((boostedProfiles ?? []).map((p) => p.id));
+  const candidates = [...(boostedProfiles ?? []), ...(newest ?? []).filter((p) => !boosted.has(p.id))];
 
   // Premium perk: Premium members are suggested first.
   const candidateIds = (candidates ?? []).map((p) => p.id);
@@ -35,6 +40,7 @@ export async function GET() {
   const premium = new Set((premiumSubs ?? []).map((s) => s.user_id));
 
   const score = (p: { id: string; role: string | null; city: string | null; genre: string | null; avatar_url: string | null }) =>
+    (boosted.has(p.id) ? 100 : 0) +
     (premium.has(p.id) ? 6 : 0) +
     (p.role === "artist" ? 4 : 0) +
     (me?.city && p.city && p.city.toLowerCase() === me.city.toLowerCase() ? 2 : 0) +
@@ -52,6 +58,7 @@ export async function GET() {
       avatar: p.avatar_url,
       role: p.role,
       genre: p.genre,
+      promoted: boosted.has(p.id),
     }));
 
   return NextResponse.json({ people });

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { ensurePlanProduct, getProStatus, isPlan, PLANS, PRO_TRIAL_DAYS, type Plan } from "@/lib/pro";
+import { ensurePlanProduct, getProStatus, isBilling, isPlan, planPrice, PRO_TRIAL_DAYS, type Billing, type Plan } from "@/lib/pro";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
@@ -20,8 +20,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Too many attempts. Try again later." }, { status: 429 });
   }
 
-  const { plan: rawPlan } = await req.json().catch(() => ({}));
+  const { plan: rawPlan, billing: rawBilling } = await req.json().catch(() => ({}));
   const plan: Plan = isPlan(rawPlan) ? rawPlan : "pro";
+  const billing: Billing = isBilling(rawBilling) ? rawBilling : "month";
 
   const pro = await getProStatus(user.id);
   if (pro.active && pro.source === "subscription") {
@@ -52,20 +53,20 @@ export async function POST(req: NextRequest) {
         quantity: 1,
         price_data: {
           currency: "gbp",
-          unit_amount: PLANS[plan].pence,
-          recurring: { interval: "month" },
+          unit_amount: planPrice(plan, billing),
+          recurring: { interval: billing },
           product: await ensurePlanProduct(plan),
         },
       },
     ],
     subscription_data: {
-      metadata: { type: "pro", plan, user_id: user.id },
+      metadata: { type: "pro", plan, billing, user_id: user.id },
       // Free trial only the first time someone subscribes.
       ...(pro.hadSubscription ? {} : { trial_period_days: PRO_TRIAL_DAYS }),
     },
     payment_method_collection: "always",
     allow_promotion_codes: true,
-    metadata: { type: "pro", plan, user_id: user.id },
+    metadata: { type: "pro", plan, billing, user_id: user.id },
     success_url: `${origin}/pro?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/pro?checkout=cancelled`,
   });

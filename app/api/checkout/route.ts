@@ -1,4 +1,5 @@
  import { createClient as createAdminClient } from "@supabase/supabase-js";
+import { ticketBookingFee } from "@/lib/fees";
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
@@ -127,7 +128,14 @@ export async function POST(req: NextRequest) {
       : 0;
 
     const discountedSubtotal = Math.max(0, subtotal - discountAmount);
-    const processingFee = discountedSubtotal * 0.029;
+    // GRID booking fee, charged as its own line so the buyer pays what the checkout page shows.
+    const processingFee = ticketBookingFee(discountedSubtotal);
+    if (processingFee > 0) {
+      lineItems.push({
+        price_data: { currency: "gbp", product_data: { name: "GRID booking fee" }, unit_amount: Math.round(processingFee * 100) },
+        quantity: 1,
+      });
+    }
     const platformFee = discountedSubtotal * 0.02;
 
     // Apply discount via a Stripe coupon (Stripe rejects negative

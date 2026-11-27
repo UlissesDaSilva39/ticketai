@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { ensurePlanProduct, getProStatus, isPlan, PLANS, syncSubscription } from "@/lib/pro";
+import { ensurePlanProduct, getProStatus, isPlan, planPrice, syncSubscription } from "@/lib/pro";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
       items: [
         {
           id: item.id,
-          price_data: { currency: "gbp", unit_amount: PLANS[plan].pence, recurring: { interval: "month" }, product: await ensurePlanProduct(plan) },
+          // Keep the member on the same billing interval (monthly or yearly).
+          price_data: { currency: "gbp", unit_amount: planPrice(plan, item.price?.recurring?.interval === "year" ? "year" : "month"), recurring: { interval: item.price?.recurring?.interval === "year" ? "year" : "month" }, product: await ensurePlanProduct(plan) },
         },
       ],
       proration_behavior: "create_prorations",

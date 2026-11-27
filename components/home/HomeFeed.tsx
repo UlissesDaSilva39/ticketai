@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import PromoteButton from "@/components/promote/PromoteButton";
 import Link from "next/link";
 import { HeartIcon, ReplyIcon, RocketIcon } from "@/components/MusicIcons";
 import ShareMenu from "./ShareMenu";
@@ -455,6 +456,11 @@ function PostCard({
                     <RocketIcon className="w-3.5 h-3.5" /> {boosting ? "Boosting…" : "Boost post"}
                   </button>
                 )}
+              </div>
+            )}
+            {isMine && !post.boosted && (!canBoost || !!boostNote) && (
+              <div className="ml-auto">
+                <PromoteButton kind="post" refId={post.id} label="Promote" />
               </div>
             )}
           </div>
