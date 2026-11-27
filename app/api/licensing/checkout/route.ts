@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sellerFeeRate, feePercentLabel } from "@/lib/fees";
+import { getTier } from "@/lib/pro";
 import { stripe } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -56,7 +58,9 @@ export async function POST(req: NextRequest) {
 
   const amount = pricesOf(listing)[licenceType];
   if (!amount) return NextResponse.json({ error: "That licence type isn't offered for this track." }, { status: 400 });
-  const fee = gridFeeFor(amount);
+  // Premium licensors pay a lower GRID fee (the buyer pays less too).
+  const feeRate = sellerFeeRate(await getTier(listing.owner_id));
+  const fee = gridFeeFor(amount, feeRate);
 
   const { data: owner } = await admin.from("profiles").select("full_name, username").eq("id", listing.owner_id).maybeSingle();
   const agreementText = buildAgreement({
@@ -71,6 +75,7 @@ export async function POST(req: NextRequest) {
     projectTitle,
     licenceFeePence: amount,
     effectiveDate: todayUtc(),
+    feeRate,
   });
 
   const { data: deal, error } = await admin
@@ -114,7 +119,7 @@ export async function POST(req: NextRequest) {
             product_data: { name: `${info.name}: "${listing.track_title}" by ${listing.artist_name}`, description: `Project: ${projectTitle}` },
           },
         },
-        ...(fee > 0 ? [{ quantity: 1, price_data: { currency: "gbp", unit_amount: fee, product_data: { name: "GRID fee (10%)" } } }] : []),
+        ...(fee > 0 ? [{ quantity: 1, price_data: { currency: "gbp", unit_amount: fee, product_data: { name: `GRID fee (${feePercentLabel(feeRate)})` } } }] : []),
       ],
       metadata: { type: "licence", deal_id: deal.id, listing_id: listing.id, user_id: user.id },
       payment_intent_data: { metadata: { type: "licence", deal_id: deal.id } },

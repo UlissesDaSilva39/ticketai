@@ -67,6 +67,7 @@ const TIERS: {
       "Everything in Pro",
       "Unlimited messaging",
       "1 post Boost every month (pinned at the top of the feed for 24h)",
+      "Half the selling fee: 5% instead of 10% on Marketplace and Licensing sales",
       "Priority placement in matches and suggestions",
       "See who viewed your profile",
       "Premium badge on your profile and posts",

@@ -41,7 +41,7 @@ export default function InviteCard() {
   const unlocked = !!invite && invite.joined >= invite.goal;
 
   return (
-    <section aria-label="Invite friends" className="rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm text-neutral-900 dark:text-white">
+    <section id="invite" aria-label="Invite friends" className="scroll-mt-24 rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm text-neutral-900 dark:text-white">
       <h3 className="font-semibold">Grow your network</h3>
       <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
         Invite a vocalist, producer or venue. {invite ? `${invite.goal} friends who join = 1 free month of GRID Pro.` : ""}

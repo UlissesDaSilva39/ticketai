@@ -3,12 +3,14 @@ import { stripe } from "@/lib/stripe";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
-import { MAX_PRICE_PENCE, feeFor } from "@/lib/marketplace";
+import { MAX_PRICE_PENCE } from "@/lib/marketplace";
+import { sellerFeeRate, feePercentLabel } from "@/lib/fees";
+import { getTier } from "@/lib/pro";
 
 export const dynamic = "force-dynamic";
 
 // POST /api/marketplace/checkout { listingId, pricePence? }
-// Creates a pending order and a Stripe Checkout session (item + 10% GRID fee).
+// Creates a pending order and a Stripe Checkout session (item + GRID fee: 10%, or 5% for Premium sellers).
 export async function POST(req: NextRequest) {
   const supabase = await createServerSupabase();
   const {
@@ -42,7 +44,9 @@ export async function POST(req: NextRequest) {
     if (chosen > MAX_PRICE_PENCE) return NextResponse.json({ error: "That price is too high." }, { status: 400 });
     amount = chosen;
   }
-  const fee = feeFor(amount);
+  // Premium sellers pay a lower GRID fee (the buyer pays less too).
+  const feeRate = sellerFeeRate(await getTier(listing.seller_id));
+  const fee = Math.round(amount * feeRate);
 
   const { data: order, error } = await admin
     .from("marketplace_orders")
@@ -65,7 +69,7 @@ export async function POST(req: NextRequest) {
       customer_email: user.email ?? undefined,
       line_items: [
         { quantity: 1, price_data: { currency: "gbp", unit_amount: amount, product_data: { name: listing.title } } },
-        { quantity: 1, price_data: { currency: "gbp", unit_amount: fee, product_data: { name: "GRID fee (10%)" } } },
+        { quantity: 1, price_data: { currency: "gbp", unit_amount: fee, product_data: { name: `GRID fee (${feePercentLabel(feeRate)})` } } },
       ].filter((l) => l.price_data.unit_amount > 0),
       ...(listing.kind === "merch" ? { shipping_address_collection: { allowed_countries: ["GB", "IE", "US", "CA", "AU", "DE", "FR", "ES", "IT", "NL"] } } : {}),
       metadata: { type: "marketplace", order_id: order.id, listing_id: listing.id, user_id: user.id, ...(liveStreamId ? { live_stream_id: liveStreamId } : {}) },

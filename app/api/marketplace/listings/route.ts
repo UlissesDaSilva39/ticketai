@@ -3,6 +3,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 import { promotedIds } from "@/lib/promote/server";
+import { sellerFeeRate } from "@/lib/fees";
 import { DOWNLOADABLE, MAX_PRICE_PENCE, MIN_PRICE_PENCE, isKind } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
@@ -53,6 +54,11 @@ export async function GET(req: NextRequest) {
     ? await supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", sellerIds)
     : { data: [] as { id: string; full_name: string | null; username: string | null; avatar_url: string | null }[] };
   const sellerById = new Map((sellers ?? []).map((s) => [s.id, s]));
+  // Premium sellers have a lower GRID fee (5% instead of 10%).
+  const { data: premiumSubs } = sellerIds.length
+    ? await createAdminClient().from("subscriptions").select("user_id").in("user_id", sellerIds).eq("plan", "premium").in("status", ["trialing", "active", "past_due"])
+    : { data: [] as { user_id: string }[] };
+  const premiumSellers = new Set((premiumSubs ?? []).map((s) => s.user_id));
 
   let owned = new Set<string>();
   let orderByListing = new Map<string, string>();
@@ -83,6 +89,7 @@ export async function GET(req: NextRequest) {
         seller: { id: r.seller_id, name: nameOf(s), username: s?.username ?? null },
         mine: user?.id === r.seller_id,
         promoted: promotedSet.has(r.id),
+        feeRate: sellerFeeRate(premiumSellers.has(r.seller_id) ? "premium" : null),
         owned: owned.has(r.id),
         orderId: orderByListing.get(r.id) ?? null,
         downloadable: (DOWNLOADABLE as string[]).includes(r.kind),

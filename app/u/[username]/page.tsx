@@ -4,6 +4,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { EventCard } from "@/components/EventCard";
 import FriendButton from "@/components/FriendButton";
 import MessageButton from "@/components/MessageButton";
+import TipButton from "@/components/coins/TipButton";
+import PromoteButton from "@/components/promote/PromoteButton";
+import { Crown } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Event } from "@/lib/types";
@@ -28,6 +31,11 @@ export default async function PublicProfilePage({
 
   // Private profiles are only visible to their owner.
   if (!profile || (!profile.is_public && profile.id !== user?.id)) return notFound();
+
+  // Backstage (fan memberships): show "Join" when the artist has opened it.
+  const { data: backstageTiers } = await createAdminClient().from("backstage_tiers").select("price_pence").eq("artist_id", profile.id).eq("active", true);
+  const backstageFrom = backstageTiers?.length ? Math.min(...backstageTiers.map((t) => t.price_pence)) : null;
+  const displayName = profile.full_name && !profile.full_name.includes("@") ? profile.full_name : profile.username;
 
   const isOwnProfile = user?.id === profile.id;
 
@@ -121,6 +129,12 @@ export default async function PublicProfilePage({
                 }
               />
               <MessageButton otherUserId={profile.id} />
+              {backstageFrom !== null && (
+                <Link href={`/backstage/${profile.username}`} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
+                  <Crown className="w-4 h-4" aria-hidden="true" /> Join Backstage · from £{(backstageFrom / 100).toFixed(0)}/mo
+                </Link>
+              )}
+              <TipButton targetType="profile" targetId={profile.id} creatorName={displayName ?? "this artist"} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold border border-emerald-600 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors" />
             </div>
           )}
           {isOwnProfile && (
@@ -130,6 +144,14 @@ export default async function PublicProfilePage({
             >
               Edit Profile
             </Link>
+          )}
+          {isOwnProfile && (
+            <div className="flex flex-wrap gap-3 mt-3">
+              <PromoteButton kind="profile" refId={profile.id} label="Boost my profile" />
+              <Link href="/backstage" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-bold border border-emerald-600 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">
+                <Crown className="w-4 h-4" aria-hidden="true" /> {backstageFrom !== null ? "Manage Backstage" : "Start Backstage"}
+              </Link>
+            </div>
           )}
         </div>
       </div>

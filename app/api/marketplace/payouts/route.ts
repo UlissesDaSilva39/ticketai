@@ -3,6 +3,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
 import { MIN_PAYOUT_PENCE, sellerBalance } from "@/lib/marketplace-seller";
+import { getPayoutAccount, payWithStripe } from "@/lib/payouts";
 
 export const dynamic = "force-dynamic";
 
@@ -36,5 +37,14 @@ export async function POST() {
     console.error("[marketplace/payouts]", error?.message);
     return NextResponse.json({ error: "Withdrawals aren't available yet. Please try again later." }, { status: 500 });
   }
-  return NextResponse.json({ payout: data });
+  // Bank connected with Stripe: pay straight away. Otherwise GRID pays it by hand.
+  const acc = await getPayoutAccount(user.id);
+  if (acc?.payouts_enabled) {
+    const paid = await payWithStripe(data.id);
+    if (paid.ok) {
+      const { data: fresh } = await admin.from("marketplace_payouts").select("id, amount_pence, status, created_at, paid_at").eq("id", data.id).maybeSingle();
+      return NextResponse.json({ payout: fresh ?? data, instant: true });
+    }
+  }
+  return NextResponse.json({ payout: data, instant: false });
 }

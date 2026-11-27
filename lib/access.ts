@@ -50,6 +50,8 @@ const PUBLIC_PATTERNS: RegExp[] = [
   new RegExp(`^/licensing/deal/${SEG}$`),
   // GRID LIVE rooms (shared links; chatting and gifting still need login)
   new RegExp(`^/live/[0-9a-f-]{36}$`),
+  // Backstage join pages (joining and reading posts still need login)
+  new RegExp(`^/backstage/${SEG}$`),
   // other shareable links
   new RegExp(`^/smart/${SEG}$`),
   new RegExp(`^/share/analytics/${SEG}$`),

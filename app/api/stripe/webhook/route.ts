@@ -8,6 +8,8 @@ import { handleLicenceEvent } from "@/lib/licensing/server";
 import { handleCoinsEvent } from "@/lib/live/server";
 import { handlePromotionEvent } from "@/lib/promote/server";
 import { handleAdEvent } from "@/lib/ads/server";
+import { handleSubmissionEvent } from "@/lib/submissions/server";
+import { handleBackstageEvent } from "@/lib/backstage/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -42,6 +44,9 @@ export async function POST(req: NextRequest) {
     // Paid promotions ("Boost anything") and self-serve ad campaigns.
     if (await handlePromotionEvent(event)) return NextResponse.json({ received: true });
     if (await handleAdEvent(event)) return NextResponse.json({ received: true });
+    // Paid demos / priority messages and Backstage fan memberships.
+    if (await handleSubmissionEvent(event)) return NextResponse.json({ received: true });
+    if (await handleBackstageEvent(event)) return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Pro billing webhook failed:", err);
     return NextResponse.json({ error: "Pro billing failed" }, { status: 500 });
