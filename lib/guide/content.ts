@@ -60,6 +60,16 @@ export const QUESTIONS: GuideAnswer[] = [
     links: [{ label: "Start a release", href: "/distribution" }],
   },
   {
+    id: "live",
+    question: "How do I earn from live streams?",
+    answer:
+      "Go live on YouTube or Twitch and open a GRID LIVE room around it. Fans chat, send gifts (you keep 70%) and buy your pinned merch, beats, licences or tickets without leaving the stream. Set a goal to get them gifting together.",
+    links: [
+      { label: "Go live", href: "/live/new" },
+      { label: "See who's live", href: "/live" },
+    ],
+  },
+  {
     id: "pro",
     question: "What does GRID Pro add?",
     answer:

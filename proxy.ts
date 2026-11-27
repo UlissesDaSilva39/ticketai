@@ -30,7 +30,7 @@ const CSP = [
   "img-src 'self' data: blob: https:",
   "media-src 'self' blob: https:",
   `connect-src 'self' ${SUPABASE_URL} ${SUPABASE_WS} https://api.stripe.com${IS_PROD ? "" : " ws: wss:"}`,
-  "frame-src https://open.spotify.com https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://js.stripe.com https://hooks.stripe.com",
+  "frame-src https://open.spotify.com https://www.youtube.com https://www.youtube-nocookie.com https://player.twitch.tv https://w.soundcloud.com https://js.stripe.com https://hooks.stripe.com",
   "frame-ancestors 'none'",
   "object-src 'none'",
   "base-uri 'self'",
