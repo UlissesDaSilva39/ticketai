@@ -3,7 +3,8 @@
 // Admin index: each page below checks that the visitor is an admin.
 const LINKS = [
   { href: "/admin/ads", title: "Ad review", text: "Approve or reject paid ads (rejecting refunds them)." },
-  { href: "/admin/payouts", title: "Payouts", text: "Seller payout requests." },
+  { href: "/admin/withdrawals", title: "Withdrawals", text: "Pay members who asked to withdraw their earnings." },
+  { href: "/admin/payouts", title: "Promoter payouts", text: "Promoter commission payouts." },
   { href: "/admin/featured", title: "Featured", text: "Featured content." },
   { href: "/admin/curators", title: "Curators", text: "Playlist curators." },
   { href: "/admin/claims", title: "Claims", text: "Profile claims." },

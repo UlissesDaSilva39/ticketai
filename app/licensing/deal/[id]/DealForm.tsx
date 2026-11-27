@@ -28,6 +28,7 @@ type Listing = {
   prices: ListingPrices;
   dealsCount: number;
   active: boolean;
+  feeRate: number;
 };
 
 const CheckIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
@@ -59,7 +60,7 @@ export default function DealForm({
   const [error, setError] = useState("");
 
   const amount = type ? listing.prices[type] ?? 0 : 0;
-  const fee = gridFeeFor(amount);
+  const fee = gridFeeFor(amount, listing.feeRate);
   const total = amount + fee;
 
   const agreement = useMemo(
@@ -77,6 +78,7 @@ export default function DealForm({
             projectTitle: projectTitle.trim() || "[your project]",
             licenceFeePence: amount,
             effectiveDate: todayUtc(),
+            feeRate: listing.feeRate,
           })
         : "",
     [type, listing, licensorName, legalName, projectTitle, amount]
@@ -266,7 +268,7 @@ export default function DealForm({
             <dd className="text-gray-900 dark:text-white">{formatGbp(amount)}</dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-gray-500">GRID fee (10%)</dt>
+            <dt className="text-gray-500">GRID fee ({Math.round(listing.feeRate * 100)}%)</dt>
             <dd className="text-gray-900 dark:text-white">{formatGbp(fee)}</dd>
           </div>
           <div className="flex justify-between gap-4 text-base pt-1">

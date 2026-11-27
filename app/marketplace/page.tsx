@@ -28,6 +28,7 @@ type Listing = {
   seller: { id: string; name: string; username: string | null };
   mine: boolean;
   promoted?: boolean;
+  feeRate?: number;
   owned: boolean;
   orderId: string | null;
   downloadable: boolean;
@@ -117,7 +118,8 @@ function Marketplace() {
   };
 
   const finalPence = selectedProduct ? (pricingMode === "fixed" ? selectedProduct.pricePence : Math.round(customPrice * 100)) : 0;
-  const feePence = Math.round(finalPence * FEE_RATE);
+  const feeRate = selectedProduct?.feeRate ?? FEE_RATE;
+  const feePence = Math.round(finalPence * feeRate);
   const totalPence = finalPence + feePence;
   const belowMinimum = !!selectedProduct && finalPence < selectedProduct.pricePence;
 
@@ -247,8 +249,8 @@ function Marketplace() {
                       <p className="text-[10px] text-gray-500">Listed {new Date(p.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] text-gray-400 uppercase font-semibold">GRID Fee (10%)</p>
-                      <p className="text-xs text-gray-500">{gbp(Math.round(p.pricePence * FEE_RATE))}</p>
+                      <p className="text-[10px] text-gray-400 uppercase font-semibold">GRID Fee ({Math.round((p.feeRate ?? FEE_RATE) * 100)}%)</p>
+                      <p className="text-xs text-gray-500">{gbp(Math.round(p.pricePence * (p.feeRate ?? FEE_RATE)))}</p>
                     </div>
                   </div>
                   {p.mine ? (
@@ -368,7 +370,7 @@ function Marketplace() {
                     <span>Item price:</span><span>{gbp(finalPence)}</span>
                   </div>
                   <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-                    <span>GRID Fee (10%):</span><span>{gbp(feePence)}</span>
+                    <span>GRID Fee ({Math.round(feeRate * 100)}%):</span><span>{gbp(feePence)}</span>
                   </div>
                   <div className="flex justify-between text-sm font-bold text-gray-900 dark:text-white pt-2 border-t border-gray-200 dark:border-zinc-700">
                     <span>Total:</span><span>{gbp(totalPence)}</span>

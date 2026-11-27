@@ -20,7 +20,8 @@ import { useMe, displayName, initials, roleLabel, compactNumber, type MeProfile 
 import ProBadge from "@/components/ProBadge";
 import { LiveNowStrip, LiveSidebarLink } from "@/components/home/LiveNow";
 import SponsoredCard from "@/components/ads/SponsoredCard";
-import { Rocket } from "lucide-react";
+import StartEarning from "@/components/home/StartEarning";
+import { Rocket, Wallet } from "lucide-react";
 
 const NAV_LINK = "flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-emerald-50/70 dark:hover:bg-zinc-800 transition-colors group";
 
@@ -146,6 +147,7 @@ export default function HomePage() {
               {me && <ProfileStrength items={profileStrengthItems(me.profile)} />}
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <li><LiveSidebarLink className={NAV_LINK} /></li>
+                <li><Link href="/earnings" className={NAV_LINK}><Wallet className="w-5 h-5 text-emerald-600" aria-hidden="true" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Earnings</span></Link></li>
                 <li><Link href="/boost" className={NAV_LINK}><Rocket className="w-5 h-5 text-emerald-600" aria-hidden="true" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Boost</span></Link></li>
                 <li><Link href="/marketplace" className={NAV_LINK}><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Marketplace</span></Link></li>
                 <li><Link href="/saved" className={NAV_LINK}><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Saved Items</span></Link></li>
@@ -164,6 +166,9 @@ export default function HomePage() {
           
           {/* STORIES */}
           <GridStories myName={myName} myAvatar={me?.profile.avatar_url ?? null} />
+
+          {/* "Start earning" checklist (hidden once complete or dismissed) */}
+          <StartEarning />
 
           {/* Who's live right now (GRID LIVE) */}
           <LiveNowStrip />

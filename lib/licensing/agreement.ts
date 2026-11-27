@@ -14,7 +14,7 @@ export const isLicenceType = (v: unknown): v is LicenceType =>
   typeof v === "string" && (LICENCE_TYPES as readonly string[]).includes(v);
 
 export const GRID_FEE_RATE = 0.1;
-export const gridFeeFor = (pence: number) => Math.round(pence * GRID_FEE_RATE);
+export const gridFeeFor = (pence: number, rate: number = GRID_FEE_RATE) => Math.round(pence * rate);
 export const formatGbp = (pence: number) => `£${(pence / 100).toFixed(2)}`;
 
 type LicenceInfo = {
@@ -66,14 +66,16 @@ export type AgreementInput = {
   projectTitle: string;
   licenceFeePence: number;
   effectiveDate: string; // YYYY-MM-DD
+  /** GRID fee rate (10%, or 5% when the licensor has Premium). */
+  feeRate?: number;
 };
 
 /** The full agreement text. Plain text so it can be hashed and stored exactly. */
 export function buildAgreement(a: AgreementInput): string {
   const t = LICENCE_INFO[a.licenceType];
   const fee = formatGbp(a.licenceFeePence);
-  const gridFee = formatGbp(gridFeeFor(a.licenceFeePence));
-  const total = formatGbp(a.licenceFeePence + gridFeeFor(a.licenceFeePence));
+  const gridFee = formatGbp(gridFeeFor(a.licenceFeePence, a.feeRate));
+  const total = formatGbp(a.licenceFeePence + gridFeeFor(a.licenceFeePence, a.feeRate));
   const work = `"${a.trackTitle}" by ${a.artistName}${a.isrc ? ` (ISRC ${a.isrc})` : ""}`;
 
   return `GRID STANDARD MUSIC LICENCE (${AGREEMENT_VERSION})

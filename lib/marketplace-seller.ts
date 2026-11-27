@@ -14,8 +14,12 @@ export type SellerBalance = {
   thisMonthPence: number;
   lastMonthPence: number;
   payouts: { id: string; amount_pence: number; status: string; created_at: string; paid_at: string | null }[];
-  orders: { id: string; listing_id: string; amount_pence: number; paid_at: string | null }[];
+  orders: { id: string; listing_id: string; amount_pence: number; paid_at: string | null; source?: IncomeSource }[];
+  /** Lifetime earnings by where they came from. */
+  bySource: Record<IncomeSource, number>;
 };
+
+export type IncomeSource = "marketplace" | "licensing" | "live" | "reviews" | "tips" | "backstage";
 
 export async function sellerBalance(db: SupabaseClient, sellerId: string): Promise<SellerBalance> {
   const [{ data: orders }, payoutsRes, licencesRes, giftsRes, repliesRes, tipsRes, backstageRes] = await Promise.all([
@@ -33,14 +37,21 @@ export async function sellerBalance(db: SupabaseClient, sellerId: string): Promi
     db.from("backstage_payments").select("id, artist_earn_pence, paid_at").eq("artist_id", sellerId),
   ]);
   const extra = [
-    ...(repliesRes.error ? [] : (repliesRes.data ?? []).map((r) => ({ id: r.id, listing_id: "submission", amount_pence: r.reviewer_earn_pence, paid_at: r.replied_at }))),
-    ...(tipsRes.error ? [] : (tipsRes.data ?? []).map((t) => ({ id: t.id, listing_id: t.target_id, amount_pence: t.creator_earn_pence, paid_at: t.created_at }))),
-    ...(backstageRes.error ? [] : (backstageRes.data ?? []).map((b) => ({ id: b.id, listing_id: "backstage", amount_pence: b.artist_earn_pence, paid_at: b.paid_at }))),
+    ...(repliesRes.error ? [] : (repliesRes.data ?? []).map((r) => ({ id: r.id, listing_id: "submission", amount_pence: r.reviewer_earn_pence, paid_at: r.replied_at, source: "reviews" as const }))),
+    ...(tipsRes.error ? [] : (tipsRes.data ?? []).map((t) => ({ id: t.id, listing_id: t.target_id, amount_pence: t.creator_earn_pence, paid_at: t.created_at, source: "tips" as const }))),
+    ...(backstageRes.error ? [] : (backstageRes.data ?? []).map((b) => ({ id: b.id, listing_id: "backstage", amount_pence: b.artist_earn_pence, paid_at: b.paid_at, source: "backstage" as const }))),
   ];
   const gifts = giftsRes.error
     ? []
-    : (giftsRes.data ?? []).map((g) => ({ id: g.id, listing_id: g.stream_id, amount_pence: g.host_earn_pence, paid_at: g.created_at }));
-  const paid = [...(orders ?? []), ...(licencesRes.error ? [] : licencesRes.data ?? []), ...gifts, ...extra];
+    : (giftsRes.data ?? []).map((g) => ({ id: g.id, listing_id: g.stream_id, amount_pence: g.host_earn_pence, paid_at: g.created_at, source: "live" as const }));
+  const paid = [
+    ...(orders ?? []).map((o) => ({ ...o, source: "marketplace" as const })),
+    ...(licencesRes.error ? [] : licencesRes.data ?? []).map((o) => ({ ...o, source: "licensing" as const })),
+    ...gifts,
+    ...extra,
+  ];
+  const bySource: Record<IncomeSource, number> = { marketplace: 0, licensing: 0, live: 0, reviews: 0, tips: 0, backstage: 0 };
+  for (const o of paid) bySource[o.source] += o.amount_pence;
   const payouts = payoutsRes.error ? [] : payoutsRes.data ?? [];
 
   const now = Date.now();
@@ -65,5 +76,6 @@ export async function sellerBalance(db: SupabaseClient, sellerId: string): Promi
     lastMonthPence: paid.filter((o) => at(o) >= lastMonthStart && at(o) < monthStart).reduce((s, o) => s + o.amount_pence, 0),
     payouts,
     orders: paid,
+    bySource,
   };
 }

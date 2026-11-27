@@ -66,6 +66,7 @@ export default function Navbar() {
     { name: "Boost", path: "/boost", icon: PromoteIcon },
     { name: "Send demos", path: "/submit", icon: SubmitIcon },
     { name: "Backstage", path: "/backstage", icon: BackstageIcon },
+    { name: "Earnings", path: "/earnings", icon: EarningsIcon },
     { name: "Payments", path: "/payments", icon: PaymentsIcon },
     { name: "Splits", path: "/splits", icon: SplitsIcon },
     { name: "Newsletters", path: "/newsletters", icon: NewslettersIcon },
@@ -316,6 +317,12 @@ const SubmitIcon = ({ isActive }: { isActive: boolean }) => (
 const BackstageIcon = ({ isActive }: { isActive: boolean }) => (
   <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
     <path strokeLinecap="round" strokeLinejoin="round" d="M2 18h20M3.5 18L2 7l5.5 4L12 4l4.5 7L22 7l-1.5 11" />
+  </svg>
+);
+
+const EarningsIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2v-2M21 12h-6a2 2 0 100 4h6v-4z" />
   </svg>
 );
 

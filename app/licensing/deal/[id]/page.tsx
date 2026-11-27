@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { sellerFeeRate } from "@/lib/fees";
+import { getTier } from "@/lib/pro";
 import { notFound } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { displayName, pricesOf } from "@/lib/licensing/server";
@@ -61,6 +63,7 @@ export default async function LicenceDealPage({
             prices: pricesOf(listing),
             dealsCount: listing.deals_count,
             active: listing.status === "active",
+            feeRate: sellerFeeRate(await getTier(listing.owner_id)),
           }}
           licensorName={displayName(owner)}
           viewer={user ? { signedIn: true, isOwner: user.id === listing.owner_id } : { signedIn: false, isOwner: false }}
