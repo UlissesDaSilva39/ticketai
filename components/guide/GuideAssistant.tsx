@@ -68,11 +68,14 @@ export default function GuideAssistant() {
   const panelRef = useRef<HTMLDivElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
 
-  // Decide once whether to open by itself.
+  // Decide once whether to open by itself. Never on full-screen work or
+  // watching pages (live rooms, editors), where it would cover the controls:
+  // the round button still opens it there.
   useEffect(() => {
     const isNever = store.get(KEY_NEVER) === "1";
     setNever(isNever);
     if (isNever) return;
+    if (/^\/(live\/|articles\/[^/]+\/edit|distribution\/releases\/)/.test(window.location.pathname)) return;
     const last = Number(store.get(KEY_LAST) || 0);
     if (!last || Date.now() - last > REMIND_AFTER_MS) {
       const t = setTimeout(() => {

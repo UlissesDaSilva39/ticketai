@@ -140,6 +140,7 @@ export default function HomePage() {
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
               {me && <ProfileStrength items={profileStrengthItems(me.profile)} />}
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <li><Link href="/live" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><span className="w-5 h-5 flex items-center justify-center" aria-hidden="true"><span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" /></span> <span className="group-hover:text-emerald-700 font-semibold">GRID LIVE</span></Link></li>
                 <li><Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></Link></li>
                 <li><Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></Link></li>
                 <li><Link href="/groups" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span></Link></li>

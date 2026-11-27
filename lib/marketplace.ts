@@ -1,6 +1,7 @@
 import type Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notifyServer } from "@/lib/notify-server";
+import { announceLivePurchase } from "@/lib/live/server";
 
 // GRID Marketplace (server-only helpers).
 // Buyers pay the item price + a 10% GRID fee; sellers earn the item price.
@@ -60,6 +61,10 @@ export async function fulfilMarketplaceSession(session: Stripe.Checkout.Session)
       body: `You earned £${(updated.amount_pence / 100).toFixed(2)}.`,
       href: "/marketplace",
     }).catch(() => undefined);
+    // Bought during a GRID LIVE: show it in the room's chat.
+    if (session.metadata?.live_stream_id && session.metadata?.user_id) {
+      await announceLivePurchase(session.metadata.live_stream_id, session.metadata.user_id, listing?.title ?? "an item").catch(() => undefined);
+    }
     return { orderId, paid: true };
   }
 

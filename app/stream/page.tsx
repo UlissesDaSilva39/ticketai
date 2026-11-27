@@ -30,7 +30,7 @@ export default function StreamHome() {
         </p>
         <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
           <Link href="/stream/upload" className="btn-primary">Upload video</Link>
-          <Link href="/stream/live" className="btn-secondary">Go live</Link>
+          <Link href="/live/new" className="btn-secondary">Go live</Link>
         </div>
       </div>
 
@@ -41,7 +41,7 @@ export default function StreamHome() {
               <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#EF4444", display: "inline-block" }} />
               Live now
             </h2>
-            <Link href="/stream/live" style={{ color: "#16A36A", fontSize: "14px", fontWeight: 500, textDecoration: "none" }}>See all →</Link>
+            <Link href="/live" style={{ color: "#16A36A", fontSize: "14px", fontWeight: 500, textDecoration: "none" }}>See all →</Link>
           </div>
           <div className="grid-cards">
             {live.map(item => (

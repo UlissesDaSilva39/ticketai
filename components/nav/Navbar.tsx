@@ -62,6 +62,7 @@ export default function Navbar() {
   ];
 
   const moreItems = [
+    { name: "Live", path: "/live", icon: LiveIcon },
     { name: "Payments", path: "/payments", icon: PaymentsIcon },
     { name: "Splits", path: "/splits", icon: SplitsIcon },
     { name: "Newsletters", path: "/newsletters", icon: NewslettersIcon },
@@ -71,7 +72,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-50">
-      <div className="max-w-[1280px] mx-auto px-4 flex justify-between items-center h-14 gap-4">
+      <div className="max-w-[1280px] mx-auto px-2 sm:px-4 flex justify-between items-center h-14 gap-2 sm:gap-4">
         
         <div className="flex items-center gap-3 flex-shrink-0">
           <Link href="/" className="text-xl font-bold text-emerald-600 tracking-tight hidden md:block">GRID</Link>
@@ -83,12 +84,12 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center h-full flex-1 justify-center">
+        <div className="flex items-center h-full flex-1 justify-center min-w-0">
           {navItems.map((item) => {
             const isActive = pathname === item.path;
             const Icon = item.icon;
             return (
-              <Link key={item.name} href={item.path} className={`relative flex flex-col items-center justify-center h-full px-4 min-w-[64px] group transition-colors ${isActive ? "text-gray-900 dark:text-white font-semibold" : "text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white"}`}>
+              <Link key={item.name} href={item.path} className={`relative flex flex-col items-center justify-center h-full px-2 min-w-[44px] sm:px-4 sm:min-w-[64px] group transition-colors ${isActive ? "text-gray-900 dark:text-white font-semibold" : "text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white"}`}>
                 <div className="relative">
                   <Icon isActive={isActive} />
                   {item.badge && (
@@ -300,5 +301,12 @@ const DistributionIcon = ({ isActive }: { isActive: boolean }) => (
 const LicensingIcon = ({ isActive }: { isActive: boolean }) => (
   <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7 3h7l5 5v11a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+  </svg>
+);
+
+const LiveIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+    <path strokeLinecap="round" d="M7.8 7.8a6 6 0 000 8.4M16.2 7.8a6 6 0 010 8.4M5 5a10 10 0 000 14M19 5a10 10 0 010 14" />
   </svg>
 );

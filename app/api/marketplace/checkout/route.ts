@@ -55,6 +55,9 @@ export async function POST(req: NextRequest) {
   }
 
   const origin = req.headers.get("origin") ?? new URL(req.url).origin;
+  // Bought from a GRID LIVE room: come back to the room and announce the sale there.
+  const liveStreamId = typeof body.liveStreamId === "string" && /^[0-9a-f-]{36}$/i.test(body.liveStreamId) ? body.liveStreamId : null;
+  const returnTo = liveStreamId ? `/live/${liveStreamId}` : null;
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -65,10 +68,10 @@ export async function POST(req: NextRequest) {
         { quantity: 1, price_data: { currency: "gbp", unit_amount: fee, product_data: { name: "GRID fee (10%)" } } },
       ].filter((l) => l.price_data.unit_amount > 0),
       ...(listing.kind === "merch" ? { shipping_address_collection: { allowed_countries: ["GB", "IE", "US", "CA", "AU", "DE", "FR", "ES", "IT", "NL"] } } : {}),
-      metadata: { type: "marketplace", order_id: order.id, listing_id: listing.id, user_id: user.id },
+      metadata: { type: "marketplace", order_id: order.id, listing_id: listing.id, user_id: user.id, ...(liveStreamId ? { live_stream_id: liveStreamId } : {}) },
       payment_intent_data: { metadata: { type: "marketplace", order_id: order.id } },
-      success_url: `${origin}/marketplace?purchase=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/marketplace?purchase=cancelled`,
+      success_url: returnTo ? `${origin}${returnTo}?purchase=success&session_id={CHECKOUT_SESSION_ID}` : `${origin}/marketplace?purchase=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: returnTo ? `${origin}${returnTo}?purchase=cancelled` : `${origin}/marketplace?purchase=cancelled`,
     });
     await admin.from("marketplace_orders").update({ stripe_session_id: session.id }).eq("id", order.id);
     return NextResponse.json({ url: session.url });
