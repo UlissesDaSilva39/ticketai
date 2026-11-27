@@ -18,6 +18,7 @@ type LiveCard = {
   startedAt: string | null;
   scheduledFor: string | null;
   raisedCoins: number;
+  promoted?: boolean;
 };
 type LiveNowData = { live: LiveCard[]; upcoming: LiveCard[] };
 
@@ -93,6 +94,9 @@ function Snapshot({ card }: { card: LiveCard }) {
         <span className="absolute top-2 right-2 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-black/55 backdrop-blur text-white text-[11px] font-bold">
           <CoinIcon className="w-3 h-3" /> {card.raisedCoins.toLocaleString("en-GB")}
         </span>
+      )}
+      {card.promoted && (
+        <span className="absolute top-8 left-2 px-1.5 py-0.5 rounded bg-black/60 backdrop-blur text-white text-[10px] font-bold">Promoted</span>
       )}
       <div className="absolute inset-x-0 bottom-0 p-2.5 text-white">
         <div className="flex items-center gap-1.5">

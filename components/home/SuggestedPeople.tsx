@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { initials, roleLabel } from "@/lib/hooks/useMe";
 
-type Person = { id: string; name: string; username: string; avatar: string | null; role: string | null; genre: string | null };
+type Person = { id: string; name: string; username: string; avatar: string | null; role: string | null; genre: string | null; promoted?: boolean };
 
 export default function SuggestedPeople() {
   const [people, setPeople] = useState<Person[] | null>(null);
@@ -72,7 +72,7 @@ export default function SuggestedPeople() {
                 )}
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover:underline">{p.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{roleLabel(p.role, p.genre)}</p>
+                  <p className="text-xs text-gray-500 truncate">{p.promoted ? "Promoted · " : ""}{roleLabel(p.role, p.genre)}</p>
                 </div>
               </Link>
               <button

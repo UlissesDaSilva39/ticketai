@@ -63,6 +63,7 @@ export default function Navbar() {
 
   const moreItems = [
     { name: "Live", path: "/live", icon: LiveIcon },
+    { name: "Boost", path: "/boost", icon: PromoteIcon },
     { name: "Payments", path: "/payments", icon: PaymentsIcon },
     { name: "Splits", path: "/splits", icon: SplitsIcon },
     { name: "Newsletters", path: "/newsletters", icon: NewslettersIcon },
@@ -301,6 +302,12 @@ const DistributionIcon = ({ isActive }: { isActive: boolean }) => (
 const LicensingIcon = ({ isActive }: { isActive: boolean }) => (
   <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7 3h7l5 5v11a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+  </svg>
+);
+
+const PromoteIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 00-2.9-.1zM12 15l-3-3a22 22 0 012-3.9A12.9 12.9 0 0122 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 01-4 2zM9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5" />
   </svg>
 );
 

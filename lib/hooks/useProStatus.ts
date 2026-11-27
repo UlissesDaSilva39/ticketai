@@ -39,13 +39,13 @@ function readApplicationsThisWeek(): number {
 }
 
 /** Sends the browser to Stripe Checkout for Pro or Premium. Returns an error message on failure. */
-export async function goToProCheckout(plan: "pro" | "premium" = "pro"): Promise<string | null> {
+export async function goToProCheckout(plan: "pro" | "premium" = "pro", billing: "month" | "year" = "month"): Promise<string | null> {
   try {
     const res = await fetch("/api/billing/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ plan }),
+      body: JSON.stringify({ plan, billing }),
     });
     const d = await res.json().catch(() => ({}));
     if (res.status === 401) {

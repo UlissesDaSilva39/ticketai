@@ -1,5 +1,7 @@
 "use client";
 import { Suspense, useCallback, useEffect, useState } from "react";
+import { Rocket } from "lucide-react";
+import PromoteButton from "@/components/promote/PromoteButton";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MarketIcon, BookmarkIcon, UsersIcon, CalendarSVG, NoteIcon } from "@/components/MusicIcons";
@@ -25,6 +27,7 @@ type Listing = {
   createdAt: string;
   seller: { id: string; name: string; username: string | null };
   mine: boolean;
+  promoted?: boolean;
   owned: boolean;
   orderId: string | null;
   downloadable: boolean;
@@ -222,6 +225,11 @@ function Marketplace() {
                     <NoteIcon className="w-8 h-8 text-white" />
                   </div>
                   <span className="absolute top-3 right-3 bg-white/90 dark:bg-black/80 text-gray-900 dark:text-white text-xs font-bold px-2 py-1 rounded-md">{TYPE_LABEL[p.kind]}</span>
+                  {p.promoted && (
+                    <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 bg-black/70 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded-md">
+                      <Rocket className="w-3 h-3" aria-hidden="true" /> Promoted
+                    </span>
+                  )}
                   {p.payWhatYouWant && (
                     <span className="absolute top-3 left-3 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-md">💰 Pay What You Want</span>
                   )}
@@ -244,9 +252,12 @@ function Marketplace() {
                     </div>
                   </div>
                   {p.mine ? (
-                    <Link href="/seller" className="block text-center w-full mt-4 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-sm py-2 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                    <div className="mt-4 flex gap-2">
+                    <Link href="/seller" className="flex-1 block text-center bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-sm py-2 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                       Your listing
                     </Link>
+                    {!p.promoted && <PromoteButton kind="listing" refId={p.id} label="Boost" className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors" />}
+                    </div>
                   ) : p.owned && p.downloadable && p.orderId ? (
                     <a href={`/api/marketplace/download/${p.orderId}`} className="block text-center w-full mt-4 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-sm py-2 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                       Download

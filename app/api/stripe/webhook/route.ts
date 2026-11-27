@@ -6,6 +6,8 @@ import { handleBillingEvent } from "@/lib/pro";
 import { handleMarketplaceEvent } from "@/lib/marketplace";
 import { handleLicenceEvent } from "@/lib/licensing/server";
 import { handleCoinsEvent } from "@/lib/live/server";
+import { handlePromotionEvent } from "@/lib/promote/server";
+import { handleAdEvent } from "@/lib/ads/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -37,6 +39,9 @@ export async function POST(req: NextRequest) {
     if (await handleLicenceEvent(event)) return NextResponse.json({ received: true });
     // GRID LIVE coin packs.
     if (await handleCoinsEvent(event)) return NextResponse.json({ received: true });
+    // Paid promotions ("Boost anything") and self-serve ad campaigns.
+    if (await handlePromotionEvent(event)) return NextResponse.json({ received: true });
+    if (await handleAdEvent(event)) return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Pro billing webhook failed:", err);
     return NextResponse.json({ error: "Pro billing failed" }, { status: 500 });

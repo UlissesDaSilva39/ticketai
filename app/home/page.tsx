@@ -19,6 +19,8 @@ import SuggestedPeople from "@/components/home/SuggestedPeople";
 import { useMe, displayName, initials, roleLabel, compactNumber, type MeProfile } from "@/lib/hooks/useMe";
 import ProBadge from "@/components/ProBadge";
 import { LiveNowStrip, LiveSidebarLink } from "@/components/home/LiveNow";
+import SponsoredCard from "@/components/ads/SponsoredCard";
+import { Rocket } from "lucide-react";
 
 const NAV_LINK = "flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-emerald-50/70 dark:hover:bg-zinc-800 transition-colors group";
 
@@ -144,6 +146,7 @@ export default function HomePage() {
               {me && <ProfileStrength items={profileStrengthItems(me.profile)} />}
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
                 <li><LiveSidebarLink className={NAV_LINK} /></li>
+                <li><Link href="/boost" className={NAV_LINK}><Rocket className="w-5 h-5 text-emerald-600" aria-hidden="true" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Boost</span></Link></li>
                 <li><Link href="/marketplace" className={NAV_LINK}><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Marketplace</span></Link></li>
                 <li><Link href="/saved" className={NAV_LINK}><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Saved Items</span></Link></li>
                 <li><Link href="/groups" className={NAV_LINK}><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Groups</span></Link></li>
@@ -207,6 +210,7 @@ export default function HomePage() {
         <aside className="col-span-12 lg:col-span-3 space-y-4">
           {!isPro && !meLoading && <ProTrialCard />}
           <InviteCard />
+          <SponsoredCard />
           <OpenCollabs />
 
           <SuggestedPeople />

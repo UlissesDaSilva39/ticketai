@@ -1,6 +1,7 @@
 ﻿ "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import { TICKET_BOOKING_FEE_RATE, ticketBookingFee } from "@/lib/fees";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Event } from "@/lib/types";
@@ -58,7 +59,7 @@ function CheckoutContent() {
     : 0;
 
   const discountedSubtotal = Math.max(0, subtotal - discountAmount);
-  const processingFee = discountedSubtotal * 0.029;
+  const processingFee = ticketBookingFee(discountedSubtotal);
   const total = discountedSubtotal + processingFee;
 
   async function applyPromo() {
@@ -207,7 +208,7 @@ function CheckoutContent() {
               </div>
             )}
 
-            <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400"><span>Processing fee (2.9%)</span><span>£{processingFee.toFixed(2)}</span></div>
+            <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400"><span>Booking fee ({Math.round(TICKET_BOOKING_FEE_RATE * 100)}%)</span><span>£{processingFee.toFixed(2)}</span></div>
             <div className="flex justify-between font-bold text-xl pt-3 border-t border-gray-300"><span>Total</span><span>£{total.toFixed(2)}</span></div>
           </div>
         </section>

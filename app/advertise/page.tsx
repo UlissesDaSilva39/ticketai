@@ -1,227 +1,277 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { BarChart3, Check, ExternalLink, ImagePlus, Megaphone, ShieldCheck, Target, X } from "lucide-react";
+import { AD_PLANS, type AdPlan } from "@/lib/ads/catalog";
+import { uploadMedia } from "@/components/grid/media";
 
-export default function AdvertisePage() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({ name: '', email: '', promote: '', newsletter: false });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  
-  // Upsell Modals
-  const [showBasicUpsell, setShowBasicUpsell] = useState(false);
-  const [showPremiumUpsell, setShowPremiumUpsell] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState('Basic');
+const gbp = (p: number) => `£${(p / 100).toFixed(p % 100 ? 2 : 0)}`;
+const input =
+  "w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500";
+const label = "block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5";
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    
+const PLANS: { id: AdPlan | "enterprise"; name: string; price: string; per: string; blurb: string; features: string[]; popular?: boolean }[] = [
+  {
+    id: "basic",
+    name: "Basic",
+    price: gbp(AD_PLANS.basic.pence),
+    per: `/ ${AD_PLANS.basic.days} days`,
+    blurb: "A single event, release or offer.",
+    features: ["Sponsored card on GRID home pages", `Runs for ${AD_PLANS.basic.days} days`, "Views and clicks report", "Reviewed within 24 hours"],
+  },
+  {
+    id: "premium",
+    name: "Premium",
+    price: gbp(AD_PLANS.premium.pence),
+    per: `/ ${AD_PLANS.premium.days} days`,
+    blurb: "For promoters, venues, labels and brands.",
+    features: ["Everything in Basic", `Runs for ${AD_PLANS.premium.days} days`, "Shown twice as often as Basic", "Views and clicks report"],
+    popular: true,
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    price: "Custom",
+    per: "",
+    blurb: "Festivals, brands and big campaigns.",
+    features: ["Homepage takeover", "Newsletter features", "Campaign planning with our team"],
+  },
+];
+
+function AdvertiseInner() {
+  const sp = useSearchParams();
+  const [plan, setPlan] = useState<AdPlan | null>(null);
+  const [headline, setHeadline] = useState("");
+  const [body, setBody] = useState("");
+  const [link, setLink] = useState("");
+  const [image, setImage] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [contact, setContact] = useState({ name: "", email: "", promote: "", newsletter: false });
+  const [sent, setSent] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const cancelled = sp.get("ad") === "cancelled";
+
+  useEffect(() => {
+    if (plan) document.getElementById("launch")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [plan]);
+
+  async function onFile(f: File | undefined) {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) return setError("Choose an image (JPG, PNG or WebP).");
+    setError("");
+    setUploading(true);
     try {
-      const res = await fetch('/api/advertise', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, plan: selectedPlan }),
-      });
-      
-      if (res.ok) setSubmitted(true);
-      else alert('Something went wrong. Please try again.');
-    } catch {
-      alert('Network error. Please try again.');
+      const up = await uploadMedia(f);
+      setImage(up.url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Upload failed.");
     } finally {
-      setLoading(false);
+      setUploading(false);
     }
-  };
-
-  const handlePlanClick = (plan: string) => {
-    setSelectedPlan(plan);
-    if (plan === 'Basic') {
-      setShowBasicUpsell(true);
-    } else if (plan === 'Premium') {
-      setShowPremiumUpsell(true);
-    } else {
-      // Enterprise -> scroll to form
-      document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  if (submitted) {
-    return (
-      <main style={{ minHeight: '100vh', background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: 'system-ui' }}>
-        <div style={{ background: 'white', borderRadius: 24, padding: 48, maxWidth: 500, textAlign: 'center', border: '1px solid #e5e7eb', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>🎉</div>
-          <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 12px' }}>Thanks for your interest!</h1>
-          <p style={{ fontSize: 16, color: '#6b7280', margin: '0 0 24px' }}>
-            Our team will reach out within 24 hours to discuss your campaign.
-          </p>
-          <button onClick={() => router.push('/')} style={{ padding: '12px 24px', borderRadius: 8, background: '#111827', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-            Back to Home
-          </button>
-        </div>
-      </main>
-    );
   }
 
+  async function launch(e: React.FormEvent) {
+    e.preventDefault();
+    if (!plan) return;
+    setError("");
+    setBusy(true);
+    const r = await fetch("/api/ads/checkout", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ plan, headline, body, linkUrl: link, imageUrl: image }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 401) return void (window.location.href = "/login?redirect=/advertise");
+    if (r.ok && d.url) return void (window.location.href = d.url);
+    setError(d.error || "Couldn't start checkout.");
+    setBusy(false);
+  }
+
+  async function sendContact(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    const r = await fetch("/api/advertise", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...contact, plan: "Enterprise" }) });
+    setBusy(false);
+    if (r.ok) setSent(true);
+    else setError("Something went wrong. Please try again.");
+  }
+
+  let host = "";
+  try {
+    host = link ? new URL(link).hostname.replace(/^www\./, "") : "";
+  } catch {}
+
   return (
-    <main style={{ minHeight: '100vh', background: '#f9fafb', fontFamily: 'system-ui', paddingBottom: 80 }}>
-      
-      {/* HERO */}
-      <div style={{ background: 'linear-gradient(135deg, #111827, #1f2937)', padding: '80px 24px', textAlign: 'center', color: 'white' }}>
-        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-          <h1 style={{ fontSize: 48, fontWeight: 900, margin: '0 0 16px', letterSpacing: '-1px' }}>
-            Advertise on GRID
-          </h1>
-          <p style={{ fontSize: 20, color: '#9ca3af', margin: '0 0 40px', maxWidth: 700, marginLeft: 'auto', marginRight: 'auto' }}>
-            Reach 50,000+ artists, promoters, and music lovers. Promote your event, venue, or brand directly to the people who matter.
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 pb-20">
+      <section className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-zinc-950 text-white px-4 py-16 sm:py-20 text-center">
+        <div className="max-w-3xl mx-auto">
+          <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold uppercase tracking-wide">
+            <Megaphone className="w-3.5 h-3.5" aria-hidden="true" /> GRID Ads
           </p>
-          <div style={{ display: 'flex', gap: 48, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40 }}>
-            <div><p style={{ fontSize: 32, fontWeight: 800, margin: 0 }}>50k+</p><p style={{ fontSize: 14, color: '#9ca3af', margin: 0 }}>Monthly visitors</p></div>
-            <div><p style={{ fontSize: 32, fontWeight: 800, margin: 0 }}>2.5M</p><p style={{ fontSize: 14, color: '#9ca3af', margin: 0 }}>Page views</p></div>
-            <div><p style={{ fontSize: 32, fontWeight: 800, margin: 0 }}>12k+</p><p style={{ fontSize: 14, color: '#9ca3af', margin: 0 }}>Events promoted</p></div>
-          </div>
-          <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', opacity: 0.7 }}>
-            <span style={{ fontSize: 14, color: '#d1d5db' }}>Trusted by: Nightshift Presents · Fabric · Paper Lions · Techno Nation</span>
+          <h1 className="text-4xl sm:text-5xl font-bold mt-4">Put your music business in front of the industry</h1>
+          <p className="text-lg text-emerald-50/90 mt-4">Artists, producers, DJs, promoters, venues and labels use GRID every day. Launch a sponsored ad in minutes and pay by card.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <a href="#plans" className="px-6 py-3 rounded-full bg-white text-emerald-800 font-bold hover:bg-emerald-50 transition-colors">See plans</a>
+            <Link href="/boost" className="px-6 py-3 rounded-full border border-white/40 font-bold hover:bg-white/10 transition-colors">Boost a post from £2.99</Link>
           </div>
         </div>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-4">
+        {cancelled && <p role="status" className="mt-6 rounded-xl bg-gray-100 dark:bg-zinc-800 px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">Payment cancelled. You haven&apos;t been charged.</p>}
+
+        <div className="grid gap-4 sm:grid-cols-3 mt-10">
+          {[
+            [Target, "Reach the right people", "Shown to music professionals and fans on GRID, not random traffic."],
+            [ShieldCheck, "Reviewed, then live", "Our team checks each ad within 24 hours. If we can't run it, you get a full refund."],
+            [BarChart3, "See what it did", "Track views and clicks for every campaign in your ads dashboard."],
+          ].map(([Icon, t, d]) => {
+            const I = Icon as typeof Target;
+            return (
+              <div key={t as string} className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-5">
+                <span className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 grid place-items-center mb-3" aria-hidden="true"><I className="w-5 h-5" /></span>
+                <p className="font-bold text-gray-900 dark:text-white">{t as string}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{d as string}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <h2 id="plans" className="text-3xl font-bold text-gray-900 dark:text-white text-center mt-16">Choose your plan</h2>
+        <p className="text-gray-600 dark:text-gray-400 text-center mt-2">One-off payment. No contract.</p>
+        <div className="grid gap-6 md:grid-cols-3 mt-8">
+          {PLANS.map((p) => (
+            <div key={p.id} className={`relative bg-white dark:bg-zinc-900 rounded-2xl border-2 p-6 flex flex-col ${p.popular ? "border-emerald-600 shadow-xl" : "border-gray-200 dark:border-zinc-800"}`}>
+              {p.popular && <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-bold">MOST POPULAR</span>}
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">{p.name}</h3>
+              <p className="text-sm text-gray-500">{p.blurb}</p>
+              <p className="my-5"><span className="text-4xl font-bold text-gray-900 dark:text-white">{p.price}</span> <span className="text-sm text-gray-500">{p.per}</span></p>
+              <ul className="space-y-2 flex-1">
+                {p.features.map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                    <Check className="w-4 h-4 text-emerald-600 flex-none mt-0.5" aria-hidden="true" /> {f}
+                  </li>
+                ))}
+              </ul>
+              {p.id === "enterprise" ? (
+                <a href="#contact" className="mt-6 block text-center py-3 rounded-full font-bold border-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors">Talk to us</a>
+              ) : (
+                <button type="button" onClick={() => setPlan(p.id as AdPlan)} className={`mt-6 py-3 rounded-full font-bold transition-colors ${plan === p.id ? "bg-emerald-800 text-white" : "bg-emerald-600 hover:bg-emerald-700 text-white"}`}>
+                  {plan === p.id ? "Selected" : `Launch ${p.name} ad`}
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {plan && (
+          <section id="launch" className="mt-12 scroll-mt-24 bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-5 sm:p-8">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create your {AD_PLANS[plan].name} ad</h2>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">{gbp(AD_PLANS[plan].pence)} for {AD_PLANS[plan].days} days. Starts once approved (within 24 hours).</p>
+              </div>
+              <button type="button" onClick={() => setPlan(null)} aria-label="Close" className="p-1 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800"><X className="w-5 h-5" aria-hidden="true" /></button>
+            </div>
+            <div className="grid gap-8 lg:grid-cols-[1fr_320px] mt-6">
+              <form onSubmit={launch} className="space-y-4">
+                <div>
+                  <label htmlFor="ad-headline" className={label}>Headline *</label>
+                  <input id="ad-headline" value={headline} onChange={(e) => setHeadline(e.target.value)} maxLength={80} placeholder="e.g. Tickets out now: Night Drive, London 12 Dec" className={input} />
+                </div>
+                <div>
+                  <label htmlFor="ad-body" className={label}>Text</label>
+                  <textarea id="ad-body" value={body} onChange={(e) => setBody(e.target.value)} maxLength={200} rows={3} placeholder="One or two lines about your offer" className={input} />
+                  <p className="text-xs text-gray-500 mt-1">{200 - body.length} characters left</p>
+                </div>
+                <div>
+                  <label htmlFor="ad-link" className={label}>Link *</label>
+                  <input id="ad-link" value={link} onChange={(e) => setLink(e.target.value)} inputMode="url" placeholder="https://…" className={input} />
+                </div>
+                <div>
+                  <span className={label}>Image</span>
+                  <input ref={fileRef} type="file" accept="image/*" className="sr-only" onChange={(e) => onFile(e.target.files?.[0])} aria-label="Ad image" />
+                  <button type="button" onClick={() => fileRef.current?.click()} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-300 dark:border-zinc-700 text-sm font-bold text-gray-700 dark:text-gray-200 hover:border-emerald-500">
+                    <ImagePlus className="w-4 h-4" aria-hidden="true" /> {uploading ? "Uploading…" : image ? "Change image" : "Upload image"}
+                  </button>
+                  {image && <button type="button" onClick={() => setImage(null)} className="ml-3 text-sm font-semibold text-red-700 dark:text-red-400">Remove</button>}
+                </div>
+                {error && <p role="alert" className="rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 p-3 text-sm">{error}</p>}
+                <button type="submit" disabled={busy || uploading} className="w-full py-4 rounded-full font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 transition-colors">
+                  {busy ? "Opening secure checkout…" : `Pay ${gbp(AD_PLANS[plan].pence)} & submit for review`}
+                </button>
+                <p className="text-xs text-gray-500 text-center">Secure payment by Stripe. Full refund if we can&apos;t approve your ad. No adult, gambling, misleading or illegal content.</p>
+              </form>
+
+              <div>
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Preview</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+                  <p className="px-4 pt-3 text-[11px] font-bold uppercase tracking-wide text-gray-500">Sponsored</p>
+                  <div className="p-4">
+                    {image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={image} alt="" className="w-full aspect-[16/9] object-cover rounded-lg mb-3" />
+                    )}
+                    <p className="font-bold text-gray-900 dark:text-white">{headline || "Your headline"}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{body || "Your text appears here."}</p>
+                    <p className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-400">{host || "yourwebsite.com"} <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" /></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        <p className="text-center mt-10">
+          <Link href="/advertise/campaigns" className="font-bold text-emerald-700 dark:text-emerald-400 hover:underline">See my campaigns →</Link>
+        </p>
+
+        <section id="contact" className="mt-12 scroll-mt-24 bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 p-5 sm:p-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">Planning something bigger?</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-center mt-1">Tell us about your campaign and we&apos;ll reply within 24 hours.</p>
+          {sent ? (
+            <p role="status" className="mt-6 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-200 p-4 text-center font-semibold">Thanks! We&apos;ll be in touch within 24 hours.</p>
+          ) : (
+            <form onSubmit={sendContact} className="mt-6 space-y-4">
+              <div>
+                <label htmlFor="c-name" className={label}>Your name</label>
+                <input id="c-name" required value={contact.name} onChange={(e) => setContact({ ...contact, name: e.target.value })} className={input} />
+              </div>
+              <div>
+                <label htmlFor="c-email" className={label}>Email</label>
+                <input id="c-email" required type="email" value={contact.email} onChange={(e) => setContact({ ...contact, email: e.target.value })} className={input} />
+              </div>
+              <div>
+                <label htmlFor="c-what" className={label}>What do you want to promote?</label>
+                <select id="c-what" required value={contact.promote} onChange={(e) => setContact({ ...contact, promote: e.target.value })} className={input}>
+                  <option value="">Select an option</option>
+                  <option value="Event">An event or festival</option>
+                  <option value="Venue">A venue</option>
+                  <option value="Brand">A brand</option>
+                  <option value="Artist">An artist or label</option>
+                </select>
+              </div>
+              <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <input type="checkbox" checked={contact.newsletter} onChange={(e) => setContact({ ...contact, newsletter: e.target.checked })} className="w-4 h-4 accent-emerald-600" />
+                I&apos;m also interested in a GRID newsletter feature
+              </label>
+              <button type="submit" disabled={busy} className="w-full py-3.5 rounded-full font-bold text-white bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 disabled:opacity-60">{busy ? "Sending…" : "Send"}</button>
+            </form>
+          )}
+        </section>
       </div>
-
-      <div style={{ maxWidth: 1000, margin: '0 auto', padding: '64px 24px' }}>
-        
-        {/* TIERS */}
-        <h2 style={{ fontSize: 36, fontWeight: 800, textAlign: 'center', margin: '0 0 16px' }}>Choose your plan</h2>
-        <p style={{ fontSize: 16, color: '#6b7280', textAlign: 'center', margin: '0 0 48px' }}>Simple, transparent pricing. No hidden fees.</p>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-          
-          {/* BASIC */}
-          <div style={{ background: 'white', borderRadius: 16, padding: 32, border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px' }}>Basic</h3>
-            <p style={{ fontSize: 14, color: '#6b7280', margin: '0 0 24px' }}>Perfect for single events.</p>
-            <p style={{ fontSize: 48, fontWeight: 800, margin: '0 0 24px' }}>£25<span style={{ fontSize: 16, fontWeight: 600, color: '#6b7280' }}>/event</span></p>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Featured on Events page for 7 days</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Social media mention</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Basic analytics</p>
-            </div>
-            <button onClick={() => handlePlanClick('Basic')} style={{ width: '100%', padding: '14px 0', borderRadius: 8, background: '#111827', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer', marginTop: 24 }}>
-              Get Started
-            </button>
-          </div>
-
-          {/* PREMIUM */}
-          <div style={{ background: 'white', borderRadius: 16, padding: 32, border: '2px solid #7c5cff', boxShadow: '0 20px 40px -10px rgba(124,92,255,0.3)', transform: 'scale(1.05)', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: '#7c5cff', color: 'white', padding: '4px 16px', borderRadius: 999, fontSize: 11, fontWeight: 800, letterSpacing: 0.5 }}>MOST POPULAR</div>
-            <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px' }}>Premium</h3>
-            <p style={{ fontSize: 14, color: '#6b7280', margin: '0 0 24px' }}>For promoters and venues.</p>
-            <p style={{ fontSize: 48, fontWeight: 800, margin: '0 0 24px' }}>£150<span style={{ fontSize: 16, fontWeight: 600, color: '#6b7280' }}>/month</span></p>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Featured on ALL discovery pages</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Priority placement in search</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Dedicated social campaign</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Advanced analytics dashboard</p>
-            </div>
-            <button onClick={() => handlePlanClick('Premium')} style={{ width: '100%', padding: '14px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer', marginTop: 24 }}>
-              Choose Premium
-            </button>
-          </div>
-
-          {/* ENTERPRISE */}
-          <div style={{ background: 'white', borderRadius: 16, padding: 32, border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: 20, fontWeight: 800, margin: '0 0 8px' }}>Enterprise</h3>
-            <p style={{ fontSize: 14, color: '#6b7280', margin: '0 0 24px' }}>For brands and festivals.</p>
-            <p style={{ fontSize: 48, fontWeight: 800, margin: '0 0 24px' }}>Custom</p>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Everything in Premium</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Homepage banner takeover</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Email newsletter feature</p>
-              <p style={{ fontSize: 14, color: '#374151', marginBottom: 8 }}>✓ Dedicated account manager</p>
-            </div>
-            <button onClick={() => handlePlanClick('Enterprise')} style={{ width: '100%', padding: '14px 0', borderRadius: 8, background: '#111827', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer', marginTop: 24 }}>
-              Contact Sales
-            </button>
-          </div>
-        </div>
-
-        {/* CONTACT FORM */}
-        <div id="contact-form" style={{ background: 'white', borderRadius: 24, padding: 48, marginTop: 64, border: '1px solid #e5e7eb' }}>
-          <h2 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 8px', textAlign: 'center' }}>Get in touch</h2>
-          <p style={{ fontSize: 16, color: '#6b7280', textAlign: 'center', margin: '0 0 32px' }}>Fill out the form and our team will get back to you within 24 hours.</p>
-          
-          <form onSubmit={handleSubmit} style={{ maxWidth: 600, margin: '0 auto' }}>
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Your Name</label>
-              <input required type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} style={{ width: '100%', padding: '12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14 }} />
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Email Address</label>
-              <input required type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} style={{ width: '100%', padding: '12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14 }} />
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 700, marginBottom: 6 }}>What do you want to promote?</label>
-              <select value={formData.promote} onChange={(e) => setFormData({...formData, promote: e.target.value})} style={{ width: '100%', padding: '12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14 }}>
-                <option value="">Select an option</option>
-                <option value="Event">An Event</option>
-                <option value="Venue">A Venue</option>
-                <option value="Brand">A Brand</option>
-                <option value="Artist">An Artist</option>
-              </select>
-            </div>
-            
-            <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <input type="checkbox" checked={formData.newsletter} onChange={(e) => setFormData({...formData, newsletter: e.target.checked})} style={{ width: 16, height: 16, cursor: 'pointer' }} />
-              <label style={{ fontSize: 14, color: '#374151', cursor: 'pointer' }}>Also feature my campaign in the GRID Newsletter (+£50)</label>
-            </div>
-
-            <button type="submit" disabled={loading} style={{ width: '100%', padding: '16px 0', borderRadius: 12, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: 'white', border: 'none', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}>
-              {loading ? 'Sending...' : 'Send Message'}
-            </button>
-          </form>
-        </div>
-      </div>
-
-      {/* BASIC UPSELL MODAL */}
-      {showBasicUpsell && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 24, backdropFilter: 'blur(4px)' }}>
-          <div style={{ background: 'white', borderRadius: 24, padding: 40, maxWidth: 450, width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>🚀</div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 8px' }}>Want 3x more clicks?</h2>
-            <p style={{ fontSize: 15, color: '#6b7280', margin: '0 0 24px' }}>
-              Upgrade to Premium for just <strong>+£50</strong> and get featured on all discovery pages, plus priority placement in search.
-            </p>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={() => { setShowBasicUpsell(false); setSelectedPlan('Premium'); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                Yes, upgrade!
-              </button>
-              <button onClick={() => { setShowBasicUpsell(false); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: '#f3f4f6', color: '#374151', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                No thanks
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* PREMIUM UPSELL MODAL */}
-      {showPremiumUpsell && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 24, backdropFilter: 'blur(4px)' }}>
-          <div style={{ background: 'white', borderRadius: 24, padding: 40, maxWidth: 450, width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>🏆</div>
-            <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 8px' }}>Go Enterprise?</h2>
-            <p style={{ fontSize: 15, color: '#6b7280', margin: '0 0 24px' }}>
-              For just <strong>+£50/month</strong>, get a homepage banner takeover, email newsletter feature, and a dedicated account manager. 
-            </p>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={() => { setShowPremiumUpsell(false); setSelectedPlan('Enterprise'); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: 'linear-gradient(135deg, #7c5cff, #ff5c8a)', color: 'white', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                Yes, upgrade!
-              </button>
-              <button onClick={() => { setShowPremiumUpsell(false); document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, padding: '14px 0', borderRadius: 8, background: '#f3f4f6', color: '#374151', border: 'none', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                No thanks
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </main>
+  );
+}
+
+export default function AdvertisePage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-gray-50 dark:bg-zinc-950" />}>
+      <AdvertiseInner />
+    </Suspense>
   );
 }

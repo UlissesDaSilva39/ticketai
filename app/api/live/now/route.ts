@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { displayName } from "@/lib/live/server";
+import { promotedIds } from "@/lib/promote/server";
 import { liveCategoryLabel, snapshotBucket, snapshotUrl } from "@/lib/live/catalog";
 
 export const dynamic = "force-dynamic";
@@ -16,9 +17,12 @@ export async function GET() {
   ]);
   if (liveRes.error) return NextResponse.json({ live: [], upcoming: [] }, { headers: { "cache-control": "no-store" } });
 
-  const rows = [...(liveRes.data ?? []), ...(soonRes.data ?? [])];
+  // Paid promotions ("GRID Boost") go first among the lives on air.
+  const boosted = new Set(await promotedIds("live"));
+  const liveRows = [...(liveRes.data ?? [])].sort((a, b) => Number(boosted.has(b.id)) - Number(boosted.has(a.id)));
+  const rows = [...liveRows, ...(soonRes.data ?? [])];
   const hostIds = [...new Set(rows.map((r) => r.host_id))];
-  const liveIds = (liveRes.data ?? []).map((r) => r.id);
+  const liveIds = liveRows.map((r) => r.id);
   const [{ data: hosts }, { data: gifts }] = await Promise.all([
     hostIds.length ? admin.from("profiles").select("id, full_name, username, avatar_url").in("id", hostIds) : Promise.resolve({ data: [] as { id: string; full_name: string | null; username: string | null; avatar_url: string | null }[] }),
     liveIds.length ? admin.from("gift_sends").select("stream_id, coins").in("stream_id", liveIds).eq("status", "active") : Promise.resolve({ data: [] as { stream_id: string; coins: number }[] }),
@@ -40,10 +44,11 @@ export async function GET() {
       startedAt: r.started_at,
       scheduledFor: r.scheduled_for,
       raisedCoins: raised.get(r.id) ?? 0,
+      promoted: boosted.has(r.id),
     };
   };
   return NextResponse.json(
-    { live: (liveRes.data ?? []).map(shape), upcoming: (soonRes.data ?? []).map(shape) },
+    { live: liveRows.map(shape), upcoming: (soonRes.data ?? []).map(shape) },
     { headers: { "cache-control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" } }
   );
 }
