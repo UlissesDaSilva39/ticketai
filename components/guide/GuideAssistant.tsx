@@ -147,7 +147,7 @@ export default function GuideAssistant() {
         aria-expanded={open}
         aria-controls="grid-guide"
         aria-label={open ? `Close ${GUIDE_NAME}, the GRID guide` : `Open ${GUIDE_NAME}, the GRID guide`}
-        className="fixed right-4 bottom-24 z-40 rounded-full shadow-lg ring-2 ring-white dark:ring-zinc-900 hover:scale-105 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500"
+        className={`fixed z-40 rounded-full ${/^\/live\/[0-9a-f-]{36}$/.test(pathname ?? "") ? "right-4 bottom-20 lg:right-auto lg:left-4 lg:bottom-4" : "right-4 bottom-24"} shadow-lg ring-2 ring-white dark:ring-zinc-900 hover:scale-105 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500`}
       >
         <RemiAvatar size={52} />
         {!open && (

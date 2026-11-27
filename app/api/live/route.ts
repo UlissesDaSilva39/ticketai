@@ -85,12 +85,12 @@ export async function POST(req: NextRequest) {
     products[0].pinned = true;
     await admin.from("live_products").insert(products.map((p) => ({ ...p, stream_id: data.id })));
   }
-  await admin.from("live_messages").insert({ stream_id: data.id, kind: "system", body: goLiveNow ? "The live has started. Say hi! 👋" : "Live scheduled. Chat opens now." });
+  await admin.from("live_messages").insert({ stream_id: data.id, kind: "system", body: goLiveNow ? "The live has started. Say hi!" : "Live scheduled. Chat opens now." });
   if (goLiveNow) {
     const { data: me } = await admin.from("profiles").select("full_name, username").eq("id", user.id).maybeSingle();
     const { data: followers } = await admin.from("follows").select("follower_id").eq("target_type", "user").eq("target_id", user.id).limit(1000);
     for (const f of followers ?? []) {
-      await notifyServer({ userId: f.follower_id, type: "live", title: `🔴 ${displayName(me)} is live: ${title}`, body: "Join now and send a gift.", href: `/live/${data.id}` }).catch(() => undefined);
+      await notifyServer({ userId: f.follower_id, type: "live", title: `${displayName(me)} is live: ${title}`, body: "Join now and send a gift.", href: `/live/${data.id}` }).catch(() => undefined);
     }
   }
   return NextResponse.json({ id: data.id });

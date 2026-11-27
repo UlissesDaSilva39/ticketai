@@ -305,8 +305,8 @@ const LicensingIcon = ({ isActive }: { isActive: boolean }) => (
 );
 
 const LiveIcon = ({ isActive }: { isActive: boolean }) => (
-  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={isActive ? 2.4 : 1.8} viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="2.5" fill="#dc2626" stroke="none" />
     <path strokeLinecap="round" d="M7.8 7.8a6 6 0 000 8.4M16.2 7.8a6 6 0 010 8.4M5 5a10 10 0 000 14M19 5a10 10 0 010 14" />
   </svg>
 );

@@ -7,13 +7,13 @@ export const HOST_SHARE = 0.7;
 
 /** 1 coin = 1p of gift value. */
 export const GIFTS = [
-  { id: "clap", emoji: "👏", name: "Applause", coins: 10 },
-  { id: "mic", emoji: "🎤", name: "Mic drop", coins: 50 },
-  { id: "headphones", emoji: "🎧", name: "Headphones", coins: 100 },
-  { id: "vinyl", emoji: "💿", name: "Gold vinyl", coins: 300 },
-  { id: "encore", emoji: "🔥", name: "Encore!", coins: 500 },
-  { id: "headliner", emoji: "🏆", name: "Headliner", coins: 1000 },
-  { id: "soldout", emoji: "🚀", name: "Sold out", coins: 5000 },
+  { id: "clap", name: "Applause", coins: 10 },
+  { id: "mic", name: "Mic drop", coins: 50 },
+  { id: "headphones", name: "Headphones", coins: 100 },
+  { id: "vinyl", name: "Gold vinyl", coins: 300 },
+  { id: "encore", name: "Encore!", coins: 500 },
+  { id: "headliner", name: "Headliner", coins: 1000 },
+  { id: "soldout", name: "Sold out", coins: 5000 },
 ] as const;
 export type Gift = (typeof GIFTS)[number];
 export const giftById = (id: string) => GIFTS.find((g) => g.id === id);
