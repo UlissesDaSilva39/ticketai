@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const r = await load((await params).id);
   if (!r) return { title: "GRID LIVE" };
   const { data: host } = await r.supabase.from("profiles").select("full_name, username").eq("id", r.s.host_id).maybeSingle();
-  const title = `${r.s.status === "live" ? "🔴 LIVE: " : ""}${r.s.title} · ${displayName(host)}`;
+  const title = `${r.s.status === "live" ? "LIVE: " : ""}${r.s.title} · ${displayName(host)}`;
   return { title: `${title} | GRID LIVE`, description: r.s.description ?? `${liveCategoryLabel(r.s.category)} on GRID LIVE. Watch, chat and send gifts.`, openGraph: { title, type: "video.other" } };
 }
 

@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { CalendarClock, ExternalLink, Gift as GiftGlyph, MessageCircle, Pin, Radio, Share2, ShoppingBag, Square, Target, Trophy, Wallet, X } from "lucide-react";
+import { CoinIcon, GiftIcon, LiveDot } from "@/components/live/icons";
 import { COIN_PACKS, GIFTS, HOST_SHARE, coinsLabel, formatGbp, giftById, liveCategoryLabel, playerSrc, watchUrl } from "@/lib/live/catalog";
 
 type Stream = {
@@ -19,9 +21,12 @@ type Stream = {
 };
 type Product = { id: string; kind: string; refId: string | null; url: string | null; title: string; pricePence: number | null; imageUrl: string | null; pinned: boolean };
 type Msg = { id: number; kind: "chat" | "gift" | "purchase" | "system"; body: string; giftId: string | null; coins: number | null; name: string | null; at: string };
-type Burst = { key: number; emoji: string; text: string };
+type Burst = { key: number; giftId: string | null; text: string };
 
 const card = "bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800";
+const btnPrimary = "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-60";
+const btnGhost = "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-200 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors disabled:opacity-60";
+const RANK = ["bg-amber-400 text-amber-950", "bg-zinc-300 text-zinc-800", "bg-orange-300 text-orange-950"];
 
 export default function LiveRoom({
   stream,
@@ -84,7 +89,7 @@ export default function LiveRoom({
           if (gifts.length) {
             setBursts((b) => [
               ...b,
-              ...gifts.slice(-3).map((g, i) => ({ key: Date.now() + i, emoji: giftById(g.giftId ?? "")?.emoji ?? "🎁", text: g.body })),
+              ...gifts.slice(-3).map((g, i) => ({ key: Date.now() + i, giftId: g.giftId, text: g.body })),
             ]);
           }
         }
@@ -127,7 +132,7 @@ export default function LiveRoom({
         const d = await r.json().catch(() => ({}));
         if (r.ok) {
           setBalance(d.balance);
-          flash("ok", "Coins added. Send a gift! 🎁");
+          flash("ok", "Coins added. Send a gift!");
         }
         clean();
         return;
@@ -245,7 +250,7 @@ export default function LiveRoom({
               </div>
             ) : status === "scheduled" ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center p-6 bg-gradient-to-br from-emerald-700 to-zinc-900">
-                <p className="text-sm font-bold uppercase tracking-widest text-emerald-200">Starting soon</p>
+                <p className="text-sm font-bold uppercase tracking-widest text-emerald-200 inline-flex items-center gap-2"><CalendarClock className="w-4 h-4" aria-hidden="true" /> Starting soon</p>
                 <p className="text-2xl sm:text-3xl font-bold mt-2">{stream.title}</p>
                 {stream.scheduledFor && <p className="text-white/80 mt-2">{new Date(stream.scheduledFor).toLocaleString("en-GB", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}</p>}
                 <p className="text-white/70 text-sm mt-4">Chat is open. Say hi while you wait.</p>
@@ -256,15 +261,15 @@ export default function LiveRoom({
 
             {status === "live" && (
               <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-red-600 text-white text-xs font-bold flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-white animate-pulse" aria-hidden="true" /> LIVE
+                <LiveDot /> LIVE
               </span>
             )}
 
             {/* Gift animations */}
             <div className="pointer-events-none absolute inset-x-0 bottom-4 flex flex-col items-center gap-2" aria-live="polite">
               {bursts.slice(0, 2).map((b) => (
-                <div key={b.key} className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/70 text-white text-sm font-semibold shadow-lg motion-safe:animate-bounce">
-                  <span className="text-3xl" aria-hidden="true">{b.emoji}</span> {b.text}
+                <div key={b.key} className="flex items-center gap-3 pl-1.5 pr-4 py-1.5 rounded-full bg-zinc-950/80 backdrop-blur text-white text-sm font-semibold shadow-xl ring-1 ring-white/10 motion-safe:animate-bounce">
+                  <GiftIcon id={b.giftId} size="md" /> {b.text}
                 </div>
               ))}
             </div>
@@ -274,8 +279,8 @@ export default function LiveRoom({
           {stream.goalCoins && (
             <div className={`${card} p-4 mx-3 sm:mx-0`}>
               <div className="flex justify-between gap-3 text-sm">
-                <span className="font-bold text-gray-900 dark:text-white">🎯 {stream.goalLabel || "Live goal"}</span>
-                <span className="text-gray-600 dark:text-gray-400">{raised.toLocaleString("en-GB")} / {stream.goalCoins.toLocaleString("en-GB")} coins</span>
+                <span className="font-bold text-gray-900 dark:text-white inline-flex items-center gap-1.5"><Target className="w-4 h-4 text-emerald-600" aria-hidden="true" /> {stream.goalLabel || "Live goal"}</span>
+                <span className="text-gray-600 dark:text-gray-400 inline-flex items-center gap-1"><CoinIcon className="w-3.5 h-3.5" /> {raised.toLocaleString("en-GB")} / {stream.goalCoins.toLocaleString("en-GB")}</span>
               </div>
               <div className="h-3 rounded-full bg-gray-100 dark:bg-zinc-800 mt-2 overflow-hidden" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={goalPct} aria-label="Goal progress">
                 <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 transition-all duration-700" style={{ width: `${goalPct}%` }} />
@@ -307,10 +312,10 @@ export default function LiveRoom({
                 </div>
               </div>
               <div className="flex gap-2">
-                <button type="button" onClick={share} className="px-4 py-2 rounded-full text-sm font-bold border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-200 hover:border-emerald-500">Share</button>
+                <button type="button" onClick={share} className={btnGhost}><Share2 className="w-4 h-4" aria-hidden="true" /> Share</button>
                 {status === "live" && (
-                  <a href={watchUrl(src)} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full text-sm font-bold border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-200 hover:border-emerald-500">
-                    Open on {stream.provider === "youtube" ? "YouTube" : "Twitch"}
+                  <a href={watchUrl(src)} target="_blank" rel="noopener noreferrer" className={btnGhost}>
+                    <ExternalLink className="w-4 h-4" aria-hidden="true" /> Open on {stream.provider === "youtube" ? "YouTube" : "Twitch"}
                   </a>
                 )}
               </div>
@@ -327,16 +332,16 @@ export default function LiveRoom({
               </p>
               <div className="flex flex-wrap gap-2">
                 {status === "scheduled" && (
-                  <button type="button" disabled={busy === "host"} onClick={() => hostAction({ action: "start" })} className="px-4 py-2 rounded-full text-sm font-bold text-white bg-red-600 hover:bg-red-700 disabled:opacity-60">
-                    🔴 Start live
+                  <button type="button" disabled={busy === "host"} onClick={() => hostAction({ action: "start" })} className={btnPrimary}>
+                    <Radio className="w-4 h-4" aria-hidden="true" /> Start live
                   </button>
                 )}
                 {status !== "ended" && (
-                  <button type="button" disabled={busy === "host"} onClick={() => confirm("End this live for everyone?") && hostAction({ action: "end" })} className="px-4 py-2 rounded-full text-sm font-bold border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-200">
-                    End live
+                  <button type="button" disabled={busy === "host"} onClick={() => confirm("End this live for everyone?") && hostAction({ action: "end" })} className={`${btnGhost} hover:!border-red-500 hover:text-red-600`}>
+                    <Square className="w-3.5 h-3.5" aria-hidden="true" /> End live
                   </button>
                 )}
-                <Link href="/seller" className="px-4 py-2 rounded-full text-sm font-bold border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-200">My earnings</Link>
+                <Link href="/seller" className={btnGhost}><Wallet className="w-4 h-4" aria-hidden="true" /> My earnings</Link>
               </div>
             </div>
           )}
@@ -344,7 +349,7 @@ export default function LiveRoom({
           {/* Shop */}
           {products.length > 0 && (
             <section aria-label="Shop this live" className="px-3 sm:px-0">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">🛍️ Shop this live</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3 inline-flex items-center gap-2"><ShoppingBag className="w-5 h-5 text-emerald-600" aria-hidden="true" /> Shop this live</h2>
               {pinned && (
                 <div className={`${card} p-4 flex items-center gap-4 border-emerald-400 dark:border-emerald-700 mb-3`}>
                   <div className="w-20 h-20 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-800 flex-none flex items-center justify-center text-white text-2xl">
@@ -352,11 +357,11 @@ export default function LiveRoom({
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={pinned.imageUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <span aria-hidden="true">🛍️</span>
+                      <ShoppingBag className="w-8 h-8" aria-hidden="true" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400">📌 PINNED BY {host.name.toUpperCase()}</p>
+                    <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400 inline-flex items-center gap-1"><Pin className="w-3.5 h-3.5" aria-hidden="true" /> PINNED BY {host.name.toUpperCase()}</p>
                     <p className="font-bold text-gray-900 dark:text-white truncate">{pinned.title}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">{priceLabel(pinned)}</p>
                   </div>
@@ -374,7 +379,7 @@ export default function LiveRoom({
                       <div className="flex gap-2 mt-2">
                         <button type="button" onClick={() => buyProduct(p)} className="flex-1 px-3 py-1.5 rounded-full text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700">{buyLabel(p)}</button>
                         {viewer.isHost && (
-                          <button type="button" onClick={() => hostAction({ pinProductId: p.id })} className="px-2.5 py-1.5 rounded-full text-xs font-bold border border-gray-300 dark:border-zinc-700" aria-label={`Pin ${p.title}`}>📌</button>
+                          <button type="button" onClick={() => hostAction({ pinProductId: p.id })} className="px-2.5 py-1.5 rounded-full text-xs font-bold border border-gray-300 dark:border-zinc-700" aria-label={`Pin ${p.title}`}><Pin className="w-3.5 h-3.5" aria-hidden="true" /></button>
                         )}
                       </div>
                     </li>
@@ -389,12 +394,15 @@ export default function LiveRoom({
         <aside className="space-y-4 px-3 sm:px-0 lg:sticky lg:top-20">
           {supporters.length > 0 && (
             <div className={`${card} p-4`}>
-              <p className="font-bold text-gray-900 dark:text-white mb-2">🏆 Top supporters</p>
+              <p className="font-bold text-gray-900 dark:text-white mb-3 inline-flex items-center gap-2"><Trophy className="w-4 h-4 text-amber-500" aria-hidden="true" /> Top supporters</p>
               <ol className="space-y-1.5">
                 {supporters.map((s, i) => (
-                  <li key={s.name + i} className="flex justify-between text-sm">
-                    <span className="text-gray-800 dark:text-gray-200 truncate">{["🥇", "🥈", "🥉"][i] ?? `${i + 1}.`} {s.name}</span>
-                    <span className="text-gray-500 flex-none">{s.coins.toLocaleString("en-GB")}</span>
+                  <li key={s.name + i} className="flex items-center justify-between gap-2 text-sm">
+                    <span className="flex items-center gap-2 min-w-0 text-gray-800 dark:text-gray-200">
+                      <span className={`w-6 h-6 flex-none rounded-full grid place-items-center text-[11px] font-bold ${RANK[i] ?? "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300"}`}>{i + 1}</span>
+                      <span className="truncate">{s.name}</span>
+                    </span>
+                    <span className="text-gray-500 flex-none inline-flex items-center gap-1"><CoinIcon className="w-3.5 h-3.5" /> {s.coins.toLocaleString("en-GB")}</span>
                   </li>
                 ))}
               </ol>
@@ -402,14 +410,14 @@ export default function LiveRoom({
           )}
 
           <div className={`${card} flex flex-col h-[440px]`}>
-            <p className="px-4 pt-3 pb-2 font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-zinc-800">Live chat</p>
+            <p className="px-4 pt-3 pb-2 font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-zinc-800 flex items-center gap-2"><MessageCircle className="w-4 h-4 text-emerald-600" aria-hidden="true" /> Live chat</p>
             <div className="flex-1 overflow-y-auto px-4 py-2 space-y-1.5 text-sm" role="log" aria-label="Live chat">
-              {messages.length === 0 && <p className="text-gray-500 py-6 text-center">Be the first to say hi 👋</p>}
+              {messages.length === 0 && <p className="text-gray-500 py-6 text-center">Be the first to say hi.</p>}
               {messages.map((m) =>
                 m.kind === "gift" ? (
-                  <p key={m.id} className="rounded-lg bg-amber-50 dark:bg-amber-900/20 px-2 py-1 font-semibold text-amber-900 dark:text-amber-200">🎁 {m.body}</p>
+                  <p key={m.id} className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1.5 font-semibold text-emerald-900 dark:text-emerald-200 flex items-center gap-2"><GiftIcon id={m.giftId} size="sm" /> <span className="min-w-0">{m.body}</span></p>
                 ) : m.kind === "purchase" ? (
-                  <p key={m.id} className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 font-semibold text-emerald-900 dark:text-emerald-200">🛍️ {m.body}</p>
+                  <p key={m.id} className="rounded-lg bg-zinc-900 dark:bg-zinc-800 px-2 py-1.5 font-semibold text-white flex items-center gap-2"><span className="w-7 h-7 flex-none rounded-lg bg-emerald-600 grid place-items-center" aria-hidden="true"><ShoppingBag className="w-4 h-4" /></span> <span className="min-w-0">{m.body}</span></p>
                 ) : m.kind === "system" ? (
                   <p key={m.id} className="text-xs text-gray-500 text-center py-1">{m.body}</p>
                 ) : (
@@ -437,10 +445,10 @@ export default function LiveRoom({
           {!viewer.isHost && status !== "ended" && (
             <div className={`${card} p-4`}>
               <div className="flex items-center justify-between gap-2 mb-3">
-                <p className="font-bold text-gray-900 dark:text-white">Send a gift</p>
+                <p className="font-bold text-gray-900 dark:text-white inline-flex items-center gap-2"><GiftGlyph className="w-4 h-4 text-emerald-600" aria-hidden="true" /> Send a gift</p>
                 {viewer.signedIn && (
-                  <button type="button" onClick={() => setCoinsOpen(true)} className="text-sm font-bold text-amber-700 dark:text-amber-400 hover:underline">
-                    🪙 {balance === null ? "…" : balance.toLocaleString("en-GB")} · Get coins
+                  <button type="button" onClick={() => setCoinsOpen(true)} className="inline-flex items-center gap-1.5 pl-1.5 pr-3 py-1 rounded-full text-sm font-bold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">
+                    <CoinIcon className="w-5 h-5" /> {balance === null ? "…" : balance.toLocaleString("en-GB")} <span className="text-emerald-600 dark:text-emerald-400">+</span>
                   </button>
                 )}
               </div>
@@ -452,11 +460,11 @@ export default function LiveRoom({
                     disabled={status !== "live" || busy.startsWith("gift")}
                     onClick={() => sendGift(g.id)}
                     title={status !== "live" ? "Gifts open when the live starts" : `${g.name}: ${coinsLabel(g.coins)}`}
-                    className="flex flex-col items-center gap-0.5 p-2 rounded-xl border border-gray-200 dark:border-zinc-700 hover:border-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 disabled:opacity-40"
+                    className="group flex flex-col items-center gap-1 p-2 rounded-xl border border-gray-200 dark:border-zinc-700 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors disabled:opacity-40"
                   >
-                    <span className="text-2xl" aria-hidden="true">{g.emoji}</span>
+                    <span className="transition-transform group-hover:scale-110 group-active:scale-95"><GiftIcon id={g.id} /></span>
                     <span className="text-[11px] font-semibold text-gray-700 dark:text-gray-300 leading-tight text-center">{g.name}</span>
-                    <span className="text-[11px] text-amber-700 dark:text-amber-400">🪙 {g.coins.toLocaleString("en-GB")}</span>
+                    <span className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 inline-flex items-center gap-0.5"><CoinIcon className="w-3 h-3" /> {g.coins.toLocaleString("en-GB")}</span>
                   </button>
                 ))}
               </div>
@@ -478,19 +486,19 @@ export default function LiveRoom({
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="coins-title" onKeyDown={(e) => e.key === "Escape" && setCoinsOpen(false)}>
           <div className="bg-white dark:bg-zinc-900 w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-start justify-between gap-4 mb-1">
-              <h2 id="coins-title" className="text-xl font-bold text-gray-900 dark:text-white">Get coins 🪙</h2>
-              <button type="button" onClick={() => setCoinsOpen(false)} aria-label="Close" className="text-2xl leading-none text-gray-500">×</button>
+              <h2 id="coins-title" className="text-xl font-bold text-gray-900 dark:text-white inline-flex items-center gap-2"><CoinIcon className="w-6 h-6" /> Get coins</h2>
+              <button type="button" onClick={() => setCoinsOpen(false)} aria-label="Close" className="p-1 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800"><X className="w-5 h-5" aria-hidden="true" /></button>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Coins let you send gifts to artists while they&apos;re live. Balance: {balance?.toLocaleString("en-GB") ?? 0} coins.</p>
             <ul className="space-y-2">
               {COIN_PACKS.map((p) => (
                 <li key={p.id}>
-                  <button type="button" disabled={busy.startsWith("pack")} onClick={() => buyCoins(p.id)} className={`w-full flex items-center justify-between gap-3 p-4 rounded-xl border-2 hover:border-amber-400 disabled:opacity-60 ${p.label === "Most popular" ? "border-amber-400 bg-amber-50 dark:bg-amber-900/20" : "border-gray-200 dark:border-zinc-700"}`}>
+                  <button type="button" disabled={busy.startsWith("pack")} onClick={() => buyCoins(p.id)} className={`w-full flex items-center justify-between gap-3 p-4 rounded-xl border-2 hover:border-emerald-500 transition-colors disabled:opacity-60 ${p.label === "Most popular" ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20" : "border-gray-200 dark:border-zinc-700"}`}>
                     <span className="text-left">
-                      <span className="block font-bold text-gray-900 dark:text-white">🪙 {p.coins.toLocaleString("en-GB")} coins</span>
-                      {p.label && <span className="text-xs font-bold text-amber-700 dark:text-amber-400">{p.label}</span>}
+                      <span className="flex items-center gap-2 font-bold text-gray-900 dark:text-white"><CoinIcon className="w-5 h-5" /> {p.coins.toLocaleString("en-GB")} coins</span>
+                      {p.label && <span className="block mt-0.5 ml-7 text-xs font-bold text-emerald-700 dark:text-emerald-400">{p.label}</span>}
                     </span>
-                    <span className="font-bold text-gray-900 dark:text-white">{busy === `pack-${p.id}` ? "…" : formatGbp(p.pence)}</span>
+                    <span className="px-3 py-1.5 rounded-full text-sm font-bold text-white bg-emerald-600">{busy === `pack-${p.id}` ? "…" : formatGbp(p.pence)}</span>
                   </button>
                 </li>
               ))}
@@ -504,13 +512,13 @@ export default function LiveRoom({
       {!viewer.isHost && status === "live" && (
         <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-zinc-950/95 backdrop-blur border-t border-gray-200 dark:border-zinc-800 px-3 py-2 flex gap-2 overflow-x-auto">
           {GIFTS.slice(0, 4).map((g) => (
-            <button key={g.id} type="button" onClick={() => sendGift(g.id)} className="flex-none px-3 py-2 rounded-full border border-gray-200 dark:border-zinc-700 text-sm font-semibold" aria-label={`Send ${g.name}, ${g.coins} coins`}>
-              {g.emoji} {g.coins}
+            <button key={g.id} type="button" onClick={() => sendGift(g.id)} className="flex-none flex items-center gap-1.5 pl-1 pr-3 py-1 rounded-full border border-gray-200 dark:border-zinc-700 text-sm font-semibold text-gray-800 dark:text-gray-200" aria-label={`Send ${g.name}, ${g.coins} coins`}>
+              <GiftIcon id={g.id} size="sm" /> {g.coins}
             </button>
           ))}
           {pinned && (
-            <button type="button" onClick={() => buyProduct(pinned)} className="flex-none px-4 py-2 rounded-full text-sm font-bold text-white bg-emerald-600">
-              🛍️ {buyLabel(pinned)}
+            <button type="button" onClick={() => buyProduct(pinned)} className="flex-none flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold text-white bg-emerald-600">
+              <ShoppingBag className="w-4 h-4" aria-hidden="true" /> {buyLabel(pinned)}
             </button>
           )}
         </div>

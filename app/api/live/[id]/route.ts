@@ -20,12 +20,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (b.action === "start") {
     if (s.status !== "scheduled") return NextResponse.json({ error: "This live has already started or ended." }, { status: 409 });
     await admin.from("live_streams").update({ status: "live", started_at: new Date().toISOString() }).eq("id", id);
-    await admin.from("live_messages").insert({ stream_id: id, kind: "system", body: "The live has started. Say hi! 👋" });
+    await admin.from("live_messages").insert({ stream_id: id, kind: "system", body: "The live has started. Say hi!" });
     // Tell the host's followers (best effort, same follows table as the rest of GRID).
     const { data: me } = await admin.from("profiles").select("full_name, username").eq("id", user.id).maybeSingle();
     const { data: followers } = await admin.from("follows").select("follower_id").eq("target_type", "user").eq("target_id", user.id).limit(1000);
     for (const f of followers ?? []) {
-      await notifyServer({ userId: f.follower_id, type: "live", title: `🔴 ${displayName(me)} is live: ${s.title}`, body: "Join now and send a gift.", href: `/live/${id}` }).catch(() => undefined);
+      await notifyServer({ userId: f.follower_id, type: "live", title: `${displayName(me)} is live: ${s.title}`, body: "Join now and send a gift.", href: `/live/${id}` }).catch(() => undefined);
     }
     return NextResponse.json({ status: "live" });
   }

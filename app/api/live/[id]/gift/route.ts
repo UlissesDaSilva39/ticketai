@@ -33,7 +33,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     p_gift: gift.id,
     p_coins: gift.coins,
     p_host_share: HOST_SHARE,
-    p_label: `${displayName(me)} sent ${gift.emoji} ${gift.name}`,
+    p_label: `${displayName(me)} sent ${gift.name}`,
   });
   if (error) {
     const key = Object.keys(ERRORS).find((k) => error.message.includes(k));
