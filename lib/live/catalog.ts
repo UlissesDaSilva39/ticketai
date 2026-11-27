@@ -64,3 +64,17 @@ export function playerSrc(s: StreamSource, host: string): string {
 
 export const watchUrl = (s: StreamSource) =>
   s.provider === "youtube" ? `https://www.youtube.com/watch?v=${s.ref}` : `https://www.twitch.tv/${s.ref}`;
+
+/**
+ * A still snapshot of the stream for cards. YouTube refreshes the "_live" frame while
+ * a stream is on air; Twitch serves a live preview (changes every few minutes, so the
+ * `bucket` cache-buster keeps it fresh). Returns null when there's no source.
+ */
+export function snapshotUrl(s: StreamSource | null, bucket = 0): string | null {
+  if (!s) return null;
+  if (s.provider === "youtube") return `https://i.ytimg.com/vi/${encodeURIComponent(s.ref)}/hqdefault_live.jpg`;
+  return `https://static-cdn.jtvnw.net/previews-ttv/live_user_${encodeURIComponent(s.ref)}-640x360.jpg${bucket ? `?t=${bucket}` : ""}`;
+}
+
+/** Changes every 5 minutes: used as a cache-buster so stream snapshots stay fresh. */
+export const snapshotBucket = () => Math.floor(Date.now() / (5 * 60 * 1000));

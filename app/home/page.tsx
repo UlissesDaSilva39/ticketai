@@ -18,6 +18,9 @@ import HomeFeed from "@/components/home/HomeFeed";
 import SuggestedPeople from "@/components/home/SuggestedPeople";
 import { useMe, displayName, initials, roleLabel, compactNumber, type MeProfile } from "@/lib/hooks/useMe";
 import ProBadge from "@/components/ProBadge";
+import { LiveNowStrip, LiveSidebarLink } from "@/components/home/LiveNow";
+
+const NAV_LINK = "flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-emerald-50/70 dark:hover:bg-zinc-800 transition-colors group";
 
 // Profile-strength checklist built from the real profile. Edits happen on /profile/edit.
 function profileStrengthItems(p: MeProfile) {
@@ -140,11 +143,11 @@ export default function HomePage() {
             <div className="border-t border-gray-100 dark:border-zinc-800 p-4">
               {me && <ProfileStrength items={profileStrengthItems(me.profile)} />}
               <ul className="space-y-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <li><Link href="/live" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><span className="w-5 h-5 flex items-center justify-center" aria-hidden="true"><span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" /></span> <span className="group-hover:text-emerald-700 font-semibold">GRID LIVE</span></Link></li>
-                <li><Link href="/marketplace" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Marketplace</span></Link></li>
-                <li><Link href="/saved" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Saved Items</span></Link></li>
-                <li><Link href="/groups" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Groups</span></Link></li>
-                <li><Link href="/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors group"><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700">Events</span></Link></li>
+                <li><LiveSidebarLink className={NAV_LINK} /></li>
+                <li><Link href="/marketplace" className={NAV_LINK}><MarketIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Marketplace</span></Link></li>
+                <li><Link href="/saved" className={NAV_LINK}><BookmarkIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Saved Items</span></Link></li>
+                <li><Link href="/groups" className={NAV_LINK}><UsersIcon className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Groups</span></Link></li>
+                <li><Link href="/events" className={NAV_LINK}><CalendarSVG className="w-5 h-5 text-emerald-600" /> <span className="group-hover:text-emerald-700 dark:group-hover:text-emerald-400">Events</span></Link></li>
               </ul>
             </div>
           </div>
@@ -158,6 +161,9 @@ export default function HomePage() {
           
           {/* STORIES */}
           <GridStories myName={myName} myAvatar={me?.profile.avatar_url ?? null} />
+
+          {/* Who's live right now (GRID LIVE) */}
+          <LiveNowStrip />
 
           {/* Opportunities ranked for this user (/api/matches) */}
           <MatchedForYou isPro={isPro} />
@@ -209,9 +215,14 @@ export default function HomePage() {
 
       {/* PUBLISH TOAST */}
       {postToast && (
-        <div role="status" className="fixed bottom-8 right-8 z-50 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl">
-          <p className="font-bold">✓ Success!</p>
-          <p className="text-xs text-gray-400">Your update has been posted.</p>
+        <div role="status" className="fixed bottom-8 right-8 z-50 bg-zinc-900 text-white pl-3 pr-6 py-3 rounded-xl shadow-xl ring-1 ring-white/10 flex items-center gap-3">
+          <span className="w-8 h-8 rounded-full bg-emerald-600 grid place-items-center flex-none" aria-hidden="true">
+            <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><path d="M5 12l5 5L20 7" /></svg>
+          </span>
+          <span>
+            <span className="block font-bold">Posted</span>
+            <span className="block text-xs text-gray-400">Your update is live on your network.</span>
+          </span>
         </div>
       )}
 
